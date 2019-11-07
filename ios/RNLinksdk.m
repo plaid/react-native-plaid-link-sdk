@@ -7,7 +7,7 @@
 
 static NSString* const kRNLinkKitConfigPublicKeyKey = @"publicKey";
 static NSString* const kRNLinkKitConfigEnvKey = @"env";
-static NSString* const kRNLinkKitConfigProductsKey = @"products";
+static NSString* const kRNLinkKitConfigProductsKey = @"product";
 static NSString* const kRNLinkKitConfigClientNameKey = @"clientName";
 static NSString* const kRNLinkKitConfigWebhookKey = @"webhook";
 static NSString* const kRNLinkKitConfigPublicTokenKey = @"publicToken";
@@ -126,16 +126,16 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     if ([language length] > 0) {
        linkConfiguration.language = language;
     }
-    
+
     // Cache the presenting view controller so it can be used to dismiss when done.
     self.presentingViewController = RCTPresentedViewController();
-    
+
     __weak typeof(self) weakSelf = self;
     self.linkViewDelegate = [[RNLinkkitDelegate alloc] init];
     self.linkViewDelegate.onSuccess = ^(NSString* publicToken, NSDictionary<NSString*,id>*metadata) {
         __typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf dismissLinkViewController];
-        
+
         if (strongSelf.completionCallback) {
             NSMutableDictionary<NSString*, id> *jsMetadata = [metadata mutableCopy];
             jsMetadata[kRNLinkKitEventTokenKey] = publicToken;
@@ -146,7 +146,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     self.linkViewDelegate.onExit = ^(NSError* error, NSDictionary<NSString*,id>*metadata) {
         __typeof(weakSelf) strongSelf = weakSelf;
         [weakSelf dismissLinkViewController];
-        
+
         if (strongSelf.completionCallback) {
             if (error) {
                 strongSelf.completionCallback(@[RCTMakeError(error.localizedDescription, nil, nil), metadata]);
@@ -186,7 +186,7 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {
 }
 
 @end
-  
+
 #pragma mark - PLKPlaidLinkViewDelegate
 
 @implementation RNLinkkitDelegate
@@ -216,4 +216,4 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {
 }
 
 @end
-  
+

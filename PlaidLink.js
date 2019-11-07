@@ -2,15 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, NativeModules, Platform, View } from 'react-native';
 
-const openLink = async ({
-  onCancelled,
-  onError,
-  onExit,
-  onSuccess,
-  ...serializable
-}) => {
+const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   if (Platform.OS === 'android') {
-    var constants = NativeModules.PlaidAndroid.getConstants();
+    const constants = NativeModules.PlaidAndroid.getConstants();
     NativeModules.PlaidAndroid.startLinkActivityForResult(
       JSON.stringify(serializable),
       result => {
@@ -21,15 +15,7 @@ const openLink = async ({
             }
             break;
           case constants.RESULT_EXCEPTION:
-            if (onError != null) {
-              onError(result.data);
-            }
-            break;
           case constants.RESULT_CANCELLED:
-            if (onCancelled != null) {
-              onCancelled(result.data);
-            }
-            break;
           case constants.RESULT_EXIT:
             if (onExit != null) {
               onExit(result.data);
@@ -42,23 +28,16 @@ const openLink = async ({
     NativeModules.RNLinksdk.create(serializable);
     NativeModules.RNLinksdk.open((error, metadata) => {
       if (error) {
-        if (onError != null) {
+        if (onExit != null) {
           var data = metadata || {};
           data.error = error;
-          onError(data);
+          onExit(data);
         }
       } else {
         switch (metadata.status) {
           case 'connected':
             if (onSuccess != null) {
               onSuccess(metadata);
-            }
-            break;
-          case undefined:
-          case null:
-          case '':
-            if (onCancelled != null) {
-              onCancelled(metadata);
             }
             break;
           default:
@@ -72,36 +51,82 @@ const openLink = async ({
   }
 };
 
-export const PlaidLink = props => {
+export const PlaidLink = ({ children, className, ...linkProps }) => {
   return (
     <View>
-      <Button onPress={() => openLink(props)} title="Open Link" />
+      <Button
+        className={className}
+        onPress={() => openLink(linkProps)}
+        title="Open Link"
+      >
+        {children}
+      </Button>
     </View>
   );
 };
 
 PlaidLink.propTypes = {
   // Required props
-  publicKey: PropTypes.string.isRequired,
+
+  // Displayed once a user has successfully linked their account
   clientName: PropTypes.string.isRequired,
+
+  // The Plaid API environment on which to create user accounts.
   env: PropTypes.oneOf(['development', 'sandbox', 'production']).isRequired,
+
+  // A function that is called when a user has successfully onboarded their
+  // account. The function should expect two arguments, the public_key and a
+  // metadata object.
   onSuccess: PropTypes.func.isRequired,
-  products: PropTypes.arrayOf(PropTypes.string).isRequired,
+
+  // The Plaid product(s) you wish to use, an array containing some of
+  // auth, identity, income, transactions, assets, liabilities, investments.
+  product: PropTypes.arrayOf(
+    PropTypes.oneOf([
+      'auth',
+      'identity',
+      'income',
+      'transactions',
+      'assets',
+      'liabilities',
+      'investments',
+    ]),
+  ).isRequired,
+
+  // The public_key associated with your account; available from
+  // the Plaid dashboard (https://dashboard.plaid.com).
+  publicKey: PropTypes.string.isRequired,
+
   // Optional props
-  apiVersion: PropTypes.oneOf(['v1', 'v2']), // is this necessary? defaults to v2
+
+  // Button class name as a string.
+  className: PropTypes.string,
+
+  // A list of Plaid-supported country codes using the ISO-3166-1 alpha-2
+  // country code standard.
   countryCodes: PropTypes.arrayOf(PropTypes.string),
+
+  // Plaid-supported language to localize Link. English will be used by default.
   language: PropTypes.string,
-  institution: PropTypes.string,
-  onCancelled: PropTypes.func,
-  onError: PropTypes.func,
+
+  // A function that is called when a user has specifically exited Link flow.
   onExit: PropTypes.func,
+
+  // Specify an existing user's public token to launch Link in update mode.
+  // This will cause Link to open directly to the authentication step for
+  // that user's institution.
   token: PropTypes.string,
+
+  // Specify a user to enable all Auth features. Reach out to your
+  // account manager or integrations@plaid.com to get enabled. See the Auth
+  // [https://plaid.com/docs#auth] docs for integration details.
   userEmailAddress: PropTypes.string,
   userLegalName: PropTypes.string,
   userPhoneNumber: PropTypes.string,
-  webhook: PropTypes.string,
-};
 
-PlaidLink.defaultProps = {
-  apiVersion: 'v2',
+  // Specify a webhook to associate with a user.
+  webhook: PropTypes.string,
+
+  // Note: onEvent is omitted here, to handle onEvent callbacks refer to
+  // the documentation here: https://github.com/plaid/react-native-plaid-link-sdk#to-receive-onevent-callbacks
 };

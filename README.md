@@ -81,32 +81,28 @@ const MyPlaidComponent = () => {
      // Replace any of the following <#VARIABLE#>s according to your setup,
      // for details see https://plaid.com/docs/quickstart/#client-side-link-configuration
  
-       publicKey: ‘<# Your Public Key #>’,
-       clientName: ‘<# Your Client Name #>’,
-       env: ‘‘<# Environment #>’ // ‘sandbox’ or 'development' or 'production'
-       onSuccess: (e) => { console.log(‘success: ‘, e) },
-       products: [‘<# Product #>’],
+      publicKey='<# Your Public Key #>'
+      clientName='<# Your Client Name #>'
+      env='<# Environment #>'  // 'sandbox' or 'development' or 'production'
+      onSuccess={e => console.log('success: ', e)}
+      product={['<# Product #>']}
  
-       // Optional props
-       apiVersion: ‘v2’
-       countryCodes: [‘<# Country Code #>’],
-       Language: ’<# Language #>’,
-       institution: ‘<# Institution #>’,
-       onCancelled: (e) => { console.log(‘cancelled: ’, e) },
-       onError: (e) => { console.log(‘error: ’, e) },
-       onExit: (e) => { console.log(‘exit: ‘, e) },
-       userEmailAddress: ‘<# User Email #>’,
-       userLegalName: ‘<# User Legal Name #>’,
-       userPhoneNumber : ‘<# User Phone Number #>’,
-       webhook:’<# Webhook URL #>’,
-/>
+      // Optional props
+      countryCodes={['<# Country Code #>']}
+      language='<# Language #>'
+      onExit={e => console.log('exit: ', e)}
+      userEmailAddress='<# User Email #>'
+      userLegalName='<# User Legal Name #>'
+      userPhoneNumber='<# User Phone Number #>'
+      webhook='<# Webhook URL #>'
+    />
   );
 };
 ```
 
 ### To receive onEvent callbacks:
 
-The React Native Plaid module emits `onEvent` events throughout the account linking process — see details here. To receive these events in your React Native app, wrap the `PlaidLink` react component with the following in order to listen for those events:
+The React Native Plaid module emits `onEvent` events throughout the account linking process — see [details here](https://plaid.com/docs/#onevent-callback). To receive these events in your React Native app, wrap the `PlaidLink` react component with the following in order to listen for those events:
 
 ```
 import React from 'react';
@@ -126,18 +122,18 @@ class PlaidEventContainer extends React.Component {
   }
  
   render() {
-    return <PlaidLink 
-      clientName = ‘##YOUR CLIENT NAME##
-      publicKey = ‘##YOUR PUBLIC KEY##‘
-      env = ‘sandbox‘
-      onSuccess = {(result) => {console.log(‘Success: ‘, result)}}
-      onError = {(result) => {console.log(‘Error: ‘, result)}}
-      onCancelled = {(result) => {console.log(‘Cancelled: ‘, result)}}
-      onExit = {(result) => {console.log(‘Exit: ‘, result)}}
-      products = {[‘transactions‘]}
-      language = ‘en‘
-      countryCodes = {[‘US‘]}
-    />;
+    return (
+      <PlaidLink
+        clientName='##YOUR CLIENT NAME##'
+        publicKey='#YOUR PUBLIC KEY##'
+        env='sandbox'
+        onSuccess={e => console.log('success: ', e)}
+        onExit={e => console.log('exit: ', e)}
+        product={['transactions']}
+        language='en'
+        countryCodes={['US']}
+      />
+    );
   }
 }
 ```

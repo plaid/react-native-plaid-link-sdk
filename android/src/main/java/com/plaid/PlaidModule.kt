@@ -33,7 +33,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   private var callback: Callback? = null
 
   companion object {
-    private const val PRODUCTS = "products"
+    private const val PRODUCTS = "product"
     private const val CLIENT_NAME = "clientName"
     private const val COUNTRY_CODES = "countryCodes"
     private const val LANGUAGE = "language"

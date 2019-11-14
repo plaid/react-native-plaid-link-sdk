@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, NativeModules, Platform, View } from 'react-native';
+import { NativeModules, Platform, View } from 'react-native';
+import { Button } from 'native-base';
 
 const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   if (Platform.OS === 'android') {
@@ -51,13 +52,13 @@ const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   }
 };
 
-export const PlaidLink = ({ children, className, ...linkProps }) => {
+export const PlaidLink = ({ children, className, styles, ...linkProps }) => {
   return (
     <View>
       <Button
         className={className}
         onPress={() => openLink(linkProps)}
-        title="Open Link"
+        style={styles}
       >
         {children}
       </Button>

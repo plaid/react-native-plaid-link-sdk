@@ -14,6 +14,8 @@ Add pod 'Plaid' to your project’s Podfile (likely located at `ios/Podfile` )
 cd ios && pod install && cd ..
 ```
 
+Add a Run Script build phase (after the [CP] Embed Pods Frameworks step) to your target as [described in Plaid Link for iOS documentation](https://plaid.com/docs/link/ios/#add-run-script). This strips simulator symbols from App Store release builds.
+
 That's it if using a recent react-native version with [autolinking](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md) support.
 
 ### Manual Integration
@@ -52,7 +54,7 @@ Add `import com.plaid.PlaidPackage;` on the imports section
 Add `packages.add(new PlaidPackage());` in `List<ReactPackage> getPackages();`
 
 
-Add `Plaid.create(this);` in `public void onCreate()`
+Add `Plaid.create(this);` in `public void onCreate()` along with `import com.plaid.link.Plaid;` at the top of the file.
 
 ### `android/app/build.gradle`
 
@@ -78,6 +80,8 @@ import PlaidLink from 'react-native-plaid-link-sdk';
 const MyPlaidComponent = () => {
   return (
     <PlaidLink
+      title='Add Account'
+
      // Replace any of the following <#VARIABLE#>s according to your setup,
      // for details see https://plaid.com/docs/quickstart/#client-side-link-configuration
  

@@ -51,13 +51,22 @@ const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   }
 };
 
-export const PlaidLink = ({ children, className, ...linkProps }) => {
+export const PlaidLink = ({
+  children,
+  className,
+  title,
+  accessibilityLabel,
+  color,
+  ...linkProps
+}) => {
   return (
     <View>
       <Button
         className={className}
         onPress={() => openLink(linkProps)}
-        title="Open Link"
+        title={title}
+        accessibilityLabel={accessibilityLabel}
+        color={color}
       >
         {children}
       </Button>

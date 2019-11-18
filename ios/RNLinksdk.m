@@ -10,7 +10,7 @@ static NSString* const kRNLinkKitConfigEnvKey = @"env";
 static NSString* const kRNLinkKitConfigProductsKey = @"product";
 static NSString* const kRNLinkKitConfigClientNameKey = @"clientName";
 static NSString* const kRNLinkKitConfigWebhookKey = @"webhook";
-static NSString* const kRNLinkKitConfigPublicTokenKey = @"publicToken";
+static NSString* const kRNLinkKitConfigPublicTokenKey = @"token";
 static NSString* const kRNLinkKitConfigSelectAccountKey = @"selectAccount";
 static NSString* const kRNLinkKitConfigUserLegalNameKey = @"userLegalName";
 static NSString* const kRNLinkKitConfigUserEmailAddressKey = @"userEmailAddress";
@@ -87,12 +87,14 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     NSArray<NSString*> *products = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];
     NSString *clientName = [RCTConvert NSString:configuration[kRNLinkKitConfigClientNameKey]];
     NSString *webhook = [RCTConvert NSString:configuration[kRNLinkKitConfigWebhookKey]];
+    NSString *publicTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicTokenKey]];
     NSString *userLegalName = [RCTConvert NSString:configuration[kRNLinkKitConfigUserLegalNameKey]];
     NSString *userEmailAddress = [RCTConvert NSString:configuration[kRNLinkKitConfigUserEmailAddressKey]];
     NSString *userPhoneNumber = [RCTConvert NSString:configuration[kRNLinkKitConfigUserPhoneNumberKey]];
     NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
     NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
     BOOL selectAccount = [RCTConvert BOOL:configuration[kRNLinkKitConfigSelectAccountKey]];
+    NSString *institution = [RCTConvert NSString:configuration[kRNLinkKitConfigInstitutionKey]];
     BOOL longtailAuth = [RCTConvert BOOL:configuration[kRNLinkKitConfigLongtailAuthKey]];
 
     PLKEnvironment environment = PLKEnvironmentFromString(env);
@@ -164,9 +166,20 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         }
     };
 
-    self.linkViewController =
-        [[PLKPlaidLinkViewController alloc] initWithConfiguration:linkConfiguration
-                                                         delegate:self.linkViewDelegate];
+    if ([publicTokenInput length] > 0) {
+        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPublicToken:publicTokenInput
+                                                                            configuration:linkConfiguration
+                                                                                 delegate:self.linkViewDelegate];
+    }
+    else if ([institution length] > 0) {
+        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithInstitution:institution
+                                                                       configuration:linkConfiguration
+                                                                            delegate:self.linkViewDelegate];
+    }
+    else {
+        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithConfiguration:linkConfiguration
+                                                                              delegate:self.linkViewDelegate];
+    }
 }
 
 RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {

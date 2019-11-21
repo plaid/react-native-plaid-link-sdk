@@ -57,7 +57,7 @@ export const PlaidLink = ({
   title,
   accessibilityLabel,
   color,
-  activeOpacity
+  activeOpacity,
   ...linkProps
 }) => {
   return (

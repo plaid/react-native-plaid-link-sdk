@@ -51,15 +51,7 @@ const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   }
 };
 
-export const PlaidLink = ({
-  children,
-  className,
-  title,
-  accessibilityLabel,
-  color,
-  activeOpacity,
-  ...linkProps
-}) => {
+export const PlaidLink = ({ children, activeOpacity, ...linkProps }) => {
   return (
     <View>
       <TouchableOpacity

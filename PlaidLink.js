@@ -57,16 +57,14 @@ export const PlaidLink = ({
   title,
   accessibilityLabel,
   color,
+  activeOpacity
   ...linkProps
 }) => {
   return (
     <View>
       <TouchableOpacity
-        className={className}
         onPress={() => openLink(linkProps)}
-        title={title}
-        accessibilityLabel={accessibilityLabel}
-        color={color}
+        activeOpacity={activeOpacity}
       >
         {children}
       </TouchableOpacity>

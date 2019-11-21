@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, NativeModules, Platform, View } from 'react-native';
+import { TouchableOpacity, NativeModules, Platform, View } from 'react-native';
 
 const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   if (Platform.OS === 'android') {
@@ -61,7 +61,7 @@ export const PlaidLink = ({
 }) => {
   return (
     <View>
-      <Button
+      <TouchableOpacity
         className={className}
         onPress={() => openLink(linkProps)}
         title={title}
@@ -69,7 +69,7 @@ export const PlaidLink = ({
         color={color}
       >
         {children}
-      </Button>
+      </TouchableOpacity>
     </View>
   );
 };

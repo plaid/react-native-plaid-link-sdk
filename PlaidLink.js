@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { TouchableOpacity, NativeModules, Platform, View } from 'react-native';
+import { Button, TouchableOpacity, NativeModules, Platform, View } from 'react-native';
 
 const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   if (Platform.OS === 'android') {
@@ -51,16 +51,28 @@ const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   }
 };
 
-export const PlaidLink = ({ children, activeOpacity, ...linkProps }) => {
+export const PlaidLink = ({
+  accessibilityLabel,
+  activeOpacity,
+  children,
+  color,
+  title,
+  ...linkProps
+}) => {
   return (
-    <View>
-      <TouchableOpacity
-        onPress={() => openLink(linkProps)}
-        activeOpacity={activeOpacity}
-      >
-        {children}
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      onPress={() => openLink(linkProps)}
+      activeOpacity={activeOpacity || 1}
+    >
+      {children || (
+        <Button
+          accessibilityLabel={accessibilityLabel}
+          color={color}
+          onPress={() => openLink(linkProps)}
+          title={title}
+        />
+      )}
+    </TouchableOpacity>
   );
 };
 

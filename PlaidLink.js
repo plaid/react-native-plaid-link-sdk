@@ -52,11 +52,11 @@ const openLink = async ({ onExit, onSuccess, ...serializable }) => {
 };
 
 export const PlaidLink = ({
+  children,
+  title,
   accessibilityLabel,
   activeOpacity,
-  children,
   color,
-  title,
   ...linkProps
 }) => {
   return (

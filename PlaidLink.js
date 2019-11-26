@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, NativeModules, Platform, View } from 'react-native';
+import { NativeModules, Platform, TouchableOpacity, View } from 'react-native';
 
 const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   if (Platform.OS === 'android') {
@@ -53,24 +53,20 @@ const openLink = async ({ onExit, onSuccess, ...serializable }) => {
 
 export const PlaidLink = ({
   children,
-  className,
-  title,
+  style,
   accessibilityLabel,
-  color,
+  testID,
   ...linkProps
 }) => {
   return (
-    <View>
-      <Button
-        className={className}
+      <TouchableOpacity
+        style={style}
         onPress={() => openLink(linkProps)}
-        title={title}
         accessibilityLabel={accessibilityLabel}
-        color={color}
+        testID={testID}
       >
         {children}
-      </Button>
-    </View>
+      </TouchableOpacity>
   );
 };
 
@@ -107,9 +103,6 @@ PlaidLink.propTypes = {
   publicKey: PropTypes.string.isRequired,
 
   // Optional props
-
-  // Button class name as a string.
-  className: PropTypes.string,
 
   // A list of Plaid-supported country codes using the ISO-3166-1 alpha-2
   // country code standard.

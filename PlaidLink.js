@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { NativeModules, Platform, TouchableOpacity, View } from 'react-native';
+import { NativeModules, Platform, TouchableOpacity } from 'react-native';
 
 const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   if (Platform.OS === 'android') {
@@ -51,22 +51,24 @@ const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   }
 };
 
+const handlePress = (linkProps) => {
+  openLink(linkProps);
+  if (componentProps && componentProps.onPress) {
+    componentProps.onPress();
+  };
+};
+
 export const PlaidLink = ({
-  children,
-  style,
-  accessibilityLabel,
-  testID,
+  component,
+  componentProps,
   ...linkProps
 }) => {
+  const Component = component;
   return (
-      <TouchableOpacity
-        style={style}
-        onPress={() => openLink(linkProps)}
-        accessibilityLabel={accessibilityLabel}
-        testID={testID}
-      >
-        {children}
-      </TouchableOpacity>
+    <Component
+      {...componentProps}
+      onPress={() => handlePress(linkProps)}
+    />
   );
 };
 
@@ -129,6 +131,16 @@ PlaidLink.propTypes = {
   // Specify a webhook to associate with a user.
   webhook: PropTypes.string,
 
+  // Underlying component to render
+  component: PropTypes.func,
+
+  // Props for underlying component
+  componentProps: PropTypes.object,
+
   // Note: onEvent is omitted here, to handle onEvent callbacks refer to
   // the documentation here: https://github.com/plaid/react-native-plaid-link-sdk#to-receive-onevent-callbacks
+};
+
+PlaidLink.defaultProps = {
+  component: TouchableOpacity,
 };

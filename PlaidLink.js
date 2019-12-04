@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { NativeModules, Platform, TouchableOpacity } from 'react-native';
 
-const openLink = async ({ onExit, onSuccess, ...serializable }) => {
+export const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   if (Platform.OS === 'android') {
     const constants = NativeModules.PlaidAndroid.getConstants();
     NativeModules.PlaidAndroid.startLinkActivityForResult(
@@ -51,11 +51,11 @@ const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   }
 };
 
-const handlePress = (linkProps) => {
+const handlePress = (linkProps, componentProps) => {
   openLink(linkProps);
   if (componentProps && componentProps.onPress) {
     componentProps.onPress();
-  };
+  }
 };
 
 export const PlaidLink = ({
@@ -67,7 +67,7 @@ export const PlaidLink = ({
   return (
     <Component
       {...componentProps}
-      onPress={() => handlePress(linkProps)}
+      onPress={() => handlePress(linkProps, componentProps)}
     />
   );
 };

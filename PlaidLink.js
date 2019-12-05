@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, NativeModules, Platform, View } from 'react-native';
+import { NativeModules, Platform, TouchableOpacity } from 'react-native';
 
-const openLink = async ({ onExit, onSuccess, ...serializable }) => {
+export const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   if (Platform.OS === 'android') {
     const constants = NativeModules.PlaidAndroid.getConstants();
     NativeModules.PlaidAndroid.startLinkActivityForResult(
@@ -51,26 +51,24 @@ const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   }
 };
 
+const handlePress = (linkProps, componentProps) => {
+  openLink(linkProps);
+  if (componentProps && componentProps.onPress) {
+    componentProps.onPress();
+  }
+};
+
 export const PlaidLink = ({
-  children,
-  className,
-  title,
-  accessibilityLabel,
-  color,
+  component,
+  componentProps,
   ...linkProps
 }) => {
+  const Component = component;
   return (
-    <View>
-      <Button
-        className={className}
-        onPress={() => openLink(linkProps)}
-        title={title}
-        accessibilityLabel={accessibilityLabel}
-        color={color}
-      >
-        {children}
-      </Button>
-    </View>
+    <Component
+      {...componentProps}
+      onPress={() => handlePress(linkProps, componentProps)}
+    />
   );
 };
 
@@ -108,9 +106,6 @@ PlaidLink.propTypes = {
 
   // Optional props
 
-  // Button class name as a string.
-  className: PropTypes.string,
-
   // A list of Plaid-supported country codes using the ISO-3166-1 alpha-2
   // country code standard.
   countryCodes: PropTypes.arrayOf(PropTypes.string),
@@ -136,6 +131,16 @@ PlaidLink.propTypes = {
   // Specify a webhook to associate with a user.
   webhook: PropTypes.string,
 
+  // Underlying component to render
+  component: PropTypes.func,
+
+  // Props for underlying component
+  componentProps: PropTypes.object,
+
   // Note: onEvent is omitted here, to handle onEvent callbacks refer to
   // the documentation here: https://github.com/plaid/react-native-plaid-link-sdk#to-receive-onevent-callbacks
+};
+
+PlaidLink.defaultProps = {
+  component: TouchableOpacity,
 };

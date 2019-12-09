@@ -58,11 +58,7 @@ const handlePress = (linkProps, componentProps) => {
   }
 };
 
-export const PlaidLink = ({
-  component,
-  componentProps,
-  ...linkProps
-}) => {
+export const PlaidLink = ({ component, componentProps, ...linkProps }) => {
   const Component = component;
   return (
     <Component
@@ -103,6 +99,10 @@ PlaidLink.propTypes = {
   // The public_key associated with your account; available from
   // the Plaid dashboard (https://dashboard.plaid.com).
   publicKey: PropTypes.string.isRequired,
+
+  // The redirect uri for the android sdk which must be
+  // registered on dashboard.plaid.com
+  webviewRedirectUri: PropTypes.string.isRequired,
 
   // Optional props
 

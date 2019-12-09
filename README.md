@@ -8,7 +8,13 @@ npm install --save react-native-plaid-link-sdk
 
 ## iOS
 
-Add pod 'Plaid' to your project’s Podfile (likely located at `ios/Podfile` )
+Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The current minimum version supported is `1.1.25`.
+
+```
+pod 'Plaid', '~> 1.1.25'
+```
+
+Then install your cocoapods dependencies:
 
 ```
 cd ios && pod install && cd ..
@@ -40,11 +46,30 @@ followed by
 Inside the <application> tag add:
 ```
 <activity android:name="com.plaid.link.LinkActivity" />
+
+<activity android:name="com.plaid.link.redirect.LinkRedirectActivity">
+  <intent-filter android:autoVerify="true">
+    <action android:name="android.intent.action.VIEW" />
+
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+
+    <data
+      android:host="redirect"
+      android:scheme="yourappname" />
+  </intent-filter>
+</activity>
  
-    <meta-data
-      android:name="com.plaid.link.public_key"
-      android:value="YOUR KEY" />
+<meta-data
+  android:name="com.plaid.link.public_key"
+  android:value="YOUR KEY" />
 ```
+
+To register your redirect uri:
+1. Log into your [Plaid Dashboard](https://dashboard.plaid.com/)
+2. Select API under Team Settings in the top navigation bar
+3. Click configure then Add New Uri then enter your Uri  (for example yourAppName://redirect)
+4. Click Save Changes
 
  ### `android/app/src/main/java/<AppName>/MainApplication.java`
 
@@ -58,7 +83,7 @@ Add `Plaid.create(this);` in `public void onCreate()` along with `import com.pla
 
 ### `android/app/build.gradle`
 
-Add `implementation project(':react-native-plaid-link-sdk')` and `implementation 'com.plaid.link:sdk-core:0.2.1'` in the dependencies block
+Add `implementation project(':react-native-plaid-link-sdk')` and `implementation 'com.plaid.link:sdk-core:0.3.0'` in the dependencies block
 
 
 ### `android/settings.gradle`
@@ -90,6 +115,7 @@ const MyPlaidComponent = () => {
       env='<# Environment #>'  // 'sandbox' or 'development' or 'production'
       onSuccess={e => console.log('success: ', e)}
       product={['<# Product #>']}
+      webviewRedirectUri = "yourAppName://redirect"
  
       // Optional props
       countryCodes={['<# Country Code #>']}

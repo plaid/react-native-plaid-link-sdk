@@ -45,6 +45,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val WEBHOOK = "webhook"
     private const val DATA = "data"
     private const val RESULT_CODE = "resultCode"
+    private const val WEBVIEW_REDIRECT_URI = "webviewRedirectUri"
     private const val LINK_REQUEST_CODE = 101
   }
 
@@ -98,7 +99,11 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         }
       }
 
-      val builder = LinkConfiguration.Builder(obj.getString(CLIENT_NAME), productsArray)
+      val builder = LinkConfiguration.Builder(
+        obj.getString(CLIENT_NAME),
+        productsArray,
+        obj.getString(WEBVIEW_REDIRECT_URI)
+      )
 
       if (obj.has(COUNTRY_CODES)) {
         val countryCodes = ArrayList<String>()
@@ -159,8 +164,9 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       }
 
       Plaid.setLinkEventListener(LinkEventListener {
+        var event = snakeCaseGson.toJson(it).replace("event_name", "event")
         reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-          .emit("onEvent", snakeCaseGson.toJson(it))
+          .emit("onEvent", JSONObject(event))
       })
 
       Plaid.openLink(activity, builder.build(), LINK_REQUEST_CODE)

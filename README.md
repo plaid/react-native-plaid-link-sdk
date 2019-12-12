@@ -114,6 +114,7 @@ const MyPlaidComponent = () => {
       clientName='<# Your Client Name #>'
       env='<# Environment #>'  // 'sandbox' or 'development' or 'production'
       onSuccess={e => console.log('success: ', e)}
+      onExit={e => console.log('exit: ', e)}
       product={['<# Product #>']}
       webviewRedirectUri = "yourAppName://redirect"
  

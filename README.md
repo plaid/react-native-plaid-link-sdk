@@ -59,7 +59,7 @@ Inside the <application> tag add:
       android:scheme="yourappname" />
   </intent-filter>
 </activity>
- 
+
 <meta-data
   android:name="com.plaid.link.public_key"
   android:value="YOUR KEY" />
@@ -101,22 +101,22 @@ In your app:
 
 ```
 import PlaidLink from 'react-native-plaid-link-sdk';
- 
+
 const MyPlaidComponent = () => {
   return (
     <PlaidLink
-      title='Add Account'
+      component={() => {return <Button title="Add Bank" />;}}
 
      // Replace any of the following <#VARIABLE#>s according to your setup,
      // for details see https://plaid.com/docs/quickstart/#client-side-link-configuration
- 
+
       publicKey='<# Your Public Key #>'
       clientName='<# Your Client Name #>'
       env='<# Environment #>'  // 'sandbox' or 'development' or 'production'
       onSuccess={e => console.log('success: ', e)}
       product={['<# Product #>']}
       webviewRedirectUri = "yourAppName://redirect"
- 
+
       // Optional props
       countryCodes={['<# Country Code #>']}
       language='<# Language #>'
@@ -137,23 +137,24 @@ The React Native Plaid module emits `onEvent` events throughout the account link
 ```
 import React from 'react';
 import { NativeEventEmitter, NativeModules } from 'react-native';
- 
+
 class PlaidEventContainer extends React.Component {
- 
+
   componentDidMount() {
     const emitter = new NativeEventEmitter(Platform.OS === 'ios' ? NativeModules.RNLinksdk : NativeModules.PlaidAndroid);
     this._listener = emitter.addListener('onEvent', (e) => console.log(e));
   }
- 
+
   componentWillUnmount() {
     if (this._listener) {
       this._listener.remove();
     }
   }
- 
+
   render() {
     return (
       <PlaidLink
+        component={() => {return <Button title="Add Bank" />;}}
         clientName='##YOUR CLIENT NAME##'
         publicKey='#YOUR PUBLIC KEY##'
         env='sandbox'

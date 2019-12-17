@@ -174,8 +174,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       }
 
       Plaid.setLinkEventListener(LinkEventListener {
+        var json = snakeCaseGson.toJson(it)
+        json = json.replace("event_name", "event")
         reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-          .emit("onEvent", convertJsonToMap(JSONObject(snakeCaseGson.toJson(it))))
+          .emit("onEvent", convertJsonToMap(JSONObject(json)))
       })
 
       Plaid.openLink(activity, builder.build(), LINK_REQUEST_CODE)

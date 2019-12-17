@@ -100,32 +100,33 @@ project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projec
 In your app:
 
 ```
+import Text from 'react-native';
 import PlaidLink from 'react-native-plaid-link-sdk';
  
 const MyPlaidComponent = () => {
   return (
     <PlaidLink
-      title='Add Account'
-
      // Replace any of the following <#VARIABLE#>s according to your setup,
      // for details see https://plaid.com/docs/quickstart/#client-side-link-configuration
  
       publicKey='<# Your Public Key #>'
       clientName='<# Your Client Name #>'
       env='<# Environment #>'  // 'sandbox' or 'development' or 'production'
-      onSuccess={e => console.log('success: ', e)}
       product={['<# Product #>']}
       webviewRedirectUri = "yourAppName://redirect"
+      onSuccess={data => console.log('success: ', data)}
+      onExit={data => console.log('exit: ', data)}
  
       // Optional props
       countryCodes={['<# Country Code #>']}
       language='<# Language #>'
-      onExit={e => console.log('exit: ', e)}
       userEmailAddress='<# User Email #>'
       userLegalName='<# User Legal Name #>'
       userPhoneNumber='<# User Phone Number #>'
       webhook='<# Webhook URL #>'
-    />
+    >
+      <Text>Add Account</Text>
+    </PlaidLink>
   );
 };
 ```
@@ -136,7 +137,7 @@ The React Native Plaid module emits `onEvent` events throughout the account link
 
 ```
 import React from 'react';
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import { Text, NativeEventEmitter, NativeModules } from 'react-native';
  
 class PlaidEventContainer extends React.Component {
  
@@ -157,13 +158,36 @@ class PlaidEventContainer extends React.Component {
         clientName='##YOUR CLIENT NAME##'
         publicKey='#YOUR PUBLIC KEY##'
         env='sandbox'
-        onSuccess={e => console.log('success: ', e)}
-        onExit={e => console.log('exit: ', e)}
+        onSuccess={data => console.log('success: ', data)}
+        onExit={data => console.log('exit: ', data)}
         product={['transactions']}
         language='en'
         countryCodes={['US']}
-      />
+      >
+        <Text>Add Account</Text>
+      </PlaidLink>
     );
   }
 }
+```
+
+### Customizing the PlaidLink component
+
+By default, `PlaidLink` renders a `TouchableOpacity` component. You may override the component used by passing `component` and `componentProps`. For example:
+
+```
+      <PlaidLink
+        clientName = "Component Test"
+        publicKey = "##YOUR PUBLIC KEY##"
+        products = {["transactions"]}
+        env = "sandbox"
+        component= {Button}
+        componentProps = {{title: 'Add Account'}}
+        onSuccess = {(result) => {console.log('Success: ', result)}}
+        onError = {(result) => {console.log('Error: ', result)}}
+        onCancelled = {(result) => {console.log('Cancelled: ', result)}}
+        product = {["transactions"]}
+        language = "en"
+        countryCodes = {["US"]}
+    >
 ```

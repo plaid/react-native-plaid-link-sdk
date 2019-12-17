@@ -58,13 +58,20 @@ const handlePress = (linkProps, componentProps) => {
   }
 };
 
-export const PlaidLink = ({ component, componentProps, ...linkProps }) => {
+export const PlaidLink = ({
+  component,
+  componentProps,
+  children,
+  ...linkProps
+}) => {
   const Component = component;
   return (
     <Component
       {...componentProps}
       onPress={() => handlePress(linkProps, componentProps)}
-    />
+    >
+      {children}
+    </Component>
   );
 };
 

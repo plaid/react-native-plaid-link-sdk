@@ -15,8 +15,11 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.plaid.link.Plaid
+import com.plaid.linkbase.models.LinkCancellation
 import com.plaid.linkbase.models.LinkConfiguration
+import com.plaid.linkbase.models.LinkConnection
 import com.plaid.linkbase.models.LinkEventListener
+import com.plaid.linkbase.models.PlaidApiError
 import com.plaid.linkbase.models.PlaidEnvironment
 import com.plaid.linkbase.models.PlaidProduct
 import org.json.JSONException
@@ -38,6 +41,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val COUNTRY_CODES = "countryCodes"
     private const val LANGUAGE = "language"
     private const val ENV = "env"
+    private const val LINK_CUSTOMIZATION_NAME = "linkCustomizationName"
     private const val PUBLIC_TOKEN = "publicToken"
     private const val USER_EMAIL = "userEmailAddress"
     private const val USER_NAME = "userLegalName"
@@ -133,6 +137,12 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         }
       }
 
+      if (obj.has(LINK_CUSTOMIZATION_NAME)) {
+        if (!TextUtils.isEmpty(obj.getString(LINK_CUSTOMIZATION_NAME))) {
+          builder.linkCustomizationName(obj.getString(LINK_CUSTOMIZATION_NAME))
+        }
+      }
+
       if (obj.has(PUBLIC_TOKEN)) {
         if (!TextUtils.isEmpty(obj.getString(PUBLIC_TOKEN))) {
           builder.publicToken(obj.getString(PUBLIC_TOKEN))
@@ -164,9 +174,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       }
 
       Plaid.setLinkEventListener(LinkEventListener {
-        var event = snakeCaseGson.toJson(it).replace("event_name", "event")
         reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-          .emit("onEvent", JSONObject(event))
+          .emit("onEvent", convertJsonToMap(JSONObject(snakeCaseGson.toJson(it))))
       })
 
       Plaid.openLink(activity, builder.build(), LINK_REQUEST_CODE)
@@ -191,25 +200,20 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
     if (requestCode == LINK_REQUEST_CODE) {
       if (resultCode == Plaid.RESULT_SUCCESS) {
-        val item = data.getSerializableExtra(Plaid.LINK_RESULT)
-        if (item != null) {
-          result.putString(DATA, snakeCaseGson.toJson(item))
-        }
+        val item = data.getParcelableExtra(Plaid.LINK_RESULT) as LinkConnection
+        result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(item))))
       } else if (resultCode == Plaid.RESULT_CANCELLED) {
-        val cancellation = data.getSerializableExtra(Plaid.LINK_RESULT)
-        if (cancellation != null) {
-          result.putString(DATA, snakeCaseGson.toJson(cancellation))
-        }
+        val cancellation = data.getParcelableExtra(Plaid.LINK_RESULT) as LinkCancellation
+        result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(cancellation))))
       } else if (resultCode == Plaid.RESULT_EXIT) {
-        val error = data.getSerializableExtra(Plaid.LINK_RESULT)
-        if (error != null) {
-          result.putString(DATA, snakeCaseGson.toJson(error))
-        }
+        val error = data.getParcelableExtra(Plaid.LINK_RESULT) as PlaidApiError
+        result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(error))))
       } else if (resultCode == Plaid.RESULT_EXCEPTION) {
-        val exception = data.getSerializableExtra(Plaid.LINK_RESULT)
-        if (exception != null) {
-          result.putString(DATA, snakeCaseGson.toJson(exception))
-        }
+        val exception = data.getSerializableExtra(Plaid.LINK_RESULT) as Exception
+        val map = WritableNativeMap()
+        map.putString("class", exception.javaClass.name)
+        map.putString("message", exception.message)
+        result.putMap(DATA, map)
       }
       this.callback?.invoke(result)
     } else {

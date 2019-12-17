@@ -10,6 +10,7 @@ static NSString* const kRNLinkKitConfigEnvKey = @"env";
 static NSString* const kRNLinkKitConfigProductsKey = @"product";
 static NSString* const kRNLinkKitConfigClientNameKey = @"clientName";
 static NSString* const kRNLinkKitConfigWebhookKey = @"webhook";
+static NSString* const kRNLinkKitConfigLinkCustomizationName = @"linkCustomizationName";
 static NSString* const kRNLinkKitConfigPublicTokenKey = @"token";
 static NSString* const kRNLinkKitConfigSelectAccountKey = @"selectAccount";
 static NSString* const kRNLinkKitConfigUserLegalNameKey = @"userLegalName";
@@ -87,6 +88,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     NSArray<NSString*> *products = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];
     NSString *clientName = [RCTConvert NSString:configuration[kRNLinkKitConfigClientNameKey]];
     NSString *webhook = [RCTConvert NSString:configuration[kRNLinkKitConfigWebhookKey]];
+    NSString *linkCustomizationName = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkCustomizationName]];
     NSString *publicTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicTokenKey]];
     NSString *userLegalName = [RCTConvert NSString:configuration[kRNLinkKitConfigUserLegalNameKey]];
     NSString *userEmailAddress = [RCTConvert NSString:configuration[kRNLinkKitConfigUserEmailAddressKey]];
@@ -109,6 +111,9 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
                                                                     apiVersion:apiVersion];
     if ([clientName length] > 0) {
        linkConfiguration.clientName = clientName;
+    }
+    if([linkCustomizationName length] > 0) {
+        linkConfiguration.linkCustomizationName = linkCustomizationName;
     }
     if ([webhook length] > 0) {
        linkConfiguration.webhook = [NSURL URLWithString:webhook];

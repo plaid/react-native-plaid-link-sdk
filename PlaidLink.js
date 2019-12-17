@@ -110,6 +110,9 @@ PlaidLink.propTypes = {
   // country code standard.
   countryCodes: PropTypes.arrayOf(PropTypes.string),
 
+  // Allows non default customization to be retrieved by name.
+  linkCustomizationName: PropTypes.string,
+
   // Plaid-supported language to localize Link. English will be used by default.
   language: PropTypes.string,
 

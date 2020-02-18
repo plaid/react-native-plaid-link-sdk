@@ -100,7 +100,7 @@ project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projec
 In your app:
 
 ```
-import Text from 'react-native';
+import { Text } from 'react-native';
 import PlaidLink from 'react-native-plaid-link-sdk';
  
 const MyPlaidComponent = () => {

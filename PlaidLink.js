@@ -14,7 +14,6 @@ export const openLink = async ({ onExit, onSuccess, ...serializable }) => {
               onSuccess(result.data);
             }
             break;
-          case constants.RESULT_EXCEPTION:
           case constants.RESULT_CANCELLED:
           case constants.RESULT_EXIT:
             if (onExit != null) {
@@ -140,6 +139,42 @@ PlaidLink.propTypes = {
 
   // Specify a webhook to associate with a user.
   webhook: PropTypes.string,
+
+  // Specify an existing payment token to launch Link in payment initation mode.
+  // This will cause Link to open a payment confirmation dialog prior to
+  // institution selection.
+  paymentToken: PropTypes.string,
+
+  // An oauthNonce is required to support OAuth authentication flows when
+  // launching Link within a WebView and using one or more European country
+  // codes. The nonce must be at least 16 characters long.
+  oauthNonce: PropTypes.string,
+
+  // An oauthRedirectUri is required to support OAuth authentication flows when
+  // launching or re-launching Link within a WebView and using one or more
+  // European country codes.
+  oauthRedirectUri: function(props, propName) {
+    let value = props[propName];
+    if (value === undefined || value === null) {
+      return;
+    }
+    if (typeof value !== 'string') {
+      return new Error(
+        'Invalid `' +
+          propName +
+          '`: Expected string instead of ' +
+          typeof value,
+      );
+    }
+    if (/^https?:\/\/(localhost|127.0.0.1)/.test(value)) {
+      return new Error('Invalid `' + propName + '`: localhost disallowed');
+    }
+  },
+
+  // An oauthStateId is required to support OAuth authentication and payment flows when
+  // re-launching Link within a WebView and using one or more European country
+  // codes.
+  oauthStateId: PropTypes.string,
 
   // Underlying component to render
   component: PropTypes.func,

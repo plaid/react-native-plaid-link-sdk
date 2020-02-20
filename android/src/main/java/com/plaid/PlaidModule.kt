@@ -3,6 +3,7 @@ package com.plaid
 import android.app.Activity
 import android.content.Intent
 import android.text.TextUtils
+import android.util.Log
 import com.facebook.react.bridge.ActivityEventListener
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Callback
@@ -15,13 +16,13 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.plaid.link.Plaid
-import com.plaid.linkbase.models.LinkCancellation
-import com.plaid.linkbase.models.LinkConfiguration
-import com.plaid.linkbase.models.LinkConnection
-import com.plaid.linkbase.models.LinkEventListener
-import com.plaid.linkbase.models.PlaidApiError
-import com.plaid.linkbase.models.PlaidEnvironment
-import com.plaid.linkbase.models.PlaidProduct
+import com.plaid.linkbase.models.configuration.LinkConfiguration
+import com.plaid.linkbase.models.configuration.PlaidEnvironment
+import com.plaid.linkbase.models.configuration.PlaidProduct
+import com.plaid.linkbase.models.connection.LinkCancellation
+import com.plaid.linkbase.models.connection.LinkConnection
+import com.plaid.linkbase.models.connection.PlaidError
+import com.plaid.log.internal.Plog
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
@@ -37,6 +38,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
   companion object {
     private const val PRODUCTS = "product"
+    private const val PUBLIC_KEY = "publicKey"
     private const val CLIENT_NAME = "clientName"
     private const val COUNTRY_CODES = "countryCodes"
     private const val LANGUAGE = "language"
@@ -49,7 +51,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val WEBHOOK = "webhook"
     private const val DATA = "data"
     private const val RESULT_CODE = "resultCode"
-    private const val WEBVIEW_REDIRECT_URI = "webviewRedirectUri"
     private const val LINK_REQUEST_CODE = 101
   }
 
@@ -62,7 +63,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     constants["RESULT_SUCCESS"] = Plaid.RESULT_SUCCESS
     constants["RESULT_CANCELLED"] = Plaid.RESULT_CANCELLED
     constants["RESULT_EXIT"] = Plaid.RESULT_EXIT
-    constants["RESULT_EXCEPTION"] = Plaid.RESULT_EXCEPTION
     constants["REQUEST_CODE"] = LINK_REQUEST_CODE
     return constants
   }
@@ -88,6 +88,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     try {
       val obj = JSONObject(data)
 
+      Plaid.setPublicKey(obj.getString(PUBLIC_KEY))
+
       val productsArray = ArrayList<PlaidProduct>()
       var jsonArray = obj.getJSONArray(PRODUCTS)
       for (i in 0 until jsonArray.length()) {
@@ -105,8 +107,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
       val builder = LinkConfiguration.Builder(
         obj.getString(CLIENT_NAME),
-        productsArray,
-        obj.getString(WEBVIEW_REDIRECT_URI)
+        productsArray
       )
 
       if (obj.has(COUNTRY_CODES)) {
@@ -173,18 +174,18 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         }
       }
 
-      Plaid.setLinkEventListener(LinkEventListener {
+      Plaid.setLinkEventListener {
         var json = snakeCaseGson.toJson(it)
         json = json.replace("event_name", "event")
         reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
           .emit("onEvent", convertJsonToMap(JSONObject(json)))
-      })
+      }
 
       Plaid.openLink(activity, builder.build(), LINK_REQUEST_CODE)
     } catch (ex: JSONException) {
       val result = WritableNativeMap()
-      result.putInt(RESULT_CODE, Plaid.RESULT_EXCEPTION)
-      result.putString(DATA, snakeCaseGson.toJson(ex))
+      result.putInt(RESULT_CODE, Plaid.RESULT_EXIT)
+      result.putString(DATA, snakeCaseGson.toJson(PlaidError.fromException(ex)))
       this.callback?.invoke(result)
     }
 
@@ -194,11 +195,20 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     activity: Activity,
     requestCode: Int,
     resultCode: Int,
-    data: Intent
+    data: Intent?
   ) {
     val result = WritableNativeMap()
 
     result.putInt(RESULT_CODE, resultCode)
+
+    // This should not happen but if it does we have no data to return
+    if (data == null) {
+      Plog.w(Log.getStackTraceString(Throwable()))
+      val cancellation = LinkCancellation("")
+      result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(cancellation))))
+      this.callback?.invoke(result)
+      return
+    }
 
     if (requestCode == LINK_REQUEST_CODE) {
       if (resultCode == Plaid.RESULT_SUCCESS) {
@@ -208,14 +218,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         val cancellation = data.getParcelableExtra(Plaid.LINK_RESULT) as LinkCancellation
         result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(cancellation))))
       } else if (resultCode == Plaid.RESULT_EXIT) {
-        val error = data.getParcelableExtra(Plaid.LINK_RESULT) as PlaidApiError
+        val error = data.getParcelableExtra(Plaid.LINK_RESULT) as PlaidError
         result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(error))))
-      } else if (resultCode == Plaid.RESULT_EXCEPTION) {
-        val exception = data.getSerializableExtra(Plaid.LINK_RESULT) as Exception
-        val map = WritableNativeMap()
-        map.putString("class", exception.javaClass.name)
-        map.putString("message", exception.message)
-        result.putMap(DATA, map)
       }
       this.callback?.invoke(result)
     } else {

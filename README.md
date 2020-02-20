@@ -6,12 +6,16 @@ In your react-native project directory:
 npm install --save react-native-plaid-link-sdk
 ```
 
+## Updating from previous versions.
+
+When upgrading from a previous major version of this library, see the notes [here](./upgrade_notes) for additional instructions.
+
 ## iOS
 
 Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The current minimum version supported is `1.1.25`.
 
 ```
-pod 'Plaid', '~> 1.1.25'
+pod 'Plaid', '~> 1.1.27'
 ```
 
 Then install your cocoapods dependencies:
@@ -41,35 +45,10 @@ followed by
 
 ## Android
 
-### `android/app/src/main/AndroidManifest.xml`
-
-Inside the <application> tag add:
-```
-<activity android:name="com.plaid.link.LinkActivity" />
-
-<activity android:name="com.plaid.link.redirect.LinkRedirectActivity">
-  <intent-filter android:autoVerify="true">
-    <action android:name="android.intent.action.VIEW" />
-
-    <category android:name="android.intent.category.DEFAULT" />
-    <category android:name="android.intent.category.BROWSABLE" />
-
-    <data
-      android:host="redirect"
-      android:scheme="yourappname" />
-  </intent-filter>
-</activity>
- 
-<meta-data
-  android:name="com.plaid.link.public_key"
-  android:value="YOUR KEY" />
-```
-
-To register your redirect uri:
-1. Log into your [Plaid Dashboard](https://dashboard.plaid.com/)
-2. Select API under Team Settings in the top navigation bar
-3. Click configure then Add New Uri then enter your Uri  (for example yourAppName://redirect)
-4. Click Save Changes
+To register your app id:
+1. Log into your [Plaid Dashboard](https://dashboard.plaid.com/team/api) at the API page
+2. Next to Allowed Android package names click "Configure" then "Add New Android Package Name" (for example com.plaid.example)
+3. Click "Save Changes", you may be prompted to re-enter your password
 
  ### `android/app/src/main/java/<AppName>/MainApplication.java`
 
@@ -78,12 +57,9 @@ Add `import com.plaid.PlaidPackage;` on the imports section
 
 Add `packages.add(new PlaidPackage());` in `List<ReactPackage> getPackages();`
 
-
-Add `Plaid.create(this);` in `public void onCreate()` along with `import com.plaid.link.Plaid;` at the top of the file.
-
 ### `android/app/build.gradle`
 
-Add `implementation project(':react-native-plaid-link-sdk')` and `implementation 'com.plaid.link:sdk-core:0.3.0'` in the dependencies block
+Add `implementation project(':react-native-plaid-link-sdk')` and `implementation 'com.plaid.link:sdk-core:1.0.0'` in the dependencies block
 
 
 ### `android/settings.gradle`
@@ -113,9 +89,9 @@ const MyPlaidComponent = () => {
       clientName='<# Your Client Name #>'
       env='<# Environment #>'  // 'sandbox' or 'development' or 'production'
       product={['<# Product #>']}
-      webviewRedirectUri = "yourAppName://redirect"
       onSuccess={data => console.log('success: ', data)}
       onExit={data => console.log('exit: ', data)}
+      onCancelled = {(result) => {console.log('Cancelled: ', result)}}
  
       // Optional props
       countryCodes={['<# Country Code #>']}
@@ -160,6 +136,7 @@ class PlaidEventContainer extends React.Component {
         env='sandbox'
         onSuccess={data => console.log('success: ', data)}
         onExit={data => console.log('exit: ', data)}
+        onCancelled = {(result) => {console.log('Cancelled: ', result)}}
         product={['transactions']}
         language='en'
         countryCodes={['US']}

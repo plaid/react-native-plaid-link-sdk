@@ -12,6 +12,7 @@ static NSString* const kRNLinkKitConfigClientNameKey = @"clientName";
 static NSString* const kRNLinkKitConfigWebhookKey = @"webhook";
 static NSString* const kRNLinkKitConfigLinkCustomizationName = @"linkCustomizationName";
 static NSString* const kRNLinkKitConfigPublicTokenKey = @"token";
+static NSString* const kRNLinkKitConfigPaymentTokenKey = @"paymentToken";
 static NSString* const kRNLinkKitConfigSelectAccountKey = @"selectAccount";
 static NSString* const kRNLinkKitConfigUserLegalNameKey = @"userLegalName";
 static NSString* const kRNLinkKitConfigUserEmailAddressKey = @"userEmailAddress";
@@ -21,6 +22,9 @@ static NSString* const kRNLinkKitConfigLanguageKey = @"language";
 static NSString* const kRNLinkKitConfigInstitutionKey = @"institution";
 static NSString* const kRNLinkKitConfigLongtailAuthKey = @"longtailAuth";
 static NSString* const kRNLinkKitConfigApiVersionKey = @"apiVersion";
+static NSString* const kRNLinkKitConfigOAuthRedirectUriKey = @"oauthRedirectUri";
+static NSString* const kRNLinkKitConfigOAuthNonceKey = @"oauthNonce";
+static NSString* const kRNLinkKitConfigOAuthStateIdKey = @"oauthStateId";
 
 static NSString* const kRNLinkKitOnEventEvent = @"onEvent";
 static NSString* const kRNLinkKitEventTokenKey = @"public_token";
@@ -90,9 +94,13 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     NSString *webhook = [RCTConvert NSString:configuration[kRNLinkKitConfigWebhookKey]];
     NSString *linkCustomizationName = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkCustomizationName]];
     NSString *publicTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicTokenKey]];
+    NSString *paymentTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigPaymentTokenKey]];
     NSString *userLegalName = [RCTConvert NSString:configuration[kRNLinkKitConfigUserLegalNameKey]];
     NSString *userEmailAddress = [RCTConvert NSString:configuration[kRNLinkKitConfigUserEmailAddressKey]];
     NSString *userPhoneNumber = [RCTConvert NSString:configuration[kRNLinkKitConfigUserPhoneNumberKey]];
+    NSString *oauthRedirectUri = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthRedirectUriKey]];
+    NSString *oauthNonce = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthNonceKey]];
+    NSString *oauthStateId = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthStateIdKey]];
     NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
     NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
     BOOL selectAccount = [RCTConvert BOOL:configuration[kRNLinkKitConfigSelectAccountKey]];
@@ -126,6 +134,12 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     }
     if ([userPhoneNumber length] > 0) {
         linkConfiguration.userPhoneNumber = userPhoneNumber;
+    }
+    if ([oauthRedirectUri length] > 0) {
+        linkConfiguration.oauthRedirectUri = [NSURL URLWithString:oauthRedirectUri];
+    }
+    if ([oauthNonce length] > 0) {
+        linkConfiguration.oauthNonce = oauthNonce;
     }
     if ([countryCodes count] > 0) {
        linkConfiguration.countryCodes = countryCodes;
@@ -171,6 +185,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         }
     };
 
+
     if ([publicTokenInput length] > 0) {
         self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPublicToken:publicTokenInput
                                                                             configuration:linkConfiguration
@@ -180,6 +195,17 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithInstitution:institution
                                                                        configuration:linkConfiguration
                                                                             delegate:self.linkViewDelegate];
+    }
+    else if ([paymentTokenInput length] > 0) {
+        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPaymentToken:paymentToken
+                                                                              oauthStateId:oauthStateId
+                                                                             configuration:linkConfiguration
+                                                                                  delegate:self.linkViewDelegate];
+    }
+    else if ([oauthStateId length] > 0) {
+        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithOAuthStateId:oauthStateId
+                                                                             configuration:linkConfiguration
+                                                                                  delegate:self.linkViewDelegate];
     }
     else {
         self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithConfiguration:linkConfiguration

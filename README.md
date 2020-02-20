@@ -12,7 +12,7 @@ When upgrading from a previous major version of this library, see the notes [her
 
 ## iOS
 
-Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The current minimum version supported is `1.1.25`.
+Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The current minimum version supported is `1.1.27`.
 
 ```
 pod 'Plaid', '~> 1.1.27'

@@ -106,10 +106,6 @@ PlaidLink.propTypes = {
   // the Plaid dashboard (https://dashboard.plaid.com).
   publicKey: PropTypes.string.isRequired,
 
-  // The redirect uri for the android sdk which must be
-  // registered on dashboard.plaid.com
-  webviewRedirectUri: PropTypes.string.isRequired,
-
   // Optional props
 
   // A list of Plaid-supported country codes using the ISO-3166-1 alpha-2

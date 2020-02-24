@@ -201,34 +201,32 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
     result.putInt(RESULT_CODE, resultCode)
 
-    // This should not happen but if it does we have no data to return
-    if (data == null) {
-      Plog.w(Log.getStackTraceString(Throwable()))
-      val cancellation = LinkCancellation("")
-      result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(cancellation))))
-      this.callback?.invoke(result)
-      return
-    }
-
     if (requestCode == LINK_REQUEST_CODE) {
       if (resultCode == Plaid.RESULT_SUCCESS) {
-        val item = data.getParcelableExtra(Plaid.LINK_RESULT) as LinkConnection
+        val item = data!!.getParcelableExtra(Plaid.LINK_RESULT) as LinkConnection
         result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(item))))
       } else if (resultCode == Plaid.RESULT_CANCELLED) {
-        val cancellation = data.getParcelableExtra(Plaid.LINK_RESULT) as LinkCancellation
+        val cancellation = data!!.getParcelableExtra(Plaid.LINK_RESULT) as LinkCancellation
         result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(cancellation))))
       } else if (resultCode == Plaid.RESULT_EXIT) {
-        val error = data.getParcelableExtra(Plaid.LINK_RESULT) as PlaidError
+        val error = data!!.getParcelableExtra(Plaid.LINK_RESULT) as PlaidApiError
         result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(error))))
+      } else if (resultCode == Plaid.RESULT_EXCEPTION) {
+        val exception = data!!.getSerializableExtra(Plaid.LINK_RESULT) as Exception
+        val map = WritableNativeMap()
+        map.putString("class", exception.javaClass.name)
+        map.putString("message", exception.message)
+        result.putMap(DATA, map)
       }
       this.callback?.invoke(result)
     } else {
-      if (data.extras != null) {
-        result.putMap(DATA, Arguments.makeNativeMap(data.extras))
+      if (data!!.extras != null) {
+        result.putMap(DATA, Arguments.makeNativeMap(data!!.extras))
       }
       this.callback?.invoke(result)
     }
   }
+
 
   override fun onNewIntent(intent: Intent) {
     // Do Nothing

@@ -212,10 +212,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
                                                                               delegate:self.linkViewDelegate];
     }
     
-    // self.linkViewController.modalPresentationStyle = UIModalPresentationStyle.UIModalPresentationFullScreen;
-    // UIModalPresentationFullScreen = 0. I don't know what to import to get UIModalPresentationStyle enum
-    self.linkViewController.modalPresentationStyle = 0;
-
+    self.linkViewController.modalPresentationStyle = UIModalPresentationFullScreen;
 }
 
 RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {

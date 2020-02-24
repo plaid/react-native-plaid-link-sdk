@@ -211,6 +211,8 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithConfiguration:linkConfiguration
                                                                               delegate:self.linkViewDelegate];
     }
+    
+    self.linkViewController.modalPresentationStyle = UIModalPresentationFullScreen;
 }
 
 RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {

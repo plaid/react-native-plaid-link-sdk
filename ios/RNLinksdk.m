@@ -197,7 +197,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
                                                                             delegate:self.linkViewDelegate];
     }
     else if ([paymentTokenInput length] > 0) {
-        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPaymentToken:paymentToken
+        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPaymentToken:paymentTokenInput
                                                                               oauthStateId:oauthStateId
                                                                              configuration:linkConfiguration
                                                                                   delegate:self.linkViewDelegate];

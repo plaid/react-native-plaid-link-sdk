@@ -49,6 +49,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val USER_NAME = "userLegalName"
     private const val USER_PHONE = "userPhoneNumber"
     private const val WEBHOOK = "webhook"
+    private const val INSTITUTION = "institution"
     private const val DATA = "data"
     private const val RESULT_CODE = "resultCode"
     private const val LINK_REQUEST_CODE = 101
@@ -171,6 +172,12 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       if (obj.has(WEBHOOK)) {
         if (!TextUtils.isEmpty(obj.getString(WEBHOOK))) {
           builder.webhook(obj.getString(WEBHOOK))
+        }
+      }
+      
+      if (obj.has(INSTITUTION)) {
+        if (!TextUtils.isEmpty(obj.getString(INSTITUTION))) {
+          builder.extraParams(mapOf("institution" to obj.getString(INSTITUTION)))
         }
       }
 

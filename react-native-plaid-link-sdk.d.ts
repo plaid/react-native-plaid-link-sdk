@@ -1,5 +1,9 @@
-import React from 'react';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { FC } from 'react';
+import {
+  TouchableOpacity,
+  ContainedTouchableProperties,
+} from 'react-native-gesture-handler';
+import { TouchableOpacityProperties } from 'react-native';
 
 export interface OnSuccessMetadata {
   status: string;
@@ -97,7 +101,10 @@ export interface OnEventArgs {
 }
 
 declare module 'react-native-plaid-link-sdk' {
-  export interface PlaidLinkProps {
+  export interface PlaidLinkProps<
+    C = TouchableOpacity,
+    P = TouchableOpacityProperties | ContainedTouchableProperties
+  > {
     // Required props
 
     // Displayed once a user has successfully linked their account
@@ -178,10 +185,10 @@ declare module 'react-native-plaid-link-sdk' {
     oauthStateId?: string;
 
     // Underlying component to render
-    component?: React.ComponentType = TouchableOpacity;
+    component?: C;
 
     // Props for underlying component
-    componentProps?: Parameters<component>;
+    componentProps?: P;
 
     // Note: onEvent is omitted here, to handle onEvent callbacks refer to
     // the documentation here: https://github.com/plaid/react-native-plaid-link-sdk#to-receive-onevent-callbacks

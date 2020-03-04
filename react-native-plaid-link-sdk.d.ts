@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  TouchableOpacity,
-  ContainedTouchableProperties,
-} from 'react-native-gesture-handler';
-import { TouchableOpacityProperties } from 'react-native';
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 export interface OnSuccessMetadata {
   status: string;
@@ -103,7 +99,7 @@ export interface OnEventArgs {
 declare module 'react-native-plaid-link-sdk' {
   export interface PlaidLinkProps<
     C = TouchableOpacity,
-    P = TouchableOpacityProperties | ContainedTouchableProperties
+    P = TouchableOpacityProps
   > {
     // Required props
 

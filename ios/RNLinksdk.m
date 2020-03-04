@@ -196,12 +196,12 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
                                                                        configuration:linkConfiguration
                                                                             delegate:self.linkViewDelegate];
     }
-    else if ([paymentTokenInput length] > 0) {
-        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPaymentToken:paymentTokenInput
-                                                                              oauthStateId:oauthStateId
-                                                                             configuration:linkConfiguration
-                                                                                  delegate:self.linkViewDelegate];
-    }
+    // else if ([paymentTokenInput length] > 0) {
+    //     self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPaymentToken:paymentTokenInput
+    //                                                                           oauthStateId:oauthStateId
+    //                                                                          configuration:linkConfiguration
+    //                                                                               delegate:self.linkViewDelegate];
+    // }
     else if ([oauthStateId length] > 0) {
         self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithOAuthStateId:oauthStateId
                                                                              configuration:linkConfiguration

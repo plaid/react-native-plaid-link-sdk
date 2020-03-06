@@ -32,14 +32,13 @@ export interface OnSuccessMetadata {
   };
 }
 
-export enum ErrorStatus {
-  requires_questions = 'requires_questions',
-  requires_selections = 'requires_selections',
-  requires_code = 'requires_code',
-  choose_device = 'choose_device',
-  requires_credentials = 'requires_credentials',
-  institution_not_found = 'institution_not_found',
-}
+export type ErrorStatus =
+  | 'requires_questions'
+  | 'requires_selections'
+  | 'requires_code'
+  | 'choose_device'
+  | 'requires_credentials'
+  | 'institution_not_found';
 
 export interface OnExitMetadata {
   link_session_id: string;
@@ -51,30 +50,28 @@ export interface OnExitMetadata {
   };
 }
 
-export enum EventType {
-  ERROR = 'ERROR',
-  EXIT = 'EXIT',
-  HANDOFF = 'HANDOFF',
-  OPEN = 'OPEN',
-  OPEN_MY_PLAID = 'OPEN_MY_PLAID',
-  SEARCH_INSTITUTION = 'SEARCH_INSTITUTION',
-  SELECT_INSTITUTION = 'SELECT_INSTITUTION',
-  SUBMIT_CREDENTIALS = 'SUBMIT_CREDENTIALS',
-  SUBMIT_MFA = 'SUBMIT_MFA',
-  TRANSITION_VIEW = 'TRANSITION_VIEW',
-}
+export type EventType =
+  | 'ERROR'
+  | 'EXIT'
+  | 'HANDOFF'
+  | 'OPEN'
+  | 'OPEN_MY_PLAID'
+  | 'SEARCH_INSTITUTION'
+  | 'SELECT_INSTITUTION'
+  | 'SUBMIT_CREDENTIALS'
+  | 'SUBMIT_MFA'
+  | 'TRANSITION_VIEW';
 
-export enum ViewName {
-  CONNECTED = 'CONNECTED',
-  CREDENTIAL = 'CREDENTIAL',
-  ERROR = 'ERROR',
-  EXIT = 'EXIT',
-  LOADING = 'LOADING',
-  MFA = 'MFA',
-  RECAPTCHA = 'RECAPTCHA',
-  SELECT_ACCOUNT = 'SELECT_ACCOUNT',
-  SELECT_INSTITUTION = 'SELECT_INSTITUTION',
-}
+export type ViewName =
+  | 'CONNECTED'
+  | 'CREDENTIAL'
+  | 'ERROR'
+  | 'EXIT'
+  | 'LOADING'
+  | 'MFA'
+  | 'RECAPTCHA'
+  | 'SELECT_ACCOUNT'
+  | 'SELECT_INSTITUTION';
 
 export interface EventMetadata {
   error_code: string | null;
@@ -96,6 +93,15 @@ export interface OnEventArgs {
   metadata: EventMetadata;
 }
 
+export type ProductType =
+  | 'auth'
+  | 'identity'
+  | 'income'
+  | 'transactions'
+  | 'assets'
+  | 'liabilities'
+  | 'investments';
+
 declare module 'react-native-plaid-link-sdk' {
   export interface PlaidLinkProps<
     C = TouchableOpacity,
@@ -116,15 +122,7 @@ declare module 'react-native-plaid-link-sdk' {
 
     // The Plaid product(s) you wish to use, an array containing some of
     // auth, identity, income, transactions, assets, liabilities, investments.
-    product: Array<
-      | 'auth'
-      | 'identity'
-      | 'income'
-      | 'transactions'
-      | 'assets'
-      | 'liabilities'
-      | 'investments'
-    >;
+    product: Array<ProductType>;
 
     // The public_key associated with your account; available from
     // the Plaid dashboard (https://dashboard.plaid.com).

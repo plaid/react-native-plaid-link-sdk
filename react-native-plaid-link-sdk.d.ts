@@ -6,7 +6,7 @@ export interface OnSuccessMetadata {
   link_session_id: string;
   request_id: string;
   public_token: string;
-  account_id: string | null;
+  account_id: string;
   institution: {
     institution_id: string;
     name: string;
@@ -24,11 +24,11 @@ export interface OnSuccessMetadata {
     };
   }>;
   account: {
-    id: string | null;
-    mask: string | null;
-    name: string | null;
-    subtype: string | null;
-    type: string | null;
+    id: string;
+    mask: string;
+    name: string;
+    subtype: string;
+    type: string;
   };
 }
 
@@ -42,15 +42,15 @@ export type ErrorStatus =
 
 export interface OnExitMetadata {
   link_session_id: string;
-  request_id: string | null;
-  status: ErrorStatus | null;
+  request_id: string;
+  status: ErrorStatus;
   institution: {
     institution_id: string;
     name: string;
   };
 }
 
-export type EventType =
+export type EventName =
   | 'ERROR'
   | 'EXIT'
   | 'HANDOFF'
@@ -64,36 +64,38 @@ export type EventType =
 
 export type ViewName =
   | 'CONNECTED'
+  | 'CONSENT'
   | 'CREDENTIAL'
   | 'ERROR'
   | 'EXIT'
   | 'LOADING'
   | 'MFA'
+  | 'NUMBERS'
   | 'RECAPTCHA'
   | 'SELECT_ACCOUNT'
   | 'SELECT_INSTITUTION';
 
 export interface EventMetadata {
-  error_code: string | null;
-  error_message: string | null;
-  error_type: string | null;
-  exit_status: string | null;
-  institution_id: string | null;
-  institution_name: string | null;
-  institution_search_query: string | null;
-  request_id: string | null;
-  link_session_id: string | null;
-  mfa_type: string | null;
-  view_name: ViewName | null;
-  timestamp: string | null;
+  error_code: string;
+  error_message: string;
+  error_type: string;
+  exit_status: string;
+  institution_id: string;
+  institution_name: string;
+  institution_search_query: string;
+  request_id: string;
+  link_session_id: string;
+  mfa_type: string;
+  view_name: ViewName;
+  timestamp: string;
 }
 
 export interface OnEventArgs {
-  event: EventType;
+  eventName: EventName;
   metadata: EventMetadata;
 }
 
-export type ProductType =
+export type Product =
   | 'auth'
   | 'identity'
   | 'income'
@@ -115,14 +117,13 @@ declare module 'react-native-plaid-link-sdk' {
     // The Plaid API environment on which to create user accounts.
     env: 'development' | 'sandbox' | 'production';
 
-    // A function that is called when a user has successfully onboarded their
-    // account. The function should expect two arguments, the public_key and a
-    // metadata object.
+    // A function that is called when a user has successfully onboarded their account.
+    // The function should expect one argument, a metadata object.
     onSuccess: (metadata: OnSuccessMetadata) => void;
 
     // The Plaid product(s) you wish to use, an array containing some of
     // auth, identity, income, transactions, assets, liabilities, investments.
-    product: Array<ProductType>;
+    product: Array<Product>;
 
     // The public_key associated with your account; available from
     // the Plaid dashboard (https://dashboard.plaid.com).

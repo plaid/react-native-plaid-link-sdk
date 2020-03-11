@@ -197,10 +197,14 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     resultCode: Int,
     data: Intent?
   ) {
+    val PLAID_RESULT_CODES = arrayOf(Plaid.RESULT_SUCCESS, Plaid.RESULT_CANCELLED, Plaid.RESULT_EXIT)
     val result = WritableNativeMap()
 
     result.putInt(RESULT_CODE, resultCode)
-
+    if(!PLAID_RESULT_CODES.contains(resultCode)) {
+      Plog.w("ignoring result")
+      return
+    }
     // This should not happen but if it does we have no data to return
     if (data == null) {
       Plog.w(Log.getStackTraceString(Throwable()))

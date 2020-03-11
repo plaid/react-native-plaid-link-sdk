@@ -205,8 +205,13 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     data: Intent?
   ) {
     val result = WritableNativeMap()
+    val PLAID_RESULT_CODES = arrayOf(Plaid.RESULT_SUCCESS, Plaid.RESULT_CANCELLED, Plaid.RESULT_EXIT)
 
     result.putInt(RESULT_CODE, resultCode)
+    if(!PLAID_RESULT_CODES.contains(resultCode)) {
+      Plog.w("ignoring result")
+      return
+    }
 
     // This should not happen but if it does we have no data to return
     if (data == null) {
@@ -230,10 +235,17 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       }
       this.callback?.invoke(result)
     } else {
-      if (data.extras != null) {
-        result.putMap(DATA, Arguments.makeNativeMap(data.extras))
+      try {
+        if (data.extras != null) {
+          result.putMap(DATA, Arguments.makeNativeMap(data.extras))
+        }
+        println("callback invoked")
+        print(result)
+        this.callback?.invoke(result)
+      } catch(t: Throwable) { 
+        // log error
+        println("error in plaid module" + t)
       }
-      this.callback?.invoke(result)
     }
   }
 

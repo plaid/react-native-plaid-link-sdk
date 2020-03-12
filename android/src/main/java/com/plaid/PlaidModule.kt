@@ -244,7 +244,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         this.callback?.invoke(result)
       } catch(t: Throwable) { 
         // log error
-        println("error in plaid module" + t)
+        Plog.e("error in plaid module" + t.stackTrace)
       }
     }
   }

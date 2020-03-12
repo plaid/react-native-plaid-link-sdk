@@ -1,4 +1,4 @@
-import { openLink, PlaidLink } from './PlaidLink';
+import { openLink, dismissLink, PlaidLink } from './PlaidLink';
 
 export default PlaidLink;
-export { openLink };
+export { openLink, dismissLink };

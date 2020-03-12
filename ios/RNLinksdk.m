@@ -224,6 +224,10 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {
     }
 }
 
+RCT_EXPORT_METHOD(dismiss) {
+    [self dismissLinkViewController];
+}
+
 - (void)dismissLinkViewController {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     self.presentingViewController = nil;

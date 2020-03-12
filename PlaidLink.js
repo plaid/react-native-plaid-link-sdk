@@ -50,6 +50,12 @@ export const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   }
 };
 
+export const dismissLink = () => {
+  if (Platform.OS === 'ios') {
+    NativeModules.RNLinksdk.dismiss();
+  }
+};
+
 const handlePress = (linkProps, componentProps) => {
   openLink(linkProps);
   if (componentProps && componentProps.onPress) {

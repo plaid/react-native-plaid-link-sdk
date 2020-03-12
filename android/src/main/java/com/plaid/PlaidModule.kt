@@ -239,7 +239,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         if (data.extras != null) {
           result.putMap(DATA, Arguments.makeNativeMap(data.extras))
         }
-        println("callback invoked")
+        Plog.d("callback invoked")
         print(result)
         this.callback?.invoke(result)
       } catch(t: Throwable) { 

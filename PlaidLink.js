@@ -119,7 +119,7 @@ PlaidLink.propTypes = {
     }
     if (typeof props.publicKey !== 'string') {
       return new Error(
-        `Invalid prop 'publicKey': Expected string instead of ${typeof value}`,
+        `Invalid prop 'publicKey': Expected string instead of ${typeof props.publicKey}`,
       );
     }
   },
@@ -148,7 +148,7 @@ PlaidLink.propTypes = {
     }
     if (typeof props.token !== 'string') {
       return new Error(
-        `Invalid prop 'token': Expected string instead of ${typeof value}`,
+        `Invalid prop 'token': Expected string instead of ${typeof props.token}`,
       );
     }
   },

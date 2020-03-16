@@ -108,11 +108,21 @@ PlaidLink.propTypes = {
     ]),
   ).isRequired,
 
+  // Optional props
+
   // The public_key associated with your account; available from
   // the Plaid dashboard (https://dashboard.plaid.com).
-  publicKey: PropTypes.string.isRequired,
-
-  // Optional props
+  // Either publicKey or token is required.
+  publicKey: props => {
+    if (!props.publicKey && !props.token) {
+      return new Error(`One of props 'publicKey' or 'token' is required`);
+    }
+    if (typeof props.publicKey !== 'string') {
+      return new Error(
+        `Invalid prop 'publicKey': Expected string instead of ${typeof value}`,
+      );
+    }
+  },
 
   // A list of Plaid-supported country codes using the ISO-3166-1 alpha-2
   // country code standard.
@@ -127,10 +137,21 @@ PlaidLink.propTypes = {
   // A function that is called when a user has specifically exited Link flow.
   onExit: PropTypes.func,
 
-  // Specify an existing user's public token to launch Link in update mode.
+  // Specify an existing user's public token to launch Link in update mode
   // This will cause Link to open directly to the authentication step for
   // that user's institution.
-  token: PropTypes.string,
+  // Pass an item_add_token to launch Link in regular mode without a public_key.
+  // Either publicKey or token is required.
+  token: props => {
+    if (!props.publicKey && !props.token) {
+      return new Error(`One of props 'publicKey' or 'token' is required`);
+    }
+    if (typeof props.token !== 'string') {
+      return new Error(
+        `Invalid prop 'token': Expected string instead of ${typeof value}`,
+      );
+    }
+  },
 
   // Specify a user to enable all Auth features. Reach out to your
   // account manager or integrations@plaid.com to get enabled. See the Auth

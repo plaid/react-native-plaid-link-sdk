@@ -137,7 +137,7 @@ PlaidLink.propTypes = {
   // A function that is called when a user has specifically exited Link flow.
   onExit: PropTypes.func,
 
-  // Specify an existing user's public token to launch Link in update mode
+  // Specify an existing user's public token to launch Link in update mode.
   // This will cause Link to open directly to the authentication step for
   // that user's institution.
   // Pass an item_add_token to launch Link in regular mode without a public_key.

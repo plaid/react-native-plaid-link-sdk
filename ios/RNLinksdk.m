@@ -197,7 +197,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
                                                                             delegate:self.linkViewDelegate];
     }
     else if ([paymentTokenInput length] > 0) {
-        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPaymentToken:paymentToken
+        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPaymentToken:paymentTokenInput
                                                                               oauthStateId:oauthStateId
                                                                              configuration:linkConfiguration
                                                                                   delegate:self.linkViewDelegate];
@@ -211,6 +211,8 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithConfiguration:linkConfiguration
                                                                               delegate:self.linkViewDelegate];
     }
+    
+    self.linkViewController.modalPresentationStyle = UIModalPresentationFullScreen;
 }
 
 RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {
@@ -220,6 +222,10 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {
     } else {
         callback(@[RCTMakeError(@"create was not called", nil, nil)]);
     }
+}
+
+RCT_EXPORT_METHOD(dismiss) {
+    [self dismissLinkViewController];
 }
 
 - (void)dismissLinkViewController {

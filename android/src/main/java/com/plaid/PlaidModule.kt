@@ -44,6 +44,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val LANGUAGE = "language"
     private const val ENV = "env"
     private const val LINK_CUSTOMIZATION_NAME = "linkCustomizationName"
+    private const val OAUTH_NONCE = "oauthNonce"
     private const val PUBLIC_TOKEN = "publicToken"
     private const val USER_EMAIL = "userEmailAddress"
     private const val USER_NAME = "userLegalName"
@@ -144,6 +145,12 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         }
       }
 
+      if (obj.has(OAUTH_NONCE)) {
+        if (!TextUtils.isEmpty(obj.getString(OAUTH_NONCE))) {
+          builder.oauthNonce(obj.getString(OAUTH_NONCE))
+        }
+      }
+
       if (obj.has(PUBLIC_TOKEN)) {
         if (!TextUtils.isEmpty(obj.getString(PUBLIC_TOKEN))) {
           builder.publicToken(obj.getString(PUBLIC_TOKEN))
@@ -198,8 +205,13 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     data: Intent?
   ) {
     val result = WritableNativeMap()
+    val PLAID_RESULT_CODES = arrayOf(Plaid.RESULT_SUCCESS, Plaid.RESULT_CANCELLED, Plaid.RESULT_EXIT)
 
     result.putInt(RESULT_CODE, resultCode)
+    if(!PLAID_RESULT_CODES.contains(resultCode)) {
+      Plog.w("ignoring result")
+      return
+    }
 
     // This should not happen but if it does we have no data to return
     if (data == null) {
@@ -223,10 +235,17 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       }
       this.callback?.invoke(result)
     } else {
-      if (data.extras != null) {
-        result.putMap(DATA, Arguments.makeNativeMap(data.extras))
+      try {
+        if (data.extras != null) {
+          result.putMap(DATA, Arguments.makeNativeMap(data.extras))
+        }
+        Plog.d("callback invoked")
+        print(result)
+        this.callback?.invoke(result)
+      } catch(t: Throwable) { 
+        // log error
+        Plog.e("error in plaid module" + t.stackTrace)
       }
-      this.callback?.invoke(result)
     }
   }
 

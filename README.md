@@ -59,7 +59,7 @@ Add `packages.add(new PlaidPackage());` in `List<ReactPackage> getPackages();`
 
 ### `android/app/build.gradle`
 
-Add `implementation project(':react-native-plaid-link-sdk')` and `implementation 'com.plaid.link:sdk-core:1.0.0'` in the dependencies block
+Add `implementation project(':react-native-plaid-link-sdk')` and `implementation 'com.plaid.link:sdk-core:1.0.3'` in the dependencies block
 
 
 ### `android/settings.gradle`

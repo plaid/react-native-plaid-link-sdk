@@ -21,8 +21,8 @@ import com.plaid.linkbase.models.configuration.PlaidEnvironment
 import com.plaid.linkbase.models.configuration.PlaidProduct
 import com.plaid.linkbase.models.connection.LinkCancellation
 import com.plaid.linkbase.models.connection.LinkConnection
+import com.plaid.linkbase.models.connection.LinkExitMetadata
 import com.plaid.linkbase.models.connection.PlaidError
-import com.plaid.log.internal.Plog
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
@@ -39,6 +39,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   companion object {
     private const val PRODUCTS = "product"
     private const val PUBLIC_KEY = "publicKey"
+    private const val ACCOUNT_SUBTYPES = "accountSubtypes"
     private const val CLIENT_NAME = "clientName"
     private const val COUNTRY_CODES = "countryCodes"
     private const val LANGUAGE = "language"
@@ -85,6 +86,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     callback: Callback
   ) {
     val activity = currentActivity ?: throw IllegalStateException("Current activity is null")
+    val extrasMap = mutableMapOf<String, String>()
     this.callback = callback
     try {
       val obj = JSONObject(data)
@@ -110,6 +112,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         obj.getString(CLIENT_NAME),
         productsArray
       )
+
+      if (obj.has(ACCOUNT_SUBTYPES)) {
+        extrasMap[ACCOUNT_SUBTYPES] = obj.getJSONObject(ACCOUNT_SUBTYPES).toString()
+      }
 
       if (obj.has(COUNTRY_CODES)) {
         val countryCodes = ArrayList<String>()
@@ -181,6 +187,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         }
       }
 
+      if (extrasMap.isNotEmpty()) {
+        builder.extraParams(extrasMap)
+      }
+
       Plaid.setLinkEventListener {
         var json = snakeCaseGson.toJson(it)
         json = json.replace("event_name", "event")
@@ -192,7 +202,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     } catch (ex: JSONException) {
       val result = WritableNativeMap()
       result.putInt(RESULT_CODE, Plaid.RESULT_EXIT)
-      result.putString(DATA, snakeCaseGson.toJson(PlaidError.fromException(ex)))
+      result.putString(DATA, snakeCaseGson.toJson(plaidErrorFromException(ex)))
       this.callback?.invoke(result)
     }
 
@@ -215,7 +225,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
     // This should not happen but if it does we have no data to return
     if (data == null) {
-      Plog.w(Log.getStackTraceString(Throwable()))
+      Log.w(PlaidModule::class.java.simpleName, Log.getStackTraceString(Throwable()))
       val cancellation = LinkCancellation("")
       result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(cancellation))))
       this.callback?.invoke(result)
@@ -252,4 +262,13 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   override fun onNewIntent(intent: Intent) {
     // Do Nothing
   }
+
+  private fun plaidErrorFromException(exception: Throwable?) =
+    PlaidError(
+      "Internal exception occurred",
+      "499",
+      exception?.stackTrace?.contentToString() ?: "No stack trace",
+      exception?.localizedMessage,
+      LinkExitMetadata()
+    )
 }

@@ -122,7 +122,11 @@ PlaidLink.propTypes = {
   //
   // see https://plaid.com/docs/#auth-filtering-institutions-in-link
   // and https://plaid.com/docs/#filtering-institutions-in-link
-  accountSubtypes: PropTypes.object,
+  accountSubtypes: PropTypes.shape({
+    credit: PropTypes.arrayOf(PropTypes.string),
+    depository: PropTypes.arrayOf(PropTypes.string),
+    loan: PropTypes.arrayOf(PropTypes.string),
+  }),
 
   // A list of Plaid-supported country codes using the ISO-3166-1 alpha-2
   // country code standard.

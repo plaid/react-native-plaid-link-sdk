@@ -142,16 +142,7 @@ PlaidLink.propTypes = {
   // that user's institution.
   // Pass an item_add_token to launch Link in regular mode without a public_key.
   // Either publicKey or token is required.
-  token: props => {
-    if (!props.publicKey && !props.token) {
-      return new Error(`One of props 'publicKey' or 'token' is required`);
-    }
-    if (typeof props.token !== 'string') {
-      return new Error(
-        `Invalid prop 'token': Expected string instead of ${typeof props.token}`,
-      );
-    }
-  },
+  token: PropTypes.string,
 
   // Specify a user to enable all Auth features. Reach out to your
   // account manager or integrations@plaid.com to get enabled. See the Auth

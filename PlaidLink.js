@@ -114,6 +114,20 @@ PlaidLink.propTypes = {
 
   // Optional props
 
+  // You can configure Link to return only the accounts that
+  // match a given type and subtype
+  //
+  // This object is a nonempty Map<account type, Array<account subtype>>
+  // where account type and account subtype are strings
+  //
+  // see https://plaid.com/docs/#auth-filtering-institutions-in-link
+  // and https://plaid.com/docs/#filtering-institutions-in-link
+  accountSubtypes: PropTypes.shape({
+    credit: PropTypes.arrayOf(PropTypes.string),
+    depository: PropTypes.arrayOf(PropTypes.string),
+    loan: PropTypes.arrayOf(PropTypes.string),
+  }),
+
   // A list of Plaid-supported country codes using the ISO-3166-1 alpha-2
   // country code standard.
   countryCodes: PropTypes.arrayOf(PropTypes.string),

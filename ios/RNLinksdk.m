@@ -17,6 +17,7 @@ static NSString* const kRNLinkKitConfigSelectAccountKey = @"selectAccount";
 static NSString* const kRNLinkKitConfigUserLegalNameKey = @"userLegalName";
 static NSString* const kRNLinkKitConfigUserEmailAddressKey = @"userEmailAddress";
 static NSString* const kRNLinkKitConfigUserPhoneNumberKey = @"userPhoneNumber";
+static NSString* const kRNLinkKitConfigAccountSubtypes = @"accountSubtypes";
 static NSString* const kRNLinkKitConfigCountryCodesKey = @"countryCodes";
 static NSString* const kRNLinkKitConfigLanguageKey = @"language";
 static NSString* const kRNLinkKitConfigInstitutionKey = @"institution";
@@ -101,6 +102,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     NSString *oauthRedirectUri = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthRedirectUriKey]];
     NSString *oauthNonce = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthNonceKey]];
     NSString *oauthStateId = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthStateIdKey]];
+    NSObject<NSDictionary<NSString, NSArray<NSString*>>> *accountSubtypes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigAccountSubtypes]];
     NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
     NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
     BOOL selectAccount = [RCTConvert BOOL:configuration[kRNLinkKitConfigSelectAccountKey]];
@@ -140,6 +142,9 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     }
     if ([oauthNonce length] > 0) {
         linkConfiguration.oauthNonce = oauthNonce;
+    }
+    if ([accountSubtypes count] > 0) {
+       linkConfiguration.accountSubtypes = accountSubtypes;
     }
     if ([countryCodes count] > 0) {
        linkConfiguration.countryCodes = countryCodes;

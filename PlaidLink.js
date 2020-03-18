@@ -108,11 +108,21 @@ PlaidLink.propTypes = {
     ]),
   ).isRequired,
 
+  // Optional props
+
   // The public_key associated with your account; available from
   // the Plaid dashboard (https://dashboard.plaid.com).
-  publicKey: PropTypes.string.isRequired,
-
-  // Optional props
+  // Either publicKey or token is required.
+  publicKey: props => {
+    if (!props.publicKey && !props.token) {
+      return new Error(`One of props 'publicKey' or 'token' is required`);
+    }
+    if (typeof props.publicKey !== 'string') {
+      return new Error(
+        `Invalid prop 'publicKey': Expected string instead of ${typeof props.publicKey}`,
+      );
+    }
+  },
 
   // You can configure Link to return only the accounts that
   // match a given type and subtype
@@ -144,6 +154,8 @@ PlaidLink.propTypes = {
   // Specify an existing user's public token to launch Link in update mode.
   // This will cause Link to open directly to the authentication step for
   // that user's institution.
+  // Pass an item_add_token to launch Link in regular mode without a public_key.
+  // Either publicKey or token is required.
   token: PropTypes.string,
 
   // Specify a user to enable all Auth features. Reach out to your

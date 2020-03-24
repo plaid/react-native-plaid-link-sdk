@@ -102,7 +102,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     NSString *oauthRedirectUri = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthRedirectUriKey]];
     NSString *oauthNonce = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthNonceKey]];
     NSString *oauthStateId = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthStateIdKey]];
-    NSObject<NSDictionary<NSString, NSArray<NSString*>>> *accountSubtypes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigAccountSubtypes]];
+    NSDictionary<NSString*, NSArray<NSString*>*> *accountSubtypes = [RCTConvert NSDictionary:configuration[kRNLinkKitConfigAccountSubtypes]];
     NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
     NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
     BOOL selectAccount = [RCTConvert BOOL:configuration[kRNLinkKitConfigSelectAccountKey]];

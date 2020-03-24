@@ -219,7 +219,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
     result.putInt(RESULT_CODE, resultCode)
     if(!PLAID_RESULT_CODES.contains(resultCode)) {
-      Plog.w("ignoring result")
+      Log.w(PlaidModule::class.java.simpleName, "ignoring result")
       return
     }
 
@@ -249,12 +249,11 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         if (data.extras != null) {
           result.putMap(DATA, Arguments.makeNativeMap(data.extras))
         }
-        Plog.d("callback invoked")
-        print(result)
+        Log.d(PlaidModule::class.java.simpleName, "callback invoked")
         this.callback?.invoke(result)
       } catch(t: Throwable) { 
         // log error
-        Plog.e("error in plaid module" + t.stackTrace)
+        Log.e(PlaidModule::class.java.simpleName, "error in plaid module", t)
       }
     }
   }

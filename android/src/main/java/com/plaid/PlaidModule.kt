@@ -215,11 +215,12 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     data: Intent?
   ) {
     val result = WritableNativeMap()
-    val PLAID_RESULT_CODES = arrayOf(Plaid.RESULT_SUCCESS, Plaid.RESULT_CANCELLED, Plaid.RESULT_EXIT)
+    val PLAID_RESULT_CODES =
+      arrayOf(Plaid.RESULT_SUCCESS, Plaid.RESULT_CANCELLED, Plaid.RESULT_EXIT)
 
     result.putInt(RESULT_CODE, resultCode)
-    if(!PLAID_RESULT_CODES.contains(resultCode)) {
-      Plog.w("ignoring result")
+    if (!PLAID_RESULT_CODES.contains(resultCode)) {
+      Log.w("PlaidModule", "ignoring result")
       return
     }
 
@@ -249,12 +250,12 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         if (data.extras != null) {
           result.putMap(DATA, Arguments.makeNativeMap(data.extras))
         }
-        Plog.d("callback invoked")
+        Log.d("PlaidModule", "callback invoked")
         print(result)
         this.callback?.invoke(result)
-      } catch(t: Throwable) { 
+      } catch (t: Throwable) {
         // log error
-        Plog.e("error in plaid module" + t.stackTrace)
+        Log.e("PlaidModule", "error in plaid module" + t.stackTrace)
       }
     }
   }

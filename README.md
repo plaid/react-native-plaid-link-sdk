@@ -44,29 +44,34 @@ followed by
 4. Run your project (`Cmd+R`)<
 
 ## Android
-
-To register your app id:
+### 1. Register your app id
 1. Log into your [Plaid Dashboard](https://dashboard.plaid.com/team/api) at the API page
-2. Next to Allowed Android package names click "Configure" then "Add New Android Package Name" (for example com.plaid.example)
-3. Click "Save Changes", you may be prompted to re-enter your password
+2. Next to Allowed Android package names click "Configure" then "Add New Android Package Name"
+3. Enter your package name, for example `com.plaid.example`
+4. Click "Save Changes", you may be prompted to re-enter your password
 
- ### `android/app/src/main/java/<AppName>/MainApplication.java`
+### 2. Add PlaidPackage to your application
+1. Go to `android/app/src/main/java/<AppName>/MainApplication.java`
+2. Add `import com.plaid.PlaidPackage;` to the imports section
+3. Add `packages.add(new PlaidPackage());` to `List<ReactPackage> getPackages();`
 
-Add `import com.plaid.PlaidPackage;` on the imports section
+### 3. Configure Gradle
+1. Go to the project level `android/app/build.gradle`
+2. Make sure you are using a min sdk >= 21
+3. Use the latest Android link version ![version](https://img.shields.io/bintray/v/plaid/link-android/com.plaid.link)
+4. Add the following dependencies:
 
-
-Add `packages.add(new PlaidPackage());` in `List<ReactPackage> getPackages();`
-
-### `android/app/build.gradle`
-
-Add `implementation project(':react-native-plaid-link-sdk')` and `implementation 'com.plaid.link:sdk-core:1.0.0'` in the dependencies block
-
-
-### `android/settings.gradle`
-
-Add:
-
+```groovy
+dependencies {
+    ...
+    implementation project(':react-native-plaid-link-sdk')
+    implementation 'com.plaid.link:sdk-core:<insert latest version>'
 ```
+
+5. Go to `android/settings.gradle`
+6. Add the following lines:
+
+```groovy
 include ':react-native-plaid-link-sdk'
 project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-plaid-link-sdk/android')
 ```

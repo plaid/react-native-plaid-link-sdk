@@ -12,10 +12,10 @@ When upgrading from a previous major version of this library, see the notes [her
 
 ## iOS
 
-Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The current minimum version supported is `1.1.27`.
+Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The latest version is ![version](https://img.shields.io/cocoapods/v/Plaid).
 
 ```
-pod 'Plaid', '~> 1.1.27'
+pod 'Plaid', '~> <insert latest version>'
 ```
 
 Then install your cocoapods dependencies:

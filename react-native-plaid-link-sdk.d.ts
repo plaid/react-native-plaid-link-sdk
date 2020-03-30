@@ -1,35 +1,34 @@
 import React from 'react';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
+export interface Account {
+  id: string;
+  mask: string;
+  name: string;
+  subtype: string;
+  type: string;
+}
+
+export interface Institution {
+  institution_id: string;
+  name: string;
+}
+
 export interface OnSuccessMetadata {
   status: string;
   link_session_id: string;
   request_id: string;
   public_token: string;
   account_id: string;
-  institution: {
-    institution_id: string;
-    name: string;
-  };
-  accounts: Array<{
-    id: string;
-    name: string;
-    mask: string;
-    type: string;
-    subtype: string;
+  institution: Institution;
+  accounts: Array<Account & {
     verification_status?: {
       pending_automatic_verification: boolean;
       pending_manual_verification: boolean;
       manually_verified: boolean;
     };
   }>;
-  account: {
-    id: string;
-    mask: string;
-    name: string;
-    subtype: string;
-    type: string;
-  };
+  account: Account
 }
 
 export type ErrorStatus =
@@ -44,10 +43,7 @@ export interface OnExitMetadata {
   link_session_id: string;
   request_id: string;
   status: ErrorStatus;
-  institution: {
-    institution_id: string;
-    name: string;
-  };
+  institution: Institution;
 }
 
 export type EventName =

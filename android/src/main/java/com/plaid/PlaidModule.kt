@@ -45,7 +45,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val LANGUAGE = "language"
     private const val ENV = "env"
     private const val LINK_CUSTOMIZATION_NAME = "linkCustomizationName"
-    private const val OAUTH_NONCE = "oauthNonce"
     private const val PUBLIC_TOKEN = "publicToken"
     private const val USER_EMAIL = "userEmailAddress"
     private const val USER_NAME = "userLegalName"
@@ -148,12 +147,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       if (obj.has(LINK_CUSTOMIZATION_NAME)) {
         if (!TextUtils.isEmpty(obj.getString(LINK_CUSTOMIZATION_NAME))) {
           builder.linkCustomizationName(obj.getString(LINK_CUSTOMIZATION_NAME))
-        }
-      }
-
-      if (obj.has(OAUTH_NONCE)) {
-        if (!TextUtils.isEmpty(obj.getString(OAUTH_NONCE))) {
-          builder.oauthNonce(obj.getString(OAUTH_NONCE))
         }
       }
 

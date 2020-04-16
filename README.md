@@ -21,7 +21,7 @@ pod 'Plaid', '~> <insert latest version>'
 Then install your cocoapods dependencies:
 
 ```
-cd ios && pod install && cd ..
+(cd ios && pod install)
 ```
 
 Add a Run Script build phase (after the [CP] Embed Pods Frameworks step) to your target as [described in Plaid Link for iOS documentation](https://plaid.com/docs/link/ios/#add-run-script). This strips simulator symbols from App Store release builds.
@@ -33,14 +33,14 @@ That's it if using a recent react-native version with [autolinking](https://gith
 If using a version of react-native without [autolinking](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md) support, then you will need to:
 
 ```
-`react-native link react-native-plaid-link-sdk`
+react-native link react-native-plaid-link-sdk
 ```
 
 followed by
 
-1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `react-native-plaid-link-sdk` ➜ `ios` and add `RNLinksdk.xcodeproj`
-3. In XCode, in the project navigator, select your project. Add `libRNLinksdk.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
+1. In Xcode, in the project navigator, right click `Libraries` ▶ `Add Files to [your project's name]`
+2. Go to `node_modules` ▶ `react-native-plaid-link-sdk` ▶ `ios` and add `RNLinksdk.xcodeproj`
+3. In Xcode, in the project navigator, select your project. Add `libRNLinksdk.a` to your project's `Build Phases` ▶ `Link Binary With Libraries`
 4. Run your project (`Cmd+R`)<
 
 ## Android

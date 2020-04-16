@@ -11,7 +11,7 @@ static NSString* const kRNLinkKitConfigProductsKey = @"product";
 static NSString* const kRNLinkKitConfigClientNameKey = @"clientName";
 static NSString* const kRNLinkKitConfigWebhookKey = @"webhook";
 static NSString* const kRNLinkKitConfigLinkCustomizationName = @"linkCustomizationName";
-static NSString* const kRNLinkKitConfigPublicTokenKey = @"token";
+static NSString* const kRNLinkKitConfigLinkTokenKey = @"token";
 static NSString* const kRNLinkKitConfigPaymentTokenKey = @"paymentToken";
 static NSString* const kRNLinkKitConfigSelectAccountKey = @"selectAccount";
 static NSString* const kRNLinkKitConfigUserLegalNameKey = @"userLegalName";
@@ -94,7 +94,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     NSString *clientName = [RCTConvert NSString:configuration[kRNLinkKitConfigClientNameKey]];
     NSString *webhook = [RCTConvert NSString:configuration[kRNLinkKitConfigWebhookKey]];
     NSString *linkCustomizationName = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkCustomizationName]];
-    NSString *publicTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicTokenKey]];
+    NSString *linkTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
     NSString *paymentTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigPaymentTokenKey]];
     NSString *userLegalName = [RCTConvert NSString:configuration[kRNLinkKitConfigUserLegalNameKey]];
     NSString *userEmailAddress = [RCTConvert NSString:configuration[kRNLinkKitConfigUserEmailAddressKey]];
@@ -190,11 +190,17 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         }
     };
 
-
-    if ([publicTokenInput length] > 0) {
-        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPublicToken:publicTokenInput
-                                                                            configuration:linkConfiguration
-                                                                                 delegate:self.linkViewDelegate];
+    if ([linkTokenInput length] > 0) {
+        if ([linkTokenInput hasPrefix:@"item-add-"]) {
+            self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithItemAddToken:linkTokenInput
+                                                                                 configuration:linkConfiguration
+                                                                                      delegate:self.linkViewDelegate];
+        }
+        else {
+            self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPublicToken:linkTokenInput
+                                                                                configuration:linkConfiguration
+                                                                                     delegate:self.linkViewDelegate];
+        }
     }
     else if ([institution length] > 0) {
         self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithInstitution:institution

@@ -159,7 +159,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
       if (obj.has(PUBLIC_TOKEN)) {
         if (!TextUtils.isEmpty(obj.getString(PUBLIC_TOKEN))) {
-          builder.publicToken(obj.getString(PUBLIC_TOKEN))
+          builder.token(obj.getString(PUBLIC_TOKEN))
         }
       }
 

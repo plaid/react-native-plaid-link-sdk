@@ -173,3 +173,68 @@ By default, `PlaidLink` renders a `TouchableOpacity` component. You may override
         countryCodes = {["US"]}
     >
 ```
+
+### Re-Authenticating Accounts with PlaidLink's Update Mode
+
+If an Item happens to enter into an error state requiring the user to re-authenticate his or her credentials using PlaidLink, add the PlaidLink prop `token` on iOS, or `publicToken` on Android to launch PlaidLink in `Update Mode`.
+
+```
+import React from 'react';
+
+import {
+  View,
+  Text,
+  Button,
+  Platform,
+} from 'react-native';
+
+import PlaidLink from 'react-native-plaid-link-sdk';
+
+
+class UpdateModeExample extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {);
+  }
+
+  handleReAuth(data) {
+    // handle re-auth
+  }
+
+  render() {
+
+    let PlaidLinkButton;
+    if (Platform.OS === 'ios') {
+      PlaidLinkButton = <PlaidLink
+                          token='## USERS PUBLIC TOKEN ##'
+                          product={["transactions"]}
+                          onSuccess={data => this.handleReAuth(data)}
+                          env='sandbox'
+                          clientName='## YOUR CLIENT NAME ##'
+                          webviewRedirectUri="## YOUR WEBVIEW REDIRECT URI ##"
+                          publicKey='## YOUR PUBLIC KEY ##'>
+                            <Text>ReAuthorize Account</Text>
+                        </PlaidLink>;
+    } else if (Platform.OS === 'android') {
+      PlaidLinkButton = <PlaidLink
+                          publicToken='## USERS PUBLIC TOKEN ##'
+                          product={["transactions"]}
+                          onSuccess={data => this.handleReAuth(data)}
+                          env='sandbox'
+                          clientName='## YOUR CLIENT NAME ##'
+                          webviewRedirectUri="## YOUR WEBVIEW REDIRECT URI ##"
+                          publicKey='## YOUR PUBLIC KEY ##'>
+                            <Text>ReAuthorize Account</Text>
+                        </PlaidLink>;
+    }
+
+    return(
+      <View>
+        {PlaidLinkButton}
+      </View>
+    );
+  }
+}
+
+export default UpdateModeExample;
+```

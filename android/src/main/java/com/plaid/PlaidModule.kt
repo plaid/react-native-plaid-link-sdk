@@ -128,10 +128,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         }
       }
 
-      if (obj.has(LANGUAGE)) {
-        if (!TextUtils.isEmpty(obj.getString(LANGUAGE))) {
-          builder.language(obj.getString(LANGUAGE))
-        }
+      maybeGetStringField(LANGUAGE).let {
+        builder.language(it)
       }
 
       if (obj.has(ENV)) {
@@ -145,46 +143,33 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         }
       }
 
-      if (obj.has(LINK_CUSTOMIZATION_NAME)) {
-        if (!TextUtils.isEmpty(obj.getString(LINK_CUSTOMIZATION_NAME))) {
-          builder.linkCustomizationName(obj.getString(LINK_CUSTOMIZATION_NAME))
-        }
+      maybeGetStringField(LINK_CUSTOMIZATION_NAME)?.let {
+        builder.linkCustomizationName(it)
       }
 
-      if (obj.has(OAUTH_NONCE)) {
-        if (!TextUtils.isEmpty(obj.getString(OAUTH_NONCE))) {
-          builder.oauthNonce(obj.getString(OAUTH_NONCE))
-        }
+      maybeGetStringField(OAUTH_NONCE)?.let {
+        builder.oauthNonce(it)
       }
 
-      if (obj.has(PUBLIC_TOKEN)) {
-        if (!TextUtils.isEmpty(obj.getString(PUBLIC_TOKEN))) {
-          builder.publicToken(obj.getString(PUBLIC_TOKEN))
-        }
+      maybeGetStringField(PUBLIC_TOKEN)?.let {
+        builder.publicToken(it)
       }
 
-      if (obj.has(USER_EMAIL)) {
-        if (!TextUtils.isEmpty(obj.getString(USER_EMAIL))) {
-          builder.userEmailAddress(obj.getString(USER_EMAIL))
-        }
+      maybeGetStringField(USER_EMAIL)?.let {
+        builder.userEmailAddress(it)
       }
 
-      if (obj.has(USER_NAME)) {
-        if (!TextUtils.isEmpty(obj.getString(USER_NAME))) {
-          builder.userLegalName(obj.getString(USER_NAME))
-        }
+      maybeGetStringField(USER_NAME))?.let {
+        builder.userLegalName(it)
       }
 
-      if (obj.has(USER_PHONE)) {
-        if (!TextUtils.isEmpty(obj.getString(USER_PHONE))) {
-          builder.userPhoneNumber(obj.getString(USER_PHONE))
-        }
+
+      maybeGetStringField(USER_PHONE)?.let {
+        builder.userPhoneNumber(it)
       }
 
-      if (obj.has(WEBHOOK)) {
-        if (!TextUtils.isEmpty(obj.getString(WEBHOOK))) {
-          builder.webhook(obj.getString(WEBHOOK))
-        }
+      maybeGetStringField(WEBHOOK)?.let {
+        builder.webhook(it)
       }
 
       if (extrasMap.isNotEmpty()) {
@@ -205,7 +190,13 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       result.putString(DATA, snakeCaseGson.toJson(plaidErrorFromException(ex)))
       this.callback?.invoke(result)
     }
+  }
 
+  private fun maybeGetStringField(obj: JSONObject, fieldName: String): String? {
+    if (obj.has(fieldName) && !TextUtils.isEmpty(obj.getString(fieldName))) {
+      return obj.getString(fieldName)
+    }
+    return null
   }
 
   override fun onActivityResult(

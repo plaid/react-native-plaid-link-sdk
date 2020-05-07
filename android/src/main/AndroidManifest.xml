@@ -3,6 +3,6 @@
 
   <meta-data
     android:name="com.plaid.link.react_native"
-    android:value="3.1.2" />
+    android:value="3.2.0" />
 
 </manifest>

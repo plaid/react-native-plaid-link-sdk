@@ -96,7 +96,6 @@ const MyPlaidComponent = () => {
       product={['<# Product #>']}
       onSuccess={data => console.log('success: ', data)}
       onExit={data => console.log('exit: ', data)}
-      onCancelled = {(result) => {console.log('Cancelled: ', result)}}
  
       // Optional props
       countryCodes={['<# Country Code #>']}

@@ -124,7 +124,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
           countryCodes.add(jsonArray.getString(i))
         }
         if (countryCodes.isNotEmpty()) {
-          countryCodes(countryCodes)
+          builder.countryCodes(countryCodes)
         }
       }
 

@@ -112,6 +112,10 @@ const MyPlaidComponent = () => {
 };
 ```
 
+### OAuth requirements
+
+If you are initializing Link with one or more European country codes on iOS, your React Native integration will require additional Link configuration parameters (`oauthNonce`, `oauthRedirectUri`, and `oauthStateId`) in order to support OAuth authentication flows. You will also need to configure a universal link. See [OAuth requirements](https://plaid.com/docs/#oauth) for more information.
+
 ### To receive onEvent callbacks:
 
 The React Native Plaid module emits `onEvent` events throughout the account linking process — see [details here](https://plaid.com/docs/#onevent-callback). To receive these events in your React Native app, wrap the `PlaidLink` react component with the following in order to listen for those events:

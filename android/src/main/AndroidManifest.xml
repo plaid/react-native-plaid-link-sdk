@@ -1,8 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.plaid">
 
-  <meta-data
-    android:name="com.plaid.link.react_native"
-    android:value="3.2.0" />
+  <application>
+    <meta-data
+      android:name="com.plaid.link.react_native"
+      android:value="3.2.0" />
+  </application>
 
 </manifest>

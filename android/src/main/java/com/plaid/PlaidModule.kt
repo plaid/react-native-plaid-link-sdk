@@ -45,7 +45,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val LANGUAGE = "language"
     private const val ENV = "env"
     private const val LINK_CUSTOMIZATION_NAME = "linkCustomizationName"
-    private const val OAUTH_NONCE = "oauthNonce"
     private const val TOKEN = "token"
     private const val USER_EMAIL = "userEmailAddress"
     private const val USER_NAME = "userLegalName"
@@ -147,9 +146,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         builder.linkCustomizationName(it)
       }
 
-      maybeGetStringField(obj, OAUTH_NONCE)?.let {
-        builder.oauthNonce(it)
-      }
 
       maybeGetStringField(obj, TOKEN)?.let {
         builder.token(it)

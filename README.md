@@ -99,6 +99,7 @@ const MyPlaidComponent = () => {
  
       // Optional props
       countryCodes={['<# Country Code #>']}
+      accountSubtypes= {{'<#Type#>': ['<# Subtype #>']}}
       language='<# Language #>'
       userEmailAddress='<# User Email #>'
       userLegalName='<# User Legal Name #>'
@@ -144,7 +145,6 @@ class PlaidEventContainer extends React.Component {
         env='sandbox'
         onSuccess={data => console.log('success: ', data)}
         onExit={data => console.log('exit: ', data)}
-        onCancelled = {(result) => {console.log('Cancelled: ', result)}}
         product={['transactions']}
         language='en'
         countryCodes={['US']}
@@ -170,7 +170,6 @@ By default, `PlaidLink` renders a `TouchableOpacity` component. You may override
         componentProps = {{title: 'Add Account'}}
         onSuccess = {(result) => {console.log('Success: ', result)}}
         onError = {(result) => {console.log('Error: ', result)}}
-        onCancelled = {(result) => {console.log('Cancelled: ', result)}}
         product = {["transactions"]}
         language = "en"
         countryCodes = {["US"]}

@@ -1,6 +1,7 @@
 package com.plaid
 
 import android.app.Activity
+import android.app.Application
 import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
@@ -16,13 +17,14 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.plaid.link.Plaid
-import com.plaid.linkbase.models.configuration.LinkConfiguration
-import com.plaid.linkbase.models.configuration.PlaidEnvironment
-import com.plaid.linkbase.models.configuration.PlaidProduct
-import com.plaid.linkbase.models.connection.LinkCancellation
-import com.plaid.linkbase.models.connection.LinkConnection
-import com.plaid.linkbase.models.connection.LinkExitMetadata
-import com.plaid.linkbase.models.connection.PlaidError
+import com.plaid.link.configuration.LinkConfiguration;
+import com.plaid.link.configuration.LinkLogLevel;
+import com.plaid.link.configuration.PlaidEnvironment;
+import com.plaid.link.configuration.PlaidProduct;
+import com.plaid.link.result.LinkError
+import com.plaid.link.result.LinkExit
+import com.plaid.link.result.LinkSuccess
+import com.plaid.link.result.PlaidLinkResultHandler
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
@@ -34,7 +36,9 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   private val snakeCaseGson: Gson = GsonBuilder()
     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
     .create()
-  private var callback: Callback? = null
+
+  private var onSuccessCallback: Callback? = null
+  private var onExitCallback: Callback? = null
 
   companion object {
     private const val PRODUCTS = "product"
@@ -52,25 +56,16 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val WEBHOOK = "webhook"
     private const val DATA = "data"
     private const val RESULT_CODE = "resultCode"
-    private const val LINK_REQUEST_CODE = 101
   }
 
   override fun getName(): String {
     return "PlaidAndroid"
   }
 
-  override fun getConstants(): Map<String, Any>? {
-    val constants = HashMap<String, Any>()
-    constants["RESULT_SUCCESS"] = Plaid.RESULT_SUCCESS
-    constants["RESULT_CANCELLED"] = Plaid.RESULT_CANCELLED
-    constants["RESULT_EXIT"] = Plaid.RESULT_EXIT
-    constants["REQUEST_CODE"] = LINK_REQUEST_CODE
-    return constants
-  }
-
   override fun initialize() {
     super.initialize()
     reactApplicationContext.addActivityEventListener(this)
+    Plaid.initialize(reactApplicationContext.getApplicationContext() as Application)
   }
 
   override fun onCatalystInstanceDestroy() {
@@ -82,15 +77,15 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   @Suppress("unused")
   fun startLinkActivityForResult(
     data: String,
-    callback: Callback
+    onSuccessCallback: Callback,
+    onExitCallback: Callback
   ) {
     val activity = currentActivity ?: throw IllegalStateException("Current activity is null")
     val extrasMap = mutableMapOf<String, String>()
-    this.callback = callback
+    this.onSuccessCallback = onSuccessCallback
+    this.onExitCallback = onExitCallback
     try {
       val obj = JSONObject(data)
-
-      Plaid.setPublicKey(obj.getString(PUBLIC_KEY))
 
       val productsArray = ArrayList<PlaidProduct>()
       var jsonArray = obj.getJSONArray(PRODUCTS)
@@ -107,10 +102,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         }
       }
 
-      val builder = LinkConfiguration.Builder(
-        obj.getString(CLIENT_NAME),
-        productsArray
-      )
+      val builder = LinkConfiguration.Builder()
+        .publicKey(obj.getString(PUBLIC_KEY))
+        .clientName(obj.getString(CLIENT_NAME))
+        .products(productsArray)
 
       if (obj.has(ACCOUNT_SUBTYPES)) {
         extrasMap[ACCOUNT_SUBTYPES] = obj.getJSONObject(ACCOUNT_SUBTYPES).toString()
@@ -146,7 +141,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         builder.linkCustomizationName(it)
       }
 
-
       maybeGetStringField(obj, TOKEN)?.let {
         builder.token(it)
       }
@@ -178,12 +172,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
           .emit("onEvent", convertJsonToMap(JSONObject(json)))
       }
 
-      Plaid.openLink(activity, builder.build(), LINK_REQUEST_CODE)
+      Plaid.openLink(activity, builder.build())
     } catch (ex: JSONException) {
       val result = WritableNativeMap()
-      result.putInt(RESULT_CODE, Plaid.RESULT_EXIT)
       result.putString(DATA, snakeCaseGson.toJson(plaidErrorFromException(ex)))
-      this.callback?.invoke(result)
     }
   }
 
@@ -201,49 +193,39 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     data: Intent?
   ) {
     val result = WritableNativeMap()
-    val PLAID_RESULT_CODES =
-      arrayOf(Plaid.RESULT_SUCCESS, Plaid.RESULT_CANCELLED, Plaid.RESULT_EXIT)
-
-    result.putInt(RESULT_CODE, resultCode)
-    if (!PLAID_RESULT_CODES.contains(resultCode)) {
-      Log.w("PlaidModule", "ignoring result")
-      return
-    }
 
     // This should not happen but if it does we have no data to return
     if (data == null) {
       Log.w(PlaidModule::class.java.simpleName, Log.getStackTraceString(Throwable()))
-      val cancellation = LinkCancellation("")
-      result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(cancellation))))
-      this.callback?.invoke(result)
-      return
+      val exitMetadata: Map<String, String?> = mapOf(Pair("link_session_id", ""))
+      val exit = LinkExit.fromMap(exitMetadata)
+      result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(exit))))
+      this.onExitCallback?.invoke(result)
     }
 
-    if (requestCode == LINK_REQUEST_CODE) {
-      if (resultCode == Plaid.RESULT_SUCCESS) {
-        val item = data.getParcelableExtra(Plaid.LINK_RESULT) as LinkConnection
-        result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(item))))
-      } else if (resultCode == Plaid.RESULT_CANCELLED) {
-        val cancellation = data.getParcelableExtra(Plaid.LINK_RESULT) as LinkCancellation
-        result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(cancellation))))
-      } else if (resultCode == Plaid.RESULT_EXIT) {
-        val error = data.getParcelableExtra(Plaid.LINK_RESULT) as PlaidError
-        result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(error))))
-      }
-      this.callback?.invoke(result)
-    } else {
-      try {
-        if (data.extras != null) {
-          result.putMap(DATA, Arguments.makeNativeMap(data.extras))
-        }
-        Log.d("PlaidModule", "callback invoked")
-        print(result)
-        this.callback?.invoke(result)
-      } catch (t: Throwable) {
-        // log error
-        Log.e("PlaidModule", "error in plaid module" + t.stackTrace)
-      }
+    data?.extras?.let { extras ->
+      result.putMap(DATA, Arguments.makeNativeMap(extras))
     }
+
+    val linkHandler = PlaidLinkResultHandler(
+      onSuccess = { success ->
+        result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(success))))
+        print(result)
+        this.onSuccessCallback?.invoke(result)
+      },
+      onExit = { exit ->
+        result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(exit))))
+        print(result)
+        this.onExitCallback?.invoke(result)
+      }
+    )
+
+    if (linkHandler.onActivityResult(requestCode, resultCode, data)) {
+      return
+    } else {
+      Log.i("PlaidModule", "Result code not handled.")
+    }
+    return
   }
 
   override fun onNewIntent(intent: Intent) {
@@ -251,11 +233,5 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   }
 
   private fun plaidErrorFromException(exception: Throwable?) =
-    PlaidError(
-      "Internal exception occurred",
-      "499",
-      exception?.stackTrace?.contentToString() ?: "No stack trace",
-      exception?.localizedMessage,
-      LinkExitMetadata()
-    )
+    LinkError.fromException(exception)
 }

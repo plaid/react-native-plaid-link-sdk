@@ -7,21 +7,8 @@ export const openLink = async ({ onExit, onSuccess, ...serializable }) => {
     const constants = NativeModules.PlaidAndroid.getConstants();
     NativeModules.PlaidAndroid.startLinkActivityForResult(
       JSON.stringify(serializable),
-      result => {
-        switch (result.resultCode) {
-          case constants.RESULT_SUCCESS:
-            if (onSuccess != null) {
-              onSuccess(result.data);
-            }
-            break;
-          case constants.RESULT_CANCELLED:
-          case constants.RESULT_EXIT:
-            if (onExit != null) {
-              onExit(result.data);
-            }
-            break;
-        }
-      },
+      result => { onSuccess(result.data); },
+      result => { onExit(result.data); }
     );
   } else {
     NativeModules.RNLinksdk.create(serializable);
@@ -174,12 +161,13 @@ PlaidLink.propTypes = {
   paymentToken: PropTypes.string,
 
   // An oauthNonce is required to support OAuth authentication flows when
-  // launching Link on iOS and using one or more European country codes.
+  // launching Link within a WebView and using one or more European country
+  // codes. The nonce must be at least 16 characters long.
   oauthNonce: PropTypes.string,
 
   // An oauthRedirectUri is required to support OAuth authentication flows when
-  // launching or re-launching Link on iOS and using one or more European
-  // country codes.
+  // launching or re-launching Link within a WebView and using one or more
+  // European country codes.
   oauthRedirectUri: function(props, propName) {
     let value = props[propName];
     if (value === undefined || value === null) {
@@ -198,8 +186,9 @@ PlaidLink.propTypes = {
     }
   },
 
-  // An oauthStateId is required to support OAuth authentication flows when
-  // re-launching Link on iOS and using one or more European country codes.
+  // An oauthStateId is required to support OAuth authentication and payment flows when
+  // re-launching Link within a WebView and using one or more European country
+  // codes.
   oauthStateId: PropTypes.string,
 
   // Underlying component to render

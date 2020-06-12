@@ -197,9 +197,9 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     // This should not happen but if it does we have no data to return
     if (data == null) {
       Log.w(PlaidModule::class.java.simpleName, Log.getStackTraceString(Throwable()))
-      val cancellationMetadata: Map<String, String?> = mapOf(Pair("link_session_id", ""))
-      val cancellation = LinkExit.fromMap(cancellationMetadata)
-      result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(cancellation))))
+      val exitMetadata: Map<String, String?> = mapOf(Pair("link_session_id", ""))
+      val exit = LinkExit.fromMap(exitMetadata)
+      result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(exit))))
       this.onExitCallback?.invoke(result)
     }
 

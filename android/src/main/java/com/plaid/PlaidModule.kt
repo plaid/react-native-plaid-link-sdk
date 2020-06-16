@@ -203,10 +203,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       this.onExitCallback?.invoke(result)
     }
 
-    data?.extras?.let { extras ->
-      result.putMap(DATA, Arguments.makeNativeMap(extras))
-    }
-
     val linkHandler = PlaidLinkResultHandler(
       onSuccess = { success ->
         result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(success))))
@@ -235,3 +231,4 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   private fun plaidErrorFromException(exception: Throwable?) =
     LinkError.fromException(exception)
 }
+

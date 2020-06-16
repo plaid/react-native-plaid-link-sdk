@@ -1,6 +1,6 @@
 {
   "name": "react-native-plaid-link-sdk",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "React Native Plaid Link SDK",
   "main": "index.js",
   "scripts": {

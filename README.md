@@ -66,7 +66,7 @@ dependencies {
     ...
     implementation project(':react-native-plaid-link-sdk')
     implementation 'com.plaid.link:sdk-core:<insert latest version>'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.+'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:<insert at least version 4.x>'
 ```
 
 5. Go to `android/settings.gradle`

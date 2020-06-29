@@ -34,6 +34,9 @@ static NSString* const kRNLinkKitEventNameKey = @"event";
 static NSString* const kRNLinkKitEventMetadataKey = @"metadata";
 static NSString* const kRNLinkKitVersionConstant = @"version";
 
+NSString* const kRNLinkKitLinkTokenPrefix = @"link-";
+NSString* const kRNLinkKitItemAddTokenPrefix = @"item-add-";
+
 @interface RNLinkkitDelegate : NSObject <PLKPlaidLinkViewDelegate>
 @property (copy) void(^onSuccess)(NSString* publicToken, NSDictionary<NSString*,id>*metadata);
 @property (copy) void(^onExit)(NSError* error, NSDictionary<NSString*,id>*metadata);
@@ -117,44 +120,51 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     PLKProduct product = PLKProductFromArray(products);
     // v1 is no longer supported, always use v2 as default.
     PLKAPIVersion apiVersion = kPLKAPIVersionDefault;
-    PLKConfiguration* linkConfiguration = [[PLKConfiguration alloc] initWithKey:key
-                                                                           env:environment
-                                                                       product:product
-                                                                 selectAccount:selectAccount
-                                                                  longtailAuth:longtailAuth
-                                                                    apiVersion:apiVersion];
-    if ([clientName length] > 0) {
-       linkConfiguration.clientName = clientName;
-    }
-    if([linkCustomizationName length] > 0) {
-        linkConfiguration.linkCustomizationName = linkCustomizationName;
-    }
-    if ([webhook length] > 0) {
-       linkConfiguration.webhook = [NSURL URLWithString:webhook];
-    }
-    if ([userLegalName length] > 0) {
-       linkConfiguration.userLegalName = userLegalName;
-    }
-    if ([userEmailAddress length] > 0) {
-       linkConfiguration.userEmailAddress = userEmailAddress;
-    }
-    if ([userPhoneNumber length] > 0) {
-        linkConfiguration.userPhoneNumber = userPhoneNumber;
-    }
-    if ([oauthRedirectUri length] > 0) {
-        linkConfiguration.oauthRedirectUri = [NSURL URLWithString:oauthRedirectUri];
-    }
-    if ([oauthNonce length] > 0) {
-        linkConfiguration.oauthNonce = oauthNonce;
-    }
-    if ([accountSubtypes count] > 0) {
-       linkConfiguration.accountSubtypes = accountSubtypes;
-    }
-    if ([countryCodes count] > 0) {
-       linkConfiguration.countryCodes = countryCodes;
-    }
-    if ([language length] > 0) {
-       linkConfiguration.language = language;
+    PLKConfiguration* linkConfiguration;
+    BOOL isUsingLinkToken = [linkTokenInput length] > 0 && [linkTokenInput hasPrefix:kRNLinkKitLinkTokenPrefix];
+
+    if (isUsingLinkToken) {
+      linkConfiguration = [[PLKConfiguration alloc] initWithLinkToken:linkTokenInput];
+    } else {
+      linkConfiguration = [[PLKConfiguration alloc] initWithKey:key
+                                                            env:environment
+                                                        product:product
+                                                  selectAccount:selectAccount
+                                                   longtailAuth:longtailAuth
+                                                     apiVersion:apiVersion];
+      if ([clientName length] > 0) {
+         linkConfiguration.clientName = clientName;
+      }
+      if([linkCustomizationName length] > 0) {
+          linkConfiguration.linkCustomizationName = linkCustomizationName;
+      }
+      if ([webhook length] > 0) {
+         linkConfiguration.webhook = [NSURL URLWithString:webhook];
+      }
+      if ([userLegalName length] > 0) {
+         linkConfiguration.userLegalName = userLegalName;
+      }
+      if ([userEmailAddress length] > 0) {
+         linkConfiguration.userEmailAddress = userEmailAddress;
+      }
+      if ([userPhoneNumber length] > 0) {
+          linkConfiguration.userPhoneNumber = userPhoneNumber;
+      }
+      if ([oauthRedirectUri length] > 0) {
+          linkConfiguration.oauthRedirectUri = [NSURL URLWithString:oauthRedirectUri];
+      }
+      if ([oauthNonce length] > 0) {
+          linkConfiguration.oauthNonce = oauthNonce;
+      }
+      if ([accountSubtypes count] > 0) {
+         linkConfiguration.accountSubtypes = accountSubtypes;
+      }
+      if ([countryCodes count] > 0) {
+         linkConfiguration.countryCodes = countryCodes;
+      }
+      if ([language length] > 0) {
+         linkConfiguration.language = language;
+      }
     }
 
     // Cache the presenting view controller so it can be used to dismiss when done.
@@ -195,7 +205,12 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     };
 
     if ([linkTokenInput length] > 0) {
-        if ([linkTokenInput hasPrefix:@"item-add-"]) {
+        if (isUsingLinkToken) {
+            self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithLinkToken:linkTokenInput
+                                                                              configuration:linkConfiguration
+                                                                                   delegate:self.linkViewDelegate];
+        }
+        if ([linkTokenInput hasPrefix:kRNLinkKitItemAddTokenPrefix]) {
             self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithItemAddToken:linkTokenInput
                                                                                  configuration:linkConfiguration
                                                                                       delegate:self.linkViewDelegate];
@@ -208,8 +223,8 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     }
     else if ([institution length] > 0) {
         self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithInstitution:institution
-                                                                       configuration:linkConfiguration
-                                                                            delegate:self.linkViewDelegate];
+                                                                            configuration:linkConfiguration
+                                                                                 delegate:self.linkViewDelegate];
     }
     else if ([paymentTokenInput length] > 0) {
         self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPaymentToken:paymentTokenInput

@@ -56,6 +56,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val WEBHOOK = "webhook"
     private const val DATA = "data"
     private const val RESULT_CODE = "resultCode"
+    private const val INSTITUTION = "institution"
   }
 
   override fun getName(): String {
@@ -159,6 +160,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
       maybeGetStringField(obj, WEBHOOK)?.let {
         builder.webhook(it)
+      }
+
+      maybeGetStringField(obj, INSTITUTION)?.let {
+        extrasMap[INSTITUTION] = it
       }
 
       if (extrasMap.isNotEmpty()) {

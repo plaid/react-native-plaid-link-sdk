@@ -125,6 +125,12 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
 
     if (isUsingLinkToken) {
       linkConfiguration = [[PLKConfiguration alloc] initWithLinkToken:linkTokenInput];
+      if ([oauthRedirectUri length] > 0) {
+          linkConfiguration.oauthRedirectUri = [NSURL URLWithString:oauthRedirectUri];
+      }
+      if ([oauthNonce length] > 0) {
+          linkConfiguration.oauthNonce = oauthNonce;
+      }
     } else {
       linkConfiguration = [[PLKConfiguration alloc] initWithKey:key
                                                             env:environment
@@ -207,10 +213,11 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     if ([linkTokenInput length] > 0) {
         if (isUsingLinkToken) {
             self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithLinkToken:linkTokenInput
+                                                                               oauthStateId:oauthStateId
                                                                               configuration:linkConfiguration
                                                                                    delegate:self.linkViewDelegate];
         }
-        if ([linkTokenInput hasPrefix:kRNLinkKitItemAddTokenPrefix]) {
+        else if ([linkTokenInput hasPrefix:kRNLinkKitItemAddTokenPrefix]) {
             self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithItemAddToken:linkTokenInput
                                                                                  configuration:linkConfiguration
                                                                                       delegate:self.linkViewDelegate];

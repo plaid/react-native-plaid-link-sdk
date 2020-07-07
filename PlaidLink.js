@@ -7,8 +7,16 @@ export const openLink = async ({ onExit, onSuccess, ...serializable }) => {
     const constants = NativeModules.PlaidAndroid.getConstants();
     NativeModules.PlaidAndroid.startLinkActivityForResult(
       JSON.stringify(serializable),
-      result => { onSuccess(result.data); },
-      result => { onExit(result.data); }
+      result => {
+        if (onSuccess != null) {
+          onSuccess(result.data);
+        }
+      },
+      result => {
+        if (onExit != null) {
+          onExit(result.data);
+        }
+      }
     );
   } else {
     NativeModules.RNLinksdk.create(serializable);

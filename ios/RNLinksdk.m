@@ -54,6 +54,10 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 
 RCT_EXPORT_MODULE();
 
++ (NSString*)sdkVersion {
+    return @"1.1.0";
+}
+
 + (BOOL)requiresMainQueueSetup
 {
     // Because LinkKit reliese on UIKit.

@@ -81,17 +81,18 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
     // If we're initializing with a Link token, we will not use or
     // accept many of the client-side configs.
-    var isUsingLinkToken = false;
-    maybeGetStringField(obj, TOKEN)?.let {
+    val token = maybeGetStringField(obj, TOKEN)
+    token?.let {
       if (it.startsWith(LINK_TOKEN_PREFIX)) {
-        isUsingLinkToken = true;
-      }
-    }
+        val builder = LinkTokenConfiguration.Builder()
+          .token(obj.getString(TOKEN))
 
-    if (isUsingLinkToken) {
-      val builder = LinkTokenConfiguration.Builder()
-        .token(obj.getString(TOKEN))
-      return builder.build().toLinkConfiguration()
+        if (extrasMap.isNotEmpty()) {
+          builder.extraParams(extrasMap)
+        }
+
+        return builder.build().toLinkConfiguration()
+      }
     }
 
     val productsArray = ArrayList<PlaidProduct>()

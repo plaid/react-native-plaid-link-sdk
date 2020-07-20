@@ -78,6 +78,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   fun getLinkConfiguration(data: String): LinkConfiguration {
     val obj = JSONObject(data)
     val extrasMap = mutableMapOf<String, String>()
+    val logLevel = LinkLogLevel.ASSERT
 
     // If we're initializing with a Link token, we will not use or
     // accept many of the client-side configs.
@@ -86,6 +87,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       if (it.startsWith(LINK_TOKEN_PREFIX)) {
         val builder = LinkTokenConfiguration.Builder()
           .token(obj.getString(TOKEN))
+          .logLevel(logLevel)
 
         if (extrasMap.isNotEmpty()) {
           builder.extraParams(extrasMap)
@@ -114,6 +116,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       .publicKey(obj.getString(PUBLIC_KEY))
       .clientName(obj.getString(CLIENT_NAME))
       .products(productsArray)
+      .logLevel(logLevel)
 
     if (obj.has(ACCOUNT_SUBTYPES)) {
       extrasMap[ACCOUNT_SUBTYPES] = obj.getJSONObject(ACCOUNT_SUBTYPES).toString()

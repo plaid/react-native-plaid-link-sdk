@@ -95,82 +95,18 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     // Configuration
-    NSString *key = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicKeyKey]];
-    NSString *env = [RCTConvert NSString:configuration[kRNLinkKitConfigEnvKey]];
-    NSArray<NSString*> *products = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];
-    NSString *clientName = [RCTConvert NSString:configuration[kRNLinkKitConfigClientNameKey]];
-    NSString *webhook = [RCTConvert NSString:configuration[kRNLinkKitConfigWebhookKey]];
-    NSString *linkCustomizationName = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkCustomizationName]];
     NSString *linkTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
     NSString *paymentTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigPaymentTokenKey]];
-    NSString *userLegalName = [RCTConvert NSString:configuration[kRNLinkKitConfigUserLegalNameKey]];
-    NSString *userEmailAddress = [RCTConvert NSString:configuration[kRNLinkKitConfigUserEmailAddressKey]];
-    NSString *userPhoneNumber = [RCTConvert NSString:configuration[kRNLinkKitConfigUserPhoneNumberKey]];
-    NSString *oauthRedirectUri = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthRedirectUriKey]];
-    NSString *oauthNonce = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthNonceKey]];
     NSString *oauthStateId = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthStateIdKey]];
-    NSDictionary<NSString*, NSArray<NSString*>*> *accountSubtypes = [RCTConvert NSDictionary:configuration[kRNLinkKitConfigAccountSubtypes]];
-    NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
-    NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
-    BOOL selectAccount = [RCTConvert BOOL:configuration[kRNLinkKitConfigSelectAccountKey]];
     NSString *institution = [RCTConvert NSString:configuration[kRNLinkKitConfigInstitutionKey]];
-    BOOL longtailAuth = [RCTConvert BOOL:configuration[kRNLinkKitConfigLongtailAuthKey]];
 
-    PLKEnvironment environment = PLKEnvironmentFromString(env);
-    PLKProduct product = PLKProductFromArray(products);
-    // v1 is no longer supported, always use v2 as default.
-    PLKAPIVersion apiVersion = kPLKAPIVersionDefault;
     PLKConfiguration* linkConfiguration;
     BOOL isUsingLinkToken = [linkTokenInput length] > 0 && [linkTokenInput hasPrefix:kRNLinkKitLinkTokenPrefix];
 
     if (isUsingLinkToken) {
-      linkConfiguration = [[PLKConfiguration alloc] initWithLinkToken:linkTokenInput];
-      if ([oauthRedirectUri length] > 0) {
-          linkConfiguration.oauthRedirectUri = [NSURL URLWithString:oauthRedirectUri];
-      }
-      if ([oauthNonce length] > 0) {
-          linkConfiguration.oauthNonce = oauthNonce;
-      }
+      linkConfiguration = [self getLinkTokenConfiguration: configuration];
     } else {
-      linkConfiguration = [[PLKConfiguration alloc] initWithKey:key
-                                                            env:environment
-                                                        product:product
-                                                  selectAccount:selectAccount
-                                                   longtailAuth:longtailAuth
-                                                     apiVersion:apiVersion];
-      if ([clientName length] > 0) {
-         linkConfiguration.clientName = clientName;
-      }
-      if([linkCustomizationName length] > 0) {
-          linkConfiguration.linkCustomizationName = linkCustomizationName;
-      }
-      if ([webhook length] > 0) {
-         linkConfiguration.webhook = [NSURL URLWithString:webhook];
-      }
-      if ([userLegalName length] > 0) {
-         linkConfiguration.userLegalName = userLegalName;
-      }
-      if ([userEmailAddress length] > 0) {
-         linkConfiguration.userEmailAddress = userEmailAddress;
-      }
-      if ([userPhoneNumber length] > 0) {
-          linkConfiguration.userPhoneNumber = userPhoneNumber;
-      }
-      if ([oauthRedirectUri length] > 0) {
-          linkConfiguration.oauthRedirectUri = [NSURL URLWithString:oauthRedirectUri];
-      }
-      if ([oauthNonce length] > 0) {
-          linkConfiguration.oauthNonce = oauthNonce;
-      }
-      if ([accountSubtypes count] > 0) {
-         linkConfiguration.accountSubtypes = accountSubtypes;
-      }
-      if ([countryCodes count] > 0) {
-         linkConfiguration.countryCodes = countryCodes;
-      }
-      if ([language length] > 0) {
-         linkConfiguration.language = language;
-      }
+      linkConfiguration = [self getLegacyLinkConfiguration: configuration];
     }
 
     // Cache the presenting view controller so it can be used to dismiss when done.
@@ -270,6 +206,89 @@ RCT_EXPORT_METHOD(dismiss) {
     self.presentingViewController = nil;
     self.linkViewController = nil;
     self.linkViewDelegate = nil;
+}
+
+- (PLKConfiguration*)getLinkTokenConfiguration:(NSDictionary*)configuration {
+    NSString *linkTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
+    NSString *oauthRedirectUri = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthRedirectUriKey]];
+    NSString *oauthNonce = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthNonceKey]];
+
+    PLKConfiguration* linkConfiguration = [[PLKConfiguration alloc] initWithLinkToken:linkTokenInput];
+
+    if ([oauthRedirectUri length] > 0) {
+        linkConfiguration.oauthRedirectUri = [NSURL URLWithString:oauthRedirectUri];
+    }
+    if ([oauthNonce length] > 0) {
+        linkConfiguration.oauthNonce = oauthNonce;
+    }
+    
+    return linkConfiguration;
+}
+
+- (PLKConfiguration*)getLegacyLinkConfiguration:(NSDictionary*)configuration {
+  // Configuration
+  NSString *key = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicKeyKey]];
+  NSString *env = [RCTConvert NSString:configuration[kRNLinkKitConfigEnvKey]];
+  NSArray<NSString*> *products = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];
+  NSString *clientName = [RCTConvert NSString:configuration[kRNLinkKitConfigClientNameKey]];
+  NSString *webhook = [RCTConvert NSString:configuration[kRNLinkKitConfigWebhookKey]];
+  NSString *linkCustomizationName = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkCustomizationName]];
+  NSString *userLegalName = [RCTConvert NSString:configuration[kRNLinkKitConfigUserLegalNameKey]];
+  NSString *userEmailAddress = [RCTConvert NSString:configuration[kRNLinkKitConfigUserEmailAddressKey]];
+  NSString *userPhoneNumber = [RCTConvert NSString:configuration[kRNLinkKitConfigUserPhoneNumberKey]];
+  NSString *oauthRedirectUri = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthRedirectUriKey]];
+  NSString *oauthNonce = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthNonceKey]];
+  NSDictionary<NSString*, NSArray<NSString*>*> *accountSubtypes = [RCTConvert NSDictionary:configuration[kRNLinkKitConfigAccountSubtypes]];
+  NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
+  NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
+  BOOL selectAccount = [RCTConvert BOOL:configuration[kRNLinkKitConfigSelectAccountKey]];
+  BOOL longtailAuth = [RCTConvert BOOL:configuration[kRNLinkKitConfigLongtailAuthKey]];
+
+  PLKEnvironment environment = PLKEnvironmentFromString(env);
+  PLKProduct product = PLKProductFromArray(products);
+  // v1 is no longer supported, always use v2 as default.
+  PLKAPIVersion apiVersion = kPLKAPIVersionDefault;
+  PLKConfiguration* linkConfiguration = [[PLKConfiguration alloc] initWithKey:key
+                                                        env:environment
+                                                    product:product
+                                              selectAccount:selectAccount
+                                               longtailAuth:longtailAuth
+                                                 apiVersion:apiVersion];
+  if ([clientName length] > 0) {
+     linkConfiguration.clientName = clientName;
+  }
+  if([linkCustomizationName length] > 0) {
+      linkConfiguration.linkCustomizationName = linkCustomizationName;
+  }
+  if ([webhook length] > 0) {
+     linkConfiguration.webhook = [NSURL URLWithString:webhook];
+  }
+  if ([userLegalName length] > 0) {
+     linkConfiguration.userLegalName = userLegalName;
+  }
+  if ([userEmailAddress length] > 0) {
+     linkConfiguration.userEmailAddress = userEmailAddress;
+  }
+  if ([userPhoneNumber length] > 0) {
+      linkConfiguration.userPhoneNumber = userPhoneNumber;
+  }
+  if ([oauthRedirectUri length] > 0) {
+      linkConfiguration.oauthRedirectUri = [NSURL URLWithString:oauthRedirectUri];
+  }
+  if ([oauthNonce length] > 0) {
+      linkConfiguration.oauthNonce = oauthNonce;
+  }
+  if ([accountSubtypes count] > 0) {
+     linkConfiguration.accountSubtypes = accountSubtypes;
+  }
+  if ([countryCodes count] > 0) {
+     linkConfiguration.countryCodes = countryCodes;
+  }
+  if ([language length] > 0) {
+     linkConfiguration.language = language;
+  }
+
+  return linkConfiguration;
 }
 
 @end

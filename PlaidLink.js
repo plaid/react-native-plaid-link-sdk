@@ -94,7 +94,7 @@ PlaidLink.propTypes = {
     if (!props.publicKey && !props.token) {
       return new Error(`One of props 'publicKey' or 'token' is required`);
     }
-    if (typeof props.publicKey !== 'string') {
+    if (typeof props.publicKey !== 'string' && !props.token) {
       return new Error(
         `Invalid prop 'publicKey': Expected string instead of ${typeof props.publicKey}`,
       );

@@ -99,6 +99,7 @@ PlaidLink.propTypes = {
         `Invalid prop 'publicKey': Expected string instead of ${typeof props.publicKey}`,
       );
     }
+    console.log("The public_key is being deprecated. Learn how to upgrade to link_tokens at https://plaid.com/docs/#create-link-token");
   },
 
   // Displayed once a user has successfully linked their account

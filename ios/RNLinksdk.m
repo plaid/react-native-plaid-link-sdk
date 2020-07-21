@@ -226,7 +226,6 @@ RCT_EXPORT_METHOD(dismiss) {
 }
 
 - (PLKConfiguration*)getLegacyLinkConfiguration:(NSDictionary*)configuration {
-  // Configuration
   NSString *key = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicKeyKey]];
   NSString *env = [RCTConvert NSString:configuration[kRNLinkKitConfigEnvKey]];
   NSArray<NSString*> *products = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];

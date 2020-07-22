@@ -78,16 +78,35 @@ export const PlaidLink = ({
 PlaidLink.propTypes = {
   // Required props
 
-  // Displayed once a user has successfully linked their account
-  clientName: PropTypes.string.isRequired,
-
-  // The Plaid API environment on which to create user accounts.
-  env: PropTypes.oneOf(['development', 'sandbox', 'production']).isRequired,
-
   // A function that is called when a user has successfully onboarded their
   // account. The function should expect two arguments, the public_key and a
   // metadata object.
   onSuccess: PropTypes.func.isRequired,
+
+  // Optional props
+
+  // The public_key associated with your account; available from
+  // the Plaid dashboard (https://dashboard.plaid.com).
+  // 
+  // [DEPRECATED] - instead, pass a Link token into the token field.
+  // Create a Link token with the /link/token/create endpoint.
+  publicKey: props => {
+    if (!props.publicKey && !props.token) {
+      return new Error(`One of props 'publicKey' or 'token' is required`);
+    }
+    if (typeof props.publicKey !== 'string' && !props.token) {
+      return new Error(
+        `Invalid prop 'publicKey': Expected string instead of ${typeof props.publicKey}`,
+      );
+    }
+    console.log("The public_key is being deprecated. Learn how to upgrade to link_tokens at https://plaid.com/docs/#create-link-token");
+  },
+
+  // Displayed once a user has successfully linked their account
+  clientName: PropTypes.string,
+
+  // The Plaid API environment on which to create user accounts.
+  env: PropTypes.oneOf(['development', 'sandbox', 'production']),
 
   // The Plaid product(s) you wish to use, an array containing some of
   // auth, identity, income, transactions, assets, liabilities, investments.
@@ -101,23 +120,7 @@ PlaidLink.propTypes = {
       'liabilities',
       'investments',
     ]),
-  ).isRequired,
-
-  // Optional props
-
-  // The public_key associated with your account; available from
-  // the Plaid dashboard (https://dashboard.plaid.com).
-  // Either publicKey or token is required.
-  publicKey: props => {
-    if (!props.publicKey && !props.token) {
-      return new Error(`One of props 'publicKey' or 'token' is required`);
-    }
-    if (typeof props.publicKey !== 'string') {
-      return new Error(
-        `Invalid prop 'publicKey': Expected string instead of ${typeof props.publicKey}`,
-      );
-    }
-  },
+  ),
 
   // You can configure Link to return only the accounts that
   // match a given type and subtype
@@ -146,11 +149,8 @@ PlaidLink.propTypes = {
   // A function that is called when a user has specifically exited Link flow.
   onExit: PropTypes.func,
 
-  // Specify an existing user's public token to launch Link in update mode.
-  // This will cause Link to open directly to the authentication step for
-  // that user's institution.
-  // Pass an item_add_token to launch Link in regular mode without a public_key.
-  // Either publicKey or token is required.
+  // Specify a Link token to launch link. To create a Link token, use the
+  // /link/token/create endpoint.
   token: PropTypes.string,
 
   // Specify a user to enable all Auth features. Reach out to your

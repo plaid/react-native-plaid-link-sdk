@@ -79,7 +79,8 @@ project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projec
 
 ## PlaidLink
 
-In your app:
+To initialize Plaid Link, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/#create-link-token).
+After creating a link_token, you'll need to pass it into your app and use it to launch Link:
 
 ```
 import { Text } from 'react-native';
@@ -91,21 +92,9 @@ const MyPlaidComponent = () => {
      // Replace any of the following <#VARIABLE#>s according to your setup,
      // for details see https://plaid.com/docs/quickstart/#client-side-link-configuration
  
-      publicKey='<# Your Public Key #>'
-      clientName='<# Your Client Name #>'
-      env='<# Environment #>'  // 'sandbox' or 'development' or 'production'
-      product={['<# Product #>']}
+      token={<#GENERATED_LINK_TOKEN#>}
       onSuccess={data => console.log('success: ', data)}
       onExit={data => console.log('exit: ', data)}
- 
-      // Optional props
-      countryCodes={['<# Country Code #>']}
-      accountSubtypes= {{'<#Type#>': ['<# Subtype #>']}}
-      language='<# Language #>'
-      userEmailAddress='<# User Email #>'
-      userLegalName='<# User Legal Name #>'
-      userPhoneNumber='<# User Phone Number #>'
-      webhook='<# Webhook URL #>'
     >
       <Text>Add Account</Text>
     </PlaidLink>
@@ -115,7 +104,7 @@ const MyPlaidComponent = () => {
 
 ### OAuth requirements
 
-If you are initializing Link with one or more European country codes on iOS, your React Native integration will require additional Link configuration parameters (`oauthNonce`, `oauthRedirectUri`, and `oauthStateId`) in order to support OAuth authentication flows. You will also need to configure a universal link. See [OAuth requirements](https://plaid.com/docs/#oauth) for more information.
+If you configured your `link_token` with one or more European country codes and are using React Native iOS, your integration will require additional Link configuration parameters (`oauthNonce`, `oauthRedirectUri`, and `oauthStateId`) in order to support OAuth authentication flows. You will also need to configure a universal link. See [OAuth requirements](https://plaid.com/docs/#oauth) for more information.
 
 ### To receive onEvent callbacks:
 
@@ -141,14 +130,9 @@ class PlaidEventContainer extends React.Component {
   render() {
     return (
       <PlaidLink
-        clientName='##YOUR CLIENT NAME##'
-        publicKey='#YOUR PUBLIC KEY##'
-        env='sandbox'
+        token={<#GENERATED_LINK_TOKEN#>}
         onSuccess={data => console.log('success: ', data)}
         onExit={data => console.log('exit: ', data)}
-        product={['transactions']}
-        language='en'
-        countryCodes={['US']}
       >
         <Text>Add Account</Text>
       </PlaidLink>
@@ -163,16 +147,10 @@ By default, `PlaidLink` renders a `TouchableOpacity` component. You may override
 
 ```
       <PlaidLink
-        clientName = "Component Test"
-        publicKey = "##YOUR PUBLIC KEY##"
-        products = {["transactions"]}
-        env = "sandbox"
+        token = {<#GENERATED_LINK_TOKEN#>}
         component= {Button}
         componentProps = {{title: 'Add Account'}}
         onSuccess = {(result) => {console.log('Success: ', result)}}
         onError = {(result) => {console.log('Error: ', result)}}
-        product = {["transactions"]}
-        language = "en"
-        countryCodes = {["US"]}
     >
 ```

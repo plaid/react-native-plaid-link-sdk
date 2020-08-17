@@ -77,6 +77,15 @@ include ':react-native-plaid-link-sdk'
 project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-plaid-link-sdk/android')
 ```
 
+## Version Compatibiltiy
+| React Native SDK | Android SDK | iOS SDK | |
+|---|---|---| --- |
+| 5.x.x | [2.1.0+) |   |  |
+| 4.x.x | [2.0.0-2.1.0) |   |  |
+| 3.x.x | [1.0.0-2.0.0) |   |  Deprecated |
+| 2.x.x | [0.3.0-1.0.0) |   |  Deprecated |
+| 1.x.x | [0.1.0-0.3.0) |   |  Deprecated |
+
 ## PlaidLink
 
 To initialize Plaid Link, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/#create-link-token).

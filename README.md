@@ -81,7 +81,7 @@ project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projec
 | React Native SDK | Android SDK | iOS SDK | Status |
 |---|---|---| --- |
 | 5.x.x | [2.1.0+) |   |  |
-| 4.x.x | [2.0.0-2.1.0) |   |  |
+| 4.x.x | [2.0.0-2.1.0) | <=1.1.33 | Active |
 | 3.x.x | [1.0.0-2.0.0) | v.s. |  Deprecated |
 | 2.x.x | [0.3.0-1.0.0) | <=1.1.27 |  Deprecated |
 | 1.x.x | [0.1.0-0.3.0) |   |  Deprecated |

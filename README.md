@@ -78,7 +78,7 @@ project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projec
 ```
 
 ## Version Compatibiltiy
-| React Native SDK | Android SDK | iOS SDK | |
+| React Native SDK | Android SDK | iOS SDK | Status |
 |---|---|---| --- |
 | 5.x.x | [2.1.0+) |   |  |
 | 4.x.x | [2.0.0-2.1.0) |   |  |

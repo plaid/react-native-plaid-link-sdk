@@ -18,6 +18,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.plaid.link.Plaid
 import com.plaid.link.configuration.LinkConfiguration;
+import com.plaid.link.configuration.LinkTokenConfiguration;
 import com.plaid.link.configuration.LinkLogLevel;
 import com.plaid.link.configuration.PlaidEnvironment;
 import com.plaid.link.configuration.PlaidProduct;
@@ -56,6 +57,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val WEBHOOK = "webhook"
     private const val DATA = "data"
     private const val RESULT_CODE = "resultCode"
+    private const val LINK_TOKEN_PREFIX = "link"
   }
 
   override fun getName(): String {
@@ -73,6 +75,110 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     reactApplicationContext.removeActivityEventListener(this)
   }
 
+  fun getLinkConfiguration(data: String): LinkConfiguration {
+    val obj = JSONObject(data)
+    val extrasMap = mutableMapOf<String, String>()
+    val logLevel = LinkLogLevel.ASSERT
+
+    // If we're initializing with a Link token, we will not use or
+    // accept many of the client-side configs.
+    val token = maybeGetStringField(obj, TOKEN)
+    token?.let {
+      if (it.startsWith(LINK_TOKEN_PREFIX)) {
+        val builder = LinkTokenConfiguration.Builder()
+          .token(obj.getString(TOKEN))
+          .logLevel(logLevel)
+
+        if (extrasMap.isNotEmpty()) {
+          builder.extraParams(extrasMap)
+        }
+
+        return builder.build().toLinkConfiguration()
+      }
+    }
+
+    val productsArray = ArrayList<PlaidProduct>()
+    var jsonArray = obj.getJSONArray(PRODUCTS)
+    for (i in 0 until jsonArray.length()) {
+      val productString = jsonArray.getString(i)
+      if (!TextUtils.isEmpty(productString)) {
+        for (product in PlaidProduct.values()) {
+          if (!productsArray.contains(product) && product.name
+              .equals(productString, ignoreCase = true)
+          ) {
+            productsArray.add(product)
+          }
+        }
+      }
+    }
+
+    val builder = LinkConfiguration.Builder()
+      .publicKey(obj.getString(PUBLIC_KEY))
+      .clientName(obj.getString(CLIENT_NAME))
+      .products(productsArray)
+      .logLevel(logLevel)
+
+    if (obj.has(ACCOUNT_SUBTYPES)) {
+      extrasMap[ACCOUNT_SUBTYPES] = obj.getJSONObject(ACCOUNT_SUBTYPES).toString()
+    }
+
+    if (obj.has(COUNTRY_CODES)) {
+      val countryCodes = ArrayList<String>()
+      jsonArray = obj.getJSONArray(COUNTRY_CODES)
+      for (i in 0 until jsonArray.length()) {
+        countryCodes.add(jsonArray.getString(i))
+      }
+      if (countryCodes.isNotEmpty()) {
+        builder.countryCodes(countryCodes)
+      }
+    }
+
+    maybeGetStringField(obj, LANGUAGE)?.let {
+      builder.language(it)
+    }
+
+    if (obj.has(ENV)) {
+      if (!TextUtils.isEmpty(obj.getString(ENV))) {
+        for (env in PlaidEnvironment.values()) {
+          if (env.name.equals(obj.getString(ENV), ignoreCase = true)) {
+            builder.environment(env)
+            break
+          }
+        }
+      }
+    }
+
+    maybeGetStringField(obj, LINK_CUSTOMIZATION_NAME)?.let {
+      builder.linkCustomizationName(it)
+    }
+
+    maybeGetStringField(obj, TOKEN)?.let {
+      builder.token(it)
+    }
+
+    maybeGetStringField(obj, USER_EMAIL)?.let {
+      builder.userEmailAddress(it)
+    }
+
+    maybeGetStringField(obj, USER_NAME)?.let {
+      builder.userLegalName(it)
+    }
+
+    maybeGetStringField(obj, USER_PHONE)?.let {
+      builder.userPhoneNumber(it)
+    }
+
+    maybeGetStringField(obj, WEBHOOK)?.let {
+      builder.webhook(it)
+    }
+
+    if (extrasMap.isNotEmpty()) {
+      builder.extraParams(extrasMap)
+    }
+
+    return builder.build()
+  }
+
   @ReactMethod
   @Suppress("unused")
   fun startLinkActivityForResult(
@@ -81,89 +187,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     onExitCallback: Callback
   ) {
     val activity = currentActivity ?: throw IllegalStateException("Current activity is null")
-    val extrasMap = mutableMapOf<String, String>()
     this.onSuccessCallback = onSuccessCallback
     this.onExitCallback = onExitCallback
     try {
-      val obj = JSONObject(data)
-
-      val productsArray = ArrayList<PlaidProduct>()
-      var jsonArray = obj.getJSONArray(PRODUCTS)
-      for (i in 0 until jsonArray.length()) {
-        val productString = jsonArray.getString(i)
-        if (!TextUtils.isEmpty(productString)) {
-          for (product in PlaidProduct.values()) {
-            if (!productsArray.contains(product) && product.name
-                .equals(productString, ignoreCase = true)
-            ) {
-              productsArray.add(product)
-            }
-          }
-        }
-      }
-
-      val builder = LinkConfiguration.Builder()
-        .publicKey(obj.getString(PUBLIC_KEY))
-        .clientName(obj.getString(CLIENT_NAME))
-        .products(productsArray)
-
-      if (obj.has(ACCOUNT_SUBTYPES)) {
-        extrasMap[ACCOUNT_SUBTYPES] = obj.getJSONObject(ACCOUNT_SUBTYPES).toString()
-      }
-
-      if (obj.has(COUNTRY_CODES)) {
-        val countryCodes = ArrayList<String>()
-        jsonArray = obj.getJSONArray(COUNTRY_CODES)
-        for (i in 0 until jsonArray.length()) {
-          countryCodes.add(jsonArray.getString(i))
-        }
-        if (countryCodes.isNotEmpty()) {
-          builder.countryCodes(countryCodes)
-        }
-      }
-
-      maybeGetStringField(obj, LANGUAGE)?.let {
-        builder.language(it)
-      }
-
-      if (obj.has(ENV)) {
-        if (!TextUtils.isEmpty(obj.getString(ENV))) {
-          for (env in PlaidEnvironment.values()) {
-            if (env.name.equals(obj.getString(ENV), ignoreCase = true)) {
-              builder.environment(env)
-              break
-            }
-          }
-        }
-      }
-
-      maybeGetStringField(obj, LINK_CUSTOMIZATION_NAME)?.let {
-        builder.linkCustomizationName(it)
-      }
-
-      maybeGetStringField(obj, TOKEN)?.let {
-        builder.token(it)
-      }
-
-      maybeGetStringField(obj, USER_EMAIL)?.let {
-        builder.userEmailAddress(it)
-      }
-
-      maybeGetStringField(obj, USER_NAME)?.let {
-        builder.userLegalName(it)
-      }
-
-      maybeGetStringField(obj, USER_PHONE)?.let {
-        builder.userPhoneNumber(it)
-      }
-
-      maybeGetStringField(obj, WEBHOOK)?.let {
-        builder.webhook(it)
-      }
-
-      if (extrasMap.isNotEmpty()) {
-        builder.extraParams(extrasMap)
-      }
+      val linkConfiguration = getLinkConfiguration(data)
 
       Plaid.setLinkEventListener {
         var json = snakeCaseGson.toJson(it)
@@ -172,7 +199,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
           .emit("onEvent", convertJsonToMap(JSONObject(json)))
       }
 
-      Plaid.openLink(activity, builder.build())
+      Plaid.openLink(activity, linkConfiguration)
     } catch (ex: JSONException) {
       val result = WritableNativeMap()
       result.putString(DATA, snakeCaseGson.toJson(plaidErrorFromException(ex)))

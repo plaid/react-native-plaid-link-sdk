@@ -99,14 +99,16 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     NSString *paymentTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigPaymentTokenKey]];
     NSString *oauthStateId = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthStateIdKey]];
     NSString *institution = [RCTConvert NSString:configuration[kRNLinkKitConfigInstitutionKey]];
+    NSString *publicKey = [RCTConvert NSString:configuration[kRNLinkKitConfigInstitutionKey]];
 
     PLKConfiguration* linkConfiguration;
     BOOL isUsingLinkToken = [linkTokenInput length] > 0 && [linkTokenInput hasPrefix:kRNLinkKitLinkTokenPrefix];
+    BOOL isUsingPublicKey = kRNLinkKitConfigPublicKeyKey;
 
-    if (isUsingLinkToken) {
-      linkConfiguration = [self getLinkTokenConfiguration: configuration];
-    } else {
+    if (isUsingPublicKey) {
       linkConfiguration = [self getLegacyLinkConfiguration: configuration];
+    } else {
+      linkConfiguration = [self getLinkTokenConfiguration: configuration];
     }
 
     // Cache the presenting view controller so it can be used to dismiss when done.

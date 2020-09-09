@@ -99,11 +99,11 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     NSString *paymentTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigPaymentTokenKey]];
     NSString *oauthStateId = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthStateIdKey]];
     NSString *institution = [RCTConvert NSString:configuration[kRNLinkKitConfigInstitutionKey]];
-    NSString *publicKey = [RCTConvert NSString:configuration[kRNLinkKitConfigInstitutionKey]];
+    NSString *publicKey = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicKeyKey]];
 
     PLKConfiguration* linkConfiguration;
     BOOL isUsingLinkToken = [linkTokenInput length] > 0 && [linkTokenInput hasPrefix:kRNLinkKitLinkTokenPrefix];
-    BOOL isUsingPublicKey = kRNLinkKitConfigPublicKeyKey;
+    BOOL isUsingPublicKey = [publicKey length] > 0;
 
     if (isUsingPublicKey) {
       linkConfiguration = [self getLegacyLinkConfiguration: configuration];

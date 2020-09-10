@@ -80,11 +80,18 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     val extrasMap = mutableMapOf<String, String>()
     val logLevel = LinkLogLevel.ASSERT
 
+    val publicKey = maybeGetStringField(obj, PUBLIC_KEY)
+
     // If we're initializing with a Link token, we will not use or
     // accept many of the client-side configs.
     val token = maybeGetStringField(obj, TOKEN)
+
+    if (publicKey == null && token == null) {
+      throw IllegalStateException("Token must be part of configuration.")
+    }
+
     token?.let {
-      if (it.startsWith(LINK_TOKEN_PREFIX)) {
+      if (it.startsWith(LINK_TOKEN_PREFIX) || publicKey == null) {
         val builder = LinkTokenConfiguration.Builder()
           .token(obj.getString(TOKEN))
           .logLevel(logLevel)
@@ -113,7 +120,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     }
 
     val builder = LinkConfiguration.Builder()
-      .publicKey(obj.getString(PUBLIC_KEY))
+      .publicKey(publicKey)
       .clientName(obj.getString(CLIENT_NAME))
       .products(productsArray)
       .logLevel(logLevel)

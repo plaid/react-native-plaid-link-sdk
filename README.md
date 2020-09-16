@@ -150,6 +150,14 @@ class PlaidEventContainer extends React.Component {
 }
 ```
 
+You can also use the `usePlaidEmitter` hook in react functional components:
+
+```
+  usePlaidEmitter((event) => {
+    console.log(event)
+  })
+```
+
 ### Customizing the PlaidLink component
 
 By default, `PlaidLink` renders a `TouchableOpacity` component. You may override the component used by passing `component` and `componentProps`. For example:

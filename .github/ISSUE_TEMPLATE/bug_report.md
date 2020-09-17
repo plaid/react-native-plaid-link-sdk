@@ -1,3 +1,12 @@
+---
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 # The problem
 
 Briefly describe the issue you are experiencing (or the feature you want to see added to the Plaid Link 

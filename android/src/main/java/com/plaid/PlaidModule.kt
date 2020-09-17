@@ -55,6 +55,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val USER_NAME = "userLegalName"
     private const val USER_PHONE = "userPhoneNumber"
     private const val WEBHOOK = "webhook"
+    private const val EXTRAS = "extras"
     private const val DATA = "data"
     private const val RESULT_CODE = "resultCode"
     private const val LINK_TOKEN_PREFIX = "link"
@@ -78,6 +79,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   fun getLinkConfiguration(data: String): LinkConfiguration {
     val obj = JSONObject(data)
     val extrasMap = mutableMapOf<String, String>()
+    maybePopulateExtrasMap(obj, extrasMap)
+
     val logLevel = LinkLogLevel.ASSERT
 
     val publicKey = maybeGetStringField(obj, PUBLIC_KEY)
@@ -218,6 +221,19 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       return obj.getString(fieldName)
     }
     return null
+  }
+
+  private fun maybePopulateExtrasMap(obj: JSONObject, extrasMap: MutableMap<String, String>) {
+    if (obj.has(EXTRAS)) {
+      val extrasObject = obj.getJSONObject("extras")
+      extrasObject.keys().forEach { key: String ->
+        try {
+          extrasMap[key] = extrasObject.getString(key)
+        } catch (e: JSONException) {
+          // Do nothing.
+        }
+      }
+    }
   }
 
   override fun onActivityResult(

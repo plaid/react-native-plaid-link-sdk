@@ -1,6 +1,28 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import { NativeModules, Platform, TouchableOpacity } from 'react-native';
+import React, {useEffect} from 'react';
+import { NativeEventEmitter, NativeModules, Platform, TouchableOpacity } from 'react-native';
+
+/**
+ * A hook that registers a listener on the plaid emitter for the 'onEvent' type.
+ * The listener is cleaned up when this view is unmounted
+ *
+ * @param onEventListener the listener to call
+ */
+export const usePlaidEmitter = (onEventListener) =>{
+  useEffect(() => {
+    const emitter = new NativeEventEmitter(
+      Platform.OS === 'ios' ? NativeModules.RNLinksdk : NativeModules.PlaidAndroid,
+    )
+    const listener = emitter.addListener(
+      'onEvent',
+      onEventListener
+    )
+    // Clean up after this effect:
+    return function cleanup() {
+      listener.remove()
+    }
+  }, [])
+}
 
 export const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   if (Platform.OS === 'android') {

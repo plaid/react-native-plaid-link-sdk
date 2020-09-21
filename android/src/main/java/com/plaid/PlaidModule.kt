@@ -209,7 +209,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       Plaid.openLink(activity, linkConfiguration)
     } catch (ex: JSONException) {
       val result = WritableNativeMap()
-      result.putString(DATA, snakeCaseGson.toJson(plaidErrorFromException(ex)))
+      result.putString(DATA, snakeCaseGson.toJson(plaidExitFromException(ex)))
     }
   }
 
@@ -262,7 +262,16 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     // Do Nothing
   }
 
-  private fun plaidErrorFromException(exception: Throwable?) =
-    LinkError.fromException(exception)
+  private fun plaidExitFromException(exception: Throwable?): LinkExit {
+    val error = LinkError.fromException(exception)
+    val map = mapOf(
+      "link_session_id" to "",
+      "error_code" to error.errorCode,
+      "error_display_message" to error.displayMessage,
+      "error_message" to error.errorMessage,
+      "error_json" to error.errorJson
+    )
+    return LinkExit.fromMap(map)
+  }
 }
 

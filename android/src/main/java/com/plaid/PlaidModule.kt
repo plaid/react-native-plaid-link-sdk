@@ -240,6 +240,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       ).open(activity)
     } catch (ex: JSONException) {
       Log.e("PlaidModule", ex.toString())
+      throw ex
     }
   }
 
@@ -274,6 +275,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     // This should not happen but if it does we have no data to return
     if (data == null) {
       Log.w("PlaidModule", "No data was returned")
+      throw Throwable("No data was returned in onActivityResult")
       return
     }
 

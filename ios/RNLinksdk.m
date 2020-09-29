@@ -37,18 +37,12 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 NSString* const kRNLinkKitLinkTokenPrefix = @"link-";
 NSString* const kRNLinkKitItemAddTokenPrefix = @"item-add-";
 
-@interface RNLinkkitDelegate : NSObject <PLKPlaidLinkViewDelegate>
-@property (copy) void(^onSuccess)(NSString* publicToken, NSDictionary<NSString*,id>*metadata);
-@property (copy) void(^onExit)(NSError* error, NSDictionary<NSString*,id>*metadata);
-@property (copy) void(^onEvent)(NSString* event, NSDictionary<NSString*,id>*metadata);
-@end
-
 @interface RNLinksdk ()
-@property (nonatomic, strong) PLKPlaidLinkViewController* linkViewController;
+@property (nonatomic, strong) id<PLKHandler> linkHandler;
 @property (nonatomic, strong) UIViewController* presentingViewController;
-@property (nonatomic, strong) RNLinkkitDelegate* linkViewDelegate;
 @property (nonatomic, strong) RCTResponseSenderBlock completionCallback;
 @property (nonatomic, assign) BOOL hasObservers;
+@property (nonatomic, copy) NSString *institutionID;
 @end
 
 #pragma mark -
@@ -79,7 +73,8 @@ RCT_EXPORT_MODULE();
 
 - (NSDictionary *)constantsToExport {
     return @{
-        kRNLinkKitVersionConstant: [NSString stringWithFormat:@"%s+%.0f", LinkKitVersionString, LinkKitVersionNumber],
+        // TODO: Actual version numbers again
+        kRNLinkKitVersionConstant: [NSString stringWithFormat:@"%s+%.0f", "LinkKitVersionString", 1],
     };
 }
 
@@ -96,104 +91,76 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     // Configuration
     NSString *linkTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
-    NSString *paymentTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigPaymentTokenKey]];
-    NSString *oauthStateId = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthStateIdKey]];
     NSString *institution = [RCTConvert NSString:configuration[kRNLinkKitConfigInstitutionKey]];
-    NSString *publicKey = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicKeyKey]];
 
-    PLKConfiguration* linkConfiguration;
-    BOOL isUsingLinkToken = [linkTokenInput length] > 0 && [linkTokenInput hasPrefix:kRNLinkKitLinkTokenPrefix];
-    BOOL isUsingPublicKey = [publicKey length] > 0;
-
-    if (isUsingPublicKey) {
-      linkConfiguration = [self getLegacyLinkConfiguration: configuration];
-    } else {
-      linkConfiguration = [self getLinkTokenConfiguration: configuration];
-    }
+    BOOL isUsingLinkToken = [linkTokenInput length];
 
     // Cache the presenting view controller so it can be used to dismiss when done.
     self.presentingViewController = RCTPresentedViewController();
 
     __weak typeof(self) weakSelf = self;
-    self.linkViewDelegate = [[RNLinkkitDelegate alloc] init];
-    self.linkViewDelegate.onSuccess = ^(NSString* publicToken, NSDictionary<NSString*,id>*metadata) {
+    void (^onSuccess)(PLKLinkSuccess *) = ^(PLKLinkSuccess *success) {
         __typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf dismissLinkViewController];
 
         if (strongSelf.completionCallback) {
-            NSMutableDictionary<NSString*, id> *jsMetadata = [metadata mutableCopy];
-            jsMetadata[kRNLinkKitEventTokenKey] = publicToken;
+            NSMutableDictionary<NSString*, id> *jsMetadata = [[RNLinksdk dictionaryFromSuccessMetadata:success.metadata] mutableCopy];
+            jsMetadata[kRNLinkKitEventTokenKey] = success.publicToken;
             strongSelf.completionCallback(@[[NSNull null], jsMetadata]);
             strongSelf.completionCallback = nil;
         }
     };
-    self.linkViewDelegate.onExit = ^(NSError* error, NSDictionary<NSString*,id>*metadata) {
+    
+    void (^onExit)(PLKLinkExit *) = ^(PLKLinkExit *exit) {
         __typeof(weakSelf) strongSelf = weakSelf;
         [weakSelf dismissLinkViewController];
 
         if (strongSelf.completionCallback) {
-            if (error) {
-                strongSelf.completionCallback(@[RCTMakeError(error.localizedDescription, nil, nil), metadata]);
+            if (exit.error) {
+                NSDictionary *exitMetadata = [RNLinksdk dictionaryFromExitMetadata:exit.metadata];
+                strongSelf.completionCallback(@[RCTMakeError(exit.error.localizedDescription, nil, nil), exitMetadata]);
             } else {
-                strongSelf.completionCallback(@[[NSNull null], metadata]);
+                strongSelf.completionCallback(@[[NSNull null], exit.metadata]);
             }
             strongSelf.completionCallback = nil;
         }
     };
-    self.linkViewDelegate.onEvent = ^(NSString* event, NSDictionary<NSString*,id>*metadata) {
+    
+    void (^onEvent)(PLKLinkEvent *) = ^(PLKLinkEvent *event) {
         __typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf.hasObservers) {
+            NSDictionary *eventMetadata = [RNLinksdk dictionaryFromEventMetadata:event.eventMetadata];
             [strongSelf sendEventWithName:kRNLinkKitOnEventEvent
-                                     body:@{kRNLinkKitEventNameKey: event, kRNLinkKitEventMetadataKey: metadata}];
+                                     body:@{kRNLinkKitEventNameKey: event.eventName, kRNLinkKitEventMetadataKey: eventMetadata}];
         }
     };
 
-    if ([linkTokenInput length] > 0) {
-        if (isUsingLinkToken) {
-            self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithLinkToken:linkTokenInput
-                                                                               oauthStateId:oauthStateId
-                                                                              configuration:linkConfiguration
-                                                                                   delegate:self.linkViewDelegate];
-        }
-        else if ([linkTokenInput hasPrefix:kRNLinkKitItemAddTokenPrefix]) {
-            self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithItemAddToken:linkTokenInput
-                                                                                 configuration:linkConfiguration
-                                                                                      delegate:self.linkViewDelegate];
-        }
-        else {
-            self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPublicToken:linkTokenInput
-                                                                                configuration:linkConfiguration
-                                                                                     delegate:self.linkViewDelegate];
-        }
+    if (isUsingLinkToken) {
+        PLKLinkTokenConfiguration *config = [self getLinkTokenConfiguration:configuration
+                                                           onSuccessHandler:onSuccess];
+        config.onEvent = onEvent;
+        config.onExit = onExit;
+        self.linkHandler = [PLKPlaid createWithLinkTokenConfiguration:config
+                                                                error:NULL];
+    } else {
+        PLKLinkPublicKeyConfiguration *config = [self getLegacyLinkConfiguration:configuration
+                                                                onSuccessHandler:onSuccess];
+        config.onEvent = onEvent;
+        config.onExit = onExit;
+        self.linkHandler = [PLKPlaid createWithLinkPublicKeyConfiguration:config
+                                                                    error:NULL];
     }
-    else if ([institution length] > 0) {
-        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithInstitution:institution
-                                                                            configuration:linkConfiguration
-                                                                                 delegate:self.linkViewDelegate];
+    if ([institution length] > 0) {
+        self.institutionID = institution;
+
     }
-    else if ([paymentTokenInput length] > 0) {
-        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithPaymentToken:paymentTokenInput
-                                                                              oauthStateId:oauthStateId
-                                                                             configuration:linkConfiguration
-                                                                                  delegate:self.linkViewDelegate];
-    }
-    else if ([oauthStateId length] > 0) {
-        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithOAuthStateId:oauthStateId
-                                                                             configuration:linkConfiguration
-                                                                                  delegate:self.linkViewDelegate];
-    }
-    else {
-        self.linkViewController = [[PLKPlaidLinkViewController alloc] initWithConfiguration:linkConfiguration
-                                                                              delegate:self.linkViewDelegate];
-    }
-    
-    self.linkViewController.modalPresentationStyle = UIModalPresentationFullScreen;
 }
 
 RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {
-    if (self.linkViewController) {
+    if (self.linkHandler) {
         self.completionCallback = callback;
-        [RCTPresentedViewController() presentViewController:self.linkViewController animated:YES completion:nil];
+        self.presentingViewController = RCTPresentedViewController();
+        [self.linkHandler openWithContextViewController:self.presentingViewController];
     } else {
         callback(@[RCTMakeError(@"create was not called", nil, nil)]);
     }
@@ -206,58 +173,50 @@ RCT_EXPORT_METHOD(dismiss) {
 - (void)dismissLinkViewController {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     self.presentingViewController = nil;
-    self.linkViewController = nil;
-    self.linkViewDelegate = nil;
+    self.linkHandler = nil;
 }
 
-- (PLKConfiguration*)getLinkTokenConfiguration:(NSDictionary*)configuration {
+- (PLKLinkTokenConfiguration *)getLinkTokenConfiguration:(NSDictionary *)configuration
+                                        onSuccessHandler:(void(^)(PLKLinkSuccess *))onSuccessHandler {
     NSString *linkTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
-    NSString *oauthRedirectUri = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthRedirectUriKey]];
-    NSString *oauthNonce = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthNonceKey]];
-
-    PLKConfiguration* linkConfiguration = [[PLKConfiguration alloc] initWithLinkToken:linkTokenInput];
-
-    if ([oauthRedirectUri length] > 0) {
-        linkConfiguration.oauthRedirectUri = [NSURL URLWithString:oauthRedirectUri];
-    }
-    if ([oauthNonce length] > 0) {
-        linkConfiguration.oauthNonce = oauthNonce;
-    }
     
-    return linkConfiguration;
+    return [PLKLinkTokenConfiguration createWithToken:linkTokenInput onSuccess:onSuccessHandler];
 }
 
-- (PLKConfiguration*)getLegacyLinkConfiguration:(NSDictionary*)configuration {
+- (PLKLinkPublicKeyConfiguration *)getLegacyLinkConfiguration:(NSDictionary *)configuration
+                                             onSuccessHandler:(void(^)(PLKLinkSuccess *))onSuccessHandler  {
   NSString *key = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicKeyKey]];
+  NSString *paymentTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigPaymentTokenKey]];
   NSString *env = [RCTConvert NSString:configuration[kRNLinkKitConfigEnvKey]];
-  NSArray<NSString*> *products = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];
+  NSArray<NSString*> *productsInput = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];
   NSString *clientName = [RCTConvert NSString:configuration[kRNLinkKitConfigClientNameKey]];
   NSString *webhook = [RCTConvert NSString:configuration[kRNLinkKitConfigWebhookKey]];
   NSString *linkCustomizationName = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkCustomizationName]];
   NSString *userLegalName = [RCTConvert NSString:configuration[kRNLinkKitConfigUserLegalNameKey]];
   NSString *userEmailAddress = [RCTConvert NSString:configuration[kRNLinkKitConfigUserEmailAddressKey]];
   NSString *userPhoneNumber = [RCTConvert NSString:configuration[kRNLinkKitConfigUserPhoneNumberKey]];
-  NSString *oauthRedirectUri = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthRedirectUriKey]];
+  NSString *oauthRedirectUriString = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthRedirectUriKey]];
   NSString *oauthNonce = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthNonceKey]];
   NSDictionary<NSString*, NSArray<NSString*>*> *accountSubtypes = [RCTConvert NSDictionary:configuration[kRNLinkKitConfigAccountSubtypes]];
   NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
   NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
-  BOOL selectAccount = [RCTConvert BOOL:configuration[kRNLinkKitConfigSelectAccountKey]];
-  BOOL longtailAuth = [RCTConvert BOOL:configuration[kRNLinkKitConfigLongtailAuthKey]];
-
-  PLKEnvironment environment = PLKEnvironmentFromString(env);
-  PLKProduct product = PLKProductFromArray(products);
-  // v1 is no longer supported, always use v2 as default.
-  PLKAPIVersion apiVersion = kPLKAPIVersionDefault;
-  PLKConfiguration* linkConfiguration = [[PLKConfiguration alloc] initWithKey:key
-                                                        env:environment
-                                                    product:product
-                                              selectAccount:selectAccount
-                                               longtailAuth:longtailAuth
-                                                 apiVersion:apiVersion];
-  if ([clientName length] > 0) {
-     linkConfiguration.clientName = clientName;
-  }
+    
+    PLKLinkPublicKeyConfigurationToken *token;
+    if ([paymentTokenInput length] > 0) {
+        token = [PLKLinkPublicKeyConfigurationToken createWithPaymentToken:paymentTokenInput publicKey:key];
+    } else {
+        token = [PLKLinkPublicKeyConfigurationToken createWithPublicKey:key];
+    }
+    
+    PLKEnvironment environment = [RNLinksdk environmentFromString:env];
+    NSArray<NSNumber *> *products = [RNLinksdk productsArrayFromProductsStringArray:productsInput];
+    PLKLinkPublicKeyConfiguration *linkConfiguration = [[PLKLinkPublicKeyConfiguration alloc] initWithClientName:clientName
+                                                                                                     environment:environment
+                                                                                                        products:products
+                                                                                                        language:language
+                                                                                                           token:token
+                                                                                                    countryCodes:countryCodes
+                                                                                                       onSuccess:onSuccessHandler];
   if([linkCustomizationName length] > 0) {
       linkConfiguration.linkCustomizationName = linkCustomizationName;
   }
@@ -273,54 +232,102 @@ RCT_EXPORT_METHOD(dismiss) {
   if ([userPhoneNumber length] > 0) {
       linkConfiguration.userPhoneNumber = userPhoneNumber;
   }
-  if ([oauthRedirectUri length] > 0) {
-      linkConfiguration.oauthRedirectUri = [NSURL URLWithString:oauthRedirectUri];
-  }
-  if ([oauthNonce length] > 0) {
-      linkConfiguration.oauthNonce = oauthNonce;
+  if ([oauthRedirectUriString length] > 0 && [oauthNonce length] > 0) {
+      NSURL* oauthRedirectUri = [NSURL URLWithString:oauthRedirectUriString];
+      linkConfiguration.oauthConfiguration = [PLKOAuthNonceConfiguration createWithNonce:oauthNonce
+                                                                             redirectUri:oauthRedirectUri];
   }
   if ([accountSubtypes count] > 0) {
-     linkConfiguration.accountSubtypes = accountSubtypes;
-  }
-  if ([countryCodes count] > 0) {
-     linkConfiguration.countryCodes = countryCodes;
-  }
-  if ([language length] > 0) {
-     linkConfiguration.language = language;
+      NSArray<NSString *> *accountSubtypeStrings = [RNLinksdk flatten:accountSubtypes.allValues];
+      linkConfiguration.accountSubtypes = [RNLinksdk accountSubtypesArrayFromAccountSubtypesStringArray:accountSubtypeStrings];
   }
 
   return linkConfiguration;
 }
 
+#pragma mark - Bridging
+
++ (PLKEnvironment)environmentFromString:(NSString *)string {
+    if ([string isEqualToString:@"production"]) {
+        return PLKEnvironmentProduction;
+    }
+    
+    if ([string isEqualToString:@"sandbox"]) {
+        return PLKEnvironmentSandbox;
+    }
+    
+    if ([string isEqualToString:@"development"]) {
+        return PLKEnvironmentDevelopment;
+    }
+    
+    // Default to Development
+    NSLog(@"Unexpected environment string value: %@. Expected one of: production, sandbox, or development.", string);
+    return PLKEnvironmentDevelopment;
+}
+
++ (NSArray<NSNumber *> *)productsArrayFromProductsStringArray:(NSArray<NSString *> *)productsStringArray {
+    NSMutableArray<NSNumber *> *results = [NSMutableArray arrayWithCapacity:productsStringArray.count];
+    
+    for (NSString *productString in productsStringArray) {
+        NSNumber *product = [self productFromProductString:productString];
+        if (product) {
+            [results addObject:product];
+        }
+    }
+    
+    return [results copy];
+}
+
++ (NSNumber * __nullable)productFromProductString:(NSString *)productString {
+    // TODO: implement
+    return nil;
+}
+
++ (NSArray<id<PLKAccountSubtype>> *)accountSubtypesArrayFromAccountSubtypesStringArray:(NSArray<NSString *> *)accountSubtypesStringArray {
+    NSMutableArray<id<PLKAccountSubtype>> *results = [NSMutableArray arrayWithCapacity:accountSubtypesStringArray.count];
+    
+    for (NSString *accountSubtypeString in accountSubtypesStringArray) {
+        id<PLKAccountSubtype> accountSubtype = [self accountSubtypeFromString:accountSubtypeString];
+        if (accountSubtype) {
+            [results addObject:accountSubtype];
+        }
+    }
+    
+    return [results copy];
+}
+
++ (NSArray *)flatten:(NSArray<NSArray *> *)nestedArray {
+    NSMutableArray *results = [NSMutableArray array];
+    
+    for (id obj in nestedArray) {
+        if ([obj isKindOfClass:[NSArray class]]) {
+            [results addObjectsFromArray:obj];
+        } else {
+            [results addObject:obj];
+        }
+    }
+    
+    return [results copy];
+}
+
++ (id<PLKAccountSubtype> __nullable)accountSubtypeFromString:(NSString *)accountSubtypeString {
+    // TODO: implement
+    return nil;
+}
+
++ (NSDictionary *)dictionaryFromSuccessMetadata:(PLKSuccessMetadata *)metadata {
+    // TODO
+    return @{};
+}
+
++ (NSDictionary *)dictionaryFromEventMetadata:(PLKEventMetadata *)metadata {
+    // TODO
+    return @{};
+}
+
++ (NSDictionary *)dictionaryFromExitMetadata:(PLKExitMetadata *)metadata {
+    // TODO
+    return @{};
+}
+
 @end
-
-#pragma mark - PLKPlaidLinkViewDelegate
-
-@implementation RNLinkkitDelegate
-
-- (void)linkViewController:(PLKPlaidLinkViewController*)linkViewController
- didSucceedWithPublicToken:(NSString*)publicToken
-                  metadata:(NSDictionary<NSString*,id>*)metadata {
-    if (self.onSuccess) {
-        self.onSuccess(publicToken, metadata);
-    }
-}
-
-- (void)linkViewController:(PLKPlaidLinkViewController*)linkViewController
-          didExitWithError:(NSError*)error
-                  metadata:(NSDictionary<NSString*,id>*)metadata {
-    if (self.onExit) {
-        self.onExit(error, metadata);
-    }
-}
-
-- (void)linkViewController:(PLKPlaidLinkViewController*)linkViewController
-            didHandleEvent:(NSString*)event
-                  metadata:(NSDictionary<NSString*,id>*)metadata {
-    if (self.onEvent) {
-        self.onEvent(event, metadata);
-    }
-}
-
-@end
-

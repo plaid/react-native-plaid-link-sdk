@@ -21,6 +21,7 @@ import com.plaid.link.configuration.LinkPublicKeyConfiguration
 import com.plaid.link.configuration.LinkTokenConfiguration
 import com.plaid.link.configuration.PlaidEnvironment
 import com.plaid.link.configuration.PlaidProduct
+import com.plaid.link.exception.LinkException
 import com.plaid.link.result.LinkResultHandler
 import org.json.JSONException
 import org.json.JSONObject
@@ -210,6 +211,20 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         throw IllegalStateException("Token must be part of configuration.")
       }
 
+      publicKey?.let {
+        try {
+          Plaid.create(
+            reactApplicationContext.getApplicationContext() as Application,
+            getLinkPublicKeyConfiguration(obj, it)
+          ).open(activity)
+          return
+        } catch (ex: Exception) {
+          Log.w("PlaidModule", "Public key provided but unable to open Link")
+          Log.w("PlaidModule", ex.message ?: "")
+          throw ex
+        }
+      }
+
       val tokenConfiguration = getLinkTokenConfiguration(obj, token)
       tokenConfiguration?.let {
         Plaid.create(
@@ -219,11 +234,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         return
       }
 
-      // Otherwise fall back to using public key configuration.
-      Plaid.create(
-        reactApplicationContext.getApplicationContext() as Application,
-        getLinkPublicKeyConfiguration(obj, publicKey!!)
-      ).open(activity)
+      throw LinkException("Unable to open link, please check that your configuration is valid")
     } catch (ex: JSONException) {
       Log.e("PlaidModule", ex.toString())
       throw ex

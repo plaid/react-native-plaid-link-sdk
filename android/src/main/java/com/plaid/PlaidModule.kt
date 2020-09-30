@@ -6,7 +6,6 @@ import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
 import com.facebook.react.bridge.ActivityEventListener
-import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
@@ -17,19 +16,16 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.plaid.link.Plaid
+import com.plaid.link.configuration.LinkLogLevel
 import com.plaid.link.configuration.LinkPublicKeyConfiguration
 import com.plaid.link.configuration.LinkTokenConfiguration
-import com.plaid.link.configuration.LinkLogLevel
 import com.plaid.link.configuration.PlaidEnvironment
 import com.plaid.link.configuration.PlaidProduct
-import com.plaid.link.result.LinkError
-import com.plaid.link.result.LinkExit
-import com.plaid.link.result.LinkSuccess
+import com.plaid.link.exception.LinkException
 import com.plaid.link.result.LinkResultHandler
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
-import java.util.HashMap
 
 class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext), ActivityEventListener {
@@ -75,24 +71,17 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     reactApplicationContext.removeActivityEventListener(this)
   }
 
-  fun getLinkTokenConfiguration(data: String): LinkTokenConfiguration? {
-    val obj = JSONObject(data)
+  private fun getLinkTokenConfiguration(obj: JSONObject, token: String?): LinkTokenConfiguration? {
     val extrasMap = mutableMapOf<String, String>()
     maybePopulateExtrasMap(obj, extrasMap)
 
     val logLevel = LinkLogLevel.ASSERT
 
-    val publicKey = maybeGetStringField(obj, PUBLIC_KEY)
-
-    // If we're initializing with a Link token, we will not use or
-    // accept many of the client-side configs.
-    val token = maybeGetStringField(obj, TOKEN)
-
-    if (publicKey == null && token == null) {
-      throw IllegalStateException("Token must be part of configuration.")
+    if (token == null) {
+      return null
     }
 
-    if (token == null) {
+    if (!token.startsWith(LINK_TOKEN_PREFIX)) {
       return null
     }
 
@@ -107,21 +96,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     return builder.build()
   }
 
-  fun getLinkPublicKeyConfiguration(data: String): LinkPublicKeyConfiguration {
-    val obj = JSONObject(data)
+  private fun getLinkPublicKeyConfiguration(obj: JSONObject, publicKey: String): LinkPublicKeyConfiguration {
     val extrasMap = mutableMapOf<String, String>()
     maybePopulateExtrasMap(obj, extrasMap)
     val logLevel = LinkLogLevel.ASSERT
-
-    val publicKey = maybeGetStringField(obj, PUBLIC_KEY)
-
-    // If we're initializing with a Link token, we will not use or
-    // accept many of the client-side configs.
-    val token = maybeGetStringField(obj, TOKEN)
-
-    if (publicKey == null && token == null) {
-      throw IllegalStateException("Token must be part of configuration.")
-    }
 
     val productsArray = ArrayList<PlaidProduct>()
     var jsonArray = obj.getJSONArray(PRODUCTS)
@@ -224,7 +202,30 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
           .emit("onEvent", convertJsonToMap(JSONObject(json)))
       }
 
-      val tokenConfiguration = getLinkTokenConfiguration(data)
+      val obj = JSONObject(data)
+      val publicKey = maybeGetStringField(obj, PUBLIC_KEY)
+      // If we're initializing with a Link token, we will not use or
+      // accept many of the client-side configs.
+      val token = maybeGetStringField(obj, TOKEN)
+      if (publicKey == null && token == null) {
+        throw IllegalStateException("Token must be part of configuration.")
+      }
+
+      publicKey?.let {
+        try {
+          Plaid.create(
+            reactApplicationContext.getApplicationContext() as Application,
+            getLinkPublicKeyConfiguration(obj, it)
+          ).open(activity)
+          return
+        } catch (ex: Exception) {
+          Log.w("PlaidModule", "Public key provided but unable to open Link")
+          Log.w("PlaidModule", ex.message ?: "")
+          throw ex
+        }
+      }
+
+      val tokenConfiguration = getLinkTokenConfiguration(obj, token)
       tokenConfiguration?.let {
         Plaid.create(
           reactApplicationContext.getApplicationContext() as Application,
@@ -233,11 +234,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         return
       }
 
-      // Otherwise fall back to using public key configuration.
-      Plaid.create(
-        reactApplicationContext.getApplicationContext() as Application,
-        getLinkPublicKeyConfiguration(data)
-      ).open(activity)
+      throw LinkException("Unable to open link, please check that your configuration is valid")
     } catch (ex: JSONException) {
       Log.e("PlaidModule", ex.toString())
       throw ex
@@ -276,7 +273,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     if (data == null) {
       Log.w("PlaidModule", "No data was returned")
       throw Throwable("No data was returned in onActivityResult")
-      return
     }
 
     val linkHandler = LinkResultHandler(

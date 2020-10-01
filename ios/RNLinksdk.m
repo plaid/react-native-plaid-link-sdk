@@ -209,8 +209,11 @@ RCT_EXPORT_METHOD(dismiss) {
     
     PLKLinkPublicKeyConfigurationToken *token;
     BOOL isPaymentToken = [tokenInput hasPrefix:kRNLinkKitPaymentTokenPrefix];
+    BOOL isItemAddToken = [tokenInput hasPrefix:kRNLinkKitItemAddTokenPrefix];
     if (isPaymentToken) {
         token = [PLKLinkPublicKeyConfigurationToken createWithPaymentToken:tokenInput publicKey:key];
+    } else if (isItemAddToken) {
+        token = [PLKLinkPublicKeyConfigurationToken createWithPublicToken:tokenInput publicKey:key];
     } else {
         token = [PLKLinkPublicKeyConfigurationToken createWithPublicKey:key];
     }

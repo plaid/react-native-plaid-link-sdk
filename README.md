@@ -2,7 +2,7 @@
 
 In your react-native project directory:
 
-```
+```sh
 npm install --save react-native-plaid-link-sdk
 ```
 
@@ -14,13 +14,13 @@ When upgrading from a previous major version of this library, see the notes [her
 
 Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The latest version is ![version](https://img.shields.io/cocoapods/v/Plaid).
 
-```
+```sh
 pod 'Plaid', '~> <insert latest version>'
 ```
 
 Then install your cocoapods dependencies:
 
-```
+```sh
 (cd ios && pod install)
 ```
 
@@ -32,7 +32,7 @@ That's it if using a recent react-native version with [autolinking](https://gith
 
 If using a version of react-native without [autolinking](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md) support, then you will need to:
 
-```
+```sh
 react-native link react-native-plaid-link-sdk
 ```
 
@@ -63,10 +63,11 @@ followed by
 
 ```groovy
 dependencies {
-    ...
+    // ...
     implementation project(':react-native-plaid-link-sdk')
     implementation 'com.plaid.link:sdk-core:<insert latest version>'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:<insert at least version 4.x>'
+}
 ```
 
 5. Go to `android/settings.gradle`
@@ -91,17 +92,17 @@ project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projec
 To initialize Plaid Link, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/#create-link-token).
 After creating a link_token, you'll need to pass it into your app and use it to launch Link:
 
-```
+```javascript
 import { Text } from 'react-native';
 import PlaidLink from 'react-native-plaid-link-sdk';
- 
+
 const MyPlaidComponent = () => {
   return (
     <PlaidLink
-     // Replace any of the following <#VARIABLE#>s according to your setup,
-     // for details see https://plaid.com/docs/quickstart/#client-side-link-configuration
- 
-      token={<#GENERATED_LINK_TOKEN#>}
+      // Replace any of the following <#VARIABLE#>s according to your setup,
+      // for details see https://plaid.com/docs/quickstart/#client-side-link-configuration
+
+      token={/* <#GENERATED_LINK_TOKEN#> */}
       onSuccess={data => console.log('success: ', data)}
       onExit={data => console.log('exit: ', data)}
     >
@@ -119,23 +120,23 @@ If you configured your `link_token` with one or more European country codes and 
 
 The React Native Plaid module emits `onEvent` events throughout the account linking process — see [details here](https://plaid.com/docs/#onevent-callback). To receive these events in your React Native app, wrap the `PlaidLink` react component with the following in order to listen for those events:
 
-```
+```javascript
 import React from 'react';
 import { Text, NativeEventEmitter, NativeModules } from 'react-native';
- 
+
 class PlaidEventContainer extends React.Component {
- 
+
   componentDidMount() {
     const emitter = new NativeEventEmitter(Platform.OS === 'ios' ? NativeModules.RNLinksdk : NativeModules.PlaidAndroid);
     this._listener = emitter.addListener('onEvent', (e) => console.log(e));
   }
- 
+
   componentWillUnmount() {
     if (this._listener) {
       this._listener.remove();
     }
   }
- 
+
   render() {
     return (
       <PlaidLink
@@ -152,7 +153,7 @@ class PlaidEventContainer extends React.Component {
 
 You can also use the `usePlaidEmitter` hook in react functional components:
 
-```
+```javascript
   usePlaidEmitter((event) => {
     console.log(event)
   })
@@ -162,12 +163,12 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 
 By default, `PlaidLink` renders a `TouchableOpacity` component. You may override the component used by passing `component` that accepts an `onPress` callback prop and `componentProps`. For example:
 
-```
-      <PlaidLink
-        token = {<#GENERATED_LINK_TOKEN#>}
-        component= {Button}
-        componentProps = {{title: 'Add Account'}}
-        onSuccess = {(result) => {console.log('Success: ', result)}}
-        onError = {(result) => {console.log('Error: ', result)}}
-    >
+```jsx
+<PlaidLink
+  token = {/* <#GENERATED_LINK_TOKEN#> */}
+  component= {Button}
+  componentProps = {{title: 'Add Account'}}
+  onSuccess = {(result) => {console.log('Success: ', result)}}
+  onError = {(result) => {console.log('Error: ', result)}}
+>
 ```

@@ -155,9 +155,9 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         self.linkHandler = [PLKPlaid createWithLinkPublicKeyConfiguration:config
                                                                     error:NULL];
     }
+
     if ([institution length] > 0) {
         self.institutionID = institution;
-
     }
 }
 
@@ -165,7 +165,8 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {
     if (self.linkHandler) {
         self.completionCallback = callback;
         self.presentingViewController = RCTPresentedViewController();
-        [self.linkHandler openWithContextViewController:self.presentingViewController];
+        NSDictionary *options = self.institutionID.length > 0 ? @{@"institution_id": self.institutionID} : @{};
+        [self.linkHandler openWithContextViewController:self.presentingViewController options:options];
     } else {
         callback(@[RCTMakeError(@"create was not called", nil, nil)]);
     }

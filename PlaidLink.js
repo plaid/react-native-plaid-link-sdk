@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
+  Linking,
   NativeEventEmitter,
   NativeModules,
   Platform,
@@ -13,7 +14,7 @@ import {
  *
  * @param onEventListener the listener to call
  */
-export const usePlaidEmitter = onEventListener => {
+export const usePlaidEmitter = (onEventListener) => {
   useEffect(() => {
     const emitter = new NativeEventEmitter(
       Platform.OS === 'ios'
@@ -32,12 +33,12 @@ export const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   if (Platform.OS === 'android') {
     NativeModules.PlaidAndroid.startLinkActivityForResult(
       JSON.stringify(serializable),
-      result => {
+      (result) => {
         if (onSuccess != null) {
           onSuccess(result.data);
         }
       },
-      result => {
+      (result) => {
         if (onExit != null) {
           onExit(result.data);
         }
@@ -83,6 +84,24 @@ const handlePress = (linkProps, componentProps) => {
   }
 };
 
+const useMount = (func) => useEffect(() => func(), []);
+
+export const useDeepLinkRedirector = () => {
+  const _handleListenerChange = (event) => {
+    if (event.url !== null && Platform.OS === 'ios') {
+      NativeModules.RNLinksdk.continueFromRedirectUriString(event.url);
+    }
+  };
+
+  useEffect(() => {
+    Linking.addEventListener('url', _handleListenerChange);
+
+    return function cleanup() {
+      Linking.removeEventListener('url', _handleListenerChange);
+    };
+  }, []);
+};
+
 export const PlaidLink = ({
   component,
   componentProps,
@@ -115,7 +134,7 @@ PlaidLink.propTypes = {
   //
   // [DEPRECATED] - instead, pass a Link token into the token field.
   // Create a Link token with the /link/token/create endpoint.
-  publicKey: props => {
+  publicKey: (props) => {
     if (!props.publicKey && !props.token) {
       return new Error(`One of props 'publicKey' or 'token' is required`);
     }
@@ -198,7 +217,7 @@ PlaidLink.propTypes = {
   // An oauthRedirectUri is required to support OAuth authentication flows when
   // launching or re-launching Link within a WebView and using one or more
   // European country codes.
-  oauthRedirectUri: function(props, propName) {
+  oauthRedirectUri: function (props, propName) {
     let value = props[propName];
     if (value === undefined || value === null) {
       return;

@@ -120,11 +120,11 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         [weakSelf dismissLinkViewController];
 
         if (strongSelf.completionCallback) {
+            NSDictionary *exitMetadata = [RNLinksdk dictionaryFromExitMetadata:exit.metadata];
             if (exit.error) {
-                NSDictionary *exitMetadata = [RNLinksdk dictionaryFromExitMetadata:exit.metadata];
                 strongSelf.completionCallback(@[RCTMakeError(exit.error.localizedDescription, nil, nil), exitMetadata]);
             } else {
-                strongSelf.completionCallback(@[[NSNull null], exit.metadata]);
+                strongSelf.completionCallback(@[[NSNull null], exitMetadata]);
             }
             strongSelf.completionCallback = nil;
         }
@@ -494,7 +494,7 @@ RCT_EXPORT_METHOD(dismiss) {
     return @{
         @"link_session_id": metadata.linkSessionID,
         @"institution": [self dictionaryFromInstitution:metadata.insitution],
-        @"accounts": metadata.accounts,
+        @"accounts": [self accountsDictionariesFromAccounts:metadata.accounts],
         @"metadata_json": metadata.metadataJSON ?: @"<null>",
     };
 }

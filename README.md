@@ -122,7 +122,7 @@ The React Native Plaid module emits `onEvent` events throughout the account link
 
 ```javascript
 import React from 'react';
-import { Text, NativeEventEmitter, NativeModules } from 'react-native';
+import { Text, NativeEventEmitter, NativeModules, Platform } from 'react-native';
 
 class PlaidEventContainer extends React.Component {
 

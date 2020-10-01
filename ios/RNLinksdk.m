@@ -12,7 +12,6 @@ static NSString* const kRNLinkKitConfigClientNameKey = @"clientName";
 static NSString* const kRNLinkKitConfigWebhookKey = @"webhook";
 static NSString* const kRNLinkKitConfigLinkCustomizationName = @"linkCustomizationName";
 static NSString* const kRNLinkKitConfigLinkTokenKey = @"token";
-static NSString* const kRNLinkKitConfigPaymentTokenKey = @"paymentToken";
 static NSString* const kRNLinkKitConfigSelectAccountKey = @"selectAccount";
 static NSString* const kRNLinkKitConfigUserLegalNameKey = @"userLegalName";
 static NSString* const kRNLinkKitConfigUserEmailAddressKey = @"userEmailAddress";
@@ -36,6 +35,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 
 NSString* const kRNLinkKitLinkTokenPrefix = @"link-";
 NSString* const kRNLinkKitItemAddTokenPrefix = @"item-add-";
+NSString* const kRNLinkKitPaymentTokenPrefix = @"payment";
 
 @interface RNLinksdk ()
 @property (nonatomic, strong) id<PLKHandler> linkHandler;
@@ -192,7 +192,7 @@ RCT_EXPORT_METHOD(dismiss) {
 - (PLKLinkPublicKeyConfiguration *)getLegacyLinkConfiguration:(NSDictionary *)configuration
                                              onSuccessHandler:(void(^)(PLKLinkSuccess *))onSuccessHandler  {
   NSString *key = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicKeyKey]];
-  NSString *paymentTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigPaymentTokenKey]];
+  NSString *tokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
   NSString *env = [RCTConvert NSString:configuration[kRNLinkKitConfigEnvKey]];
   NSArray<NSString*> *productsInput = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];
   NSString *clientName = [RCTConvert NSString:configuration[kRNLinkKitConfigClientNameKey]];
@@ -208,8 +208,9 @@ RCT_EXPORT_METHOD(dismiss) {
   NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
     
     PLKLinkPublicKeyConfigurationToken *token;
-    if ([paymentTokenInput length] > 0) {
-        token = [PLKLinkPublicKeyConfigurationToken createWithPaymentToken:paymentTokenInput publicKey:key];
+    BOOL isPaymentToken = [tokenInput hasPrefix:kRNLinkKitPaymentTokenPrefix];
+    if (isPaymentToken) {
+        token = [PLKLinkPublicKeyConfigurationToken createWithPaymentToken:tokenInput publicKey:key];
     } else {
         token = [PLKLinkPublicKeyConfigurationToken createWithPublicKey:key];
     }
@@ -223,7 +224,7 @@ RCT_EXPORT_METHOD(dismiss) {
                                                                                                            token:token
                                                                                                     countryCodes:countryCodes
                                                                                                        onSuccess:onSuccessHandler];
-  if([linkCustomizationName length] > 0) {
+  if ([linkCustomizationName length] > 0) {
       linkConfiguration.linkCustomizationName = linkCustomizationName;
   }
   if ([webhook length] > 0) {

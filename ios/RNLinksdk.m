@@ -88,15 +88,20 @@ RCT_EXPORT_MODULE();
     self.hasObservers = false;
 }
 
+RCT_EXPORT_METHOD(continueFromRedirectUriString:(NSString *)redirectUriString) {
+    NSURL *receivedRedirectUri = (id)redirectUriString == [NSNull null] ? nil : [NSURL URLWithString:redirectUriString];
+    
+    if (receivedRedirectUri && self.linkHandler) {
+       [self.linkHandler continueFromRedirectUri:receivedRedirectUri];
+    }
+}
+
 RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     // Configuration
     NSString *linkTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
     NSString *institution = [RCTConvert NSString:configuration[kRNLinkKitConfigInstitutionKey]];
 
-    BOOL isUsingLinkToken = [linkTokenInput length];
-
-    // Cache the presenting view controller so it can be used to dismiss when done.
-    self.presentingViewController = RCTPresentedViewController();
+    BOOL isUsingLinkToken = [linkTokenInput length] && [linkTokenInput hasPrefix:kRNLinkKitLinkTokenPrefix];
 
     __weak typeof(self) weakSelf = self;
     void (^onSuccess)(PLKLinkSuccess *) = ^(PLKLinkSuccess *success) {
@@ -238,8 +243,7 @@ RCT_EXPORT_METHOD(dismiss) {
                                                                              redirectUri:oauthRedirectUri];
   }
   if ([accountSubtypes count] > 0) {
-      NSArray<NSString *> *accountSubtypeStrings = [RNLinksdk flatten:accountSubtypes.allValues];
-      linkConfiguration.accountSubtypes = [RNLinksdk accountSubtypesArrayFromAccountSubtypesStringArray:accountSubtypeStrings];
+      linkConfiguration.accountSubtypes = [RNLinksdk accountSubtypesArrayFromAccountSubtypesDictionary:accountSubtypes];
   }
 
   return linkConfiguration;
@@ -279,55 +283,387 @@ RCT_EXPORT_METHOD(dismiss) {
 }
 
 + (NSNumber * __nullable)productFromProductString:(NSString *)productString {
-    // TODO: implement
-    return nil;
+    NSDictionary *productStringMap = @{
+        @"auth": @(PLKProductAuth),
+        @"identity": @(PLKProductIdentity),
+        @"income": @(PLKProductIncome),
+        @"transactions": @(PLKProductTransactions),
+        @"assets": @(PLKProductAssets),
+        @"liabilities": @(PLKProductLiabilities),
+        @"investments": @(PLKProductInvestments),
+    };
+    return productStringMap[productString.lowercaseString];
 }
 
-+ (NSArray<id<PLKAccountSubtype>> *)accountSubtypesArrayFromAccountSubtypesStringArray:(NSArray<NSString *> *)accountSubtypesStringArray {
-    NSMutableArray<id<PLKAccountSubtype>> *results = [NSMutableArray arrayWithCapacity:accountSubtypesStringArray.count];
++ (NSArray<id<PLKAccountSubtype>> *)accountSubtypesArrayFromAccountSubtypesDictionary:(NSDictionary<NSString *, NSArray<NSString *> *> *)accountSubtypesDictionary {
+    __block NSMutableArray<id<PLKAccountSubtype>> *results = [NSMutableArray array];
     
-    for (NSString *accountSubtypeString in accountSubtypesStringArray) {
-        id<PLKAccountSubtype> accountSubtype = [self accountSubtypeFromString:accountSubtypeString];
-        if (accountSubtype) {
-            [results addObject:accountSubtype];
+    for (NSString *type in accountSubtypesDictionary.allKeys) {
+        NSArray<NSString *> *subtypes = accountSubtypesDictionary[type] ?: @[];
+        
+        for (NSString *subtype in subtypes) {
+            id<PLKAccountSubtype> accountSubtype = [self accountSubtypeFromTypeString:type subtypeString:subtype];
+            if (accountSubtype) {
+                [results addObject:accountSubtype];
+            }
         }
     }
     
     return [results copy];
 }
 
-+ (NSArray *)flatten:(NSArray<NSArray *> *)nestedArray {
-    NSMutableArray *results = [NSMutableArray array];
-    
-    for (id obj in nestedArray) {
-        if ([obj isKindOfClass:[NSArray class]]) {
-            [results addObjectsFromArray:obj];
++ (id<PLKAccountSubtype> __nullable)accountSubtypeFromTypeString:(NSString *)typeString
+                                                   subtypeString:(NSString *)subtypeString {
+    if ([typeString.lowercaseString isEqualToString:@"other"]) {
+        
+    } else if ([typeString.lowercaseString isEqualToString:@"credit"]) {
+        if ([subtypeString.lowercaseString isEqualToString:@"all"]) {
+            return [PLKAccountSubtypeCredit createWithValue:PLKAccountSubtypeValueCreditAll];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"credit card"]) {
+            return [PLKAccountSubtypeCredit createWithValue:PLKAccountSubtypeValueCreditAll];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"paypal"]) {
+            return [PLKAccountSubtypeCredit createWithValue:PLKAccountSubtypeValueCreditPaypal];
         } else {
-            [results addObject:obj];
+            return [PLKAccountSubtypeCredit createWithUnknownValue:subtypeString];
+        }
+    } else if ([typeString.lowercaseString isEqualToString:@"loan"]) {
+        if ([subtypeString.lowercaseString isEqualToString:@"all"]) {
+            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanAll];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"auto"]) {
+            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanAuto];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"business"]) {
+            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanBusiness];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"commercial"]) {
+            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanCommercial];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"construction"]) {
+            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanConstruction];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"consumer"]) {
+            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanConsumer];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"home equity"]) {
+            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanHomeEquity];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"line of credit"]) {
+            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanLineOfCredit];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"loan"]) {
+            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanLoan];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"mortgage"]) {
+            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanMortgage];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"overdraft"]) {
+            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanOverdraft];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"student"]) {
+            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanStudent];
+        } else {
+            return [PLKAccountSubtypeLoan createWithUnknownValue:subtypeString];
+        }
+    } else if ([typeString.lowercaseString isEqualToString:@"depository"]) {
+        if ([subtypeString.lowercaseString isEqualToString:@"all"]) {
+            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryAll];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"cash management"]) {
+            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryCashManagement];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"cd"]) {
+            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryCd];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"checking"]) {
+            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryChecking];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"ebt"]) {
+            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryEbt];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"hsa"]) {
+            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryHsa];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"money market"]) {
+            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryMoneyMarket];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"paypal"]) {
+            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryPaypal];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"prepaid"]) {
+            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryPrepaid];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"savings"]) {
+            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositorySavings];
+        } else {
+            return [PLKAccountSubtypeDepository createWithUnknownValue:subtypeString];
+        }
+
+    } else if ([typeString.lowercaseString isEqualToString:@"investment"]) {
+        if ([subtypeString.lowercaseString isEqualToString:@"all"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentAll];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"401a"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment401a];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"401k"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment401k];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"403B"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment403B];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"457b"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment457b];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"529"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment529];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"brokerage"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentBrokerage];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"cash isa"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentCashIsa];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"education savings account"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentEducationSavingsAccount];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"fixed annuity"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentFixedAnnuity];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"gic"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentGic];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"health reimbursement arrangement"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentHealthReimbursementArrangement];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"hsa"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentHsa];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"ira"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentIra];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"isa"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentIsa];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"keogh"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentKeogh];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"lif"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentLif];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"lira"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentLira];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"lrif"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentLrif];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"lrsp"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentLrsp];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"mutual fund"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentMutualFund];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"non-taxable brokerage account"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentNonTaxableBrokerageAccount];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"pension"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentPension];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"plan"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentPlan];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"prif"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentPrif];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"profit sharing plan"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentProfitSharingPlan];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"rdsp"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRdsp];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"resp"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentResp];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"retirement"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRetirement];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"rlif"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRlif];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"roth 401k"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRoth401k];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"roth"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRoth];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"rrif"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRrif];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"rrsp"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRrsp];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"sarsep"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentSarsep];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"sep ira"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentSepIra];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"simple ira"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentSimpleIra];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"sipp"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentSipp];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"stock plan"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentStockPlan];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"tfsa"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentTfsa];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"thrift savings plan"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentThriftSavingsPlan];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"trust"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentTrust];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"ugma"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentUgma];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"utma"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentUtma];
+        } else if ([subtypeString.lowercaseString isEqualToString:@"variable annuity"]) {
+          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentVariableAnnuity];
+        } else {
+          return [PLKAccountSubtypeInvestment createWithUnknownValue:subtypeString];
         }
     }
-    
-    return [results copy];
-}
 
-+ (id<PLKAccountSubtype> __nullable)accountSubtypeFromString:(NSString *)accountSubtypeString {
-    // TODO: implement
-    return nil;
+    return [PLKAccountSubtypeUnknown createWithRawTypeStringValue:typeString rawSubtypeStringValue:subtypeString];
 }
 
 + (NSDictionary *)dictionaryFromSuccessMetadata:(PLKSuccessMetadata *)metadata {
-    // TODO
-    return @{};
+    return @{
+        @"linkSessionID": metadata.linkSessionID,
+        @"institution": [self dictionaryFromInstitution:metadata.insitution],
+        @"accounts": metadata.accounts,
+        @"metadata_json": metadata.metadataJSON ?: @"<null>",
+    };
+}
+
++ (NSArray<NSDictionary *> *)accountsDictionariesFromAccounts:(NSArray<PLKAccount *> *)accounts {
+    NSMutableArray<NSDictionary *> *results = [NSMutableArray arrayWithCapacity:accounts.count];
+    
+    for (PLKAccount *account in accounts) {
+        NSDictionary *accountDictionary = [self dictionaryFromAccount:account];
+        [results addObject:accountDictionary];
+    }
+    return [results copy];
+}
+
++ (NSDictionary *)dictionaryFromAccount:(PLKAccount *)account {
+    return @{
+        @"id": account.ID,
+        @"name": account.name,
+        @"mask": account.mask ?: @"<null>",
+        @"subtype": [self subtypeNameForAccountSubtype:account.subtype],
+        @"type": [self typeNameForAccountSubtype:account.subtype],
+        @"verification_status": [self stringForVerificationStatus:account.verificationStatus],
+    };
+}
+
++ (NSString *)stringForVerificationStatus:(PLKVerificationStatus *)verificationStatus {
+    if (!verificationStatus) {
+        return @"<null>";
+    }
+    
+    if (verificationStatus.unknownStringValue) {
+        return verificationStatus.unknownStringValue;
+    }
+    
+    switch (verificationStatus.value) {
+        case PLKVerificationStatusValueNone:
+            return @"<null>";
+        case PLKVerificationStatusValuePendingAutomaticVerification:
+            return @"pending_automatic_verification";
+        case PLKVerificationStatusValuePendingManualVerification:
+            return @"pending_manual_verification";
+        case PLKVerificationStatusValueManuallyVerified:
+            return @"manually_verified";
+    }
+    
+    return @"unknown";
+}
+
++ (NSString *)typeNameForAccountSubtype:(id<PLKAccountSubtype>)accountSubtype {
+    if ([accountSubtype isKindOfClass:[PLKAccountSubtypeUnknown class]]) {
+        return ((PLKAccountSubtypeUnknown *)accountSubtype).rawStringValue;
+    } else if ([accountSubtype isKindOfClass:[PLKAccountSubtypeOther class]]) {
+        return @"other";
+    } else if ([accountSubtype isKindOfClass:[PLKAccountSubtypeCredit class]]) {
+        return @"credit";
+    }  else if ([accountSubtype isKindOfClass:[PLKAccountSubtypeLoan class]]) {
+        return @"loan";
+    }  else if ([accountSubtype isKindOfClass:[PLKAccountSubtypeDepository class]]) {
+        return @"depository";
+    }  else if ([accountSubtype isKindOfClass:[PLKAccountSubtypeInvestment class]]) {
+        return @"investment";
+    }
+    return @"unknown";
+}
+
++ (NSString *)subtypeNameForAccountSubtype:(id<PLKAccountSubtype>)accountSubtype {
+    if ([accountSubtype isKindOfClass:[PLKAccountSubtypeUnknown class]]) {
+        return ((PLKAccountSubtypeUnknown *)accountSubtype).rawSubtypeStringValue;
+    }
+    return accountSubtype.rawStringValue;
+}
+
++ (NSDictionary *)dictionaryFromInstitution:(PLKInstitution *)institution {
+    return @{
+        @"name": institution.name,
+        @"id": institution.ID,
+    };
 }
 
 + (NSDictionary *)dictionaryFromEventMetadata:(PLKEventMetadata *)metadata {
-    // TODO
-    return @{};
+    return @{
+        @"error": metadata.error ?: @"<null>",
+        @"exit_status": [self stringForExitStatus:metadata.exitStatus],
+        @"institution_id": metadata.institutionID ?: @"",
+        @"institution_name": metadata.institutionName ?: @"",
+        @"instituion_search_query": metadata.institutionSearchQuery ?: @"",
+        @"link_session_id": metadata.linkSessionID,
+        @"mfa_type": [self stringForMfaType:metadata.mfaType],
+        @"request_id": metadata.requestID ?: @"<null>",
+        @"timestamp": metadata.timestamp,
+        @"view_name": [self stringForViewName:metadata.viewName],
+        @"metadata_json": metadata.metadataJSON ?: @"<null>",
+    };
+}
+
++ (NSString *)stringForExitStatus:(PLKExitStatus)exitStatus {
+    switch (exitStatus) {
+        case PLKExitStatusNone:
+            return @"<null>";
+        case PLKExitStatusRequiresQuestions:
+            return @"requires_questions";
+        case PLKExitStatusRequiresSelections:
+            return @"requires_selections";
+        case PLKExitStatusRequiresCode:
+            return @"requires_code";
+        case PLKExitStatusChooseDevice:
+            return @"choose_device";
+        case PLKExitStatusRequiresCredentials:
+            return @"requires_credentials";
+        case PLKExitStatusInstitutionNotFound:
+            return @"institution_not_found";
+        case PLKExitStatusUnknown:
+            return @"unknown";
+    }
+    return @"unknown";
+}
+
++ (NSString *)stringForMfaType:(PLKMFAType)mfaType {
+    switch (mfaType) {
+        case PLKMFATypeNone:
+            return @"<null>";
+        case PLKMFATypeCode:
+            return @"code";
+        case PLKMFATypeDevice:
+            return @"device";
+        case PLKMFATypeQuestions:
+            return @"questions";
+        case PLKMFATypeSelections:
+            return @"selections";
+    }
+    
+    return @"unknown";
+}
+
++ (NSString *)stringForViewName:(PLKViewName *)viewName {
+    if (!viewName) {
+        return @"<null>";
+    }
+    
+    if (viewName.unknownStringValue) {
+        return viewName.unknownStringValue;
+    }
+    
+    switch (viewName.value) {
+        case PLKViewNameValueNone:
+            return @"<null>";
+        case PLKViewNameValueConnected:
+            return @"CONNECTED";
+        case PLKViewNameValueConsent:
+            return @"CONSENT";
+        case PLKViewNameValueCredential:
+            return @"CREDENTIAL";
+        case PLKViewNameValueError:
+            return @"ERROR";
+        case PLKViewNameValueExit:
+            return @"EXIT";
+        case PLKViewNameValueLoading:
+            return @"LOADING";
+        case PLKViewNameValueMFA:
+            return @"MFA";
+        case PLKViewNameValueNumbers:
+            return @"NUMBERS";
+        case PLKViewNameValueRecaptcha:
+            return @"RECAPTCHA";
+        case PLKViewNameValueSelectAccount:
+            return @"SELECT_ACCOUNT";
+        case PLKViewNameValueSelectInstitution:
+            return @"SELECT_INSTITUTION";
+    }
+    
+    return @"unknown";
 }
 
 + (NSDictionary *)dictionaryFromExitMetadata:(PLKExitMetadata *)metadata {
-    // TODO
-    return @{};
+    return @{
+        @"status": [self stringForExitStatus:metadata.status],
+        @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"<null>",
+        @"request_id": metadata.requestID,
+        @"link_session_id": metadata.linkSessionID,
+        @"metadata_json": metadata.metadataJSON,
+    };
 }
 
 @end

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import React, {useEffect} from 'react';
-import { NativeEventEmitter, NativeModules, Platform, TouchableOpacity } from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import { AppState, Linking, NativeEventEmitter, NativeModules, Platform, TouchableOpacity } from 'react-native';
 
 /**
  * A hook that registers a listener on the plaid emitter for the 'onEvent' type.
@@ -78,6 +78,24 @@ const handlePress = (linkProps, componentProps) => {
   if (componentProps && componentProps.onPress) {
     componentProps.onPress();
   }
+};
+
+const useMount = func => useEffect(() => func(), []);
+
+export const useDeepLinkRedirector = () => {
+  const _handleListenerChange = (event) => {
+    if (event.url !== null) {
+    NativeModules.RNLinksdk.continueFromRedirectUriString(event.url);
+    }
+  };
+
+    useEffect(() => {
+      Linking.addEventListener("url", _handleListenerChange);
+
+    return function cleanup() {
+      Linking.removeEventListener("url", _handleListenerChange);
+    };
+  }, []);
 };
 
 export const PlaidLink = ({

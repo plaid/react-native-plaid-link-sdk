@@ -43,6 +43,7 @@ NSString* const kRNLinkKitPaymentTokenPrefix = @"payment";
 @property (nonatomic, strong) RCTResponseSenderBlock completionCallback;
 @property (nonatomic, assign) BOOL hasObservers;
 @property (nonatomic, copy) NSString *institutionID;
+@property (nonatomic, nullable, strong) NSError *creationError;
 @end
 
 #pragma mark -
@@ -144,15 +145,19 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
                                                            onSuccessHandler:onSuccess];
         config.onEvent = onEvent;
         config.onExit = onExit;
+        NSError *creationError = nil;
         self.linkHandler = [PLKPlaid createWithLinkTokenConfiguration:config
-                                                                error:NULL];
+                                                                error:&creationError];
+        self.creationError = creationError;
     } else {
         PLKLinkPublicKeyConfiguration *config = [self getLegacyLinkConfiguration:configuration
                                                                 onSuccessHandler:onSuccess];
         config.onEvent = onEvent;
         config.onExit = onExit;
+           NSError *creationError = nil;
         self.linkHandler = [PLKPlaid createWithLinkPublicKeyConfiguration:config
-                                                                    error:NULL];
+                                                                    error:&creationError];
+        self.creationError = creationError;
     }
 
     if ([institution length] > 0) {
@@ -167,7 +172,8 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {
         NSDictionary *options = self.institutionID.length > 0 ? @{@"institution_id": self.institutionID} : @{};
         [self.linkHandler openWithContextViewController:self.presentingViewController options:options];
     } else {
-        callback(@[RCTMakeError(@"create was not called", nil, nil)]);
+        id error = self.creationError ? RCTJSErrorFromNSError(self.creationError) : RCTMakeError(@"create was not called", nil, nil);
+        callback(@[error]);
     }
 }
 

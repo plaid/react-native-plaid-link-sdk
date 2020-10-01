@@ -241,7 +241,7 @@ PlaidLink.propTypes = {
   oauthStateId: PropTypes.string,
 
   // Underlying component to render
-  component: PropTypes.func,
+  component: PropTypes.elementType,
 
   // Props for underlying component
   componentProps: PropTypes.object,

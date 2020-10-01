@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {useEffect, useRef, useState} from 'react';
-import { AppState, Linking, NativeEventEmitter, NativeModules, Platform, TouchableOpacity } from 'react-native';
+import { Linking, NativeEventEmitter, NativeModules, Platform, TouchableOpacity } from 'react-native';
 
 /**
  * A hook that registers a listener on the plaid emitter for the 'onEvent' type.
@@ -8,25 +8,23 @@ import { AppState, Linking, NativeEventEmitter, NativeModules, Platform, Touchab
  *
  * @param onEventListener the listener to call
  */
-export const usePlaidEmitter = (onEventListener) =>{
+export const usePlaidEmitter = onEventListener => {
   useEffect(() => {
     const emitter = new NativeEventEmitter(
-      Platform.OS === 'ios' ? NativeModules.RNLinksdk : NativeModules.PlaidAndroid,
-    )
-    const listener = emitter.addListener(
-      'onEvent',
-      onEventListener
-    )
+      Platform.OS === 'ios'
+        ? NativeModules.RNLinksdk
+        : NativeModules.PlaidAndroid,
+    );
+    const listener = emitter.addListener('onEvent', onEventListener);
     // Clean up after this effect:
     return function cleanup() {
-      listener.remove()
-    }
-  }, [])
-}
+      listener.remove();
+    };
+  }, []);
+};
 
 export const openLink = async ({ onExit, onSuccess, ...serializable }) => {
   if (Platform.OS === 'android') {
-    const constants = NativeModules.PlaidAndroid.getConstants();
     NativeModules.PlaidAndroid.startLinkActivityForResult(
       JSON.stringify(serializable),
       result => {
@@ -38,7 +36,7 @@ export const openLink = async ({ onExit, onSuccess, ...serializable }) => {
         if (onExit != null) {
           onExit(result.data);
         }
-      }
+      },
     );
   } else {
     NativeModules.RNLinksdk.create(serializable);
@@ -127,7 +125,7 @@ PlaidLink.propTypes = {
 
   // The public_key associated with your account; available from
   // the Plaid dashboard (https://dashboard.plaid.com).
-  // 
+  //
   // [DEPRECATED] - instead, pass a Link token into the token field.
   // Create a Link token with the /link/token/create endpoint.
   publicKey: props => {
@@ -139,7 +137,9 @@ PlaidLink.propTypes = {
         `Invalid prop 'publicKey': Expected string instead of ${typeof props.publicKey}`,
       );
     }
-    console.log("The public_key is being deprecated. Learn how to upgrade to link_tokens at https://plaid.com/docs/#create-link-token");
+    console.log(
+      'The public_key is being deprecated. Learn how to upgrade to link_tokens at https://plaid.com/docs/#create-link-token',
+    );
   },
 
   // Displayed once a user has successfully linked their account
@@ -202,11 +202,6 @@ PlaidLink.propTypes = {
 
   // Specify a webhook to associate with a user.
   webhook: PropTypes.string,
-
-  // Specify an existing payment token to launch Link in payment initation mode.
-  // This will cause Link to open a payment confirmation dialog prior to
-  // institution selection.
-  paymentToken: PropTypes.string,
 
   // An oauthNonce is required to support OAuth authentication flows when
   // launching Link within a WebView and using one or more European country

@@ -160,7 +160,7 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 
 ### Customizing the PlaidLink component
 
-By default, `PlaidLink` renders a `TouchableOpacity` component. You may override the component used by passing `component` and `componentProps`. For example:
+By default, `PlaidLink` renders a `TouchableOpacity` component. You may override the component used by passing `component` that accepts an `onPress` prop and `componentProps`. For example:
 
 ```
       <PlaidLink

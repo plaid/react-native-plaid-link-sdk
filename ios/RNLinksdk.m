@@ -73,8 +73,7 @@ RCT_EXPORT_MODULE();
 
 - (NSDictionary *)constantsToExport {
     return @{
-        // TODO: Actual version numbers again
-        kRNLinkKitVersionConstant: [NSString stringWithFormat:@"%s+%.0f", "LinkKitVersionString", 1],
+        kRNLinkKitVersionConstant: [NSString stringWithFormat:@"%s+%.0f", LinkKitVersionString, LinkKitVersionNumber],
     };
 }
 
@@ -591,24 +590,30 @@ RCT_EXPORT_METHOD(dismiss) {
     };
 }
 
-+ (NSString *)stringForExitStatus:(PLKExitStatus)exitStatus {
-    switch (exitStatus) {
-        case PLKExitStatusNone:
++ (NSString *)stringForExitStatus:(PLKExitStatus *)exitStatus {
+    if (!exitStatus) {
+        return @"<null>";
+    }
+
+    if (exitStatus.unknownStringValue) {
+        return exitStatus.unknownStringValue;
+    }
+
+    switch (exitStatus.value) {
+        case PLKExitStatusValueNone:
             return @"<null>";
-        case PLKExitStatusRequiresQuestions:
+        case PLKExitStatusValueRequiresQuestions:
             return @"requires_questions";
-        case PLKExitStatusRequiresSelections:
+        case PLKExitStatusValueRequiresSelections:
             return @"requires_selections";
-        case PLKExitStatusRequiresCode:
+        case PLKExitStatusValueRequiresCode:
             return @"requires_code";
-        case PLKExitStatusChooseDevice:
+        case PLKExitStatusValueChooseDevice:
             return @"choose_device";
-        case PLKExitStatusRequiresCredentials:
+        case PLKExitStatusValueRequiresCredentials:
             return @"requires_credentials";
-        case PLKExitStatusInstitutionNotFound:
+        case PLKExitStatusValueInstitutionNotFound:
             return @"institution_not_found";
-        case PLKExitStatusUnknown:
-            return @"unknown";
     }
     return @"unknown";
 }

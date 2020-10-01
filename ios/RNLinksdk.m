@@ -316,161 +316,169 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (id<PLKAccountSubtype> __nullable)accountSubtypeFromTypeString:(NSString *)typeString
                                                    subtypeString:(NSString *)subtypeString {
-    if ([typeString.lowercaseString isEqualToString:@"other"]) {
-        
-    } else if ([typeString.lowercaseString isEqualToString:@"credit"]) {
-        if ([subtypeString.lowercaseString isEqualToString:@"all"]) {
+    NSString *normalizedTypeString = typeString.lowercaseString;
+    NSString *normalizedSubtypeString = subtypeString.lowercaseString;
+    if ([normalizedTypeString isEqualToString:@"other"]) {
+        if ([normalizedSubtypeString isEqualToString:@"all"]) {
+            return [PLKAccountSubtypeOther createWithValue:PLKAccountSubtypeValueOtherAll];
+        } else if ([normalizedSubtypeString isEqualToString:@"other"]) {
+            return [PLKAccountSubtypeOther createWithValue:PLKAccountSubtypeValueOtherOther];
+        } else {
+            return [PLKAccountSubtypeOther createWithRawStringValue:normalizedSubtypeString];
+        }
+    } else if ([normalizedTypeString isEqualToString:@"credit"]) {
+        if ([normalizedSubtypeString isEqualToString:@"all"]) {
             return [PLKAccountSubtypeCredit createWithValue:PLKAccountSubtypeValueCreditAll];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"credit card"]) {
-            return [PLKAccountSubtypeCredit createWithValue:PLKAccountSubtypeValueCreditAll];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"paypal"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"credit card"]) {
+            return [PLKAccountSubtypeCredit createWithValue:PLKAccountSubtypeValueCreditCreditCard];
+        } else if ([normalizedSubtypeString isEqualToString:@"paypal"]) {
             return [PLKAccountSubtypeCredit createWithValue:PLKAccountSubtypeValueCreditPaypal];
         } else {
             return [PLKAccountSubtypeCredit createWithUnknownValue:subtypeString];
         }
-    } else if ([typeString.lowercaseString isEqualToString:@"loan"]) {
-        if ([subtypeString.lowercaseString isEqualToString:@"all"]) {
+    } else if ([normalizedTypeString isEqualToString:@"loan"]) {
+        if ([normalizedSubtypeString isEqualToString:@"all"]) {
             return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanAll];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"auto"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"auto"]) {
             return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanAuto];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"business"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"business"]) {
             return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanBusiness];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"commercial"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"commercial"]) {
             return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanCommercial];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"construction"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"construction"]) {
             return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanConstruction];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"consumer"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"consumer"]) {
             return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanConsumer];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"home equity"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"home equity"]) {
             return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanHomeEquity];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"line of credit"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"line of credit"]) {
             return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanLineOfCredit];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"loan"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"loan"]) {
             return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanLoan];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"mortgage"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"mortgage"]) {
             return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanMortgage];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"overdraft"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"overdraft"]) {
             return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanOverdraft];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"student"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"student"]) {
             return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanStudent];
         } else {
             return [PLKAccountSubtypeLoan createWithUnknownValue:subtypeString];
         }
-    } else if ([typeString.lowercaseString isEqualToString:@"depository"]) {
-        if ([subtypeString.lowercaseString isEqualToString:@"all"]) {
+    } else if ([normalizedTypeString isEqualToString:@"depository"]) {
+        if ([normalizedSubtypeString isEqualToString:@"all"]) {
             return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryAll];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"cash management"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"cash management"]) {
             return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryCashManagement];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"cd"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"cd"]) {
             return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryCd];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"checking"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"checking"]) {
             return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryChecking];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"ebt"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"ebt"]) {
             return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryEbt];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"hsa"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"hsa"]) {
             return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryHsa];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"money market"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"money market"]) {
             return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryMoneyMarket];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"paypal"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"paypal"]) {
             return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryPaypal];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"prepaid"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"prepaid"]) {
             return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryPrepaid];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"savings"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"savings"]) {
             return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositorySavings];
         } else {
             return [PLKAccountSubtypeDepository createWithUnknownValue:subtypeString];
         }
 
-    } else if ([typeString.lowercaseString isEqualToString:@"investment"]) {
-        if ([subtypeString.lowercaseString isEqualToString:@"all"]) {
+    } else if ([normalizedTypeString isEqualToString:@"investment"]) {
+        if ([normalizedSubtypeString isEqualToString:@"all"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentAll];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"401a"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"401a"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment401a];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"401k"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"401k"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment401k];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"403B"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"403B"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment403B];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"457b"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"457b"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment457b];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"529"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"529"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment529];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"brokerage"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"brokerage"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentBrokerage];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"cash isa"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"cash isa"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentCashIsa];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"education savings account"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"education savings account"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentEducationSavingsAccount];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"fixed annuity"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"fixed annuity"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentFixedAnnuity];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"gic"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"gic"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentGic];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"health reimbursement arrangement"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"health reimbursement arrangement"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentHealthReimbursementArrangement];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"hsa"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"hsa"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentHsa];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"ira"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"ira"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentIra];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"isa"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"isa"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentIsa];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"keogh"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"keogh"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentKeogh];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"lif"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"lif"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentLif];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"lira"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"lira"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentLira];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"lrif"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"lrif"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentLrif];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"lrsp"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"lrsp"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentLrsp];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"mutual fund"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"mutual fund"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentMutualFund];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"non-taxable brokerage account"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"non-taxable brokerage account"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentNonTaxableBrokerageAccount];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"pension"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"pension"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentPension];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"plan"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"plan"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentPlan];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"prif"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"prif"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentPrif];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"profit sharing plan"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"profit sharing plan"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentProfitSharingPlan];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"rdsp"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"rdsp"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRdsp];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"resp"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"resp"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentResp];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"retirement"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"retirement"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRetirement];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"rlif"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"rlif"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRlif];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"roth 401k"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"roth 401k"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRoth401k];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"roth"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"roth"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRoth];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"rrif"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"rrif"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRrif];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"rrsp"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"rrsp"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRrsp];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"sarsep"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"sarsep"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentSarsep];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"sep ira"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"sep ira"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentSepIra];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"simple ira"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"simple ira"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentSimpleIra];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"sipp"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"sipp"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentSipp];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"stock plan"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"stock plan"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentStockPlan];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"tfsa"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"tfsa"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentTfsa];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"thrift savings plan"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"thrift savings plan"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentThriftSavingsPlan];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"trust"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"trust"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentTrust];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"ugma"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"ugma"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentUgma];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"utma"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"utma"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentUtma];
-        } else if ([subtypeString.lowercaseString isEqualToString:@"variable annuity"]) {
+        } else if ([normalizedSubtypeString isEqualToString:@"variable annuity"]) {
           return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentVariableAnnuity];
         } else {
           return [PLKAccountSubtypeInvestment createWithUnknownValue:subtypeString];
@@ -482,7 +490,7 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSDictionary *)dictionaryFromSuccessMetadata:(PLKSuccessMetadata *)metadata {
     return @{
-        @"linkSessionID": metadata.linkSessionID,
+        @"link_session_id": metadata.linkSessionID,
         @"institution": [self dictionaryFromInstitution:metadata.insitution],
         @"accounts": metadata.accounts,
         @"metadata_json": metadata.metadataJSON ?: @"<null>",

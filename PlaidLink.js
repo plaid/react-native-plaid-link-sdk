@@ -235,11 +235,6 @@ PlaidLink.propTypes = {
     }
   },
 
-  // An oauthStateId is required to support OAuth authentication and payment flows when
-  // re-launching Link within a WebView and using one or more European country
-  // codes.
-  oauthStateId: PropTypes.string,
-
   // Underlying component to render
   component: PropTypes.func,
 

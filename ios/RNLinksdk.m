@@ -110,6 +110,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
 
         if (strongSelf.completionCallback) {
             NSMutableDictionary<NSString*, id> *jsMetadata = [[RNLinksdk dictionaryFromSuccessMetadata:success.metadata] mutableCopy];
+            jsMetadata[@"status"] = @"connected";
             jsMetadata[kRNLinkKitEventTokenKey] = success.publicToken;
             strongSelf.completionCallback(@[[NSNull null], jsMetadata]);
             strongSelf.completionCallback = nil;
@@ -586,7 +587,7 @@ RCT_EXPORT_METHOD(dismiss) {
         @"exit_status": [self stringForExitStatus:metadata.exitStatus] ?: @"",
         @"institution_id": metadata.institutionID ?: @"",
         @"institution_name": metadata.institutionName ?: @"",
-        @"instituion_search_query": metadata.institutionSearchQuery ?: @"",
+        @"institution_search_query": metadata.institutionSearchQuery ?: @"",
         @"link_session_id": metadata.linkSessionID ?: @"",
         @"mfa_type": [self stringForMfaType:metadata.mfaType] ?: @"",
         @"request_id": metadata.requestID ?: @"",

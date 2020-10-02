@@ -24,10 +24,8 @@ static NSString* const kRNLinkKitConfigLongtailAuthKey = @"longtailAuth";
 static NSString* const kRNLinkKitConfigApiVersionKey = @"apiVersion";
 static NSString* const kRNLinkKitConfigOAuthRedirectUriKey = @"oauthRedirectUri";
 static NSString* const kRNLinkKitConfigOAuthNonceKey = @"oauthNonce";
-static NSString* const kRNLinkKitConfigOAuthStateIdKey = @"oauthStateId";
 
 static NSString* const kRNLinkKitOnEventEvent = @"onEvent";
-static NSString* const kRNLinkKitEventTokenKey = @"public_token";
 static NSString* const kRNLinkKitEventErrorKey = @"error";
 static NSString* const kRNLinkKitEventNameKey = @"event";
 static NSString* const kRNLinkKitEventMetadataKey = @"metadata";
@@ -109,8 +107,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         [strongSelf dismissLinkViewController];
 
         if (strongSelf.completionCallback) {
-            NSMutableDictionary<NSString*, id> *jsMetadata = [[RNLinksdk dictionaryFromSuccessMetadata:success.metadata] mutableCopy];
-            jsMetadata[kRNLinkKitEventTokenKey] = success.publicToken;
+            NSDictionary<NSString*, id> *jsMetadata = [[RNLinksdk dictionaryFromSuccess:success] mutableCopy];
             strongSelf.completionCallback(@[[NSNull null], jsMetadata]);
             strongSelf.completionCallback = nil;
         }
@@ -121,7 +118,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         [weakSelf dismissLinkViewController];
 
         if (strongSelf.completionCallback) {
-            NSDictionary *exitMetadata = [RNLinksdk dictionaryFromExitMetadata:exit.metadata];
+            NSDictionary *exitMetadata = [RNLinksdk dictionaryFromExit:exit];
             if (exit.error) {
                 strongSelf.completionCallback(@[RCTMakeError(exit.error.localizedDescription, nil, nil), exitMetadata]);
             } else {
@@ -496,12 +493,16 @@ RCT_EXPORT_METHOD(dismiss) {
     return [PLKAccountSubtypeUnknown createWithRawTypeStringValue:typeString rawSubtypeStringValue:subtypeString];
 }
 
-+ (NSDictionary *)dictionaryFromSuccessMetadata:(PLKSuccessMetadata *)metadata {
++ (NSDictionary *)dictionaryFromSuccess:(PLKLinkSuccess *)success {
+    PLKSuccessMetadata *metadata = success.metadata;
     return @{
-        @"link_session_id": metadata.linkSessionID ?: @"",
-        @"institution": [self dictionaryFromInstitution:metadata.insitution] ?: @"",
-        @"accounts": [self accountsDictionariesFromAccounts:metadata.accounts] ?: @"",
-        @"metadata_json": metadata.metadataJSON ?: @"",
+        @"public_token": success.publicToken ?: @"",
+        @"metadata": @{
+          @"link_session_id": metadata.linkSessionID ?: @"",
+          @"institution": [self dictionaryFromInstitution:metadata.insitution] ?: @"",
+          @"accounts": [self accountsDictionariesFromAccounts:metadata.accounts] ?: @"",
+          @"metadata_json": metadata.metadataJSON ?: @"",
+      },
     };
 }
 
@@ -576,24 +577,193 @@ RCT_EXPORT_METHOD(dismiss) {
 + (NSDictionary *)dictionaryFromInstitution:(PLKInstitution *)institution {
     return @{
         @"name": institution.name ?: @"",
-        @"id": institution.ID ?: @"",
+        @"institution_id": institution.ID ?: @"",
     };
 }
 
-+ (NSDictionary *)dictionaryFromEventMetadata:(PLKEventMetadata *)metadata {
++ (NSDictionary *)dictionaryFromError:(PLKExitError *)error {
     return @{
-        @"error": metadata.error ?: @"",
-        @"exit_status": [self stringForExitStatus:metadata.exitStatus] ?: @"",
-        @"institution_id": metadata.institutionID ?: @"",
-        @"institution_name": metadata.institutionName ?: @"",
-        @"instituion_search_query": metadata.institutionSearchQuery ?: @"",
-        @"link_session_id": metadata.linkSessionID ?: @"",
-        @"mfa_type": [self stringForMfaType:metadata.mfaType] ?: @"",
-        @"request_id": metadata.requestID ?: @"",
-        @"timestamp": metadata.timestamp ?: @"",
-        @"view_name": [self stringForViewName:metadata.viewName] ?: @"",
-        @"metadata_json": metadata.metadataJSON ?: @"",
+        @"error_type": [self errorTypeStringFromError:error] ?: @"",
+        @"error_code": [self errorCodeStringFromError:error] ?: @"",
+        @"error_message": [self errorMessageFromError:error] ?: @"",
+        @"display_message": [self errorDisplayMessageFromError:error] ?: @"",
     };
+}
+
++ (NSDictionary *)dictionaryFromEvent:(PLKLinkEvent *)event {
+    PLKEventMetadata *metadata = event.metadata;
+    return @{
+        @"event": [self stringForEventName:event.eventName] ?: @"",
+        @"metadata": @{
+            @"error_type": [self errorTypeStringFromError:event.error] ?: @"",
+            @"error_code": [self errorCodeStringFromError:event.error] ?: @"",
+            @"error_message": [self errorMessageFromError:event.error] ?: @"",
+            @"exit_status": [self stringForExitStatus:metadata.exitStatus] ?: @"",
+            @"institution_id": metadata.institutionID ?: @"",
+            @"institution_name": metadata.institutionName ?: @"",
+            @"instituion_search_query": metadata.institutionSearchQuery ?: @"",
+            @"link_session_id": metadata.linkSessionID ?: @"",
+            @"mfa_type": [self stringForMfaType:metadata.mfaType] ?: @"",
+            @"request_id": metadata.requestID ?: @"",
+            @"timestamp": metadata.timestamp ?: @"",
+            @"view_name": [self stringForViewName:metadata.viewName] ?: @"",
+            @"metadata_json": metadata.metadataJSON ?: @"",
+        },
+    };
+}
+
++ (NSString *)errorDisplayMessageFromError:(PLKExitError *)error {
+    return error.userInfo[kPLKExitErrorDisplayMessageKey] ?: @"";
+}
+
++ (NSString *)errorTypeStringFromError:(PLKExitError *)error {
+    NSString *errorDomain = error.domain;
+    if (!error || !errorDomain) {
+        return @"";
+    }
+    
+    NSString *normalizedErrorDomain = errorDomain.lowercaseString;
+    
+    return @{
+        kPLKExitErrorInvalidRequestDomain: @"INVALID_REQUEST",
+        kPLKExitErrorInvalidInputDomain: @"INVALID_INPUT",
+        kPLKExitErrorInstitutionErrorDomain: @"INSTITUTION_ERROR",
+        kPLKExitErrorRateLimitExceededDomain: @"RATE_LIMIT_EXCEEDED",
+        kPLKExitErrorApiDomain: @"API_ERROR",
+        kPLKExitErrorItemDomain: @"ITEM_ERROR",
+        kPLKExitErrorAuthDomain: @"AUTH_ERROR",
+        kPLKExitErrorAssetReportDomain: @"ASSET_REPORT_ERROR",
+        kPLKExitErrorInternalDomain: @"INTERNAL",
+        kPLKExitErrorUnknownDomain: error.userInfo[kPLKExitErrorUnknownTypeKey] ?: @"UNKNOWN",
+    }[normalizedErrorDomain] ?: @"UNKNOWN";
+}
+
++ (NSString *)errorCodeStringFromError:(PLKExitError *)error {
+    NSString *errorDomain = error.domain;
+    if (!error || !errorDomain) {
+        return @"";
+    }
+    
+    NSString *normalizedErrorDomain = error.domain;
+    @{
+        kPLKExitErrorInvalidRequestDomain: @{
+          @(PLKApiErrorCodeInternalServerError): @"INTERNAL_SERVER_ERROR",
+          @(PLKApiErrorCodePlannedMaintenance): @"PLANNED_MAINTENANCE",
+        },
+        kPLKExitErrorInvalidInputDomain: @{
+          @(PLKInvalidInputErrorCodeInvalidApiKeys): @"INVALID_API_KEYS",
+          @(PLKInvalidInputErrorCodeUnauthorizedEnvironment): @"UNAUTHORIZED_ENVIRONMENT",
+          @(PLKInvalidInputErrorCodeInvalidAccessToken): @"INVALID_ACCESS_TOKEN",
+          @(PLKInvalidInputErrorCodeInvalidPublicToken): @"INVALID_PUBLIC_TOKEN",
+          @(PLKInvalidInputErrorCodeInvalidProduct): @"INVALID_PRODUCT",
+          @(PLKInvalidInputErrorCodeInvalidAccountId): @"INVALID_ACCOUNT_ID",
+          @(PLKInvalidInputErrorCodeInvalidInstitution): @"INVALID_INSTITUTION",
+          @(PLKInvalidInputErrorCodeTooManyVerificationAttempts): @"TOO_MANY_VERIFICATION_ATTEMPTS",
+        },
+        kPLKExitErrorInstitutionErrorDomain: @{
+          @(PLKInstitutionErrorCodeInstitutionDown): @"INSTITUTION_DOWN",
+          @(PLKInstitutionErrorCodeInstitutionNotResponding): @"INSTITUTION_NOT_RESPONDING",
+          @(PLKInstitutionErrorCodeInstitutionNotAvailable): @"INSTITUTION_NOT_AVAILABLE",
+          @(PLKInstitutionErrorCodeInstitutionNoLongerSupported): @"INSTITUTION_NO_LONGER_SUPPORTED",
+        },
+        kPLKExitErrorRateLimitExceededDomain: @{
+          @(PLKRateLimitErrorCodeAccountsLimit): @"ACCOUNTS_LIMIT",
+          @(PLKRateLimitErrorCodeAdditionLimit): @"ADDITION_LIMIT",
+          @(PLKRateLimitErrorCodeAuthLimit): @"AUTH_LIMIT",
+          @(PLKRateLimitErrorCodeIdentityLimit): @"IDENTITY_LIMIT",
+          @(PLKRateLimitErrorCodeIncomeLimit): @"INCOME_LIMIT",
+          @(PLKRateLimitErrorCodeItemGetLimit): @"ITEM_GET_LIMIT",
+          @(PLKRateLimitErrorCodeRateLimit): @"RATE_LIMIT",
+          @(PLKRateLimitErrorCodeTransactionsLimit): @"TRANSACTIONS_LIMIT",
+        },
+        kPLKExitErrorApiDomain: @{
+          @(PLKApiErrorCodeInternalServerError): @"INTERNAL_SERVER_ERROR",
+          @(PLKApiErrorCodePlannedMaintenance): @"PLANNED_MAINTENANCE",
+        },
+        kPLKExitErrorItemDomain: @{
+          @(PLKItemErrorCodeInsufficientCredentials): @"INSUFFICIENT_CREDENTIALS",
+          @(PLKItemErrorCodeInvalidCredentials): @"INVALID_CREDENTIALS",
+          @(PLKItemErrorCodeInvalidMfa): @"INVALID_MFA",
+          @(PLKItemErrorCodeInvalidSendMethod): @"INVALID_SEND_METHOD",
+          @(PLKItemErrorCodeInvalidUpdatedUsername): @"INVALID_UPDATED_USERNAME",
+          @(PLKItemErrorCodeItemLocked): @"ITEM_LOCKED",
+          @(PLKItemErrorCodeItemLoginRequired): @"ITEM_LOGIN_REQUIRED",
+          @(PLKItemErrorCodeItemNoError): @"ITEM_NO_ERROR",
+          @(PLKItemErrorCodeItemNotSupported): @"ITEM_NOT_SUPPORTED",
+          @(PLKItemErrorCodeIncorrectDepositAmounts): @"INCORRECT_DEPOSIT_AMOUNTS",
+          @(PLKItemErrorCodeUserSetupRequired): @"USER_SETUP_REQUIRED",
+          @(PLKItemErrorCodeMfaNotSupported): @"MFA_NOT_SUPPORTED",
+          @(PLKItemErrorCodeNoAccounts): @"NO_ACCOUNTS",
+          @(PLKItemErrorCodeNoAuthAccounts): @"NO_AUTH_ACCOUNTS",
+          @(PLKItemErrorCodeNoInvestmentAccounts): @"NO_INVESTMENT_ACCOUNTS",
+          @(PLKItemErrorCodeNoLiabilityAccounts): @"NO_LIABILITY_ACCOUNTS",
+          @(PLKItemErrorCodeProductNotReady): @"PRODUCT_NOT_READY",
+          @(PLKItemErrorCodeProductsNotSupported): @"PRODUCTS_NOT_SUPPORTED",
+          @(PLKItemErrorCodeInstantMatchFailed): @"INSTANT_MATCH_FAILED",
+        },
+        kPLKExitErrorAuthDomain: @{
+          @(PLKAuthErrorCodeProductNotReady): @"PRODUCT_NOT_READY",
+          @(PLKAuthErrorCodeVerificationExpired): @"VERIFICATION_EXPIRED",
+        },
+        kPLKExitErrorAssetReportDomain: @{
+          @(PLKAssetReportErrorCodeProductNotEnabled): @"PRODUCT_NOT_ENABLED",
+          @(PLKAssetReportErrorCodeDataUnavailable): @"DATA_UNAVAILABLE",
+          @(PLKAssetReportErrorCodeProductNotReady): @"PRODUCT_NOT_READY",
+          @(PLKAssetReportErrorCodeAssetReportGenerationFailed): @"ASSET_REPORT_GENERATION_FAILED",
+          @(PLKAssetReportErrorCodeInvalidParent): @"INVALID_PARENT",
+          @(PLKAssetReportErrorCodeInsightsNotEnabled): @"INSIGHTS_NOT_ENABLED",
+          @(PLKAssetReportErrorCodeInsightsPreviouslyNotEnabled): @"INSIGHTS_PREVIOUSLY_NOT_ENABLED",
+        },
+        kPLKExitErrorInternalDomain: error.userInfo[kPLKExitErrorCodeKey] ?: @"UNKNOWN",
+        kPLKExitErrorUnknownDomain: error.userInfo[kPLKExitErrorCodeKey] ?: @"UNKNOWN",
+    }
+    return @"unknown";
+}
+
++ (NSString *)errorMessageFromError:(PLKExitError *)error {
+    return error.userInfo[kPLKExitErrorMessageKey] ?: @"";
+}
+
++ (NSString *)stringForEventName:(PLKEventName *)eventName {
+    if (!eventName) {
+        return @"";
+    }
+    
+    if (eventName.unknownStringValue) {
+        return exitStatus.unknownStringValue;
+    }
+
+    switch (eventName.value) {
+        case PLKEventNameValueNone:
+            return @"";
+        case PLKEventNameValueCloseOAuth:
+            return @"CLOSE_OAUTH";
+        case PLKEventNameValueError:
+            return @"ERROR";
+        case PLKEventNameValueExit:
+            return @"EXIT";
+        case PLKEventNameValueFailOAuth:
+            return @"FAIL_OAUTH";
+        case PLKEventNameValueHandoff:
+            return @"HANDOFF";
+        case PLKEventNameValueOpen:
+            return @"OPEN";
+        case PLKEventNameValueOpenMyPlaid:
+            return @"OPEN_MY_PLAID";
+        case PLKEventNameValueOpenOAuth:
+            return @"OPEN_OAUTH";
+        case PLKEventNameValueSearchInstitution:
+            return @"SEARCH_INSTITUTION";
+        case PLKEventNameValueSelectInstitution:
+            return @"SELECT_INSTITUTION";
+        case PLKEventNameValueSubmitCredentials:
+            return @"SUBMIT_CREDENTIALS";
+        case PLKEventNameValueSubmitMFA:
+            return @"SUBMIT_MFA";
+        case PLKEventNameValueTransitionView:
+            return @"TRANSITION_VIEW";
+     }
+     return @"unknown";
 }
 
 + (NSString *)stringForExitStatus:(PLKExitStatus *)exitStatus {
@@ -680,13 +850,17 @@ RCT_EXPORT_METHOD(dismiss) {
     return @"unknown";
 }
 
-+ (NSDictionary *)dictionaryFromExitMetadata:(PLKExitMetadata *)metadata {
++ (NSDictionary *)dictionaryFromExit:(PLKLinkExit *)exit {
+    PLKExitMetadata *metadata = exit.metadata;
     return @{
-        @"status": [self stringForExitStatus:metadata.status] ?: @"",
-        @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"",
-        @"request_id": metadata.requestID ?: @"",
-        @"link_session_id": metadata.linkSessionID ?: @"",
-        @"metadata_json": metadata.metadataJSON ?: @"",
+        @"error": [self dictionaryFromError:exit.error] ?: @{},
+        @"metadata": @{
+          @"status": [self stringForExitStatus:metadata.status] ?: @"",
+          @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"",
+          @"request_id": metadata.requestID ?: @"",
+          @"link_session_id": metadata.linkSessionID ?: @"",
+          @"metadata_json": metadata.metadataJSON ?: @"",
+        },
     };
 }
 

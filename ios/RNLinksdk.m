@@ -131,9 +131,9 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     void (^onEvent)(PLKLinkEvent *) = ^(PLKLinkEvent *event) {
         __typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf.hasObservers) {
-            NSDictionary *eventMetadata = [RNLinksdk dictionaryFromEventMetadata:event.eventMetadata];
+            NSDictionary *eventDictionary = [RNLinksdk dictionaryFromEvent:event];
             [strongSelf sendEventWithName:kRNLinkKitOnEventEvent
-                                     body:@{kRNLinkKitEventNameKey: event.eventName, kRNLinkKitEventMetadataKey: eventMetadata}];
+                                     body:eventDictionary];
         }
     };
 
@@ -591,13 +591,14 @@ RCT_EXPORT_METHOD(dismiss) {
 }
 
 + (NSDictionary *)dictionaryFromEvent:(PLKLinkEvent *)event {
-    PLKEventMetadata *metadata = event.metadata;
+    PLKEventMetadata *metadata = event.eventMetadata;
+    
     return @{
         @"event": [self stringForEventName:event.eventName] ?: @"",
         @"metadata": @{
-            @"error_type": [self errorTypeStringFromError:event.error] ?: @"",
-            @"error_code": [self errorCodeStringFromError:event.error] ?: @"",
-            @"error_message": [self errorMessageFromError:event.error] ?: @"",
+            @"error_type": [self errorTypeStringFromError:metadata.error] ?: @"",
+            @"error_code": [self errorCodeStringFromError:metadata.error] ?: @"",
+            @"error_message": [self errorMessageFromError:metadata.error] ?: @"",
             @"exit_status": [self stringForExitStatus:metadata.exitStatus] ?: @"",
             @"institution_id": metadata.institutionID ?: @"",
             @"institution_name": metadata.institutionName ?: @"",
@@ -716,7 +717,7 @@ RCT_EXPORT_METHOD(dismiss) {
         },
         kPLKExitErrorInternalDomain: error.userInfo[kPLKExitErrorCodeKey] ?: @"UNKNOWN",
         kPLKExitErrorUnknownDomain: error.userInfo[kPLKExitErrorCodeKey] ?: @"UNKNOWN",
-    }
+    };
     return @"unknown";
 }
 
@@ -730,7 +731,7 @@ RCT_EXPORT_METHOD(dismiss) {
     }
     
     if (eventName.unknownStringValue) {
-        return exitStatus.unknownStringValue;
+        return eventName.unknownStringValue;
     }
 
     switch (eventName.value) {

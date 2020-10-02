@@ -498,10 +498,10 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSDictionary *)dictionaryFromSuccessMetadata:(PLKSuccessMetadata *)metadata {
     return @{
-        @"link_session_id": metadata.linkSessionID ?: @"<null>",
-        @"institution": [self dictionaryFromInstitution:metadata.insitution] ?: @"<null>",
-        @"accounts": [self accountsDictionariesFromAccounts:metadata.accounts] ?: @"<null>",
-        @"metadata_json": metadata.metadataJSON ?: @"<null>",
+        @"link_session_id": metadata.linkSessionID ?: @"",
+        @"institution": [self dictionaryFromInstitution:metadata.insitution] ?: @"",
+        @"accounts": [self accountsDictionariesFromAccounts:metadata.accounts] ?: @"",
+        @"metadata_json": metadata.metadataJSON ?: @"",
     };
 }
 
@@ -517,18 +517,18 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSDictionary *)dictionaryFromAccount:(PLKAccount *)account {
     return @{
-        @"id": account.ID ?: @"<null>",
-        @"name": account.name ?: @"<null>",
-        @"mask": account.mask ?: @"<null>",
-        @"subtype": [self subtypeNameForAccountSubtype:account.subtype] ?: @"<null>",
-        @"type": [self typeNameForAccountSubtype:account.subtype] ?: @"<null>",
-        @"verification_status": [self stringForVerificationStatus:account.verificationStatus] ?: @"<null>",
+        @"id": account.ID ?: @"",
+        @"name": account.name ?: @"",
+        @"mask": account.mask ?: @"",
+        @"subtype": [self subtypeNameForAccountSubtype:account.subtype] ?: @"",
+        @"type": [self typeNameForAccountSubtype:account.subtype] ?: @"",
+        @"verification_status": [self stringForVerificationStatus:account.verificationStatus] ?: @"",
     };
 }
 
 + (NSString *)stringForVerificationStatus:(PLKVerificationStatus *)verificationStatus {
     if (!verificationStatus) {
-        return @"<null>";
+        return @"";
     }
 
     if (verificationStatus.unknownStringValue) {
@@ -537,7 +537,7 @@ RCT_EXPORT_METHOD(dismiss) {
 
     switch (verificationStatus.value) {
         case PLKVerificationStatusValueNone:
-            return @"<null>";
+            return @"";
         case PLKVerificationStatusValuePendingAutomaticVerification:
             return @"pending_automatic_verification";
         case PLKVerificationStatusValuePendingManualVerification:
@@ -575,30 +575,30 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSDictionary *)dictionaryFromInstitution:(PLKInstitution *)institution {
     return @{
-        @"name": institution.name ?: @"<null>",
-        @"id": institution.ID ?: @"<null>",
+        @"name": institution.name ?: @"",
+        @"id": institution.ID ?: @"",
     };
 }
 
 + (NSDictionary *)dictionaryFromEventMetadata:(PLKEventMetadata *)metadata {
     return @{
-        @"error": metadata.error ?: @"<null>",
-        @"exit_status": [self stringForExitStatus:metadata.exitStatus] ?: @"<null>",
-        @"institution_id": metadata.institutionID ?: @"<null>",
-        @"institution_name": metadata.institutionName ?: @"<null>",
-        @"instituion_search_query": metadata.institutionSearchQuery ?: @"<null>",
-        @"link_session_id": metadata.linkSessionID ?: @"<null>",
-        @"mfa_type": [self stringForMfaType:metadata.mfaType] ?: @"<null>",
-        @"request_id": metadata.requestID ?: @"<null>",
-        @"timestamp": metadata.timestamp ?: @"<null>",
-        @"view_name": [self stringForViewName:metadata.viewName] ?: @"<null>",
-        @"metadata_json": metadata.metadataJSON ?: @"<null>",
+        @"error": metadata.error ?: @"",
+        @"exit_status": [self stringForExitStatus:metadata.exitStatus] ?: @"",
+        @"institution_id": metadata.institutionID ?: @"",
+        @"institution_name": metadata.institutionName ?: @"",
+        @"instituion_search_query": metadata.institutionSearchQuery ?: @"",
+        @"link_session_id": metadata.linkSessionID ?: @"",
+        @"mfa_type": [self stringForMfaType:metadata.mfaType] ?: @"",
+        @"request_id": metadata.requestID ?: @"",
+        @"timestamp": metadata.timestamp ?: @"",
+        @"view_name": [self stringForViewName:metadata.viewName] ?: @"",
+        @"metadata_json": metadata.metadataJSON ?: @"",
     };
 }
 
 + (NSString *)stringForExitStatus:(PLKExitStatus *)exitStatus {
     if (!exitStatus) {
-        return @"<null>";
+        return @"";
     }
 
     if (exitStatus.unknownStringValue) {
@@ -607,7 +607,7 @@ RCT_EXPORT_METHOD(dismiss) {
 
     switch (exitStatus.value) {
         case PLKExitStatusValueNone:
-            return @"<null>";
+            return @"";
         case PLKExitStatusValueRequiresQuestions:
             return @"requires_questions";
         case PLKExitStatusValueRequiresSelections:
@@ -627,7 +627,7 @@ RCT_EXPORT_METHOD(dismiss) {
 + (NSString *)stringForMfaType:(PLKMFAType)mfaType {
     switch (mfaType) {
         case PLKMFATypeNone:
-            return @"<null>";
+            return @"";
         case PLKMFATypeCode:
             return @"code";
         case PLKMFATypeDevice:
@@ -643,7 +643,7 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSString *)stringForViewName:(PLKViewName *)viewName {
     if (!viewName) {
-        return @"<null>";
+        return @"";
     }
 
     if (viewName.unknownStringValue) {
@@ -652,7 +652,7 @@ RCT_EXPORT_METHOD(dismiss) {
 
     switch (viewName.value) {
         case PLKViewNameValueNone:
-            return @"<null>";
+            return @"";
         case PLKViewNameValueConnected:
             return @"CONNECTED";
         case PLKViewNameValueConsent:
@@ -682,11 +682,11 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSDictionary *)dictionaryFromExitMetadata:(PLKExitMetadata *)metadata {
     return @{
-        @"status": [self stringForExitStatus:metadata.status] ?: @"<null>",
-        @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"<null>",
-        @"request_id": metadata.requestID ?: @"<null>",
-        @"link_session_id": metadata.linkSessionID ?: @"<null>",
-        @"metadata_json": metadata.metadataJSON ?: @"<null>",
+        @"status": [self stringForExitStatus:metadata.status] ?: @"",
+        @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"",
+        @"request_id": metadata.requestID ?: @"",
+        @"link_session_id": metadata.linkSessionID ?: @"",
+        @"metadata_json": metadata.metadataJSON ?: @"",
     };
 }
 

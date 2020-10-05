@@ -102,7 +102,7 @@ const MyPlaidComponent = () => {
       // Replace any of the following <#VARIABLE#>s according to your setup,
       // for details see https://plaid.com/docs/quickstart/#client-side-link-configuration
 
-      token={/* <#GENERATED_LINK_TOKEN#> */}
+      token = {"<#GENERATED_LINK_TOKEN#>"}
       onSuccess={data => console.log('success: ', data)}
       onExit={data => console.log('exit: ', data)}
     >

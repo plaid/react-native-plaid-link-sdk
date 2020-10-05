@@ -165,7 +165,7 @@ By default, `PlaidLink` renders a `TouchableOpacity` component. You may override
 
 ```jsx
 <PlaidLink
-  token = {/* <#GENERATED_LINK_TOKEN#> */}
+  token = {"<#GENERATED_LINK_TOKEN#>"}
   component= {Button}
   componentProps = {{title: 'Add Account'}}
   onSuccess = {(result) => {console.log('Success: ', result)}}

@@ -591,10 +591,15 @@ RCT_EXPORT_METHOD(dismiss) {
         @"link_session_id": metadata.linkSessionID ?: @"",
         @"mfa_type": [self stringForMfaType:metadata.mfaType] ?: @"",
         @"request_id": metadata.requestID ?: @"",
-        @"timestamp": metadata.timestamp ?: @"",
+        @"timestamp": [self iso8601StringFromDate:metadata.timestamp] ?: @"",
         @"view_name": [self stringForViewName:metadata.viewName] ?: @"",
         @"metadata_json": metadata.metadataJSON ?: @"",
     };
+}
+
++ (NSString *)iso8601StringFromDate:(NSDate *)date {
+    NSISO8601DateFormatter *dateFormatter = [[NSISO8601DateFormatter alloc] init];
+    return [dateFormatter stringFromDate:date];
 }
 
 + (NSString *)stringForExitStatus:(PLKExitStatus *)exitStatus {

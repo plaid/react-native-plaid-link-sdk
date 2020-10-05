@@ -57,6 +57,7 @@ export const openLink = async ({ onExit, onSuccess, ...serializable }) => {
         switch (metadata.status) {
           case 'connected':
             if (onSuccess != null) {
+	      metadata["status"] = undefined;
               onSuccess(metadata);
             }
             break;
@@ -236,7 +237,7 @@ PlaidLink.propTypes = {
   },
 
   // Underlying component to render
-  component: PropTypes.func,
+  component: PropTypes.elementType,
 
   // Props for underlying component
   componentProps: PropTypes.object,

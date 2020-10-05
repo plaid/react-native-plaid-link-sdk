@@ -107,7 +107,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         [strongSelf dismissLinkViewController];
 
         if (strongSelf.completionCallback) {
-            NSDictionary<NSString*, id> *jsMetadata = [[RNLinksdk dictionaryFromSuccess:success] mutableCopy];
+            NSDictionary<NSString*, id> *jsMetadata = [RNLinksdk dictionaryFromSuccess:success];
             strongSelf.completionCallback(@[[NSNull null], jsMetadata]);
             strongSelf.completionCallback = nil;
         }
@@ -496,6 +496,8 @@ RCT_EXPORT_METHOD(dismiss) {
 + (NSDictionary *)dictionaryFromSuccess:(PLKLinkSuccess *)success {
     PLKSuccessMetadata *metadata = success.metadata;
     return @{
+        // TODO: Remove `status` key.
+        @"status": @"connected",
         @"public_token": success.publicToken ?: @"",
         @"metadata": @{
           @"link_session_id": metadata.linkSessionID ?: @"",
@@ -606,7 +608,7 @@ RCT_EXPORT_METHOD(dismiss) {
             @"link_session_id": metadata.linkSessionID ?: @"",
             @"mfa_type": [self stringForMfaType:metadata.mfaType] ?: @"",
             @"request_id": metadata.requestID ?: @"",
-            @"timestamp": metadata.timestamp ?: @"",
+            @"timestamp": [self iso8601StringFromDate:metadata.timestamp] ?: @"",
             @"view_name": [self stringForViewName:metadata.viewName] ?: @"",
             @"metadata_json": metadata.metadataJSON ?: @"",
         },
@@ -646,7 +648,7 @@ RCT_EXPORT_METHOD(dismiss) {
     }
     
     NSString *normalizedErrorDomain = error.domain;
-    @{
+    return @{
         kPLKExitErrorInvalidRequestDomain: @{
           @(PLKApiErrorCodeInternalServerError): @"INTERNAL_SERVER_ERROR",
           @(PLKApiErrorCodePlannedMaintenance): @"PLANNED_MAINTENANCE",
@@ -717,8 +719,7 @@ RCT_EXPORT_METHOD(dismiss) {
         },
         kPLKExitErrorInternalDomain: error.userInfo[kPLKExitErrorCodeKey] ?: @"UNKNOWN",
         kPLKExitErrorUnknownDomain: error.userInfo[kPLKExitErrorCodeKey] ?: @"UNKNOWN",
-    };
-    return @"unknown";
+    }[normalizedErrorDomain] ?: @"UNKNOWN";
 }
 
 + (NSString *)errorMessageFromError:(PLKExitError *)error {
@@ -765,6 +766,11 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"TRANSITION_VIEW";
      }
      return @"unknown";
+}
+
++ (NSString *)iso8601StringFromDate:(NSDate *)date {
+    NSISO8601DateFormatter *dateFormatter = [[NSISO8601DateFormatter alloc] init];
+    return [dateFormatter stringFromDate:date];
 }
 
 + (NSString *)stringForExitStatus:(PLKExitStatus *)exitStatus {

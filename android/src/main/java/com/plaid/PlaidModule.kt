@@ -96,7 +96,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     return builder.build()
   }
 
-  private fun getLinkPublicKeyConfiguration(obj: JSONObject, publicKey: String): LinkPublicKeyConfiguration {
+  private fun getLinkPublicKeyConfiguration(
+    obj: JSONObject,
+    publicKey: String
+  ): LinkPublicKeyConfiguration {
     val extrasMap = mutableMapOf<String, String>()
     maybePopulateExtrasMap(obj, extrasMap)
     val logLevel = LinkLogLevel.ASSERT
@@ -198,8 +201,9 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       Plaid.setLinkEventListener {
         var json = snakeCaseGson.toJson(it)
         json = json.replace("event_name", "event")
+        val eventMap = convertJsonToMap(flattenEventObject(JSONObject(json)))
         reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-          .emit("onEvent", convertJsonToMap(JSONObject(json)))
+          .emit("onEvent", eventMap)
       }
 
       val obj = JSONObject(data)
@@ -239,6 +243,27 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       Log.e("PlaidModule", ex.toString())
       throw ex
     }
+  }
+
+  /**
+   * HACK: Our gson deserializer should handle this in the future.
+   */
+  private fun flattenEventObject(jsonObject: JSONObject): JSONObject {
+    val eventString = try {
+      jsonObject.getJSONObject("event").getString("json")
+    } catch (e: JSONException) {
+      ""
+    }
+    jsonObject.put("event", eventString)
+
+    val metadata = jsonObject.getJSONObject("metadata") ?: return jsonObject
+    val viewNameString = try {
+      metadata.getJSONObject("view_name").getString("json_value")
+    } catch (e: JSONException) {
+      ""
+    }
+    metadata.put("view_name", viewNameString)
+    return jsonObject
   }
 
   private fun maybeGetStringField(obj: JSONObject, fieldName: String): String? {

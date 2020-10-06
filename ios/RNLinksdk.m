@@ -604,7 +604,7 @@ RCT_EXPORT_METHOD(dismiss) {
             @"exit_status": [self stringForExitStatus:metadata.exitStatus] ?: @"",
             @"institution_id": metadata.institutionID ?: @"",
             @"institution_name": metadata.institutionName ?: @"",
-            @"instituion_search_query": metadata.institutionSearchQuery ?: @"",
+            @"institution_search_query": metadata.institutionSearchQuery ?: @"",
             @"link_session_id": metadata.linkSessionID ?: @"",
             @"mfa_type": [self stringForMfaType:metadata.mfaType] ?: @"",
             @"request_id": metadata.requestID ?: @"",

@@ -294,12 +294,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   ) {
     val result = WritableNativeMap()
 
-    // This should not happen but if it does we have no data to return
-    if (data == null) {
-      Log.w("PlaidModule", "No data was returned")
-      throw Throwable("No data was returned in onActivityResult")
-    }
-
     val linkHandler = LinkResultHandler(
       onSuccess = { success ->
         result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(success))))

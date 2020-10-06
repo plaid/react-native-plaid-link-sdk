@@ -598,7 +598,11 @@ RCT_EXPORT_METHOD(dismiss) {
 }
 
 + (NSString *)iso8601StringFromDate:(NSDate *)date {
-    NSISO8601DateFormatter *dateFormatter = [[NSISO8601DateFormatter alloc] init];
+    static NSISO8601DateFormatter *dateFormatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        dateFormatter = [[NSISO8601DateFormatter alloc] init];
+    });
     return [dateFormatter stringFromDate:date];
 }
 

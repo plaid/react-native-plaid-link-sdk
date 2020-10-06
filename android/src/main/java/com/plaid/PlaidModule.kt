@@ -96,7 +96,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     return builder.build()
   }
 
-  private fun getLinkPublicKeyConfiguration(obj: JSONObject, publicKey: String): LinkPublicKeyConfiguration {
+  private fun getLinkPublicKeyConfiguration(
+    obj: JSONObject,
+    publicKey: String
+  ): LinkPublicKeyConfiguration {
     val extrasMap = mutableMapOf<String, String>()
     maybePopulateExtrasMap(obj, extrasMap)
     val logLevel = LinkLogLevel.ASSERT
@@ -268,12 +271,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     data: Intent?
   ) {
     val result = WritableNativeMap()
-
-    // This should not happen but if it does we have no data to return
-    if (data == null) {
-      Log.w("PlaidModule", "No data was returned")
-      throw Throwable("No data was returned in onActivityResult")
-    }
 
     val linkHandler = LinkResultHandler(
       onSuccess = { success ->

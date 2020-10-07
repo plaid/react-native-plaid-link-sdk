@@ -120,7 +120,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         if (strongSelf.completionCallback) {
             NSDictionary *exitMetadata = [RNLinksdk dictionaryFromExit:exit];
             if (exit.error) {
-                strongSelf.completionCallback(@[RCTMakeError(exit.error.localizedDescription, nil, nil), exitMetadata]);
+                strongSelf.completionCallback(@[exitMetadata[@"error"], exitMetadata]);
             } else {
                 strongSelf.completionCallback(@[[NSNull null], exitMetadata]);
             }
@@ -625,7 +625,7 @@ RCT_EXPORT_METHOD(dismiss) {
         return @"";
     }
     
-    NSString *normalizedErrorDomain = errorDomain.lowercaseString;
+    NSString *normalizedErrorDomain = errorDomain;
     
     return @{
         kPLKExitErrorInvalidRequestDomain: @"INVALID_REQUEST",
@@ -643,83 +643,14 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSString *)errorCodeStringFromError:(PLKExitError *)error {
     NSString *errorDomain = error.domain;
+
     if (!error || !errorDomain) {
         return @"";
     }
     
     NSString *normalizedErrorDomain = error.domain;
-    return @{
-        kPLKExitErrorInvalidRequestDomain: @{
-          @(PLKApiErrorCodeInternalServerError): @"INTERNAL_SERVER_ERROR",
-          @(PLKApiErrorCodePlannedMaintenance): @"PLANNED_MAINTENANCE",
-        },
-        kPLKExitErrorInvalidInputDomain: @{
-          @(PLKInvalidInputErrorCodeInvalidApiKeys): @"INVALID_API_KEYS",
-          @(PLKInvalidInputErrorCodeUnauthorizedEnvironment): @"UNAUTHORIZED_ENVIRONMENT",
-          @(PLKInvalidInputErrorCodeInvalidAccessToken): @"INVALID_ACCESS_TOKEN",
-          @(PLKInvalidInputErrorCodeInvalidPublicToken): @"INVALID_PUBLIC_TOKEN",
-          @(PLKInvalidInputErrorCodeInvalidProduct): @"INVALID_PRODUCT",
-          @(PLKInvalidInputErrorCodeInvalidAccountId): @"INVALID_ACCOUNT_ID",
-          @(PLKInvalidInputErrorCodeInvalidInstitution): @"INVALID_INSTITUTION",
-          @(PLKInvalidInputErrorCodeTooManyVerificationAttempts): @"TOO_MANY_VERIFICATION_ATTEMPTS",
-        },
-        kPLKExitErrorInstitutionErrorDomain: @{
-          @(PLKInstitutionErrorCodeInstitutionDown): @"INSTITUTION_DOWN",
-          @(PLKInstitutionErrorCodeInstitutionNotResponding): @"INSTITUTION_NOT_RESPONDING",
-          @(PLKInstitutionErrorCodeInstitutionNotAvailable): @"INSTITUTION_NOT_AVAILABLE",
-          @(PLKInstitutionErrorCodeInstitutionNoLongerSupported): @"INSTITUTION_NO_LONGER_SUPPORTED",
-        },
-        kPLKExitErrorRateLimitExceededDomain: @{
-          @(PLKRateLimitErrorCodeAccountsLimit): @"ACCOUNTS_LIMIT",
-          @(PLKRateLimitErrorCodeAdditionLimit): @"ADDITION_LIMIT",
-          @(PLKRateLimitErrorCodeAuthLimit): @"AUTH_LIMIT",
-          @(PLKRateLimitErrorCodeIdentityLimit): @"IDENTITY_LIMIT",
-          @(PLKRateLimitErrorCodeIncomeLimit): @"INCOME_LIMIT",
-          @(PLKRateLimitErrorCodeItemGetLimit): @"ITEM_GET_LIMIT",
-          @(PLKRateLimitErrorCodeRateLimit): @"RATE_LIMIT",
-          @(PLKRateLimitErrorCodeTransactionsLimit): @"TRANSACTIONS_LIMIT",
-        },
-        kPLKExitErrorApiDomain: @{
-          @(PLKApiErrorCodeInternalServerError): @"INTERNAL_SERVER_ERROR",
-          @(PLKApiErrorCodePlannedMaintenance): @"PLANNED_MAINTENANCE",
-        },
-        kPLKExitErrorItemDomain: @{
-          @(PLKItemErrorCodeInsufficientCredentials): @"INSUFFICIENT_CREDENTIALS",
-          @(PLKItemErrorCodeInvalidCredentials): @"INVALID_CREDENTIALS",
-          @(PLKItemErrorCodeInvalidMfa): @"INVALID_MFA",
-          @(PLKItemErrorCodeInvalidSendMethod): @"INVALID_SEND_METHOD",
-          @(PLKItemErrorCodeInvalidUpdatedUsername): @"INVALID_UPDATED_USERNAME",
-          @(PLKItemErrorCodeItemLocked): @"ITEM_LOCKED",
-          @(PLKItemErrorCodeItemLoginRequired): @"ITEM_LOGIN_REQUIRED",
-          @(PLKItemErrorCodeItemNoError): @"ITEM_NO_ERROR",
-          @(PLKItemErrorCodeItemNotSupported): @"ITEM_NOT_SUPPORTED",
-          @(PLKItemErrorCodeIncorrectDepositAmounts): @"INCORRECT_DEPOSIT_AMOUNTS",
-          @(PLKItemErrorCodeUserSetupRequired): @"USER_SETUP_REQUIRED",
-          @(PLKItemErrorCodeMfaNotSupported): @"MFA_NOT_SUPPORTED",
-          @(PLKItemErrorCodeNoAccounts): @"NO_ACCOUNTS",
-          @(PLKItemErrorCodeNoAuthAccounts): @"NO_AUTH_ACCOUNTS",
-          @(PLKItemErrorCodeNoInvestmentAccounts): @"NO_INVESTMENT_ACCOUNTS",
-          @(PLKItemErrorCodeNoLiabilityAccounts): @"NO_LIABILITY_ACCOUNTS",
-          @(PLKItemErrorCodeProductNotReady): @"PRODUCT_NOT_READY",
-          @(PLKItemErrorCodeProductsNotSupported): @"PRODUCTS_NOT_SUPPORTED",
-          @(PLKItemErrorCodeInstantMatchFailed): @"INSTANT_MATCH_FAILED",
-        },
-        kPLKExitErrorAuthDomain: @{
-          @(PLKAuthErrorCodeProductNotReady): @"PRODUCT_NOT_READY",
-          @(PLKAuthErrorCodeVerificationExpired): @"VERIFICATION_EXPIRED",
-        },
-        kPLKExitErrorAssetReportDomain: @{
-          @(PLKAssetReportErrorCodeProductNotEnabled): @"PRODUCT_NOT_ENABLED",
-          @(PLKAssetReportErrorCodeDataUnavailable): @"DATA_UNAVAILABLE",
-          @(PLKAssetReportErrorCodeProductNotReady): @"PRODUCT_NOT_READY",
-          @(PLKAssetReportErrorCodeAssetReportGenerationFailed): @"ASSET_REPORT_GENERATION_FAILED",
-          @(PLKAssetReportErrorCodeInvalidParent): @"INVALID_PARENT",
-          @(PLKAssetReportErrorCodeInsightsNotEnabled): @"INSIGHTS_NOT_ENABLED",
-          @(PLKAssetReportErrorCodeInsightsPreviouslyNotEnabled): @"INSIGHTS_PREVIOUSLY_NOT_ENABLED",
-        },
-        kPLKExitErrorInternalDomain: error.userInfo[kPLKExitErrorCodeKey] ?: @"UNKNOWN",
-        kPLKExitErrorUnknownDomain: error.userInfo[kPLKExitErrorCodeKey] ?: @"UNKNOWN",
-    }[normalizedErrorDomain] ?: @"UNKNOWN";
+    NSInteger code = error.code;
+   return error.userInfo[kPLKExitErrorCodeKey];
 }
 
 + (NSString *)errorMessageFromError:(PLKExitError *)error {

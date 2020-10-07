@@ -650,7 +650,7 @@ RCT_EXPORT_METHOD(dismiss) {
     
     NSString *normalizedErrorDomain = error.domain;
     NSInteger code = error.code;
-   return error.userInfo[@"kPLKExitErrorCodeKey"];
+   return error.userInfo[kPLKExitErrorCodeKey];
 }
 
 + (NSString *)errorMessageFromError:(PLKExitError *)error {

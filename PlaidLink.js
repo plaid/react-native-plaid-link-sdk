@@ -57,12 +57,13 @@ export const openLink = async ({ onExit, onSuccess, ...serializable }) => {
         switch (metadata.status) {
           case 'connected':
             if (onSuccess != null) {
-	      metadata["status"] = undefined;
+	          delete metadata.status;
               onSuccess(metadata);
             }
             break;
           default:
             if (onExit != null) {
+	          delete metadata.status;
               onExit(metadata);
             }
             break;

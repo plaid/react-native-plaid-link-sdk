@@ -72,7 +72,7 @@ RCT_EXPORT_MODULE();
 
 - (NSDictionary *)constantsToExport {
     return @{
-        kRNLinkKitVersionConstant: [NSString stringWithFormat:@"%s+%.0f", LinkKitVersionString, LinkKitVersionNumber],
+        kRNLinkKitVersionConstant: PLKPlaid.sdkVersion,
     };
 }
 

@@ -45,6 +45,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         LinkEventNameAdapter()
       )
       this.registerTypeAdapter(
+        LinkAccount::class.java,
+        AccountAdapter()
+      )
+      this.registerTypeAdapter(
         LinkAccountType::class.java,
         AccountTypeAdapter()
       )

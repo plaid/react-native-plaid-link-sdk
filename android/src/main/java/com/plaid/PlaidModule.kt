@@ -15,12 +15,15 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.plaid.gson.*
 import com.plaid.link.Plaid
 import com.plaid.link.configuration.LinkLogLevel
 import com.plaid.link.configuration.LinkPublicKeyConfiguration
 import com.plaid.link.configuration.LinkTokenConfiguration
 import com.plaid.link.configuration.PlaidEnvironment
 import com.plaid.link.configuration.PlaidProduct
+import com.plaid.link.result.*
+import com.plaid.link.event.*
 import com.plaid.link.exception.LinkException
 import com.plaid.link.result.LinkResultHandler
 import org.json.JSONException
@@ -30,9 +33,39 @@ import java.util.ArrayList
 class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext), ActivityEventListener {
 
-  private val snakeCaseGson: Gson = GsonBuilder()
-    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-    .create()
+  private val snakeCaseGson: Gson by lazy {
+    GsonBuilder().apply {
+      setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+      this.registerTypeAdapter(
+        LinkEventViewName::class.java,
+        LinkEventViewNameAdapter()
+      )
+      this.registerTypeAdapter(
+        LinkEventName::class.java,
+        LinkEventNameAdapter()
+      )
+      this.registerTypeAdapter(
+        LinkAccountType::class.java,
+        AccountTypeAdapter()
+      )
+      this.registerTypeAdapter(
+        LinkAccountSubtype::class.java,
+        AccountSubtypeAdapter()
+      )
+      this.registerTypeAdapter(
+        LinkErrorCode::class.java,
+        PlaidErrorCodeAdapter()
+      )
+      this.registerTypeAdapter(
+        LinkErrorType::class.java,
+        PlaidErrorTypeAdapter()
+      )
+      this.registerTypeAdapter(
+        LinkAccountVerificationStatus::class.java,
+        LinkAccountVerificationStatusAdapter()
+      )
+    }.create()
+  }
 
   private var onSuccessCallback: Callback? = null
   private var onExitCallback: Callback? = null
@@ -201,7 +234,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       Plaid.setLinkEventListener {
         var json = snakeCaseGson.toJson(it)
         json = json.replace("event_name", "event")
-        val eventMap = convertJsonToMap(flattenEventObject(JSONObject(json)))
+        val eventMap = convertJsonToMap(JSONObject(json))
         reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
           .emit("onEvent", eventMap)
       }
@@ -243,27 +276,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       Log.e("PlaidModule", ex.toString())
       throw ex
     }
-  }
-
-  /**
-   * HACK: Our gson deserializer should handle this in the future.
-   */
-  private fun flattenEventObject(jsonObject: JSONObject): JSONObject {
-    val eventString = try {
-      jsonObject.getJSONObject("event").getString("json")
-    } catch (e: JSONException) {
-      ""
-    }
-    jsonObject.put("event", eventString)
-
-    val metadata = jsonObject.getJSONObject("metadata") ?: return jsonObject
-    val viewNameString = try {
-      metadata.getJSONObject("view_name").getString("json_value")
-    } catch (e: JSONException) {
-      ""
-    }
-    metadata.put("view_name", viewNameString)
-    return jsonObject
   }
 
   private fun maybeGetStringField(obj: JSONObject, fieldName: String): String? {

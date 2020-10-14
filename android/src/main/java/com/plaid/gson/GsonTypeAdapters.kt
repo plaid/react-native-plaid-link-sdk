@@ -256,3 +256,32 @@ class PlaidErrorTypeAdapter : JsonSerializer<LinkErrorType>, JsonDeserializer<Li
     return JsonPrimitive(src?.json ?: "")
   }
 }
+
+class LinkExitMetadataStatusAdapter : JsonSerializer<LinkExitMetadataStatus>,
+  JsonDeserializer<LinkExitMetadataStatus> {
+
+  override fun deserialize(
+    json: JsonElement?,
+    typeOfT: Type?,
+    context: JsonDeserializationContext?
+  ): LinkExitMetadataStatus {
+    if (json == null) {
+      return LinkExitMetadataStatus.UNKNOWN(
+        ""
+      )
+    }
+    return try {
+      LinkExitMetadataStatus.fromString(json.asString) ?: LinkExitMetadataStatus.UNKNOWN("")
+    } catch (e: Exception) {
+      LinkExitMetadataStatus.UNKNOWN("")
+    }
+  }
+
+  override fun serialize(
+    src: LinkExitMetadataStatus?,
+    typeOfSrc: Type?,
+    context: JsonSerializationContext?
+  ): JsonElement {
+    return JsonPrimitive(src?.jsonValue ?: "")
+  }
+}

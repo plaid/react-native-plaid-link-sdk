@@ -68,6 +68,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         LinkAccountVerificationStatus::class.java,
         LinkAccountVerificationStatusAdapter()
       )
+      this.registerTypeAdapter(
+        LinkExitMetadataStatus::class.java,
+        LinkExitMetadataStatusAdapter()
+      )
     }.create()
   }
 

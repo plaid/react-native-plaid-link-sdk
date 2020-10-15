@@ -12,10 +12,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.plaid.gson.RNAccountAdapter
 import com.plaid.link.Plaid
 import com.plaid.link.configuration.LinkLogLevel
 import com.plaid.link.configuration.LinkPublicKeyConfiguration
@@ -31,17 +27,12 @@ import com.plaid.link.result.LinkAccountType
 import com.plaid.link.result.LinkAccountVerificationStatus
 import com.plaid.link.result.LinkErrorCode
 import com.plaid.link.result.LinkErrorType
+import com.plaid.link.result.LinkExit
+import com.plaid.link.result.LinkSuccess
 import com.plaid.link.result.LinkExitMetadataStatus
-import com.plaid.internal.networking.adapter.AccountSubtypeAdapter
-import com.plaid.internal.networking.adapter.AccountTypeAdapter
-import com.plaid.internal.networking.adapter.LinkAccountVerificationStatusAdapter
-import com.plaid.internal.networking.adapter.LinkEventNameAdapter
-import com.plaid.internal.networking.adapter.LinkEventViewNameAdapter
-import com.plaid.internal.networking.adapter.LinkExitMetadataStatusAdapter
-import com.plaid.internal.networking.adapter.PlaidErrorCodeAdapter
-import com.plaid.internal.networking.adapter.PlaidErrorTypeAdapter
 import com.plaid.link.exception.LinkException
 import com.plaid.link.result.LinkResultHandler
+import com.plaid.gson.PlaidJsonConverter
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
@@ -49,47 +40,7 @@ import java.util.ArrayList
 class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext), ActivityEventListener {
 
-  private val snakeCaseGson: Gson by lazy {
-    GsonBuilder().apply {
-      setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-      this.registerTypeAdapter(
-        LinkAccount::class.java,
-        RNAccountAdapter()
-      )
-      this.registerTypeAdapter(
-        LinkAccountType::class.java,
-        AccountTypeAdapter()
-      )
-      this.registerTypeAdapter(
-        LinkAccountSubtype::class.java,
-        AccountSubtypeAdapter()
-      )
-      this.registerTypeAdapter(
-        LinkAccountVerificationStatus::class.java,
-        LinkAccountVerificationStatusAdapter()
-      )
-      this.registerTypeAdapter(
-        LinkEventViewName::class.java,
-        LinkEventViewNameAdapter()
-      )
-      this.registerTypeAdapter(
-        LinkEventName::class.java,
-        LinkEventNameAdapter()
-      )
-      this.registerTypeAdapter(
-        LinkErrorCode::class.java,
-        PlaidErrorCodeAdapter()
-      )
-      this.registerTypeAdapter(
-        LinkErrorType::class.java,
-        PlaidErrorTypeAdapter()
-      )
-      this.registerTypeAdapter(
-        LinkExitMetadataStatus::class.java,
-        LinkExitMetadataStatusAdapter()
-      )
-    }.create()
-  }
+  private val jsonConverter by lazy { PlaidJsonConverter() }
 
   private var onSuccessCallback: Callback? = null
   private var onExitCallback: Callback? = null
@@ -255,9 +206,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     this.onExitCallback = onExitCallback
 
     try {
-      Plaid.setLinkEventListener {
-        var json = snakeCaseGson.toJson(it)
-        json = json.replace("event_name", "event")
+      Plaid.setLinkEventListener { linkEvent: LinkEvent ->
+        var json = jsonConverter.convert(linkEvent)
         val eventMap = convertJsonToMap(JSONObject(json))
         reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
           .emit("onEvent", eventMap)
@@ -332,12 +282,12 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
     val linkHandler = LinkResultHandler(
       onSuccess = { success ->
-        result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(success))))
+        result.putMap(DATA, convertJsonToMap(JSONObject(jsonConverter.convert(success))))
         print(result)
         this.onSuccessCallback?.invoke(result)
       },
       onExit = { exit ->
-        result.putMap(DATA, convertJsonToMap(JSONObject(snakeCaseGson.toJson(exit))))
+        result.putMap(DATA, convertJsonToMap(JSONObject(jsonConverter.convert(exit))))
         print(result)
         this.onExitCallback?.invoke(result)
       }

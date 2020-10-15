@@ -10,11 +10,10 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
-import com.plaid.link.result.*
-import com.plaid.link.event.*
+import com.plaid.link.result.LinkAccount
 import java.lang.reflect.Type
 
-class AccountAdapter : JsonSerializer<LinkAccount> {
+class RNAccountAdapter : JsonSerializer<LinkAccount> {
 
   override fun serialize(
     src: LinkAccount?,
@@ -29,7 +28,7 @@ class AccountAdapter : JsonSerializer<LinkAccount> {
       addProperty("name", src.name)
       addProperty("mask", src.mask)
       context?.serialize(src.verificationStatus)?.let {
-        add("verificationStatus", it)
+        add("verification_status", it)
       }
 
       // Special handling around account subtype

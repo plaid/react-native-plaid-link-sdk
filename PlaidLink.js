@@ -111,6 +111,9 @@ export const PlaidLink = ({
   ...linkProps
 }) => {
   const Component = component;
+
+  useDeepLinkRedirector();
+
   return (
     <Component
       {...componentProps}

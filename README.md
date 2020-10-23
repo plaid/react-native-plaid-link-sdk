@@ -120,7 +120,7 @@ For non-Link Token based OAuth support, you must pass two props to the PlaidLink
 1. `oauthRedirectUri` this is the same uri you would pass to the `redirect_uri` for Link Token based OAuth. It must be registered as a universal link.
 2. `oauthNonce` this is a 16 character nonce.
 
-See [OAuth requirements](https://plaid.com/docs/#oauth) for more information.
+In order for the React Native app to respond to the universal link, you will need to update your AppDelegate to inform the React Native Linking library when the universal link is received. See [OAuth requirements](https://plaid.com/docs/#oauth) for more information.
 
 ### To receive onEvent callbacks:
 

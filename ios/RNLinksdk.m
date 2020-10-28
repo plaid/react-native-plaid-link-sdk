@@ -578,7 +578,7 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSDictionary *)dictionaryFromInstitution:(PLKInstitution *)institution {
     return @{
-        @"name": institution.name ?: @"",
+        @"institution_name": institution.name ?: @"",
         @"institution_id": institution.ID ?: @"",
     };
 }

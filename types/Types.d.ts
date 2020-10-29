@@ -166,10 +166,10 @@ export interface LinkExit {
 }
 
 export interface LinkExitMetadata {
-    linkSessionId: string;
-    requestId: string;
     status?: LinkExitMetadataStatus;
     institution?: LinkInstitution;
+    linkSessionId: string;
+    requestId: string;
     metadataJson?: String;
 }
 

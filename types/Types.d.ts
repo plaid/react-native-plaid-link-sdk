@@ -1,5 +1,3 @@
-import { LinkAccountSubtype } from "./AccountSubtypes";
-
 interface CommonPlaidLinkOptions {
     onSuccess: Function;
     onExit?: Function;
@@ -30,10 +28,10 @@ export type LinkPublicKeyConfiguration = (CommonPlaidLinkOptions & {
 });
 
 export enum LinkLogLevel {
-    ERROR,
-    WARN,
-    INFO,
     DEBUG,
+    INFO,
+    WARN,
+    ERROR,
 }
 
 export enum PlaidEnvironment {
@@ -51,7 +49,7 @@ export enum PlaidProduct {
     LIABILITIES,
     LIABILITIES_REPORT,
     PAYMENT_INITIATION,
-    TRANSACTIONS
+    TRANSACTIONS,
 }
 
 export enum LinkAccountType {
@@ -59,7 +57,7 @@ export enum LinkAccountType {
     DEPOSITORY = 'depository',
     INVESTMENT = 'investment',
     LOAN = 'loan',
-    OTHER = 'other'
+    OTHER = 'other',
 }
 
 export enum LinkAccountSubtype {

@@ -34,6 +34,7 @@ export interface OAuthConfiguration {
     oauthStateId?: string;
 }
 
+export type Configuration = LinkTokenConfiguration | LinkPublicKeyConfiguration;
 export enum LinkLogLevel {
     DEBUG,
     INFO,
@@ -375,87 +376,16 @@ export enum LinkEventViewName {
     SELECT_INSTITUTION = 'SELECT_INSTITUTION',
 }
 
-export interface PlaidLinkProps<
-    C = PropTypes.ReactComponentLike,
-    P = object
-    > {
+export interface PlaidLinkProps {
     // Required props
     // A function that is called when a user has successfully onboarded their account.
     // The function should expect one argument, a metadata object.
     onSuccess: (metadata: LinkSuccess) => void;
 
+    config: LinkTokenConfiguration | LinkPublicKeyConfiguration
+
     // Optional props
-
-    // The Plaid API environment on which to create user accounts.
-    env?: 'development' | 'sandbox' | 'production';
-
-    // Displayed once a user has successfully linked their account
-    clientName?: string;
-
-    // The Plaid product(s) you wish to use, an array containing some of
-    // auth, identity, income, transactions, assets, liabilities, investments.
-    product?: Array<PlaidProduct>;
-
-    // The public_key associated with your account; available from
-    // the Plaid dashboard (https://dashboard.plaid.com).
-    publicKey?: string;
-
-    // A list of Plaid-supported country codes using the ISO-3166-1 alpha-2
-    // country code standard.
-    countryCodes?: Array<string>;
-
-    // Allows non default customization to be retrieved by name.
-    linkCustomizationName?: string;
-
-    // Plaid-supported language to localize Link. English will be used by default.
-    language?: string;
-
+    
     // A function that is called when a user has specifically exited Link flow.
     onExit?: (metadata: LinkExit) => void;
-
-    // Specify an existing user's public token to launch Link in update mode.
-    // This will cause Link to open directly to the authentication step for
-    // that user's institution.
-    token?: string;
-
-    // Specify a user to enable all Auth features. Reach out to your
-    // account manager or integrations@plaid.com to get enabled. See the Auth
-    // [https://plaid.com/docs#auth] docs for integration details.
-    userEmailAddress?: string; // specify for microdeposit support
-    userLegalName?: string; // specify for microdeposit support
-    userPhoneNumber?: string;
-
-    // Specify a webhook to associate with a user.
-    webhook?: string;
-
-    // Specify an existing payment token to launch Link in payment initation mode.
-    // This will cause Link to open a payment confirmation dialog prior to
-    // institution selection.
-    paymentToken?: string;
-
-    // An oauthNonce is required to support OAuth authentication flows when
-    // launching Link within a WebView and using one or more European country
-    // codes. The nonce must be at least 16 characters long.
-    oauthNonce?: string;
-
-    // An oauthRedirectUri is required to support OAuth authentication flows when
-    // launching or re-launching Link within a WebView and using one or more
-    // European country codes.
-    oauthRedirectUri?: <P>(props: P, propName: keyof P) => void | Error;
-
-    // An oauthStateId is required to support OAuth authentication and payment flows when
-    // re-launching Link within a WebView and using one or more European country
-    // codes.f
-    oauthStateId?: string;
-
-    // Underlying component to render
-    component?: C;
-
-    // Props for underlying component
-    componentProps?: P;
-
-    // Note: onEvent is omitted here, to handle onEvent callbacks refer to
-    // the documentation here: https://github.com/plaid/react-native-plaid-link-sdk#to-receive-onevent-callbacks
-
-    webviewRedirectUri?: string;
 }

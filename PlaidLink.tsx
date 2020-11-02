@@ -1,21 +1,17 @@
-import PropTypes from 'prop-types';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
-    Linking,
-    NativeEventEmitter,
-    NativeModules,
-    Platform,
-    TouchableOpacity,
+  Linking,
+  NativeEventEmitter,
+  NativeModules,
+  Platform,
+  Pressable,
 } from 'react-native';
 import {
-    LinkError,
-    LinkEventListener, 
-    LinkExit, 
-    LinkPublicKeyConfiguration, 
-    LinkSuccess, 
-    PlaidLinkProps, 
-    PlaidProduct,
-
+  LinkError,
+  LinkEventListener,
+  LinkExit,
+  LinkSuccess,
+  PlaidLinkProps,
 } from './types/Types';
 
 /**
@@ -25,111 +21,95 @@ import {
  * @param LinkEventListener the listener to call
  */
 export const usePlaidEmitter = (LinkEventListener: LinkEventListener) => {
-    useEffect(() => {
-        const emitter = new NativeEventEmitter(
-            Platform.OS === 'ios'
-                ? NativeModules.RNLinksdk
-                : NativeModules.PlaidAndroid,
-        );
-        const listener = emitter.addListener('onEvent', LinkEventListener);
-        // Clean up after this effect:
-        return function cleanup() {
-            listener.remove();
-        };
-    }, []);
+  useEffect(() => {
+    const emitter = new NativeEventEmitter(
+      Platform.OS === 'ios'
+        ? NativeModules.RNLinksdk
+        : NativeModules.PlaidAndroid,
+    );
+    const listener = emitter.addListener('onEvent', LinkEventListener);
+    // Clean up after this effect:
+    return function cleanup() {
+      listener.remove();
+    };
+  }, []);
 };
 
-export const openLink = async ({ onExit, onSuccess, ...serializable }: any) => {
-    if (Platform.OS === 'android') {
-        NativeModules.PlaidAndroid.startLinkActivityForResult(
-            JSON.stringify(serializable),
-            (result: LinkSuccess) => {
-                if (onSuccess != null) {
-                    onSuccess(result);
-                }
-            },
-            (result: LinkExit) => {
-                if (onExit != null) {
-                    onExit(result);
-                }
-            },
-        );
-    } else {
-        NativeModules.RNLinksdk.create(serializable);
-        NativeModules.RNLinksdk.open((error: LinkError, metadata: any) => {
-            if (error) {
-                if (onExit != null) {
-                    var data = metadata || {};
-                    data.error = error;
-                    onExit(data);
-                }
-            } else {
-                switch (metadata.status) {
-                    case 'connected':
-                        if (onSuccess != null) {
-                            delete metadata.status;
-                            onSuccess(metadata);
-                        }
-                        break;
-                    default:
-                        if (onExit != null) {
-                            delete metadata.status;
-                            onExit(metadata);
-                        }
-                        break;
-                }
-            }
-        });
-    }
+
+export const openLink = async (plaidLinkProps: PlaidLinkProps) => {
+  if (Platform.OS === 'android') {
+    NativeModules.PlaidAndroid.startLinkActivityForResult(
+      JSON.stringify(plaidLinkProps.config),
+      (result: LinkSuccess) => {
+        if (plaidLinkProps.onSuccess != null) {
+            plaidLinkProps.onSuccess(result);
+        }
+      },
+      (result: LinkExit) => {
+        if (plaidLinkProps.onExit != null) {
+            plaidLinkProps.onExit(result);
+        }
+      },
+    );
+  } else {
+    NativeModules.RNLinksdk.create(plaidLinkProps.config);
+    NativeModules.RNLinksdk.open(
+      // TODO(what is the type of metadata here?)
+      (error: LinkError, result: LinkExit & LinkSuccess ) => {
+        if (error) {
+          if (plaidLinkProps.onExit != null) {
+            var data = result || {};
+            data.error = error;
+            plaidLinkProps.onExit(data);
+          }
+        } else {
+          switch (result.metadata.status) {
+            case 'connected':
+              if (plaidLinkProps.onSuccess != null) {
+                delete result.metadata.status;
+                plaidLinkProps.onSuccess(result);
+              }
+              break;
+            default:
+              if (plaidLinkProps.onExit != null) {
+                delete result.metadata.status;
+                plaidLinkProps.onExit(result);
+              }
+              break;
+          }
+        }
+      },
+    );
+  }
 };
 
 export const dismissLink = () => {
-    if (Platform.OS === 'ios') {
-        NativeModules.RNLinksdk.dismiss();
-    }
+  if (Platform.OS === 'ios') {
+    NativeModules.RNLinksdk.dismiss();
+  }
 };
-
-const handlePress = (linkProps: PlaidLinkProps, componentProps: any) => {
-    openLink(linkProps);
-    if (componentProps && componentProps.onPress) {
-        componentProps.onPress();
-    }
-};
-
-const useMount = (func: any) => useEffect(() => func(), []);
 
 export const useDeepLinkRedirector = () => {
-    const _handleListenerChange = (event: any) => {
-        if (event.url !== null && Platform.OS === 'ios') {
-            NativeModules.RNLinksdk.continueFromRedirectUriString(event.url);
-        }
+  const _handleListenerChange = (event: { url: string }) => {
+    if (event.url !== null && Platform.OS === 'ios') {
+      NativeModules.RNLinksdk.continueFromRedirectUriString(event.url);
+    }
+  };
+
+  useEffect(() => {
+    Linking.addEventListener('url', _handleListenerChange);
+
+    return function cleanup() {
+      Linking.removeEventListener('url', _handleListenerChange);
     };
-
-    useEffect(() => {
-        Linking.addEventListener('url', _handleListenerChange);
-
-        return function cleanup() {
-            Linking.removeEventListener('url', _handleListenerChange);
-        };
-    }, []);
+  }, []);
 };
 
 export const PlaidLink = ({
-    component,
-    componentProps,
-    children,
-    ...linkProps
-}: any) => {
-    const Component = component;
+  children,
+  ...linkProps
+}: PlaidLinkProps & { children?: React.ReactNode }) => {
+  useDeepLinkRedirector();
 
-    useDeepLinkRedirector();
-
-    return (
-        <Component
-            {...componentProps}
-            onPress={() => handlePress(linkProps, componentProps)}
-        >
-            {children}
-        </Component>
-    );
+  return <Pressable onPress={() => openLink(linkProps)}>{children}</Pressable>;
 };

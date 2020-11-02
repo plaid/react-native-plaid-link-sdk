@@ -3,6 +3,7 @@
   "version": "6.0.2",
   "description": "React Native Plaid Link SDK",
   "main": "index.js",
+  "types": "/types/Types.d.ts",
   "scripts": {
     "lint": "eslint \"./**/*.{js,jsx}\" --fix",
     "prettier": "prettier \"./**/*.{js,jsx}\" --write",

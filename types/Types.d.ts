@@ -315,3 +315,58 @@ export enum LinkErrorType {
     RECAPTCHA_ERROR = 'RECAPTCHA_ERROR',
     OAUTH_ERROR = 'OAUTH_ERROR'
 }
+
+export type LinkEventListener = (linkEvent: LinkEvent) => void
+
+
+export interface LinkEvent {
+    eventName: LinkEventName;
+    metadata: LinkEventMetadata;
+}
+
+export interface LinkEventMetadata {
+    linkSessionId: string;
+    mfaType: string;
+    requestId: string;
+    viewName: LinkEventViewName;
+    errorCode: string;
+    errorMessage: string;
+    errorType: string;
+    exitStatus: string;
+    institutionId: string;
+    institutionName: string;
+    institutionSearchQuery: string;
+    timestamp: string;
+}
+
+export enum LinkEventName {
+    CLOSE_OAUTH = 'close_oauth',
+    ERROR = 'error',
+    EXIT = 'exit',
+    FAIL_OAUTH = 'fail_oauth',
+    HANDOFF = 'handoff',
+    MATCHED_CONSENT = 'matched_consent',
+    MATCHED_SELECT_INSTITUTION = 'matched_select_institution',
+    OPEN = 'open',
+    OPEN_MY_PLAID = 'open_my_plaid',
+    OPEN_OAUTH = 'open_oauth',
+    SEARCH_INSTITUTION = 'search_institution',
+    SELECT_INSTITUTION = 'select_institution',
+    SUBMIT_CREDENTIALS = 'submit_credentials',
+    SUBMIT_MFA = 'submit_mfa',
+    TRANSITION_VIEW = 'transition_view',
+}
+
+export enum LinkEventViewName {
+    CONNECTED = 'CONNECTED',
+    CONSENT = 'CONSENT',
+    CREDENTIAL = 'CREDENTIAL',
+    ERROR = 'ERROR',
+    EXIT = 'EXIT',
+    LOADING = 'LOADING',
+    MFA = 'MFA',
+    NUMBERS = 'NUMBERS',
+    RECAPTCHA = 'RECAPTCHA',
+    SELECT_ACCOUNT = 'SELECT_ACCOUNT',
+    SELECT_INSTITUTION = 'SELECT_INSTITUTION',
+}

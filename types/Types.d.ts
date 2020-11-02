@@ -37,7 +37,7 @@ export enum LinkLogLevel {
 export enum PlaidEnvironment {
     PRODUCTION = 'production',
     DEVELOPMENT = 'development',
-    SANDBOX = 'sandbox'
+    SANDBOX = 'sandbox',
 }
 
 export enum PlaidProduct {
@@ -311,11 +311,10 @@ export enum LinkErrorType {
     ASSET_REPORT_ERROR = 'ASSET_REPORT_ERROR',
     SANDBOX_ERROR = 'SANDBOX_ERROR',
     RECAPTCHA_ERROR = 'RECAPTCHA_ERROR',
-    OAUTH_ERROR = 'OAUTH_ERROR'
+    OAUTH_ERROR = 'OAUTH_ERROR',
 }
 
 export type LinkEventListener = (linkEvent: LinkEvent) => void
-
 
 export interface LinkEvent {
     eventName: LinkEventName;
@@ -325,7 +324,7 @@ export interface LinkEvent {
 export interface LinkEventMetadata {
     linkSessionId: string;
     mfaType: string;
-    requestId: string;
+    requestId?: string;
     viewName: LinkEventViewName;
     errorCode: string;
     errorMessage: string;

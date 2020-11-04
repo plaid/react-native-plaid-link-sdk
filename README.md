@@ -58,14 +58,12 @@ followed by
 ### 3. Configure Gradle
 1. Go to the project level `android/app/build.gradle`
 2. Make sure you are using a min sdk >= 21
-3. Use the latest Android link version ![version](https://img.shields.io/bintray/v/plaid/link-android/com.plaid.link)
-4. Add the following dependencies:
+3. Add the following dependencies:
 
 ```groovy
 dependencies {
     // ...
     implementation project(':react-native-plaid-link-sdk')
-    implementation 'com.plaid.link:sdk-core:<insert latest version>'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:<insert at least version 4.x>'
 }
 ```

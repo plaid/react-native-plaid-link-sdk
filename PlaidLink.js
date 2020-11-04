@@ -170,6 +170,7 @@ PlaidLink.propTypes = {
       'assets',
       'liabilities',
       'investments',
+      'deposit_switch',
     ]),
   ),
 

@@ -196,10 +196,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
     try {
       Plaid.setLinkEventListener { linkEvent: LinkEvent ->
-        var json = jsonConverter.convert(linkEvent)
-        val eventMap = convertJsonToMap(JSONObject(json))
         reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-          .emit("onEvent", eventMap)
+          .emit("onEvent", convertJsonToMap(JSONObject(jsonConverter.convert(linkEvent))))
       }
 
       val obj = JSONObject(data)

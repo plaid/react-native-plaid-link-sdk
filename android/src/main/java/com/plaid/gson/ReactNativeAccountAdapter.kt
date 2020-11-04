@@ -22,16 +22,14 @@ internal class ReactNativeAccountAdapter : JsonSerializer<LinkAccount> {
     }
     return JsonObject().apply {
       addProperty("id", src.id)
-      addProperty("name", src.name)
-      addProperty("mask", src.mask)
-      context?.serialize(src.verificationStatus)?.let {
-        add("verification_status", it)
-      }
+      addPropertyIfNotNull("name", src.name)
+      addPropertyIfNotNull("mask", src.mask)
+      addPropertyIfNotNull("verificationStatus", src.verificationStatus?.json)
 
       // Special handling around account subtype
       val subtype = context?.serialize(src.subtype)?.asJsonObject
       subtype?.let {
-        addProperty("type", it.get("account_type").asString)
+        addProperty("type", it.get("accountType").asString)
         addProperty("subtype", it.get("json").asString)
       }
     }

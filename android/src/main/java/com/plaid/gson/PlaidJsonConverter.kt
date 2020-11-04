@@ -3,6 +3,7 @@
  */
 package com.plaid.gson
 
+import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.plaid.internal.networking.adapter.AccountSubtypeAdapter
@@ -14,6 +15,7 @@ import com.plaid.internal.networking.adapter.LinkExitMetadataStatusAdapter
 import com.plaid.internal.networking.adapter.PlaidErrorCodeAdapter
 import com.plaid.internal.networking.adapter.PlaidErrorTypeAdapter
 import com.plaid.link.event.LinkEvent
+import com.plaid.link.event.LinkEventMetadata
 import com.plaid.link.event.LinkEventName
 import com.plaid.link.event.LinkEventViewName
 import com.plaid.link.result.LinkAccount
@@ -25,6 +27,7 @@ import com.plaid.link.result.LinkErrorCode
 import com.plaid.link.result.LinkErrorType
 import com.plaid.link.result.LinkExit
 import com.plaid.link.result.LinkExitMetadataStatus
+import com.plaid.link.result.LinkInstitution
 import com.plaid.link.result.LinkSuccess
 
 class PlaidJsonConverter {
@@ -70,6 +73,14 @@ class PlaidJsonConverter {
       this.registerTypeAdapter(
         LinkError::class.java,
         ReactNativeLinkErrorTypeAdapter()
+      )
+      this.registerTypeAdapter(
+        LinkInstitution::class.java,
+        ReactNativeInstitutionAdapter()
+      )
+      this.registerTypeAdapter(
+        LinkEventMetadata::class.java,
+        ReactNativeLinkEventMetadataAdapter()
       )
     }.create()
   }

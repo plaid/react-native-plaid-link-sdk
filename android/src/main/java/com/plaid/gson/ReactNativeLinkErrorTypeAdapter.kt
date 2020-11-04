@@ -19,8 +19,8 @@ class ReactNativeLinkErrorTypeAdapter : JsonSerializer<LinkError> {
         addProperty("errorCode", it.get("json").asString)
         addProperty("errorType", it.get("errorType").asString)
       }
-      addProperty("errorDisplayMessage", src.displayMessage)
-      addProperty("errorJson", src.errorJson)
+      addPropertyIfNotNull("errorDisplayMessage", src.displayMessage)
+      addPropertyIfNotNull("errorJson", src.errorJson)
     }
   }
 }

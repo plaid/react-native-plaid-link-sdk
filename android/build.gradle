@@ -21,12 +21,14 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.6.2.0"
     }
 }
 
 apply plugin: 'com.android.library'
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-android-extensions"
+apply plugin: "de.mannodermaus.android-junit5"
 
 android {
     compileSdkVersion 29
@@ -58,4 +60,10 @@ dependencies {
     implementation "com.plaid.link:sdk-core:3.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
+
+    testImplementation "junit:junit:4.13.1"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.0"
+    testImplementation "io.mockk:mockk:1.10.2"
+    testImplementation "org.assertj:assertj-core:3.17.2"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.0"
 }

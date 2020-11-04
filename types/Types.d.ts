@@ -10,22 +10,27 @@ export type LinkTokenConfiguration = (CommonPlaidLinkOptions & {
 });
 
 export type LinkPublicKeyConfiguration = (CommonPlaidLinkOptions & {
-    publicKey: string;
     token?: string;
+    publicKey?: string;
     clientName: string;
     environment: PlaidEnvironment;
-    product: Array<PlaidProduct>;
-    countryCodes?: Array<string>;
-    language?: string;
-    userEmailAddress?: string;
-    userLegalName?: string;
+    products: Array<PlaidProduct>;
+    language: string;
+    countryCodes: Array<string>;
     webhook?: string;
+    userLegalName?: string;
+    userEmailAddress?: string;
+    userPhoneNumber?: string;
     linkCustomizationName?: string;
     accountSubtypes?: Array<LinkAccountSubtype>;
+    oauthConfiguration?: OAuthConfiguration
+});
+
+export interface OAuthConfiguration {
     oauthNonce?: string;
     oauthRedirectUri?: string;
     oauthStateId?: string;
-});
+}
 
 export enum LinkLogLevel {
     DEBUG,
@@ -135,7 +140,7 @@ export interface LinkSuccessMetadata {
     institution?: LinkInstitution;
     accounts: LinkAccount[];
     linkSessionId: String;
-    metadataJson: String;
+    metadataJson?: String;
 }
 
 export interface LinkAccount {
@@ -144,7 +149,7 @@ export interface LinkAccount {
     mask?: String;
     type: LinkAccountType;
     subtype: LinkAccountSubtype;
-    verificationStatus: LinkAccountVerificationStatus;
+    verificationStatus?: LinkAccountVerificationStatus;
 }
 
 export enum LinkAccountVerificationStatus {

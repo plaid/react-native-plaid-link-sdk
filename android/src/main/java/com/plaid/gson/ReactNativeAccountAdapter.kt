@@ -3,17 +3,14 @@
  */
 package com.plaid.gson
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import com.plaid.link.result.LinkAccount
 import java.lang.reflect.Type
 
-class RNAccountAdapter : JsonSerializer<LinkAccount> {
+internal class ReactNativeAccountAdapter : JsonSerializer<LinkAccount> {
 
   override fun serialize(
     src: LinkAccount?,
@@ -23,7 +20,7 @@ class RNAccountAdapter : JsonSerializer<LinkAccount> {
     if (src == null) {
       return JsonObject()
     }
-    val obj = JsonObject().apply {
+    return JsonObject().apply {
       addProperty("id", src.id)
       addProperty("name", src.name)
       addProperty("mask", src.mask)
@@ -38,6 +35,5 @@ class RNAccountAdapter : JsonSerializer<LinkAccount> {
         addProperty("subtype", it.get("json").asString)
       }
     }
-    return obj
   }
 }

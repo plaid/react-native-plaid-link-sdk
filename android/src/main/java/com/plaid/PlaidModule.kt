@@ -63,7 +63,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val DATA = "data"
     private const val RESULT_CODE = "resultCode"
     private const val LINK_TOKEN_PREFIX = "link"
-    private const val DEPOSIT_SWITCH_TOKEN_PREFIX = "deposit-switch"
   }
 
   override fun getName(): String {
@@ -90,7 +89,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       return null
     }
 
-    if (!token.startsWith(LINK_TOKEN_PREFIX) && !token.startsWith(LINK_TOKEN_PREFIX)) {
+    if (!token.startsWith(LINK_TOKEN_PREFIX)) {
       return null
     }
 

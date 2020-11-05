@@ -12,6 +12,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.plaid.gson.PlaidJsonConverter
 import com.plaid.link.Plaid
 import com.plaid.link.configuration.LinkLogLevel
 import com.plaid.link.configuration.LinkPublicKeyConfiguration
@@ -19,20 +20,8 @@ import com.plaid.link.configuration.LinkTokenConfiguration
 import com.plaid.link.configuration.PlaidEnvironment
 import com.plaid.link.configuration.PlaidProduct
 import com.plaid.link.event.LinkEvent
-import com.plaid.link.event.LinkEventName
-import com.plaid.link.event.LinkEventViewName
-import com.plaid.link.result.LinkAccount
-import com.plaid.link.result.LinkAccountSubtype
-import com.plaid.link.result.LinkAccountType
-import com.plaid.link.result.LinkAccountVerificationStatus
-import com.plaid.link.result.LinkErrorCode
-import com.plaid.link.result.LinkErrorType
-import com.plaid.link.result.LinkExit
-import com.plaid.link.result.LinkSuccess
-import com.plaid.link.result.LinkExitMetadataStatus
 import com.plaid.link.exception.LinkException
 import com.plaid.link.result.LinkResultHandler
-import com.plaid.gson.PlaidJsonConverter
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
@@ -207,10 +196,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
     try {
       Plaid.setLinkEventListener { linkEvent: LinkEvent ->
-        var json = jsonConverter.convert(linkEvent)
-        val eventMap = convertJsonToMap(JSONObject(json))
         reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-          .emit("onEvent", eventMap)
+          .emit("onEvent", convertJsonToMap(JSONObject(jsonConverter.convert(linkEvent))))
       }
 
       val obj = JSONObject(data)

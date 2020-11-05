@@ -15,7 +15,6 @@ import com.plaid.link.result.LinkExitMetadataStatus
 import com.plaid.link.result.LinkInstitution
 import com.plaid.link.result.LinkSuccess
 import com.plaid.link.result.LinkSuccessMetadata
-import io.mockk.MockK
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -26,9 +25,9 @@ import org.junit.jupiter.api.Nested
 
 class PlaidJsonConverterTest {
   companion object {
-    const val SUCCESS_JSON = "{\"publicToken\":\"4\",\"metadata\":{\"institution\":{\"id\":\"2\",\"name\":\"Chase\"},\"accounts\":[{\"id\":\"1\",\"name\":\"My Checking\",\"mask\":\"1234\",\"verificationStatus\":\"manually_verified\",\"type\":\"depository\",\"subtype\":\"checking\"}],\"linkSessionId\":\"3\",\"metadataJson\":\"{\\\"json\\\":\\\"test\\\"}\"}}"
-    const val EXIT_ERROR_JSON = "{\"error\":{\"errorCode\":\"INTERNAL_SERVER_ERROR\",\"errorType\":\"API_ERROR\",\"errorDisplayMessage\":\"2\",\"errorJson\":\"{\\\"json\\\":\\\"error json\\\"}\"},\"metadata\":{\"status\":\"requires_code\",\"institution\":{\"id\":\"2\",\"name\":\"Chase\"},\"linkSessionId\":\"3\",\"requestId\":\"3\",\"metadataJson\":\"{\\\"json\\\":\\\"test\\\"}\"}}"
-    const val EVENT_ERROR_JSON = "{\"eventName\":\"ERROR\",\"metadata\":{\"linkSessionId\":\"8\",\"mfaType\":\"9\",\"requestId\":\"10\",\"viewName\":\"ERROR\",\"errorCode\":\"1\",\"errorMessage\":\"3\",\"errorType\":\"2\",\"exitStatus\":\"4\",\"institutionId\":\"5\",\"institutionName\":\"6\",\"institutionSearchQuery\":\"7\",\"timestamp\":\"11\"}}"
+    const val SUCCESS_JSON = """{"publicToken":"4","metadata":{"institution":{"id":"2","name":"Chase"},"accounts":[{"id":"1","name":"My Checking","mask":"1234","verificationStatus":"manually_verified","type":"depository","subtype":"checking"}],"linkSessionId":"3","metadataJson":"{\"json\":\"test\"}"}}"""
+    const val EXIT_ERROR_JSON = """{"error":{"errorCode":"INTERNAL_SERVER_ERROR","errorType":"API_ERROR","errorDisplayMessage":"2","errorJson":"{\"json\":\"error json\"}"},"metadata":{"status":"requires_code","institution":{"id":"2","name":"Chase"},"linkSessionId":"3","requestId":"3","metadataJson":"{\"json\":\"test\"}"}}"""
+    const val EVENT_ERROR_JSON = """{"eventName":"ERROR","metadata":{"linkSessionId":"8","mfaType":"9","requestId":"10","viewName":"ERROR","errorCode":"1","errorMessage":"3","errorType":"2","exitStatus":"4","institutionId":"5","institutionName":"6","institutionSearchQuery":"7","timestamp":"11"}}"""
   }
 
   lateinit var plaidJsonConverter: PlaidJsonConverter
@@ -58,7 +57,7 @@ class PlaidJsonConverterTest {
       every { successMetadata.accounts } returns listOf(linkAccount)
       every { successMetadata.institution } returns linkInstitution
       every { successMetadata.linkSessionId } returns "3"
-      every { successMetadata.metadataJson } returns "{\"json\":\"test\"}"
+      every { successMetadata.metadataJson } returns """{"json":"test"}"""
 
       val success = mockk<LinkSuccess>()
       every { success.publicToken } returns "4"
@@ -77,7 +76,7 @@ class PlaidJsonConverterTest {
       every { linkError.displayMessage } returns "2"
       every { linkError.errorCode } returns LinkErrorCode.ApiError.INTERNAL_SERVER_ERROR
       every { linkError.errorMessage } returns "message"
-      every { linkError.errorJson } returns "{\"json\":\"error json\"}"
+      every { linkError.errorJson } returns """{"json":"error json"}"""
 
       val linkInstitution = mockk<LinkInstitution>()
       every { linkInstitution.id } returns "2"
@@ -88,7 +87,7 @@ class PlaidJsonConverterTest {
       every { exitMetadata.institution } returns linkInstitution
       every { exitMetadata.linkSessionId } returns "3"
       every { exitMetadata.status } returns LinkExitMetadataStatus.REQUIRES_CODE
-      every { exitMetadata.metadataJson } returns "{\"json\":\"test\"}"
+      every { exitMetadata.metadataJson } returns """{"json":"test"}"""
 
       val exit = mockk<LinkExit>()
       every { exit.error } returns linkError
@@ -116,7 +115,7 @@ class PlaidJsonConverterTest {
       every { eventMetadata.requestId } returns "10"
       every { eventMetadata.timestamp } returns "11"
       every { eventMetadata.viewName } returns LinkEventViewName.ERROR
-      every { eventMetadata.metadataJson } returns "{\"json\":\"test\"}"
+      every { eventMetadata.metadataJson } returns """{"json":"test"}"""
 
       val event = mockk<LinkEvent>()
       every { event.eventName } returns LinkEventName.ERROR

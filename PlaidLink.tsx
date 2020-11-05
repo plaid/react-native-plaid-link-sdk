@@ -54,7 +54,6 @@ export const openLink = async (plaidLinkProps: PlaidLinkProps) => {
   } else {
     NativeModules.RNLinksdk.create(plaidLinkProps.config);
     NativeModules.RNLinksdk.open(
-      // TODO(what is the type of metadata here?)
       (error: LinkError, result: LinkExit & LinkSuccess ) => {
         if (error) {
           if (plaidLinkProps.onExit != null) {

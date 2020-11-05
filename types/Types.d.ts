@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 interface CommonPlaidLinkOptions {
     onSuccess: Function;
     onExit?: Function;
@@ -32,6 +34,7 @@ export interface OAuthConfiguration {
     oauthStateId?: string;
 }
 
+export type Configuration = LinkTokenConfiguration | LinkPublicKeyConfiguration;
 export enum LinkLogLevel {
     DEBUG,
     INFO,
@@ -371,4 +374,18 @@ export enum LinkEventViewName {
     RECAPTCHA = 'RECAPTCHA',
     SELECT_ACCOUNT = 'SELECT_ACCOUNT',
     SELECT_INSTITUTION = 'SELECT_INSTITUTION',
+}
+
+export interface PlaidLinkProps {
+    // Required props
+    // A function that is called when a user has successfully onboarded their account.
+    // The function should expect one argument, a metadata object.
+    onSuccess: (metadata: LinkSuccess) => void;
+
+    config: LinkTokenConfiguration | LinkPublicKeyConfiguration
+
+    // Optional props
+    
+    // A function that is called when a user has specifically exited Link flow.
+    onExit?: (metadata: LinkExit) => void;
 }

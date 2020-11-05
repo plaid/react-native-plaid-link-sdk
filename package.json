@@ -3,6 +3,7 @@
   "version": "6.0.2",
   "description": "React Native Plaid Link SDK",
   "main": "index.js",
+  "types": "/types/Types.d.ts",
   "scripts": {
     "lint": "eslint \"./**/*.{js,jsx}\" --fix",
     "prettier": "prettier \"./**/*.{js,jsx}\" --write",
@@ -31,6 +32,7 @@
     "react-native": "^0.61.3"
   },
   "dependencies": {
+    "@typescript-eslint/parser": "^4.6.1",
     "prop-types": "^15.7.2"
   },
   "devDependencies": {
@@ -38,8 +40,9 @@
     "@types/react": "^16.9.52",
     "@types/react-native": "^0.63.25",
     "@types/react-test-renderer": "^16.9.3",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.6.0",
+    "eslint": "^7.12.1",
     "eslint-plugin-react": "^7.16.0",
     "husky": "^3.1.0",
     "lint-staged": "^9.4.2",

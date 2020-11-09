@@ -7,7 +7,9 @@
   "scripts": {
     "lint": "eslint \"./**/*.{js,jsx}\" --fix",
     "prettier": "prettier \"./**/*.{js,jsx}\" --write",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version": "git add -A",
+    "postversion": "git push && git push --tags && rm -rf build/temp"
   },
   "keywords": [
     "react-native",

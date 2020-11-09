@@ -1,14 +1,13 @@
 import React from 'react';
-import {Text, View, Linking, StyleSheet} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { Text, View } from 'react-native';
 
 var styles = require('./style');
 
-const ErrorScreen = ({route, navigation}) => {
-  const {onerror} = route.params;
+const ErrorScreen = ({ route, navigation }: any) => {
+  const { onerror } = route.params;
   console.log(onerror);
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <View style={styles.heading}>
         <Text style={styles.titleText}>
           Uh-oh! It seems something went wrong.
@@ -20,7 +19,7 @@ const ErrorScreen = ({route, navigation}) => {
           Below is the error returned.
           {'\n'}
           {'\n'}
-          <Text style={(styles.bold, {color: '#000000'})}>
+          <Text style={(styles.bold, { color: '#000000' })}>
             {JSON.stringify(onerror)}
           </Text>
         </Text>

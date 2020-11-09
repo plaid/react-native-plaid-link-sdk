@@ -1,5 +1,17 @@
 'use strict';
 
+export const PlaidTheme = {
+  dark: false,
+  colors: {
+    primary: '#FFFFFF',
+    background: '#000000',
+    card: '#FFFFFF',
+    text: '#000000',
+    border: '#000000',
+    notification: '#FFFFFF',
+  },
+};
+
 var React = require('react-native');
 
 var {StyleSheet} = React;

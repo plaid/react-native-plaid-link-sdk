@@ -7,32 +7,32 @@ import {
   StyleSheet,
 } from 'react-native';
 import PlaidLink, { usePlaidEmitter } from 'react-native-plaid-link-sdk';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-const AppButton = ({onPress, title}) => (
+const AppButton = ({ onPress, title }: any) => (
   <TouchableOpacity onPress={onPress} style={styles.appButtonContainer}>
     <Text style={styles.appButtonText}>{title}</Text>
   </TouchableOpacity>
 );
 
-const PlaidComponent = ({token}) => {
+const PlaidComponent = ({ token }: any) => {
   const navigation = useNavigation();
-  usePlaidEmitter((event) => {
+  usePlaidEmitter((event: any) => {
     console.log(event);
   });
   return (
     <PlaidLink
       token={token}
-      onSuccess={(data) => {
-        navigation.navigate('Success', {onsuccess: data})
+      onSuccess={(data: any) => {
+        navigation.navigate('Success', { onsuccess: data })
         console.log(data)
       }}
-      onExit={(data) => {
-        navigation.navigate('Error', {onerror: data})
+      onExit={(data: any) => {
+        navigation.navigate('Error', { onerror: data })
         console.log(data)
       }}
       component={AppButton}
-      componentProps={{title: 'Open Link'}}></PlaidLink>
+      componentProps={{ title: 'Open Link' }}></PlaidLink>
   );
 };
 

@@ -1,13 +1,15 @@
 {
   "name": "react-native-plaid-link-sdk",
-  "version": "6.0.6-0",
+  "version": "6.0.3",
   "description": "React Native Plaid Link SDK",
   "main": "index.js",
   "types": "/types/Types.d.ts",
   "scripts": {
     "lint": "eslint \"./**/*.{js,jsx}\" --fix",
     "prettier": "prettier \"./**/*.{js,jsx}\" --write",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version": "git add -A",
+    "postversion": "git push && git push --tags && rm -rf build/temp"
   },
   "keywords": [
     "react-native",

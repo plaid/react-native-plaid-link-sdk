@@ -1,20 +1,21 @@
 import React from 'react';
 
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {HeaderBackButton} from '@react-navigation/stack';
-import {StatusBar} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { HeaderBackButton } from '@react-navigation/stack';
+import { StatusBar } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ErrorScreen from './components/ErrorScreen';
 import SuccessScreen from './components/SuccessScreen';
 import HomeScreen from './components/HomeScreen';
+import { PlaidTheme } from './components/style';
 
 const Stack = createStackNavigator();
 
-const App: () => React$Node = () => {
+const App = (): React.ReactElement => {
   return (
     <SafeAreaProvider>
-      <NavigationContainer style={(backgroundColor = '#000000')}>
+      <NavigationContainer theme={PlaidTheme}>
         <StatusBar barStyle="light-content" backgroundColor="#000000" />
         <Stack.Navigator>
           <Stack.Screen

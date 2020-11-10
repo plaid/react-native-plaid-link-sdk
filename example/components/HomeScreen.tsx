@@ -1,13 +1,12 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import { Text, View } from 'react-native';
 import PlaidComponent from './PlaidLink';
-import {SafeAreaView} from 'react-native-safe-area-context';
 
 var styles = require('./style');
 
 const HomeScreen = () => {
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <View style={styles.heading}>
         <Text style={styles.titleText}>Plaid Link React Native Demo</Text>
       </View>

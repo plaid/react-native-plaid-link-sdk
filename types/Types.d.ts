@@ -377,15 +377,5 @@ export enum LinkEventViewName {
 }
 
 export interface PlaidLinkProps {
-    // Required props
-    // A function that is called when a user has successfully onboarded their account.
-    // The function should expect one argument, a metadata object.
-    onSuccess: (metadata: LinkSuccess) => void;
-
     config: LinkTokenConfiguration | LinkPublicKeyConfiguration
-
-    // Optional props
-    
-    // A function that is called when a user has specifically exited Link flow.
-    onExit?: (metadata: LinkExit) => void;
 }

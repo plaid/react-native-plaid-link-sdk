@@ -1,14 +1,12 @@
 import React from 'react';
 import {
-  Text,
-  NativeEventEmitter,
-  NativeModules,
-  TouchableOpacity,
-  StyleSheet,
+    Text,
+    TouchableOpacity,
+    StyleSheet,
 } from 'react-native';
 import {PlaidLink, usePlaidEmitter} from 'react-native-plaid-link-sdk/PlaidLink';
 import {useNavigation} from '@react-navigation/native';
-import {LinkExit, LinkTokenConfiguration} from "react-native-plaid-link-sdk/types/Types";
+import {LinkExit} from "react-native-plaid-link-sdk/types/Types";
 import {LinkSuccess} from "react-native-plaid-link-sdk/types/Types";
 
 const AppButton = ({onPress, title}: any) => {
@@ -40,21 +38,21 @@ const PlaidComponent = ({token}: any) => {
 };
 
 const styles = StyleSheet.create({
-  // ...
-  appButtonContainer: {
-    elevation: 4,
-    backgroundColor: '#000',
-    width: '100%',
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-  },
-  appButtonText: {
-    fontSize: 18,
-    color: '#fff',
-    fontWeight: 'bold',
-    alignSelf: 'center',
-    textTransform: 'uppercase',
-  },
+    // ...
+    appButtonContainer: {
+        elevation: 4,
+        backgroundColor: '#000',
+        width: '100%',
+        paddingVertical: 16,
+        paddingHorizontal: 16,
+    },
+    appButtonText: {
+        fontSize: 18,
+        color: '#fff',
+        fontWeight: 'bold',
+        alignSelf: 'center',
+        textTransform: 'uppercase',
+    },
 });
 
 export default PlaidComponent;

@@ -6,34 +6,37 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import PlaidLink, { usePlaidEmitter } from 'react-native-plaid-link-sdk';
-import { useNavigation } from '@react-navigation/native';
+import {PlaidLink, usePlaidEmitter} from 'react-native-plaid-link-sdk/PlaidLink';
+import {useNavigation} from '@react-navigation/native';
+import {LinkExit, LinkTokenConfiguration} from "react-native-plaid-link-sdk/types/Types";
+import {LinkSuccess} from "react-native-plaid-link-sdk/types/Types";
 
-const AppButton = ({ onPress, title }: any) => (
-  <TouchableOpacity onPress={onPress} style={styles.appButtonContainer}>
-    <Text style={styles.appButtonText}>{title}</Text>
-  </TouchableOpacity>
-);
+const AppButton = ({onPress, title}: any) => {
+    return <TouchableOpacity onPress={onPress} style={styles.appButtonContainer}>
+        <Text style={styles.appButtonText}>{title}</Text>
+    </TouchableOpacity>
+};
 
-const PlaidComponent = ({ token }: any) => {
-  const navigation = useNavigation();
-  usePlaidEmitter((event: any) => {
-    console.log(event);
-  });
-  return (
-    <PlaidLink
-      token={token}
-      onSuccess={(data: any) => {
-        navigation.navigate('Success', { onsuccess: data })
-        console.log(data)
-      }}
-      onExit={(data: any) => {
-        navigation.navigate('Error', { onerror: data })
-        console.log(data)
-      }}
-      component={AppButton}
-      componentProps={{ title: 'Open Link' }}></PlaidLink>
-  );
+const PlaidComponent = ({token}: any) => {
+    const navigation = useNavigation();
+    usePlaidEmitter((event: any) => {
+        console.log(event);
+    });
+    return (
+        <PlaidLink
+            config={{
+                onSuccess: (success: LinkSuccess) => {
+                    navigation.navigate('Success', {onsuccess: success})
+                    console.log(success)
+                },
+                onExit: (data: LinkExit) => {
+                    navigation.navigate('Error', {onerror: data})
+                    console.log(data)
+                }
+                , token: "mytoken"
+            }}
+            children={<AppButton title="Open Link"/>}/>
+    );
 };
 
 const styles = StyleSheet.create({

@@ -1,39 +1,41 @@
 import React from 'react';
 import {
     Text,
-    TouchableOpacity,
+    View,
     StyleSheet,
 } from 'react-native';
-import {PlaidLink, usePlaidEmitter} from 'react-native-plaid-link-sdk/PlaidLink';
-import {useNavigation} from '@react-navigation/native';
-import {LinkExit} from "react-native-plaid-link-sdk/types/Types";
-import {LinkSuccess} from "react-native-plaid-link-sdk/types/Types";
+import { PlaidLink, usePlaidEmitter } from 'react-native-plaid-link-sdk/PlaidLink';
+import { useNavigation } from '@react-navigation/native';
+import { LinkEvent, LinkExit } from "react-native-plaid-link-sdk/types/Types";
+import { LinkSuccess } from "react-native-plaid-link-sdk/types/Types";
 
-const AppButton = ({onPress, title}: any) => {
-    return <TouchableOpacity onPress={onPress} style={styles.appButtonContainer}>
-        <Text style={styles.appButtonText}>{title}</Text>
-    </TouchableOpacity>
+const AppButton = (props: any) => {
+    return <View style={styles.appButtonContainer}>
+        <Text style={styles.appButtonText}>{props.title}</Text>
+    </View>
 };
 
-const PlaidComponent = ({token}: any) => {
+const PlaidComponent = (props: any) => {
     const navigation = useNavigation();
-    usePlaidEmitter((event: any) => {
+    usePlaidEmitter((event: LinkEvent) => {
         console.log(event);
     });
     return (
         <PlaidLink
-            config={{
-                onSuccess: (success: LinkSuccess) => {
-                    navigation.navigate('Success', {onsuccess: success})
-                    console.log(success)
-                },
-                onExit: (data: LinkExit) => {
-                    navigation.navigate('Error', {onerror: data})
-                    console.log(data)
-                }
-                , token: "mytoken"
+            tokenConfig={{
+                token: props.token,
             }}
-            children={<AppButton title="Open Link"/>}/>
+            onSuccess={(success: LinkSuccess) => {
+                navigation.navigate('Success', { onsuccess: success })
+                console.log(success)
+            }}
+            onExit={(exit: LinkExit) => {
+                navigation.navigate('Exit', { onerror: exit })
+                console.log(exit)
+            }}
+        >
+            <AppButton title="Open Link" />
+        </PlaidLink>
     );
 };
 

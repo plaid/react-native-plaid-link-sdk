@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 
 interface CommonPlaidLinkOptions {
-    onSuccess: Function;
-    onExit?: Function;
     logLevel?: LinkLogLevel;
     extraParams?: Record<string, any>;
 }
@@ -376,6 +374,16 @@ export enum LinkEventViewName {
     SELECT_INSTITUTION = 'SELECT_INSTITUTION',
 }
 
-export interface PlaidLinkProps {
-    config: LinkTokenConfiguration | LinkPublicKeyConfiguration
-}
+export type LinkSuccessListener = (LinkSuccess: LinkSuccess) => void
+
+export type LinkExitListener = (LinkExit: LinkExit) => void
+
+export type PlaidLinkConfiguration = LinkTokenConfiguration | LinkPublicKeyConfiguration
+
+export interface PlaidLinkProps  { 
+    tokenConfig?: LinkTokenConfiguration
+    publicKeyConfig?: LinkPublicKeyConfiguration
+    onSuccess: LinkSuccessListener
+    onExit?: LinkExitListener
+    children: React.ReactNode
+  }

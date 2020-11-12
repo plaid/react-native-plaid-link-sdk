@@ -10,7 +10,10 @@ import {
   LinkError,
   LinkEventListener,
   LinkExit,
+  LinkExitListener,
   LinkSuccess,
+  LinkSuccessListener,
+  PlaidLinkConfiguration,
   PlaidLinkProps,
 } from './types/Types';
 
@@ -36,43 +39,43 @@ export const usePlaidEmitter = (LinkEventListener: LinkEventListener) => {
 };
 
 
-export const openLink = async (plaidLinkProps: PlaidLinkProps) => {
+export const openLink = async (config: PlaidLinkConfiguration, onSuccess: LinkSuccessListener, onExit?: LinkExitListener) => {
   if (Platform.OS === 'android') {
     NativeModules.PlaidAndroid.startLinkActivityForResult(
-      JSON.stringify(plaidLinkProps.config),
+      JSON.stringify(config),
       (result: LinkSuccess) => {
-        if (plaidLinkProps.onSuccess != null) {
-            plaidLinkProps.onSuccess(result);
+        if (onSuccess != null) {
+          onSuccess(result);
         }
       },
       (result: LinkExit) => {
-        if (plaidLinkProps.onExit != null) {
-            plaidLinkProps.onExit(result);
+        if (onExit != null) {
+          onExit(result);
         }
       },
     );
   } else {
-    NativeModules.RNLinksdk.create(plaidLinkProps.config);
+    NativeModules.RNLinksdk.create(config);
     NativeModules.RNLinksdk.open(
       (error: LinkError, result: LinkExit & LinkSuccess ) => {
         if (error) {
-          if (plaidLinkProps.onExit != null) {
+          if (onExit != null) {
             var data = result || {};
             data.error = error;
-            plaidLinkProps.onExit(data);
+            onExit(data);
           }
         } else {
           switch (result.metadata.status) {
             case 'connected':
-              if (plaidLinkProps.onSuccess != null) {
+              if (onSuccess != null) {
                 delete result.metadata.status;
-                plaidLinkProps.onSuccess(result);
+                onSuccess(result);
               }
               break;
             default:
-              if (plaidLinkProps.onExit != null) {
+              if (onExit != null) {
                 delete result.metadata.status;
-                plaidLinkProps.onExit(result);
+                onExit(result);
               }
               break;
           }
@@ -104,11 +107,8 @@ export const useDeepLinkRedirector = () => {
   }, []);
 };
 
-export const PlaidLink = ({
-  children,
-  ...linkProps
-}: PlaidLinkProps & { children?: React.ReactNode }) => {
+export const PlaidLink = (props: PlaidLinkProps) => {
   useDeepLinkRedirector();
 
-  return <Pressable onPress={() => openLink(linkProps)}>{children}</Pressable>;
+  return <Pressable onPress={() => openLink(props.config, props.onSuccess, props.onExit)}>{props.children}</Pressable>;
 };

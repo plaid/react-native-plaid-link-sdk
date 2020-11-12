@@ -109,6 +109,6 @@ export const useDeepLinkRedirector = () => {
 
 export const PlaidLink = (props: PlaidLinkProps) => {
   useDeepLinkRedirector();
-
-  return <Pressable onPress={() => openLink(props.config, props.onSuccess, props.onExit)}>{props.children}</Pressable>;
+  let config = props.tokenConfig ? props.tokenConfig : props.publicKeyConfig!;
+  return <Pressable onPress={() => openLink(config, props.onSuccess, props.onExit)}>{props.children}</Pressable>;
 };

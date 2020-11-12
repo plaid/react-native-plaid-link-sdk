@@ -6,8 +6,7 @@ import {
 } from 'react-native';
 import { PlaidLink, usePlaidEmitter } from 'react-native-plaid-link-sdk/PlaidLink';
 import { useNavigation } from '@react-navigation/native';
-import { LinkEvent, LinkExit } from "react-native-plaid-link-sdk/types/Types";
-import { LinkSuccess } from "react-native-plaid-link-sdk/types/Types";
+import { LinkEvent, LinkExit, LinkSuccess } from "react-native-plaid-link-sdk/types/Types";
 
 const AppButton = (props: any) => {
     return <View style={styles.appButtonContainer}>

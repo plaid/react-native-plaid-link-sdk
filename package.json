@@ -2,8 +2,11 @@
   "name": "react-native-plaid-link-sdk",
   "version": "6.0.3",
   "description": "React Native Plaid Link SDK",
-  "main": "index.js",
-  "types": "/types/Types.d.ts",
+  "main": "lib/index.js",
+  "types": "../types/Types.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
     "lint": "eslint \"./**/*.{js,jsx}\" --fix",
     "prettier": "prettier \"./**/*.{js,jsx}\" --write",

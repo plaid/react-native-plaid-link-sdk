@@ -15,7 +15,7 @@ import {
   LinkSuccessListener,
   PlaidLinkConfiguration,
   PlaidLinkProps,
-} from './types/Types';
+} from './Types';
 
 /**
  * A hook that registers a listener on the plaid emitter for the 'onEvent' type.

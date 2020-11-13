@@ -32,7 +32,6 @@ export interface OAuthConfiguration {
     oauthStateId?: string;
 }
 
-export type Configuration = LinkTokenConfiguration | LinkPublicKeyConfiguration;
 export enum LinkLogLevel {
     DEBUG,
     INFO,
@@ -380,10 +379,10 @@ export type LinkExitListener = (LinkExit: LinkExit) => void
 
 export type PlaidLinkConfiguration = LinkTokenConfiguration | LinkPublicKeyConfiguration
 
-export interface PlaidLinkProps  { 
+export interface PlaidLinkProps {
     tokenConfig?: LinkTokenConfiguration
     publicKeyConfig?: LinkPublicKeyConfiguration
     onSuccess: LinkSuccessListener
     onExit?: LinkExitListener
     children: React.ReactNode
-  }
+}

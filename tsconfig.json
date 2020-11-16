@@ -12,7 +12,7 @@
     "target": "es6",
     "module": "es6",
     "declaration": true,
-    "outDir": "./build",
+    "outDir": "./lib",
   },
   "exclude": [
     "node_modules",

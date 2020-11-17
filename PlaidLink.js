@@ -159,8 +159,7 @@ PlaidLink.propTypes = {
   // The Plaid API environment on which to create user accounts.
   env: PropTypes.oneOf(['development', 'sandbox', 'production']),
 
-  // The Plaid product(s) you wish to use, an array containing some of
-  // auth, identity, income, transactions, assets, liabilities, investments.
+  // The Plaid product(s) you wish to use
   product: PropTypes.arrayOf(
     PropTypes.oneOf([
       'auth',
@@ -170,6 +169,7 @@ PlaidLink.propTypes = {
       'assets',
       'liabilities',
       'investments',
+      'deposit_switch',
     ]),
   ),
 

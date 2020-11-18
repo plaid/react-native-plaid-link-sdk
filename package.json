@@ -1,12 +1,14 @@
 {
   "name": "react-native-plaid-link-sdk",
-  "version": "7.0.0-snapshot2",
+  "version": "7.0.0-snapshot4",
   "description": "React Native Plaid Link SDK",
   "main": "build/index.js",
-  "types": "build/Types.d.ts",
+  "types": "build/index.d.ts",
   "files": [
     "build/**/*",
-    "src/**/*"
+    "android/**/*",
+    "ios/**/*",
+    "react-native-plaid-link-sdk.podspec"
   ],
   "scripts": {
     "lint": "eslint \"./**/*.{js,jsx}\" --fix",

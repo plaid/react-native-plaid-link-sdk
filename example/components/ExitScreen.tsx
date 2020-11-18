@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, } from 'react-native';
+import { LinkExit, } from 'react-native-plaid-link-sdk';
 
 var styles = require('./style');
 
-const ErrorScreen = ({ route, navigation }: any) => {
-  const { onerror } = route.params;
-  console.log(onerror);
+const ExitScreen = ({ route, navigation }: any) => {
+  const linkExit : LinkExit = route.params;
+  console.log(linkExit);
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.heading}>
@@ -20,7 +21,7 @@ const ErrorScreen = ({ route, navigation }: any) => {
           {'\n'}
           {'\n'}
           <Text style={(styles.bold, { color: '#000000' })}>
-            {JSON.stringify(onerror)}
+            {JSON.stringify(linkExit)}
           </Text>
         </Text>
       </View>
@@ -28,4 +29,4 @@ const ErrorScreen = ({ route, navigation }: any) => {
   );
 };
 
-export default ErrorScreen;
+export default ExitScreen;

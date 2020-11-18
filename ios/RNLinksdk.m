@@ -34,6 +34,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 NSString* const kRNLinkKitLinkTokenPrefix = @"link-";
 NSString* const kRNLinkKitItemAddTokenPrefix = @"item-add-";
 NSString* const kRNLinkKitPaymentTokenPrefix = @"payment";
+NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
 
 @interface RNLinksdk ()
 @property (nonatomic, strong) id<PLKHandler> linkHandler;
@@ -112,7 +113,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
             strongSelf.completionCallback = nil;
         }
     };
-    
+
     void (^onExit)(PLKLinkExit *) = ^(PLKLinkExit *exit) {
         __typeof(weakSelf) strongSelf = weakSelf;
         [weakSelf dismissLinkViewController];
@@ -127,7 +128,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
             strongSelf.completionCallback = nil;
         }
     };
-    
+
     void (^onEvent)(PLKLinkEvent *) = ^(PLKLinkEvent *event) {
         __typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf.hasObservers) {
@@ -187,7 +188,7 @@ RCT_EXPORT_METHOD(dismiss) {
 - (PLKLinkTokenConfiguration *)getLinkTokenConfiguration:(NSDictionary *)configuration
                                         onSuccessHandler:(void(^)(PLKLinkSuccess *))onSuccessHandler {
     NSString *linkTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
-    
+
     return [PLKLinkTokenConfiguration createWithToken:linkTokenInput onSuccess:onSuccessHandler];
 }
 
@@ -208,18 +209,21 @@ RCT_EXPORT_METHOD(dismiss) {
   NSDictionary<NSString*, NSArray<NSString*>*> *accountSubtypes = [RCTConvert NSDictionary:configuration[kRNLinkKitConfigAccountSubtypes]];
   NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
   NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
-    
+
     PLKLinkPublicKeyConfigurationToken *token;
     BOOL isPaymentToken = [tokenInput hasPrefix:kRNLinkKitPaymentTokenPrefix];
     BOOL isItemAddToken = [tokenInput hasPrefix:kRNLinkKitItemAddTokenPrefix];
+    BOOL isDepositSwitchToken = [tokenInput hasPrefix:kRNLinkKitDepositSwitchTokenPrefix];
     if (isPaymentToken) {
         token = [PLKLinkPublicKeyConfigurationToken createWithPaymentToken:tokenInput publicKey:key];
     } else if (isItemAddToken) {
         token = [PLKLinkPublicKeyConfigurationToken createWithPublicToken:tokenInput publicKey:key];
+    } else if (isDepositSwitchToken) {
+        token = [PLKLinkPublicKeyConfigurationToken createWithDepositSwitchToken:tokenInput publicKey:key];
     } else {
         token = [PLKLinkPublicKeyConfigurationToken createWithPublicKey:key];
     }
-    
+
     PLKEnvironment environment = [RNLinksdk environmentFromString:env];
     NSArray<NSNumber *> *products = [RNLinksdk productsArrayFromProductsStringArray:productsInput];
     PLKLinkPublicKeyConfiguration *linkConfiguration = [[PLKLinkPublicKeyConfiguration alloc] initWithClientName:clientName
@@ -262,15 +266,15 @@ RCT_EXPORT_METHOD(dismiss) {
     if ([string isEqualToString:@"production"]) {
         return PLKEnvironmentProduction;
     }
-    
+
     if ([string isEqualToString:@"sandbox"]) {
         return PLKEnvironmentSandbox;
     }
-    
+
     if ([string isEqualToString:@"development"]) {
         return PLKEnvironmentDevelopment;
     }
-    
+
     // Default to Development
     NSLog(@"Unexpected environment string value: %@. Expected one of: production, sandbox, or development.", string);
     return PLKEnvironmentDevelopment;
@@ -278,14 +282,14 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSArray<NSNumber *> *)productsArrayFromProductsStringArray:(NSArray<NSString *> *)productsStringArray {
     NSMutableArray<NSNumber *> *results = [NSMutableArray arrayWithCapacity:productsStringArray.count];
-    
+
     for (NSString *productString in productsStringArray) {
         NSNumber *product = [self productFromProductString:productString];
         if (product) {
             [results addObject:product];
         }
     }
-    
+
     return [results copy];
 }
 
@@ -298,6 +302,7 @@ RCT_EXPORT_METHOD(dismiss) {
         @"assets": @(PLKProductAssets),
         @"liabilities": @(PLKProductLiabilities),
         @"investments": @(PLKProductInvestments),
+        @"deposit_switch": @(PLKProductDepositSwitch),
     };
     return productStringMap[productString.lowercaseString];
 }

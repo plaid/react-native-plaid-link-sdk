@@ -328,16 +328,16 @@ export interface LinkEvent {
 
 export interface LinkEventMetadata {
     linkSessionId: string;
-    mfaType: string;
+    mfaType?: string;
     requestId?: string;
     viewName: LinkEventViewName;
-    errorCode: string;
-    errorMessage: string;
-    errorType: string;
-    exitStatus: string;
-    institutionId: string;
-    institutionName: string;
-    institutionSearchQuery: string;
+    errorCode?: string;
+    errorMessage?: string;
+    errorType?: string;
+    exitStatus?: string;
+    institutionId?: string;
+    institutionName?: string;
+    institutionSearchQuery?: string;
     timestamp: string;
 }
 

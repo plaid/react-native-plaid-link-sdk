@@ -7,14 +7,15 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-import { Linking } from 'react-native';
+import { Linking, } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, } from 'react-native-gesture-handler';
+import { LinkSuccess, } from 'react-native-plaid-link-sdk';
 
 var styles = require('./style');
 
 const SuccessScreen = ({ route, navigation }: any) => {
-  const { onsuccess } = route.params;
+  const linkSuccess : LinkSuccess  = route.params;
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.heading}>
@@ -48,11 +49,11 @@ const SuccessScreen = ({ route, navigation }: any) => {
           <Text
             style={successStyles.publicKey}
             onLongPress={() => {
-              Clipboard.setString(onsuccess.public_token);
+              Clipboard.setString(linkSuccess.publicToken);
               notifyMessage('Copied to Clipboard');
             }}>
             <Text style={styles.bold}>
-              Public Token: {onsuccess.public_token}
+              Public Token: {linkSuccess.publicToken}
             </Text>
           </Text>
         </TouchableOpacity>

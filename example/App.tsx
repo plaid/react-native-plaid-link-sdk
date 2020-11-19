@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { HeaderBackButton } from '@react-navigation/stack';
 import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import ErrorScreen from './components/ErrorScreen';
+import ExitScreen from './components/ExitScreen';
 import SuccessScreen from './components/SuccessScreen';
 import HomeScreen from './components/HomeScreen';
 import { PlaidTheme } from './components/style';
@@ -42,8 +42,8 @@ const App = (): React.ReactElement => {
             }}
           />
           <Stack.Screen
-            name="Error"
-            component={ErrorScreen}
+            name="Exit"
+            component={ExitScreen}
             options={{
               animationEnabled: false,
               headerStyle: {

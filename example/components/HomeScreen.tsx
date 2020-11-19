@@ -22,7 +22,7 @@ const HomeScreen = () => {
         </Text>
       </View>
       <View style={styles.bottom}>
-        <PlaidComponent token="link-sandbox-d6f96b38-742f-4a9a-90a5-f121f3445db4" />
+        <PlaidComponent token="<INSERT TOKEN>" />
       </View>
     </View>
   );

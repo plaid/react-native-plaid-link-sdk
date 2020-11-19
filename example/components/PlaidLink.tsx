@@ -4,9 +4,8 @@ import {
     View,
     StyleSheet,
 } from 'react-native';
-import { PlaidLink, usePlaidEmitter } from 'react-native-plaid-link-sdk/PlaidLink';
-import { useNavigation } from '@react-navigation/native';
-import { LinkEvent, LinkExit, LinkSuccess } from "react-native-plaid-link-sdk/types/Types";
+import { PlaidLink, usePlaidEmitter, LinkEvent, LinkExit, LinkSuccess, } from 'react-native-plaid-link-sdk';
+import { useNavigation, } from '@react-navigation/native';
 
 const AppButton = (props: any) => {
     return <View style={styles.appButtonContainer}>
@@ -25,11 +24,11 @@ const PlaidComponent = (props: any) => {
                 token: props.token,
             }}
             onSuccess={(success: LinkSuccess) => {
-                navigation.navigate('Success', { onsuccess: success })
+                navigation.navigate('Success', success)
                 console.log(success)
             }}
             onExit={(exit: LinkExit) => {
-                navigation.navigate('Exit', { onerror: exit })
+                navigation.navigate('Exit', exit)
                 console.log(exit)
             }}
         >

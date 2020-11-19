@@ -27,15 +27,15 @@ class RNAccountAdapter : JsonSerializer<LinkAccount> {
       addProperty("id", src.id)
       addProperty("name", src.name)
       addProperty("mask", src.mask)
-      context?.serialize(src.verificationStatus)?.let {
-        add("verification_status", it)
+      context?.serialize(src.verificationStatus)?.asJsonObject?.let {
+        addProperty("verification_status", it.get("json").asString)
       }
 
       // Special handling around account subtype
       val subtype = context?.serialize(src.subtype)?.asJsonObject
       subtype?.let {
-        addProperty("type", it.get("account_type").asString)
-        addProperty("subtype", it.get("json").asString)
+        addProperty("type", it.get("account_type")?.asString)
+        addProperty("subtype", it.get("json")?.asString)
       }
     }
     return obj

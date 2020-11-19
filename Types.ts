@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 interface CommonPlaidLinkOptions {
     logLevel?: LinkLogLevel;
     extraParams?: Record<string, any>;
@@ -32,7 +30,6 @@ export interface OAuthConfiguration {
     oauthStateId?: string;
 }
 
-export type Configuration = LinkTokenConfiguration | LinkPublicKeyConfiguration;
 export enum LinkLogLevel {
     DEBUG,
     INFO,
@@ -329,16 +326,16 @@ export interface LinkEvent {
 
 export interface LinkEventMetadata {
     linkSessionId: string;
-    mfaType: string;
+    mfaType?: string;
     requestId?: string;
     viewName: LinkEventViewName;
-    errorCode: string;
-    errorMessage: string;
-    errorType: string;
-    exitStatus: string;
-    institutionId: string;
-    institutionName: string;
-    institutionSearchQuery: string;
+    errorCode?: string;
+    errorMessage?: string;
+    errorType?: string;
+    exitStatus?: string;
+    institutionId?: string;
+    institutionName?: string;
+    institutionSearchQuery?: string;
     timestamp: string;
 }
 
@@ -380,10 +377,10 @@ export type LinkExitListener = (LinkExit: LinkExit) => void
 
 export type PlaidLinkConfiguration = LinkTokenConfiguration | LinkPublicKeyConfiguration
 
-export interface PlaidLinkProps  { 
+export interface PlaidLinkProps {
     tokenConfig?: LinkTokenConfiguration
     publicKeyConfig?: LinkPublicKeyConfiguration
     onSuccess: LinkSuccessListener
     onExit?: LinkExitListener
     children: React.ReactNode
-  }
+}

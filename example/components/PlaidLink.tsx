@@ -24,9 +24,8 @@ const PlaidComponent = (props: any) => {
                 token: props.token,
             }}
             onSuccess={(success: LinkSuccess) => {
-                console.log("ZDS")
-                console.log(success)
                 navigation.navigate('Success', success)
+                console.log(success)
             }}
             onExit={(exit: LinkExit) => {
                 navigation.navigate('Exit', exit)

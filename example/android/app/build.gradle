@@ -200,7 +200,7 @@ dependencies {
         exclude group:'com.facebook.flipper'
     }
     implementation project(':react-native-plaid-link-sdk')
-        implementation 'com.plaid.link:sdk-core:3.0.1+'
+        implementation 'com.plaid.link:sdk-core:3.2.0'
         implementation 'com.squareup.okhttp3:okhttp:4.9.0+' 
 
     if (enableHermes) {

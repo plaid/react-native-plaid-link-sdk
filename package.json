@@ -15,7 +15,7 @@
     "prettier": "prettier \"./**/*.{js,jsx}\" --write",
     "test": "echo \"Error: no test specified\" && exit 1",
     "version": "git add -A",
-    "postversion": "git push && git push --tags && rm -rf build/temp",
+    "postversion": "git push && git push --tags && rm -rf dist/temp",
     "compile-typescript": "tsc"
   },
   "keywords": [

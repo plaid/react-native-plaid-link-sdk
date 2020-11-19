@@ -2,10 +2,10 @@
   "name": "react-native-plaid-link-sdk",
   "version": "7.0.0-snapshot5",
   "description": "React Native Plaid Link SDK",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "build/**/*",
+    "dist/**/*",
     "android/**/*",
     "ios/**/*",
     "react-native-plaid-link-sdk.podspec"

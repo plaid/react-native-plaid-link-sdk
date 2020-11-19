@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 interface CommonPlaidLinkOptions {
     logLevel?: LinkLogLevel;
     extraParams?: Record<string, any>;

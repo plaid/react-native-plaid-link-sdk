@@ -31,10 +31,10 @@ export interface OAuthConfiguration {
 }
 
 export enum LinkLogLevel {
-    DEBUG,
-    INFO,
-    WARN,
-    ERROR,
+    DEBUG="debug",
+    INFO="info",
+    WARN="warn",
+    ERROR="error",
 }
 
 export enum PlaidEnvironment {
@@ -44,15 +44,16 @@ export enum PlaidEnvironment {
 }
 
 export enum PlaidProduct {
-    ASSETS,
-    AUTH,
-    IDENTITY,
-    INCOME,
-    INVESTMENTS,
-    LIABILITIES,
-    LIABILITIES_REPORT,
-    PAYMENT_INITIATION,
-    TRANSACTIONS,
+    ASSETS="assets",
+    AUTH="auth",
+    DEPOSIT_SWITCH="deposit_switch",
+    IDENTITY="identity",
+    INCOME="income",
+    INVESTMENTS="investments",
+    LIABILITIES="liabilities",
+    LIABILITIES_REPORT="liabilities_report",
+    PAYMENT_INITIATION="payment_initiation",
+    TRANSACTIONS="transactions",
 }
 
 export enum LinkAccountType {

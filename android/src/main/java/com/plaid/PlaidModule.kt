@@ -48,7 +48,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val USER_NAME = "userLegalName"
     private const val USER_PHONE = "userPhoneNumber"
     private const val WEBHOOK = "webhook"
-    private const val EXTRAS = "extraParams"
+    private const val EXTRAS = "extras"
     private const val LINK_TOKEN_PREFIX = "link"
   }
 

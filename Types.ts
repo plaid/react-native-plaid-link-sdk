@@ -1,6 +1,6 @@
 interface CommonPlaidLinkOptions {
     logLevel?: LinkLogLevel;
-    extraParams?: Record<string, any>;
+    extras?: Record<string, any>;
 }
 
 export type LinkTokenConfiguration = (CommonPlaidLinkOptions & {

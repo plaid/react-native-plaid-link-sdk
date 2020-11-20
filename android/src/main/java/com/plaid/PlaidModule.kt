@@ -34,13 +34,14 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   private var onExitCallback: Callback? = null
 
   companion object {
-    private const val PRODUCTS = "product"
+    private const val PRODUCTS = "products"
     private const val PUBLIC_KEY = "publicKey"
     private const val ACCOUNT_SUBTYPES = "accountSubtypes"
     private const val CLIENT_NAME = "clientName"
     private const val COUNTRY_CODES = "countryCodes"
     private const val LANGUAGE = "language"
-    private const val ENV = "env"
+    private const val LOG_LEVEL = "logLevel"
+    private const val ENV = "environment"
     private const val LINK_CUSTOMIZATION_NAME = "linkCustomizationName"
     private const val TOKEN = "token"
     private const val USER_EMAIL = "userEmailAddress"
@@ -69,7 +70,14 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     val extrasMap = mutableMapOf<String, String>()
     maybePopulateExtrasMap(obj, extrasMap)
 
-    val logLevel = LinkLogLevel.ASSERT
+    var logLevel = LinkLogLevel.ASSERT
+    if (obj.has(LOG_LEVEL)) {
+      LinkLogLevel.values().forEach {
+        if (it.name.equals(obj.getString(LOG_LEVEL), true)) {
+          logLevel = it
+        }
+      }
+    }
 
     if (token == null) {
       return null
@@ -96,7 +104,14 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   ): LinkPublicKeyConfiguration {
     val extrasMap = mutableMapOf<String, String>()
     maybePopulateExtrasMap(obj, extrasMap)
-    val logLevel = LinkLogLevel.ASSERT
+    var logLevel = LinkLogLevel.ASSERT
+    if (obj.has(LOG_LEVEL)) {
+      LinkLogLevel.values().forEach {
+        if (it.name.equals(obj.getString(LOG_LEVEL), true)) {
+          logLevel = it
+        }
+      }
+    }
 
     val productsArray = ArrayList<PlaidProduct>()
     var jsonArray = obj.getJSONArray(PRODUCTS)
@@ -247,12 +262,11 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
   private fun maybePopulateExtrasMap(obj: JSONObject, extrasMap: MutableMap<String, String>) {
     if (obj.has(EXTRAS)) {
-      val extrasObject = obj.getJSONObject("extras")
-      extrasObject.keys().forEach { key: String ->
-        try {
-          extrasMap[key] = extrasObject.getString(key)
-        } catch (e: JSONException) {
-          // Do nothing.
+      val extrasArray = obj.getJSONArray(EXTRAS)
+      for (i in 0 until extrasArray.length()) {
+        val extraObject = extrasArray.get(i) as JSONObject
+        extraObject.keys().forEach { key ->
+          extrasMap[key] = extraObject.getString(key)
         }
       }
     }

@@ -55,6 +55,9 @@ followed by
 2. Add `import com.plaid.PlaidPackage;` to the imports section
 3. Add `packages.add(new PlaidPackage());` to `List<ReactPackage> getPackages();`
 
+## Plaid Link React Native SDK
+For a full guide and migration guides please vist our [docs](https://plaid.com/docs/link/react-native/)
+
 ### 3. Configure Gradle
 1. Go to the project level `android/app/build.gradle`
 2. Make sure you are using a min sdk >= 21
@@ -64,7 +67,6 @@ followed by
 dependencies {
     // ...
     implementation project(':react-native-plaid-link-sdk')
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:<insert at least version 4.x>'
 }
 ```
 
@@ -79,32 +81,33 @@ project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projec
 ## Version Compatibiltiy
 | React Native SDK | Android SDK | iOS SDK | Status |
 |---|---|---|---|
-| 5.x.x | [2.1.0+)      | >=1.1.34 | Active |
-| 4.x.x | [2.0.0-2.1.0) | <=1.1.33 | Active |
-| 3.x.x | [1.0.0-2.0.0) | <=1.1.33 |  Deprecated |
-| 2.x.x | [0.3.0-1.0.0) | <=1.1.27 |  Deprecated |
-| 1.x.x | [0.1.0-0.3.0) | <=1.1.24 |  Deprecated |
+| 7.x.x | 3.2.x         | >=2.0.7             | Active     |
+| 6.x.x | 3.0.x, 3.1.x  | >=2.0.1 && <= 2.0.7 | Active     |
+| 5.x.x | [2.1.0+)      | >=1.1.34            | Active |
+| 4.x.x | [2.0.0-2.1.0) | <=1.1.33            | Active |
+| 3.x.x | [1.0.0-2.0.0) | <=1.1.33            |  Deprecated |
+| 2.x.x | [0.3.0-1.0.0) | <=1.1.27            |  Deprecated |
+| 1.x.x | [0.1.0-0.3.0) | <=1.1.24            |  Deprecated |
 
 ## PlaidLink
 
-To initialize Plaid Link, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/#create-link-token).
-After creating a link_token, you'll need to pass it into your app and use it to launch Link:
+To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/#create-link-token).
+After creating a `link_token`, you'll need to pass it into your app and use it to launch Link:
 
 ```javascript
 import { Text } from 'react-native';
-import PlaidLink from 'react-native-plaid-link-sdk';
+import { PlaidLink, LinkSuccess, LinkExit } from 'react-native-plaid-link-sdk';
 
 const MyPlaidComponent = () => {
   return (
     <PlaidLink
-      // Replace any of the following <#VARIABLE#>s according to your setup,
-      // for details see https://plaid.com/docs/quickstart/#client-side-link-configuration
-
-      token = {"<#GENERATED_LINK_TOKEN#>"}
-      onSuccess={data => console.log('success: ', data)}
-      onExit={data => console.log('exit: ', data)}
+        tokenConfig={{
+            token: "#GENERATED_LINK_TOKEN#",
+        }}
+        onSuccess={(success: LinkSuccess) => { console.log(success) }}
+        onExit={(exit: LinkExit) => { console.log(exit) }}
     >
-      <Text>Add Account</Text>
+        <Text>Add Account</Text>
     </PlaidLink>
   );
 };
@@ -141,38 +144,29 @@ class PlaidEventContainer extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <PlaidLink
-        token={<#GENERATED_LINK_TOKEN#>}
-        onSuccess={data => console.log('success: ', data)}
-        onExit={data => console.log('exit: ', data)}
-      >
-        <Text>Add Account</Text>
-      </PlaidLink>
-    );
-  }
+  ...
 }
 ```
 
 You can also use the `usePlaidEmitter` hook in react functional components:
 
 ```javascript
-  usePlaidEmitter((event) => {
+  usePlaidEmitter((event: LinkEvent) => {
     console.log(event)
   })
 ```
 
 ### Customizing the PlaidLink component
 
-By default, `PlaidLink` renders a `TouchableOpacity` component. You may override the component used by passing `component` that accepts an `onPress` callback prop and `componentProps`. For example:
+`PlaidLink` wraps the view you provide as a child with a `Pressable` component and intercepts the `onPress` event. For example:
 
 ```jsx
 <PlaidLink
-  token = {"<#GENERATED_LINK_TOKEN#>"}
-  component= {Button}
-  componentProps = {{title: 'Add Account'}}
-  onSuccess = {(result) => {console.log('Success: ', result)}}
-  onError = {(result) => {console.log('Error: ', result)}}
->
+  tokenConfig={{
+      token: "#GENERATED_LINK_TOKEN#",
+  }}
+  children={<Text>"Open Link" </Text>}
+  onSuccess={(success: LinkSuccess) => { console.log(success) }}
+  onExit={(exit: LinkExit) => { console.log(exit) }}
+/>
 ```

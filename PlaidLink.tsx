@@ -15,7 +15,7 @@ import {
 } from './Types';
 
 /**
- * A hook that registers a listener on the plaid emitter for the 'onEvent' type.
+ * A hook that registers a listener on the Plaid emitter for the 'onEvent' type.
  * The listener is cleaned up when this view is unmounted
  *
  * @param LinkEventListener the listener to call

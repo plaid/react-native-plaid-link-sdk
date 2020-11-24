@@ -11,6 +11,7 @@ import {
   LinkEventListener,
   LinkExit,
   LinkSuccess,
+  PlaidLinkComponentProps,
   PlaidLinkProps,
 } from './Types';
 
@@ -105,7 +106,7 @@ export const useDeepLinkRedirector = () => {
   }, []);
 };
 
-export const PlaidLink = (props: PlaidLinkProps) => {
-  //useDeepLinkRedirector();
+export const PlaidLink = (props: PlaidLinkComponentProps) => {
+  useDeepLinkRedirector();
   return props.children //<Pressable onPress={() => openLink(props)}>{props.children}</Pressable>;
 };

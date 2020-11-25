@@ -383,5 +383,8 @@ export interface PlaidLinkProps {
     publicKeyConfig?: LinkPublicKeyConfiguration
     onSuccess: LinkSuccessListener
     onExit?: LinkExitListener
-    children: React.ReactNode
 }
+
+export type PlaidLinkComponentProps = (PlaidLinkProps & {
+    children: React.ReactNode
+});

@@ -108,5 +108,5 @@ export const useDeepLinkRedirector = () => {
 
 export const PlaidLink : React.ReactNode = (props: PlaidLinkComponentProps) => {
   useDeepLinkRedirector();
-  return props.children //<Pressable onPress={() => openLink(props)}>{props.children}</Pressable>;
+  return <Pressable onPress={() => openLink(props)}>{props.children}</Pressable>;
 };

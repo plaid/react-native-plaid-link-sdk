@@ -26,7 +26,9 @@ class RNAccountAdapter : JsonSerializer<LinkAccount> {
     val obj = JsonObject().apply {
       addProperty("id", src.id)
       addProperty("name", src.name)
-      addProperty("mask", src.mask)
+      src.mask?.let {
+        addProperty("mask", it)
+      }
       src.verificationStatus?.let { status ->
         context?.serialize(status)?.asJsonObject?.let {
           addProperty("verification_status", it.get("json").asString)

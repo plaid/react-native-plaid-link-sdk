@@ -6,7 +6,7 @@
 #import <React/RCTUtils.h>
 
 static NSString* const kRNLinkKitConfigPublicKeyKey = @"publicKey";
-static NSString* const kRNLinkKitConfigEnvKey = @"env";
+static NSString* const kRNLinkKitConfigEnvKey = @"environment";
 static NSString* const kRNLinkKitConfigProductsKey = @"products";
 static NSString* const kRNLinkKitConfigClientNameKey = @"clientName";
 static NSString* const kRNLinkKitConfigWebhookKey = @"webhook";
@@ -22,8 +22,8 @@ static NSString* const kRNLinkKitConfigLanguageKey = @"language";
 static NSString* const kRNLinkKitConfigInstitutionKey = @"institution";
 static NSString* const kRNLinkKitConfigLongtailAuthKey = @"longtailAuth";
 static NSString* const kRNLinkKitConfigApiVersionKey = @"apiVersion";
-static NSString* const kRNLinkKitConfigOAuthRedirectUriKey = @"oauthRedirectUri";
-static NSString* const kRNLinkKitConfigOAuthNonceKey = @"oauthNonce";
+static NSString* const kRNLinkKitConfigOAuthRedirectUriKeyPath = @"oauthConfiguration.redirectUri";
+static NSString* const kRNLinkKitConfigOAuthNonceKeyPath = @"ouathConfiguration.nonce";
 
 static NSString* const kRNLinkKitOnEventEvent = @"onEvent";
 static NSString* const kRNLinkKitEventErrorKey = @"error";
@@ -194,21 +194,23 @@ RCT_EXPORT_METHOD(dismiss) {
 
 - (PLKLinkPublicKeyConfiguration *)getLegacyLinkConfiguration:(NSDictionary *)configuration
                                              onSuccessHandler:(void(^)(PLKLinkSuccess *))onSuccessHandler  {
-  NSString *key = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicKeyKey]];
-  NSString *tokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
-  NSString *env = [RCTConvert NSString:configuration[kRNLinkKitConfigEnvKey]];
-  NSArray<NSString*> *productsInput = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];
-  NSString *clientName = [RCTConvert NSString:configuration[kRNLinkKitConfigClientNameKey]];
-  NSString *webhook = [RCTConvert NSString:configuration[kRNLinkKitConfigWebhookKey]];
-  NSString *linkCustomizationName = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkCustomizationName]];
-  NSString *userLegalName = [RCTConvert NSString:configuration[kRNLinkKitConfigUserLegalNameKey]];
-  NSString *userEmailAddress = [RCTConvert NSString:configuration[kRNLinkKitConfigUserEmailAddressKey]];
-  NSString *userPhoneNumber = [RCTConvert NSString:configuration[kRNLinkKitConfigUserPhoneNumberKey]];
-  NSString *oauthRedirectUriString = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthRedirectUriKey]];
-  NSString *oauthNonce = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthNonceKey]];
-  NSDictionary<NSString*, NSArray<NSString*>*> *accountSubtypes = [RCTConvert NSDictionary:configuration[kRNLinkKitConfigAccountSubtypes]];
-  NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
-  NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
+    NSString *key = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicKeyKey]];
+    NSString *tokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
+    NSString *env = [RCTConvert NSString:configuration[kRNLinkKitConfigEnvKey]];
+    NSArray<NSString*> *productsInput = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];
+    NSString *clientName = [RCTConvert NSString:configuration[kRNLinkKitConfigClientNameKey]];
+    NSString *webhook = [RCTConvert NSString:configuration[kRNLinkKitConfigWebhookKey]];
+    NSString *linkCustomizationName = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkCustomizationName]];
+    NSString *userLegalName = [RCTConvert NSString:configuration[kRNLinkKitConfigUserLegalNameKey]];
+    NSString *userEmailAddress = [RCTConvert NSString:configuration[kRNLinkKitConfigUserEmailAddressKey]];
+    NSString *userPhoneNumber = [RCTConvert NSString:configuration[kRNLinkKitConfigUserPhoneNumberKey]];
+    NSString *oauthRedirectUriInput = [configuration valueForKeyPath:kRNLinkKitConfigOAuthRedirectUriKeyPath];
+    NSString *oauthRedirectUriString = [RCTConvert NSString:oauthRedirectUriInput];
+    NSString *oauthNonceInput = [configuration valueForKeyPath:kRNLinkKitConfigOAuthNonceKeyPath];
+    NSString *oauthNonce = [RCTConvert NSString:oauthNonceInput];
+    NSDictionary<NSString*, NSArray<NSString*>*> *accountSubtypes = [RCTConvert NSDictionary:configuration[kRNLinkKitConfigAccountSubtypes]];
+    NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
+    NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
 
     PLKLinkPublicKeyConfigurationToken *token;
     BOOL isPaymentToken = [tokenInput hasPrefix:kRNLinkKitPaymentTokenPrefix];

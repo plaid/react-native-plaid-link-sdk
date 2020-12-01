@@ -135,7 +135,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       .logLevel(logLevel)
 
     if (obj.has(ACCOUNT_SUBTYPES)) {
-      extrasMap[ACCOUNT_SUBTYPES] = obj.getJSONObject(ACCOUNT_SUBTYPES).toString()
+      extrasMap[ACCOUNT_SUBTYPES] = obj.getJSONArray(ACCOUNT_SUBTYPES).toString()
     }
 
     if (obj.has(COUNTRY_CODES)) {

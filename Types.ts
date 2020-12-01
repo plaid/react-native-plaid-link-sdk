@@ -20,7 +20,7 @@ export type LinkPublicKeyConfiguration = (CommonPlaidLinkOptions & {
     userEmailAddress?: string;
     userPhoneNumber?: string;
     linkCustomizationName?: string;
-    accountSubtypes?: Array<LinkAccountSubtype>;
+    accountSubtypes?: Array<Record<LinkAccountType, LinkAccountSubtype>>;
     oauthConfiguration?: OAuthConfiguration
 });
 

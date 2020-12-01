@@ -20,6 +20,7 @@ import com.plaid.link.configuration.PlaidEnvironment
 import com.plaid.link.configuration.PlaidProduct
 import com.plaid.link.event.LinkEvent
 import com.plaid.link.exception.LinkException
+import com.plaid.link.result.LinkAccountSubtype
 import com.plaid.link.result.LinkResultHandler
 import org.json.JSONException
 import org.json.JSONObject
@@ -135,7 +136,16 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       .logLevel(logLevel)
 
     if (obj.has(ACCOUNT_SUBTYPES)) {
-      extrasMap[ACCOUNT_SUBTYPES] = obj.getJSONArray(ACCOUNT_SUBTYPES).toString()
+      val subtypeList = mutableListOf<LinkAccountSubtype>()
+      val subtypesArray = obj.getJSONArray(ACCOUNT_SUBTYPES)
+      for (i in 0 until subtypesArray.length()) {
+        val subtypeObject = subtypesArray.get(i) as JSONObject
+        subtypeObject.keys().forEach { type ->
+          val subtype = subtypeObject.getString(type)
+          subtypeList.add(LinkAccountSubtype.convert(subtype, type))
+        }
+      }
+      builder.accountSubtypes = subtypeList
     }
 
     if (obj.has(COUNTRY_CODES)) {

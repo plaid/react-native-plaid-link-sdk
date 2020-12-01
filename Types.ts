@@ -20,7 +20,7 @@ export type LinkPublicKeyConfiguration = (CommonPlaidLinkOptions & {
     userEmailAddress?: string;
     userPhoneNumber?: string;
     linkCustomizationName?: string;
-    accountSubtypes?: Map<LinkAccountType, Array<LinkAccountSubtype>>;
+    accountSubtypes?: Array<LinkAccountSubtypeFilter>;
     oauthConfiguration?: OAuthConfiguration
 });
 
@@ -130,6 +130,12 @@ export enum LinkAccountSubtype {
     UTMA = 'utma',
     VARIABLE_ANNUITY = 'variable annuity',
 }
+
+export interface LinkAccountSubtypeFilter {
+    type: LinkAccountType,
+    subtype: LinkAccountSubtype
+}
+
 export interface LinkSuccess {
     publicToken: string;
     metadata: LinkSuccessMetadata;

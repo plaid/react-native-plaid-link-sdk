@@ -51,6 +51,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val WEBHOOK = "webhook"
     private const val EXTRAS = "extras"
     private const val LINK_TOKEN_PREFIX = "link"
+    private const val TYPE = "type"
+    private const val SUBTYPE = "subtype"
   }
 
   override fun getName(): String {
@@ -140,10 +142,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       val subtypesArray = obj.getJSONArray(ACCOUNT_SUBTYPES)
       for (i in 0 until subtypesArray.length()) {
         val subtypeObject = subtypesArray.get(i) as JSONObject
-        subtypeObject.keys().forEach { type ->
-          val subtype = subtypeObject.getString(type)
-          subtypeList.add(LinkAccountSubtype.convert(subtype, type))
-        }
+        subtypeList.add(LinkAccountSubtype.convert(subtypeObject.getString(SUBTYPE), subtypeObject.getString(TYPE)))
       }
       builder.accountSubtypes = subtypeList
     }

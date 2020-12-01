@@ -4,7 +4,7 @@ import {
     View,
     StyleSheet,
 } from 'react-native';
-import { PlaidLink, usePlaidEmitter, LinkEvent, LinkExit, LinkSuccess, LinkAccountType, LinkAccountSubtype} from 'react-native-plaid-link-sdk';
+import { PlaidLink, usePlaidEmitter, LinkEvent, LinkExit, LinkSuccess, } from 'react-native-plaid-link-sdk';
 import { useNavigation, } from '@react-navigation/native';
 
 const AppButton = (props: any) => {

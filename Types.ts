@@ -225,7 +225,7 @@ export class LinkAccountSubtypeLoan implements LinkAccountSubtypeInterface {
     private constructor(public readonly type: LinkAccountType, public readonly subtype: LinkAccountSubtype) { }
 }
 
-export class LinkAccountSubtypeOther implements LinkAccountSubtypeInterface {
+export class LinkAccountSubtypeUnknown implements LinkAccountSubtypeInterface {
     constructor(public readonly type: string, public readonly subtype: string) { }
 }
 

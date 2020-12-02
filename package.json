@@ -37,7 +37,7 @@
   "author": "Plaid",
   "license": "MIT",
   "peerDependencies": {
-    "react": ">=16.8.1",
+    "react": "^16.8.1",
     "react-native": ">=0.61.3"
   },
   "dependencies": {

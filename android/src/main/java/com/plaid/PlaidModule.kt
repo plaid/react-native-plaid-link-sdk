@@ -20,6 +20,7 @@ import com.plaid.link.configuration.PlaidEnvironment
 import com.plaid.link.configuration.PlaidProduct
 import com.plaid.link.event.LinkEvent
 import com.plaid.link.exception.LinkException
+import com.plaid.link.result.LinkAccountSubtype
 import com.plaid.link.result.LinkResultHandler
 import org.json.JSONException
 import org.json.JSONObject
@@ -50,6 +51,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val WEBHOOK = "webhook"
     private const val EXTRAS = "extras"
     private const val LINK_TOKEN_PREFIX = "link"
+    private const val TYPE = "type"
+    private const val SUBTYPE = "subtype"
   }
 
   override fun getName(): String {
@@ -135,7 +138,13 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       .logLevel(logLevel)
 
     if (obj.has(ACCOUNT_SUBTYPES)) {
-      extrasMap[ACCOUNT_SUBTYPES] = obj.getJSONObject(ACCOUNT_SUBTYPES).toString()
+      val subtypeList = mutableListOf<LinkAccountSubtype>()
+      val subtypesArray = obj.getJSONArray(ACCOUNT_SUBTYPES)
+       val subtypeList = subtypesArray.map {
+        val subtypeObject = subtypesArray.get(i) as JSONObject
+        LinkAccountSubtype.convert(subtypeObject.getString(SUBTYPE), subtypeObject.getString(TYPE))
+      }
+      builder.accountSubtypes = subtypeList
     }
 
     if (obj.has(COUNTRY_CODES)) {

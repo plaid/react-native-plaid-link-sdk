@@ -25,9 +25,8 @@ export type LinkPublicKeyConfiguration = (CommonPlaidLinkOptions & {
 });
 
 export interface OAuthConfiguration {
-    oauthNonce?: string;
-    oauthRedirectUri?: string;
-    oauthStateId?: string;
+    nonce?: string;
+    redirectUri?: string;
 }
 
 export enum LinkLogLevel {

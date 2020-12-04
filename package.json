@@ -37,12 +37,14 @@
   "author": "Plaid",
   "license": "MIT",
   "peerDependencies": {
-    "react": "^16.8.1",
-    "react-native": "^0.61.3"
+    "react": "~16.13.1",
+    "react-native": "^0.63.3"
   },
   "dependencies": {
     "@typescript-eslint/parser": "^4.6.1",
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "react": "~16.13.1",
+    "react-native": "^0.63.3"
   },
   "devDependencies": {
     "@react-native-community/eslint-plugin": "^1.1.0",

@@ -140,9 +140,9 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     if (obj.has(ACCOUNT_SUBTYPES)) {
       val subtypeList = mutableListOf<LinkAccountSubtype>()
       val subtypesArray = obj.getJSONArray(ACCOUNT_SUBTYPES)
-       val subtypeList = subtypesArray.map {
+      for (i in 0 until subtypesArray.length()) {
         val subtypeObject = subtypesArray.get(i) as JSONObject
-        LinkAccountSubtype.convert(subtypeObject.getString(SUBTYPE), subtypeObject.getString(TYPE))
+        subtypeList.add(LinkAccountSubtype.convert(subtypeObject.getString(SUBTYPE), subtypeObject.getString(TYPE)))
       }
       builder.accountSubtypes = subtypeList
     }

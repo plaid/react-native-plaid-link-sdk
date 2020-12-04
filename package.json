@@ -17,7 +17,7 @@
     "version": "git add -A",
     "postversion": "git push && git push --tags && rm -rf dist/temp",
     "compile-typescript": "tsc",
-    "check-version": "bash check_version_hook.sh"
+    "check-version": "node check_version_hook.js"
   },
   "keywords": [
     "react-native",

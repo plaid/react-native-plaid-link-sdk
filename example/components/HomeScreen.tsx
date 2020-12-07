@@ -15,7 +15,7 @@ const HomeScreen = () => {
           &#8226; It’s easy to integrate, with fewer lines than webviews
         </Text>
         <Text style={styles.baseText}>
-          &#8226; It supports all Link flows, including oAuth
+          &#8226; It supports all Link flows, including OAuth
         </Text>
         <Text style={styles.baseText}>
           &#8226; You can get support directly from the Plaid team

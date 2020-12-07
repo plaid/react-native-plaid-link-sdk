@@ -99,8 +99,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     return builder.build()
   }
 
-  private fun getLogLevel(logLevelString: String) {
-    LinkLogLevel.values().firstOrNull {
+  private fun getLogLevel(logLevelString: String): LinkLogLevel {
+    return LinkLogLevel.values().firstOrNull {
       it.name.equals(logLevelString, true)
     } ?: LinkLogLevel.ASSERT
   }

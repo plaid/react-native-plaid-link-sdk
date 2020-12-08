@@ -107,6 +107,8 @@ export const useDeepLinkRedirector = () => {
 };
 
 export const PlaidLink = (props: PlaidLinkComponentProps) => {
-  useDeepLinkRedirector();
+  if (Platform.OS === 'ios') {
+    useDeepLinkRedirector();
+  }
   return <Pressable onPress={() => openLink(props)}>{props.children}</Pressable>;
 };

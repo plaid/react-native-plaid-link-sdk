@@ -208,7 +208,8 @@ RCT_EXPORT_METHOD(dismiss) {
     NSString *oauthRedirectUriString = [RCTConvert NSString:oauthRedirectUriInput];
     NSString *oauthNonceInput = [configuration valueForKeyPath:kRNLinkKitConfigOAuthNonceKeyPath];
     NSString *oauthNonce = [RCTConvert NSString:oauthNonceInput];
-    NSDictionary<NSString*, NSArray<NSString*>*> *accountSubtypes = [RCTConvert NSDictionary:configuration[kRNLinkKitConfigAccountSubtypes]];
+    id accountSubtypesInput = configuration[kRNLinkKitConfigAccountSubtypes];
+    NSArray<NSDictionary<NSString*, NSString *>*> *accountSubtypeDictionaries = [RCTConvert NSDictionaryArray:accountSubtypesInput];
     NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
     NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
 
@@ -255,8 +256,8 @@ RCT_EXPORT_METHOD(dismiss) {
       linkConfiguration.oauthConfiguration = [PLKOAuthNonceConfiguration createWithNonce:oauthNonce
                                                                              redirectUri:oauthRedirectUri];
   }
-  if ([accountSubtypes count] > 0) {
-      linkConfiguration.accountSubtypes = [RNLinksdk accountSubtypesArrayFromAccountSubtypesDictionary:accountSubtypes];
+  if ([accountSubtypeDictionaries count] > 0) {
+      linkConfiguration.accountSubtypes = [RNLinksdk accountSubtypesArrayFromAccountSubtypeDictionaries:accountSubtypeDictionaries];
   }
 
   return linkConfiguration;
@@ -309,25 +310,23 @@ RCT_EXPORT_METHOD(dismiss) {
     return productStringMap[productString.lowercaseString];
 }
 
-+ (NSArray<id<PLKAccountSubtype>> *)accountSubtypesArrayFromAccountSubtypesDictionary:(NSDictionary<NSString *, NSArray<NSString *> *> *)accountSubtypesDictionary {
++ (NSArray<id<PLKAccountSubtype>> *)accountSubtypesArrayFromAccountSubtypeDictionaries:(NSArray<NSDictionary<NSString *, NSString *> *> *)accountSubtypeDictionaries {
     __block NSMutableArray<id<PLKAccountSubtype>> *results = [NSMutableArray array];
     
-    for (NSString *type in accountSubtypesDictionary.allKeys) {
-        NSArray<NSString *> *subtypes = accountSubtypesDictionary[type] ?: @[];
-
-        for (NSString *subtype in subtypes) {
-            id<PLKAccountSubtype> accountSubtype = [self accountSubtypeFromTypeString:type subtypeString:subtype];
-            if (accountSubtype) {
-                [results addObject:accountSubtype];
-            }
+    for (NSDictionary *accountSubtypeDictionary in accountSubtypeDictionaries) {
+        NSString *type = accountSubtypeDictionary[@"type"];
+        NSString *subtype = accountSubtypeDictionary[@"subtype"];
+        id<PLKAccountSubtype> result = [self accountSubtypeFromTypeString:type subtypeString:subtype];
+        if (result) {
+            [results addObject:result];
         }
     }
     
     return [results copy];
 }
 
-+ (id<PLKAccountSubtype> __nullable)accountSubtypeFromTypeString:(NSString *)typeString
-                                                   subtypeString:(NSString *)subtypeString {
++ (id<PLKAccountSubtype>)accountSubtypeFromTypeString:(NSString *)typeString
+                                        subtypeString:(NSString *)subtypeString {
     NSString *normalizedTypeString = typeString.lowercaseString;
     NSString *normalizedSubtypeString = subtypeString.lowercaseString;
     if ([normalizedTypeString isEqualToString:@"other"]) {

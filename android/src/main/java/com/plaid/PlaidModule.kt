@@ -73,15 +73,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     val extrasMap = mutableMapOf<String, String>()
     maybePopulateExtrasMap(obj, extrasMap)
 
-    var logLevel = LinkLogLevel.ASSERT
-    if (obj.has(LOG_LEVEL)) {
-      LinkLogLevel.values().forEach {
-        if (it.name.equals(obj.getString(LOG_LEVEL), true)) {
-          logLevel = it
-        }
-      }
-    }
-
     if (token == null) {
       return null
     }
@@ -89,6 +80,13 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     if (!token.startsWith(LINK_TOKEN_PREFIX)) {
       return null
     }
+
+    val logLevel =
+      if (obj.has(LOG_LEVEL)) {
+        getLogLevel(obj.getString(LOG_LEVEL))
+      } else {
+        LinkLogLevel.ASSERT
+      }
 
     val builder = LinkTokenConfiguration.Builder()
       .token(token)
@@ -101,20 +99,18 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     return builder.build()
   }
 
+  private fun getLogLevel(logLevelString: String): LinkLogLevel {
+    return LinkLogLevel.values().firstOrNull {
+      it.name.equals(logLevelString, true)
+    } ?: LinkLogLevel.ASSERT
+  }
+
   private fun getLinkPublicKeyConfiguration(
     obj: JSONObject,
     publicKey: String
   ): LinkPublicKeyConfiguration {
     val extrasMap = mutableMapOf<String, String>()
     maybePopulateExtrasMap(obj, extrasMap)
-    var logLevel = LinkLogLevel.ASSERT
-    if (obj.has(LOG_LEVEL)) {
-      LinkLogLevel.values().forEach {
-        if (it.name.equals(obj.getString(LOG_LEVEL), true)) {
-          logLevel = it
-        }
-      }
-    }
 
     val productsArray = ArrayList<PlaidProduct>()
     var jsonArray = obj.getJSONArray(PRODUCTS)
@@ -131,6 +127,13 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       }
     }
 
+    val logLevel =
+      if (obj.has(LOG_LEVEL)) {
+        getLogLevel(obj.getString(LOG_LEVEL))
+      } else {
+        LinkLogLevel.ASSERT
+      }
+
     val builder = LinkPublicKeyConfiguration.Builder()
       .publicKey(publicKey)
       .clientName(obj.getString(CLIENT_NAME))
@@ -142,7 +145,12 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       val subtypesArray = obj.getJSONArray(ACCOUNT_SUBTYPES)
       for (i in 0 until subtypesArray.length()) {
         val subtypeObject = subtypesArray.get(i) as JSONObject
-        subtypeList.add(LinkAccountSubtype.convert(subtypeObject.getString(SUBTYPE), subtypeObject.getString(TYPE)))
+        subtypeList.add(
+          LinkAccountSubtype.convert(
+            subtypeObject.getString(SUBTYPE),
+            subtypeObject.getString(TYPE)
+          )
+        )
       }
       builder.accountSubtypes = subtypeList
     }

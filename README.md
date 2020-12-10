@@ -113,6 +113,8 @@ const MyPlaidComponent = () => {
 };
 ```
 
+`PlaidLink` wraps the view you provide as a child with a `Pressable` component and intercepts the `onPress` event.
+
 ### OAuth requirements
 
 For Link Token based OAuth support, you must configure your `link_token` with a `redirect_uri` to support OAuth on iOS. Other than setting the `redirect_uri`, which must be a universal link, when you create the `link_token` no further configuration is required. Notably, no props are required on the React Native side.
@@ -154,19 +156,4 @@ You can also use the `usePlaidEmitter` hook in react functional components:
   usePlaidEmitter((event: LinkEvent) => {
     console.log(event)
   })
-```
-
-### Customizing the PlaidLink component
-
-`PlaidLink` wraps the view you provide as a child with a `Pressable` component and intercepts the `onPress` event. For example:
-
-```jsx
-<PlaidLink
-  tokenConfig={{
-      token: "#GENERATED_LINK_TOKEN#",
-  }}
-  children={<Text>"Open Link" </Text>}
-  onSuccess={(success: LinkSuccess) => { console.log(success) }}
-  onExit={(exit: LinkExit) => { console.log(exit) }}
-/>
 ```

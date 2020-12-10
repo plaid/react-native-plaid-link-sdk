@@ -11,11 +11,12 @@ import {
   LinkEventListener,
   LinkExit,
   LinkSuccess,
+  PlaidLinkComponentProps,
   PlaidLinkProps,
 } from './Types';
 
 /**
- * A hook that registers a listener on the plaid emitter for the 'onEvent' type.
+ * A hook that registers a listener on the Plaid emitter for the 'onEvent' type.
  * The listener is cleaned up when this view is unmounted
  *
  * @param LinkEventListener the listener to call
@@ -105,7 +106,7 @@ export const useDeepLinkRedirector = () => {
   }, []);
 };
 
-export const PlaidLink = (props: PlaidLinkProps) => {
+export const PlaidLink = (props: PlaidLinkComponentProps) => {
   useDeepLinkRedirector();
   return <Pressable onPress={() => openLink(props)}>{props.children}</Pressable>;
 };

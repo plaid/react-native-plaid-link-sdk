@@ -81,13 +81,13 @@ project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projec
 ## Version Compatibiltiy
 | React Native SDK | Android SDK | iOS SDK | Status |
 |---|---|---|---|
-| 7.x.x | 3.2.x         | >=2.0.7             | Active     |
-| 6.x.x | 3.0.x, 3.1.x  | >=2.0.1 && <= 2.0.7 | Active     |
-| 5.x.x | [2.1.0+)      | >=1.1.34            | Active |
-| 4.x.x | [2.0.0-2.1.0) | <=1.1.33            | Active |
-| 3.x.x | [1.0.0-2.0.0) | <=1.1.33            |  Deprecated |
-| 2.x.x | [0.3.0-1.0.0) | <=1.1.27            |  Deprecated |
-| 1.x.x | [0.1.0-0.3.0) | <=1.1.24            |  Deprecated |
+| 7.x.x | [3.2.0+]      | >=2.0.7  | Active     |
+| 6.x.x | [3.0.0-3.2.0) | >=2.0.1  | Active |
+| 5.x.x | [2.1.0-3.0.0) | >=1.1.34 | Active |
+| 4.x.x | [2.0.0-2.1.0) | <=1.1.33 | Active |
+| 3.x.x | [1.0.0-2.0.0) | <=1.1.33 |  Deprecated |
+| 2.x.x | [0.3.0-1.0.0) | <=1.1.27 |  Deprecated |
+| 1.x.x | [0.1.0-0.3.0) | <=1.1.24 |  Deprecated |
 
 ## PlaidLink
 

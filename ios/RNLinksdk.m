@@ -6,8 +6,8 @@
 #import <React/RCTUtils.h>
 
 static NSString* const kRNLinkKitConfigPublicKeyKey = @"publicKey";
-static NSString* const kRNLinkKitConfigEnvKey = @"env";
-static NSString* const kRNLinkKitConfigProductsKey = @"product";
+static NSString* const kRNLinkKitConfigEnvKey = @"environment";
+static NSString* const kRNLinkKitConfigProductsKey = @"products";
 static NSString* const kRNLinkKitConfigClientNameKey = @"clientName";
 static NSString* const kRNLinkKitConfigWebhookKey = @"webhook";
 static NSString* const kRNLinkKitConfigLinkCustomizationName = @"linkCustomizationName";
@@ -22,8 +22,8 @@ static NSString* const kRNLinkKitConfigLanguageKey = @"language";
 static NSString* const kRNLinkKitConfigInstitutionKey = @"institution";
 static NSString* const kRNLinkKitConfigLongtailAuthKey = @"longtailAuth";
 static NSString* const kRNLinkKitConfigApiVersionKey = @"apiVersion";
-static NSString* const kRNLinkKitConfigOAuthRedirectUriKey = @"oauthRedirectUri";
-static NSString* const kRNLinkKitConfigOAuthNonceKey = @"oauthNonce";
+static NSString* const kRNLinkKitConfigOAuthRedirectUriKeyPath = @"oauthConfiguration.redirectUri";
+static NSString* const kRNLinkKitConfigOAuthNonceKeyPath = @"ouathConfiguration.nonce";
 
 static NSString* const kRNLinkKitOnEventEvent = @"onEvent";
 static NSString* const kRNLinkKitEventErrorKey = @"error";
@@ -34,6 +34,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 NSString* const kRNLinkKitLinkTokenPrefix = @"link-";
 NSString* const kRNLinkKitItemAddTokenPrefix = @"item-add-";
 NSString* const kRNLinkKitPaymentTokenPrefix = @"payment";
+NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
 
 @interface RNLinksdk ()
 @property (nonatomic, strong) id<PLKHandler> linkHandler;
@@ -112,7 +113,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
             strongSelf.completionCallback = nil;
         }
     };
-    
+
     void (^onExit)(PLKLinkExit *) = ^(PLKLinkExit *exit) {
         __typeof(weakSelf) strongSelf = weakSelf;
         [weakSelf dismissLinkViewController];
@@ -127,7 +128,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
             strongSelf.completionCallback = nil;
         }
     };
-    
+
     void (^onEvent)(PLKLinkEvent *) = ^(PLKLinkEvent *event) {
         __typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf.hasObservers) {
@@ -187,39 +188,45 @@ RCT_EXPORT_METHOD(dismiss) {
 - (PLKLinkTokenConfiguration *)getLinkTokenConfiguration:(NSDictionary *)configuration
                                         onSuccessHandler:(void(^)(PLKLinkSuccess *))onSuccessHandler {
     NSString *linkTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
-    
+
     return [PLKLinkTokenConfiguration createWithToken:linkTokenInput onSuccess:onSuccessHandler];
 }
 
 - (PLKLinkPublicKeyConfiguration *)getLegacyLinkConfiguration:(NSDictionary *)configuration
                                              onSuccessHandler:(void(^)(PLKLinkSuccess *))onSuccessHandler  {
-  NSString *key = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicKeyKey]];
-  NSString *tokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
-  NSString *env = [RCTConvert NSString:configuration[kRNLinkKitConfigEnvKey]];
-  NSArray<NSString*> *productsInput = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];
-  NSString *clientName = [RCTConvert NSString:configuration[kRNLinkKitConfigClientNameKey]];
-  NSString *webhook = [RCTConvert NSString:configuration[kRNLinkKitConfigWebhookKey]];
-  NSString *linkCustomizationName = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkCustomizationName]];
-  NSString *userLegalName = [RCTConvert NSString:configuration[kRNLinkKitConfigUserLegalNameKey]];
-  NSString *userEmailAddress = [RCTConvert NSString:configuration[kRNLinkKitConfigUserEmailAddressKey]];
-  NSString *userPhoneNumber = [RCTConvert NSString:configuration[kRNLinkKitConfigUserPhoneNumberKey]];
-  NSString *oauthRedirectUriString = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthRedirectUriKey]];
-  NSString *oauthNonce = [RCTConvert NSString:configuration[kRNLinkKitConfigOAuthNonceKey]];
-  NSDictionary<NSString*, NSArray<NSString*>*> *accountSubtypes = [RCTConvert NSDictionary:configuration[kRNLinkKitConfigAccountSubtypes]];
-  NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
-  NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
-    
+    NSString *key = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicKeyKey]];
+    NSString *tokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
+    NSString *env = [RCTConvert NSString:configuration[kRNLinkKitConfigEnvKey]];
+    NSArray<NSString*> *productsInput = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];
+    NSString *clientName = [RCTConvert NSString:configuration[kRNLinkKitConfigClientNameKey]];
+    NSString *webhook = [RCTConvert NSString:configuration[kRNLinkKitConfigWebhookKey]];
+    NSString *linkCustomizationName = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkCustomizationName]];
+    NSString *userLegalName = [RCTConvert NSString:configuration[kRNLinkKitConfigUserLegalNameKey]];
+    NSString *userEmailAddress = [RCTConvert NSString:configuration[kRNLinkKitConfigUserEmailAddressKey]];
+    NSString *userPhoneNumber = [RCTConvert NSString:configuration[kRNLinkKitConfigUserPhoneNumberKey]];
+    NSString *oauthRedirectUriInput = [configuration valueForKeyPath:kRNLinkKitConfigOAuthRedirectUriKeyPath];
+    NSString *oauthRedirectUriString = [RCTConvert NSString:oauthRedirectUriInput];
+    NSString *oauthNonceInput = [configuration valueForKeyPath:kRNLinkKitConfigOAuthNonceKeyPath];
+    NSString *oauthNonce = [RCTConvert NSString:oauthNonceInput];
+    id accountSubtypesInput = configuration[kRNLinkKitConfigAccountSubtypes];
+    NSArray<NSDictionary<NSString*, NSString *>*> *accountSubtypeDictionaries = [RCTConvert NSDictionaryArray:accountSubtypesInput];
+    NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
+    NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
+
     PLKLinkPublicKeyConfigurationToken *token;
     BOOL isPaymentToken = [tokenInput hasPrefix:kRNLinkKitPaymentTokenPrefix];
     BOOL isItemAddToken = [tokenInput hasPrefix:kRNLinkKitItemAddTokenPrefix];
+    BOOL isDepositSwitchToken = [tokenInput hasPrefix:kRNLinkKitDepositSwitchTokenPrefix];
     if (isPaymentToken) {
         token = [PLKLinkPublicKeyConfigurationToken createWithPaymentToken:tokenInput publicKey:key];
     } else if (isItemAddToken) {
         token = [PLKLinkPublicKeyConfigurationToken createWithPublicToken:tokenInput publicKey:key];
+    } else if (isDepositSwitchToken) {
+        token = [PLKLinkPublicKeyConfigurationToken createWithDepositSwitchToken:tokenInput publicKey:key];
     } else {
         token = [PLKLinkPublicKeyConfigurationToken createWithPublicKey:key];
     }
-    
+
     PLKEnvironment environment = [RNLinksdk environmentFromString:env];
     NSArray<NSNumber *> *products = [RNLinksdk productsArrayFromProductsStringArray:productsInput];
     PLKLinkPublicKeyConfiguration *linkConfiguration = [[PLKLinkPublicKeyConfiguration alloc] initWithClientName:clientName
@@ -249,8 +256,8 @@ RCT_EXPORT_METHOD(dismiss) {
       linkConfiguration.oauthConfiguration = [PLKOAuthNonceConfiguration createWithNonce:oauthNonce
                                                                              redirectUri:oauthRedirectUri];
   }
-  if ([accountSubtypes count] > 0) {
-      linkConfiguration.accountSubtypes = [RNLinksdk accountSubtypesArrayFromAccountSubtypesDictionary:accountSubtypes];
+  if ([accountSubtypeDictionaries count] > 0) {
+      linkConfiguration.accountSubtypes = [RNLinksdk accountSubtypesArrayFromAccountSubtypeDictionaries:accountSubtypeDictionaries];
   }
 
   return linkConfiguration;
@@ -262,15 +269,15 @@ RCT_EXPORT_METHOD(dismiss) {
     if ([string isEqualToString:@"production"]) {
         return PLKEnvironmentProduction;
     }
-    
+
     if ([string isEqualToString:@"sandbox"]) {
         return PLKEnvironmentSandbox;
     }
-    
+
     if ([string isEqualToString:@"development"]) {
         return PLKEnvironmentDevelopment;
     }
-    
+
     // Default to Development
     NSLog(@"Unexpected environment string value: %@. Expected one of: production, sandbox, or development.", string);
     return PLKEnvironmentDevelopment;
@@ -278,14 +285,14 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSArray<NSNumber *> *)productsArrayFromProductsStringArray:(NSArray<NSString *> *)productsStringArray {
     NSMutableArray<NSNumber *> *results = [NSMutableArray arrayWithCapacity:productsStringArray.count];
-    
+
     for (NSString *productString in productsStringArray) {
         NSNumber *product = [self productFromProductString:productString];
         if (product) {
             [results addObject:product];
         }
     }
-    
+
     return [results copy];
 }
 
@@ -298,29 +305,28 @@ RCT_EXPORT_METHOD(dismiss) {
         @"assets": @(PLKProductAssets),
         @"liabilities": @(PLKProductLiabilities),
         @"investments": @(PLKProductInvestments),
+        @"deposit_switch": @(PLKProductDepositSwitch),
     };
     return productStringMap[productString.lowercaseString];
 }
 
-+ (NSArray<id<PLKAccountSubtype>> *)accountSubtypesArrayFromAccountSubtypesDictionary:(NSDictionary<NSString *, NSArray<NSString *> *> *)accountSubtypesDictionary {
++ (NSArray<id<PLKAccountSubtype>> *)accountSubtypesArrayFromAccountSubtypeDictionaries:(NSArray<NSDictionary<NSString *, NSString *> *> *)accountSubtypeDictionaries {
     __block NSMutableArray<id<PLKAccountSubtype>> *results = [NSMutableArray array];
     
-    for (NSString *type in accountSubtypesDictionary.allKeys) {
-        NSArray<NSString *> *subtypes = accountSubtypesDictionary[type] ?: @[];
-
-        for (NSString *subtype in subtypes) {
-            id<PLKAccountSubtype> accountSubtype = [self accountSubtypeFromTypeString:type subtypeString:subtype];
-            if (accountSubtype) {
-                [results addObject:accountSubtype];
-            }
+    for (NSDictionary *accountSubtypeDictionary in accountSubtypeDictionaries) {
+        NSString *type = accountSubtypeDictionary[@"type"];
+        NSString *subtype = accountSubtypeDictionary[@"subtype"];
+        id<PLKAccountSubtype> result = [self accountSubtypeFromTypeString:type subtypeString:subtype];
+        if (result) {
+            [results addObject:result];
         }
     }
     
     return [results copy];
 }
 
-+ (id<PLKAccountSubtype> __nullable)accountSubtypeFromTypeString:(NSString *)typeString
-                                                   subtypeString:(NSString *)subtypeString {
++ (id<PLKAccountSubtype>)accountSubtypeFromTypeString:(NSString *)typeString
+                                        subtypeString:(NSString *)subtypeString {
     NSString *normalizedTypeString = typeString.lowercaseString;
     NSString *normalizedSubtypeString = subtypeString.lowercaseString;
     if ([normalizedTypeString isEqualToString:@"other"]) {
@@ -498,12 +504,12 @@ RCT_EXPORT_METHOD(dismiss) {
     return @{
         // TODO: Remove `status` key.
         @"status": @"connected",
-        @"public_token": success.publicToken ?: @"",
+        @"publicToken": success.publicToken ?: @"",
         @"metadata": @{
-          @"link_session_id": metadata.linkSessionID ?: @"",
+          @"linkSessionId": metadata.linkSessionID ?: @"",
           @"institution": [self dictionaryFromInstitution:metadata.insitution] ?: @"",
           @"accounts": [self accountsDictionariesFromAccounts:metadata.accounts] ?: @"",
-          @"metadata_json": metadata.metadataJSON ?: @"",
+          @"metadataJson": metadata.metadataJSON ?: @"",
       },
     };
 }
@@ -525,7 +531,7 @@ RCT_EXPORT_METHOD(dismiss) {
         @"mask": account.mask ?: @"",
         @"subtype": [self subtypeNameForAccountSubtype:account.subtype] ?: @"",
         @"type": [self typeNameForAccountSubtype:account.subtype] ?: @"",
-        @"verification_status": [self stringForVerificationStatus:account.verificationStatus] ?: @"",
+        @"verificationStatus": [self stringForVerificationStatus:account.verificationStatus] ?: @"",
     };
 }
 
@@ -578,17 +584,17 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSDictionary *)dictionaryFromInstitution:(PLKInstitution *)institution {
     return @{
-        @"institution_name": institution.name ?: @"",
-        @"institution_id": institution.ID ?: @"",
+        @"name": institution.name ?: @"",
+        @"id": institution.ID ?: @"",
     };
 }
 
 + (NSDictionary *)dictionaryFromError:(PLKExitError *)error {
     return @{
-        @"error_type": [self errorTypeStringFromError:error] ?: @"",
-        @"error_code": [self errorCodeStringFromError:error] ?: @"",
-        @"error_message": [self errorMessageFromError:error] ?: @"",
-        @"display_message": [self errorDisplayMessageFromError:error] ?: @"",
+        @"errorType": [self errorTypeStringFromError:error] ?: @"",
+        @"errorCode": [self errorCodeStringFromError:error] ?: @"",
+        @"errorMessage": [self errorMessageFromError:error] ?: @"",
+        @"errorDisplayMessage": [self errorDisplayMessageFromError:error] ?: @"",
     };
 }
 
@@ -598,19 +604,19 @@ RCT_EXPORT_METHOD(dismiss) {
     return @{
         @"event": [self stringForEventName:event.eventName] ?: @"",
         @"metadata": @{
-            @"error_type": [self errorTypeStringFromError:metadata.error] ?: @"",
-            @"error_code": [self errorCodeStringFromError:metadata.error] ?: @"",
-            @"error_message": [self errorMessageFromError:metadata.error] ?: @"",
-            @"exit_status": [self stringForExitStatus:metadata.exitStatus] ?: @"",
-            @"institution_id": metadata.institutionID ?: @"",
-            @"institution_name": metadata.institutionName ?: @"",
-            @"institution_search_query": metadata.institutionSearchQuery ?: @"",
-            @"link_session_id": metadata.linkSessionID ?: @"",
-            @"mfa_type": [self stringForMfaType:metadata.mfaType] ?: @"",
-            @"request_id": metadata.requestID ?: @"",
+            @"errorType": [self errorTypeStringFromError:metadata.error] ?: @"",
+            @"errorCode": [self errorCodeStringFromError:metadata.error] ?: @"",
+            @"errorMessage": [self errorMessageFromError:metadata.error] ?: @"",
+            @"exitStatus": [self stringForExitStatus:metadata.exitStatus] ?: @"",
+            @"institutionId": metadata.institutionID ?: @"",
+            @"institutionName": metadata.institutionName ?: @"",
+            @"institutionSearchQuery": metadata.institutionSearchQuery ?: @"",
+            @"linkSessionId": metadata.linkSessionID ?: @"",
+            @"mfaType": [self stringForMfaType:metadata.mfaType] ?: @"",
+            @"requestId": metadata.requestID ?: @"",
             @"timestamp": [self iso8601StringFromDate:metadata.timestamp] ?: @"",
-            @"view_name": [self stringForViewName:metadata.viewName] ?: @"",
-            @"metadata_json": metadata.metadataJSON ?: @"",
+            @"viewName": [self stringForViewName:metadata.viewName] ?: @"",
+            @"metadataJson": metadata.metadataJSON ?: @"",
         },
     };
 }
@@ -642,15 +648,12 @@ RCT_EXPORT_METHOD(dismiss) {
 }
 
 + (NSString *)errorCodeStringFromError:(PLKExitError *)error {
-    NSString *errorDomain = error.domain;
+   NSString *errorDomain = error.domain;
 
     if (!error || !errorDomain) {
         return @"";
     }
-    
-    NSString *normalizedErrorDomain = error.domain;
-    NSInteger code = error.code;
-   return error.userInfo[kPLKExitErrorCodeKey];
+    return error.userInfo[kPLKExitErrorCodeKey];
 }
 
 + (NSString *)errorMessageFromError:(PLKExitError *)error {
@@ -799,9 +802,9 @@ RCT_EXPORT_METHOD(dismiss) {
         @"metadata": @{
           @"status": [self stringForExitStatus:metadata.status] ?: @"",
           @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"",
-          @"request_id": metadata.requestID ?: @"",
-          @"link_session_id": metadata.linkSessionID ?: @"",
-          @"metadata_json": metadata.metadataJSON ?: @"",
+          @"requestId": metadata.requestID ?: @"",
+          @"linkSessionId": metadata.linkSessionID ?: @"",
+          @"metadataJson": metadata.metadataJSON ?: @"",
         },
     };
 }

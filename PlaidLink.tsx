@@ -64,16 +64,16 @@ export const openLink = async (props: PlaidLinkProps) => {
             props.onExit(data);
           }
         } else {
-          switch (result.metadata.status) {
+          switch (result.status) {
             case 'connected':
               if (props.onSuccess != null) {
-                delete result.metadata.status;
+                delete result.status;
                 props.onSuccess(result);
               }
               break;
             default:
               if (props.onExit != null) {
-                delete result.metadata.status;
+                delete result.status;
                 props.onExit(result);
               }
               break;

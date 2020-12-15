@@ -230,6 +230,7 @@ export class LinkAccountSubtypeUnknown implements LinkAccountSubtype {
 
 export interface LinkSuccess {
     publicToken: string;
+    status?: LinkExitMetadataStatus;
     metadata: LinkSuccessMetadata;
 }
 
@@ -266,7 +267,6 @@ export interface LinkExit {
 }
 
 export interface LinkExitMetadata {
-    status?: LinkExitMetadataStatus;
     institution?: LinkInstitution;
     linkSessionId: string;
     requestId: string;

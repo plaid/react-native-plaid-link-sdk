@@ -502,8 +502,6 @@ RCT_EXPORT_METHOD(dismiss) {
 + (NSDictionary *)dictionaryFromSuccess:(PLKLinkSuccess *)success {
     PLKSuccessMetadata *metadata = success.metadata;
     return @{
-        // TODO: Remove `status` key.
-        @"status": @"connected",
         @"publicToken": success.publicToken ?: @"",
         @"metadata": @{
           @"linkSessionId": metadata.linkSessionID ?: @"",

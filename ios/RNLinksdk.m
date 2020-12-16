@@ -39,7 +39,8 @@ NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
 @interface RNLinksdk ()
 @property (nonatomic, strong) id<PLKHandler> linkHandler;
 @property (nonatomic, strong) UIViewController* presentingViewController;
-@property (nonatomic, strong) RCTResponseSenderBlock completionCallback;
+@property (nonatomic, strong) RCTResponseSenderBlock successCallback;
+@property (nonatomic, strong) RCTResponseSenderBlock exitCallback;
 @property (nonatomic, assign) BOOL hasObservers;
 @property (nonatomic, copy) NSString *institutionID;
 @property (nonatomic, nullable, strong) NSError *creationError;
@@ -107,10 +108,10 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         __typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf dismissLinkViewController];
 
-        if (strongSelf.completionCallback) {
+        if (strongSelf.successCallback) {
             NSDictionary<NSString*, id> *jsMetadata = [RNLinksdk dictionaryFromSuccess:success];
-            strongSelf.completionCallback(@[[NSNull null], jsMetadata]);
-            strongSelf.completionCallback = nil;
+            strongSelf.successCallback(@[jsMetadata]);
+            strongSelf.successCallback = nil;
         }
     };
 
@@ -118,14 +119,14 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         __typeof(weakSelf) strongSelf = weakSelf;
         [weakSelf dismissLinkViewController];
 
-        if (strongSelf.completionCallback) {
+        if (strongSelf.exitCallback) {
             NSDictionary *exitMetadata = [RNLinksdk dictionaryFromExit:exit];
             if (exit.error) {
-                strongSelf.completionCallback(@[exitMetadata[@"error"], exitMetadata]);
+                strongSelf.exitCallback(@[exitMetadata[@"error"], exitMetadata]);
             } else {
-                strongSelf.completionCallback(@[[NSNull null], exitMetadata]);
+                strongSelf.exitCallback(@[[NSNull null], exitMetadata]);
             }
-            strongSelf.completionCallback = nil;
+            strongSelf.exitCallback = nil;
         }
     };
 
@@ -163,15 +164,16 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     }
 }
 
-RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBlock)onExit) {
     if (self.linkHandler) {
-        self.completionCallback = callback;
+        self.successCallback = onSuccess;
+        self.exitCallback = onExit;
         self.presentingViewController = RCTPresentedViewController();
         NSDictionary *options = self.institutionID.length > 0 ? @{@"institution_id": self.institutionID} : @{};
         [self.linkHandler openWithContextViewController:self.presentingViewController options:options];
     } else {
         id error = self.creationError ? RCTJSErrorFromNSError(self.creationError) : RCTMakeError(@"create was not called", nil, nil);
-        callback(@[error]);
+        onExit(@[error]);
     }
 }
 

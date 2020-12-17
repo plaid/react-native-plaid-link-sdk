@@ -56,33 +56,26 @@ export const openLink = async (props: PlaidLinkProps) => {
   } else {
     NativeModules.RNLinksdk.create(config);
     NativeModules.RNLinksdk.open(
-      (error: LinkError, result: LinkExit & LinkSuccess) => {
-        if (error) {
-          if (props.onExit != null) {
+      (result: LinkSuccess) => {
+        if (props.onSuccess != null) {
+          props.onSuccess(result);
+        }
+      },
+      (error: LinkError, result: LinkExit) => {
+        if (props.onExit != null) {
+          if (error) {
             var data = result || {};
             data.error = error;
             props.onExit(data);
-          }
-        } else {
-          switch (result.metadata.status) {
-            case 'connected':
-              if (props.onSuccess != null) {
-                delete result.metadata.status;
-                props.onSuccess(result);
-              }
-              break;
-            default:
-              if (props.onExit != null) {
-                delete result.metadata.status;
-                props.onExit(result);
-              }
-              break;
+          } else {
+            props.onExit(result);
           }
         }
-      },
+      }
     );
   }
 };
+
 
 export const dismissLink = () => {
   if (Platform.OS === 'ios') {

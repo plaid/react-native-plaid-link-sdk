@@ -6,6 +6,12 @@ In your react-native project directory:
 npm install --save react-native-plaid-link-sdk
 ```
 
+## Versions and release candidates
+
+We create release candidates (e.g. 7.0.0-rc1) as beta previews for developers. These are helpful for customers who either are 1. waiting for a specific fix or 2. extremely eager for specific features. They do not hold the same quality guarantee as our official releases, and should NOT be used in production. The official releases come ~2 weeks after the first release candidate (rc1).
+
+The latest stable version is the highest version without the suffix `-rcX`.
+
 ## Updating from previous versions.
 
 When upgrading from a previous major version of this library, see the notes [here](./upgrade_notes) for additional instructions.

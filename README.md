@@ -14,7 +14,10 @@ The latest stable version is the highest version without the suffix `-rcX`.
 
 ## Updating from previous versions.
 
-When upgrading from a previous major version of this library, see the notes [here](./upgrade_notes) for additional instructions.
+When upgrading from a previous major version of this library, see the following notes for additional instructions:
+
+- Upgrading [pre 5.x](./upgrade_notes)
+- Upgrading [from 5.x onwards][upgrading]
 
 ## iOS
 
@@ -163,3 +166,5 @@ You can also use the `usePlaidEmitter` hook in react functional components:
     console.log(event)
   })
 ```
+
+[upgrading]: https://plaid.com/docs/link/react-native/#upgrading

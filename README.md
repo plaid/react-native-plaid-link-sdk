@@ -162,7 +162,7 @@ When upgrading from a previous major version of this library, see the following 
 # Version compatibility
 | React Native SDK | Android SDK | iOS SDK | Status |
 |---|---|---|---|
-| 7.x.x | [3.2.0+]      | >=2.0.7  | Active     |
+| 7.x.x | [3.2.0+]      | >=2.0.7  | In development |
 | 6.x.x | [3.0.0-3.2.0) | >=2.0.1  | Active |
 | 5.x.x | [2.1.0-3.0.0) | >=1.1.34 | Active |
 | 4.x.x | [2.0.0-2.1.0) | <=1.1.33 | Active |

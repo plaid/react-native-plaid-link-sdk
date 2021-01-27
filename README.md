@@ -10,7 +10,7 @@ npm install --save react-native-plaid-link-sdk
 >
 > To try out the new SDK, please use ![version](https://img.shields.io/npm/v/react-native-plaid-link-sdk), to use the latest stable release use [6.0.4](https://www.npmjs.com/package/react-native-plaid-link-sdk/v/6.0.4)
 
-For a full guide and migration guides please vist our [docs](https://plaid.com/docs/link/react-native/)
+For a full guide and migration guides please vist our [docs][plaid_rndocs]
 
 ## iOS setup
 Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The latest version is ![version](https://img.shields.io/cocoapods/v/Plaid).
@@ -25,13 +25,13 @@ Then install your cocoapods dependencies:
 (cd ios && pod install)
 ```
 
-Add a Run Script build phase (after the [CP] Embed Pods Frameworks step) to your target as [described in Plaid Link for iOS documentation](https://plaid.com/docs/link/ios/#add-run-script). This strips simulator symbols from App Store release builds.
+Add a Run Script build phase (after the [CP] Embed Pods Frameworks step) to your target as [described in Plaid Link for iOS documentation][plaid_iosscripts]. This strips simulator symbols from App Store release builds.
 
-That's it if using a recent react-native version with [autolinking](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md) support.
+That's it if using a recent react-native version with [autolinking][autolinking] support.
 
 ### Manual Integration
 
-If using a version of react-native without [autolinking](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md) support, then you will need to:
+If using a version of react-native without [autolinking][autolinking]  support, then you will need to:
 
 ```sh
 react-native link react-native-plaid-link-sdk
@@ -45,8 +45,10 @@ followed by
 4. Run your project (`Cmd+R`)<
 
 ## Android setup
+[Autolinking][autolinking]  unfortunately isn't supported for Android, because the SDK makes use of [TurboModules][turbomodules] to speed up app cold starts. 
+
 ### 1. Register your app id
-1. Log into your [Plaid Dashboard](https://dashboard.plaid.com/team/api) at the API page
+1. Log into your [Plaid Dashboard][plaid_dashboard] at the API page
 2. Next to Allowed Android package names click "Configure" then "Add New Android Package Name"
 3. Enter your package name, for example `com.plaid.example`
 4. Click "Save Changes", you may be prompted to re-enter your password
@@ -77,7 +79,7 @@ project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projec
 ```
 
 ## React native setup
-To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/#create-link-token).
+To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create][plaid_tokendocs].
 After creating a `link_token`, you'll need to pass it into your app and use it to launch Link:
 
 ```javascript
@@ -109,11 +111,11 @@ For non-Link Token based OAuth support, you must pass two props to the PlaidLink
 1. `oauthRedirectUri` this is the same uri you would pass to the `redirect_uri` for Link Token based OAuth. It must be registered as a universal link.
 2. `oauthNonce` this is a 16 character nonce.
 
-In order for the React Native app to respond to the universal link, you will need to update your AppDelegate to inform the React Native Linking library when the universal link is received. See [OAuth requirements](https://plaid.com/docs/#oauth) for more information.
+In order for the React Native app to respond to the universal link, you will need to update your AppDelegate to inform the React Native Linking library when the universal link is received. See [OAuth requirements][plaid_oauthdocs] for more information.
 
 ### To receive onEvent callbacks:
 
-The React Native Plaid module emits `onEvent` events throughout the account linking process — see [details here](https://plaid.com/docs/#onevent-callback). To receive these events in your React Native app, wrap the `PlaidLink` react component with the following in order to listen for those events:
+The React Native Plaid module emits `onEvent` events throughout the account linking process — see [details here][plaid_eventdocs]. To receive these events in your React Native app, wrap the `PlaidLink` react component with the following in order to listen for those events:
 
 ```javascript
 import React from 'react';
@@ -171,4 +173,14 @@ When upgrading from a previous major version of this library, see the following 
 | 1.x.x | [0.1.0-0.3.0) | <=1.1.24 |  Deprecated |
 
 
+
+[plaid_dashboard]: https://dashboard.plaid.com/team/api
+[plaid_iosscripts]: https://plaid.com/docs/link/ios/#add-run-script
+[plaid_rndocs]: https://plaid.com/docs/link/react-native/
+[plaid_oauthdocs]: https://plaid.com/docs/#oauth
+[plaid_eventdocs]: https://plaid.com/docs/#onevent-callback
+[plaid_tokendocs]: https://plaid.com/docs/#create-link-token
+
+[autolinking]: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md
+[turbomodules]: https://github.com/react-native-community/discussions-and-proposals/issues/40
 [upgrading]: https://plaid.com/docs/link/react-native/#upgrading

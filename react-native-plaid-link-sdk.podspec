@@ -15,6 +15,6 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/plaid/react-native-plaid-link-sdk.git", :tag => "v#{s.version}" }
   s.source_files  = "ios/*.{h,m}"
 
-  s.dependency 'React'
-  s.dependency 'Plaid', '~> 2.0.6'
+  s.dependency 'React-Core'
+  s.dependency 'Plaid', '~> 2.0.9'
 end

@@ -5,18 +5,19 @@ import {
   StyleSheet,
   ToastAndroid,
   Platform,
-  AlertIOS,
+  Alert,
 } from 'react-native';
-import {Linking} from 'react-native';
+import { Linking, } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { TouchableOpacity, } from 'react-native-gesture-handler';
+import { LinkSuccess, } from 'react-native-plaid-link-sdk';
 
 var styles = require('./style');
 
-const SuccessScreen = ({route, navigation}) => {
-  const {onsuccess} = route.params;
+const SuccessScreen = ({ route, navigation }: any) => {
+  const linkSuccess : LinkSuccess  = route.params;
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <View style={styles.heading}>
         <Text style={styles.titleText}>Congratulations!</Text>
       </View>
@@ -29,7 +30,7 @@ const SuccessScreen = ({route, navigation}) => {
           it for an access token and get access to your data {'\n'}
           {'\n'}2) Visit{' '}
           <Text
-            style={{color: '#0A85EA'}}
+            style={{ color: '#0A85EA' }}
             onPress={() =>
               Linking.openURL('https://github.com/plaid/react-native-plaid-link-sdk')
             }>
@@ -39,7 +40,7 @@ const SuccessScreen = ({route, navigation}) => {
           {'\n'}3) Ready for the big leagues? Unlock production access by
           visiting{' '}
           <Text
-            style={{color: '#0A85EA'}}
+            style={{ color: '#0A85EA' }}
             onPress={() => Linking.openURL('http://plaid.com/contact')}>
             http://plaid.com/contact
           </Text>
@@ -48,11 +49,11 @@ const SuccessScreen = ({route, navigation}) => {
           <Text
             style={successStyles.publicKey}
             onLongPress={() => {
-              Clipboard.setString(onsuccess.public_token);
+              Clipboard.setString(linkSuccess.publicToken);
               notifyMessage('Copied to Clipboard');
             }}>
             <Text style={styles.bold}>
-              Public Token: {onsuccess.public_token}
+              Public Token: {linkSuccess.publicToken}
             </Text>
           </Text>
         </TouchableOpacity>
@@ -74,7 +75,7 @@ function notifyMessage(msg: string) {
   if (Platform.OS === 'android') {
     ToastAndroid.show(msg, ToastAndroid.SHORT);
   } else {
-    AlertIOS.alert(msg);
+    Alert.alert(msg);
   }
 }
 

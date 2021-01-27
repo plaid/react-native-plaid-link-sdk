@@ -26,16 +26,20 @@ class RNAccountAdapter : JsonSerializer<LinkAccount> {
     val obj = JsonObject().apply {
       addProperty("id", src.id)
       addProperty("name", src.name)
-      addProperty("mask", src.mask)
-      context?.serialize(src.verificationStatus)?.let {
-        add("verification_status", it)
+      src.mask?.let {
+        addProperty("mask", it)
+      }
+      src.verificationStatus?.let { status ->
+        context?.serialize(status)?.asJsonObject?.let {
+          addProperty("verification_status", it.get("json").asString)
+        }
       }
 
       // Special handling around account subtype
       val subtype = context?.serialize(src.subtype)?.asJsonObject
       subtype?.let {
-        addProperty("type", it.get("account_type").asString)
-        addProperty("subtype", it.get("json").asString)
+        addProperty("type", it.get("account_type")?.asString)
+        addProperty("subtype", it.get("json")?.asString)
       }
     }
     return obj

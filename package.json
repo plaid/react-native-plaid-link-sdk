@@ -1,12 +1,23 @@
 {
   "name": "react-native-plaid-link-sdk",
-  "version": "6.0.3",
+  "version": "7.0.0-rc3",
   "description": "React Native Plaid Link SDK",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "android/**/*",
+    "ios/**/*",
+    "react-native-plaid-link-sdk.podspec"
+  ],
   "scripts": {
     "lint": "eslint \"./**/*.{js,jsx}\" --fix",
     "prettier": "prettier \"./**/*.{js,jsx}\" --write",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version": "git add -A",
+    "postversion": "git push && git push --tags && rm -rf dist/temp",
+    "compile-typescript": "tsc",
+    "check-version": "node check_version_hook.js"
   },
   "keywords": [
     "react-native",
@@ -14,7 +25,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && npm run check-version"
     }
   },
   "lint-staged": {
@@ -27,25 +38,26 @@
   "author": "Plaid",
   "license": "MIT",
   "peerDependencies": {
-    "react": "^16.8.1",
-    "react-native": "^0.61.3"
-  },
-  "dependencies": {
-    "prop-types": "^15.7.2"
+    "react": "*",
+    "react-native": ">=0.61"
   },
   "devDependencies": {
+    "@react-native-community/eslint-plugin": "^1.1.0",
     "@types/jest": "^26.0.14",
     "@types/react": "^16.9.52",
     "@types/react-native": "^0.63.25",
     "@types/react-test-renderer": "^16.9.3",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.6.1",
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.6.0",
+    "eslint": "^7.12.1",
+    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.16.0",
     "husky": "^3.1.0",
     "lint-staged": "^9.4.2",
     "prettier": "^1.18.2",
-    "react": "^16.8.1",
-    "react-native": "^0.61.3",
+    "react": "~16.13.1",
+    "react-native": "^0.63.3",
     "typescript": "^4.0.3",
     "xyz": "0.5.x"
   }

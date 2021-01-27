@@ -1,14 +1,14 @@
 import React from 'react';
-import {Text, View, Linking, StyleSheet} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { Text, View, } from 'react-native';
+import { LinkExit, } from 'react-native-plaid-link-sdk';
 
 var styles = require('./style');
 
-const ErrorScreen = ({route, navigation}) => {
-  const {onerror} = route.params;
-  console.log(onerror);
+const ExitScreen = ({ route, navigation }: any) => {
+  const linkExit : LinkExit = route.params;
+  console.log(linkExit);
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <View style={styles.heading}>
         <Text style={styles.titleText}>
           Uh-oh! It seems something went wrong.
@@ -20,8 +20,8 @@ const ErrorScreen = ({route, navigation}) => {
           Below is the error returned.
           {'\n'}
           {'\n'}
-          <Text style={(styles.bold, {color: '#000000'})}>
-            {JSON.stringify(onerror)}
+          <Text style={(styles.bold, { color: '#000000' })}>
+            {JSON.stringify(linkExit)}
           </Text>
         </Text>
       </View>
@@ -29,4 +29,4 @@ const ErrorScreen = ({route, navigation}) => {
   );
 };
 
-export default ErrorScreen;
+export default ExitScreen;

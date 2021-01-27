@@ -1,4 +1,4 @@
-# Getting Started
+# Getting Started ![version](https://img.shields.io/npm/v/react-native-plaid-link-sdk)
 
 In your react-native project directory:
 
@@ -6,12 +6,13 @@ In your react-native project directory:
 npm install --save react-native-plaid-link-sdk
 ```
 
-## Updating from previous versions.
+> Please note that we are updating our SDK with typescript support and an API that aligns closer to our other SDKS. This readme already reflects the installation instructions for the 7.x.x version.
+>
+> To try out the new SDK, please use ![version](https://img.shields.io/npm/v/react-native-plaid-link-sdk), to use the latest stable release use [6.0.4](https://www.npmjs.com/package/react-native-plaid-link-sdk/v/6.0.4)
 
-When upgrading from a previous major version of this library, see the notes [here](./upgrade_notes) for additional instructions.
+For a full guide and migration guides please vist our [docs](https://plaid.com/docs/link/react-native/)
 
-## iOS
-
+## iOS setup
 Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The latest version is ![version](https://img.shields.io/cocoapods/v/Plaid).
 
 ```sh
@@ -43,7 +44,7 @@ followed by
 3. In Xcode, in the project navigator, select your project. Add `libRNLinksdk.a` to your project's `Build Phases` ▶ `Link Binary With Libraries`
 4. Run your project (`Cmd+R`)<
 
-## Android
+## Android setup
 ### 1. Register your app id
 1. Log into your [Plaid Dashboard](https://dashboard.plaid.com/team/api) at the API page
 2. Next to Allowed Android package names click "Configure" then "Add New Android Package Name"
@@ -64,7 +65,6 @@ followed by
 dependencies {
     // ...
     implementation project(':react-native-plaid-link-sdk')
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:<insert at least version 4.x>'
 }
 ```
 
@@ -76,39 +76,30 @@ include ':react-native-plaid-link-sdk'
 project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-plaid-link-sdk/android')
 ```
 
-## Version Compatibiltiy
-| React Native SDK | Android SDK | iOS SDK | Status |
-|---|---|---|---|
-| 5.x.x | [2.1.0+)      | >=1.1.34 | Active |
-| 4.x.x | [2.0.0-2.1.0) | <=1.1.33 | Active |
-| 3.x.x | [1.0.0-2.0.0) | <=1.1.33 |  Deprecated |
-| 2.x.x | [0.3.0-1.0.0) | <=1.1.27 |  Deprecated |
-| 1.x.x | [0.1.0-0.3.0) | <=1.1.24 |  Deprecated |
-
-## PlaidLink
-
-To initialize Plaid Link, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/#create-link-token).
-After creating a link_token, you'll need to pass it into your app and use it to launch Link:
+## React native setup
+To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/#create-link-token).
+After creating a `link_token`, you'll need to pass it into your app and use it to launch Link:
 
 ```javascript
 import { Text } from 'react-native';
-import PlaidLink from 'react-native-plaid-link-sdk';
+import { PlaidLink, LinkSuccess, LinkExit } from 'react-native-plaid-link-sdk';
 
 const MyPlaidComponent = () => {
   return (
     <PlaidLink
-      // Replace any of the following <#VARIABLE#>s according to your setup,
-      // for details see https://plaid.com/docs/quickstart/#client-side-link-configuration
-
-      token = {"<#GENERATED_LINK_TOKEN#>"}
-      onSuccess={data => console.log('success: ', data)}
-      onExit={data => console.log('exit: ', data)}
+        tokenConfig={{
+            token: "#GENERATED_LINK_TOKEN#",
+        }}
+        onSuccess={(success: LinkSuccess) => { console.log(success) }}
+        onExit={(exit: LinkExit) => { console.log(exit) }}
     >
-      <Text>Add Account</Text>
+        <Text>Add Account</Text>
     </PlaidLink>
   );
 };
 ```
+
+`PlaidLink` wraps the view you provide as a child with a `Pressable` component and intercepts the `onPress` event.
 
 ### OAuth requirements
 
@@ -141,38 +132,43 @@ class PlaidEventContainer extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <PlaidLink
-        token={<#GENERATED_LINK_TOKEN#>}
-        onSuccess={data => console.log('success: ', data)}
-        onExit={data => console.log('exit: ', data)}
-      >
-        <Text>Add Account</Text>
-      </PlaidLink>
-    );
-  }
+  ...
 }
 ```
 
 You can also use the `usePlaidEmitter` hook in react functional components:
 
 ```javascript
-  usePlaidEmitter((event) => {
+  usePlaidEmitter((event: LinkEvent) => {
     console.log(event)
   })
 ```
 
-### Customizing the PlaidLink component
+# Version information
 
-By default, `PlaidLink` renders a `TouchableOpacity` component. You may override the component used by passing `component` that accepts an `onPress` callback prop and `componentProps`. For example:
+## Versions and release candidates
 
-```jsx
-<PlaidLink
-  token = {"<#GENERATED_LINK_TOKEN#>"}
-  component= {Button}
-  componentProps = {{title: 'Add Account'}}
-  onSuccess = {(result) => {console.log('Success: ', result)}}
-  onError = {(result) => {console.log('Error: ', result)}}
->
-```
+We create release candidates (e.g. 7.0.0-rc1) as beta previews for developers. These are helpful for customers who either are 1. waiting for a specific fix or 2. extremely eager for specific features. They do not hold the same quality guarantee as our official releases, and should NOT be used in production. The official releases come ~2 weeks after the first release candidate (rc1).
+
+The latest stable version is the highest version without the suffix `-rcX`.
+
+## Updating from previous versions.
+
+When upgrading from a previous major version of this library, see the following notes for additional instructions:
+
+- Upgrading [pre 5.x](./upgrade_notes)
+- Upgrading [from 5.x onwards][upgrading]
+
+# Version compatibility
+| React Native SDK | Android SDK | iOS SDK | Status |
+|---|---|---|---|
+| 7.x.x | [3.2.0+]      | >=2.0.7  | In development |
+| 6.x.x | [3.0.0-3.2.0) | >=2.0.1  | Active |
+| 5.x.x | [2.1.0-3.0.0) | >=1.1.34 | Active |
+| 4.x.x | [2.0.0-2.1.0) | <=1.1.33 | Active |
+| 3.x.x | [1.0.0-2.0.0) | <=1.1.33 |  Deprecated |
+| 2.x.x | [0.3.0-1.0.0) | <=1.1.27 |  Deprecated |
+| 1.x.x | [0.1.0-0.3.0) | <=1.1.24 |  Deprecated |
+
+
+[upgrading]: https://plaid.com/docs/link/react-native/#upgrading

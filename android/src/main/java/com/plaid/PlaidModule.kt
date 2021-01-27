@@ -10,8 +10,8 @@ import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.plaid.gson.PlaidJsonConverter
 import com.plaid.link.Plaid
 import com.plaid.link.configuration.LinkLogLevel
 import com.plaid.link.configuration.LinkPublicKeyConfiguration
@@ -19,20 +19,9 @@ import com.plaid.link.configuration.LinkTokenConfiguration
 import com.plaid.link.configuration.PlaidEnvironment
 import com.plaid.link.configuration.PlaidProduct
 import com.plaid.link.event.LinkEvent
-import com.plaid.link.event.LinkEventName
-import com.plaid.link.event.LinkEventViewName
-import com.plaid.link.result.LinkAccount
-import com.plaid.link.result.LinkAccountSubtype
-import com.plaid.link.result.LinkAccountType
-import com.plaid.link.result.LinkAccountVerificationStatus
-import com.plaid.link.result.LinkErrorCode
-import com.plaid.link.result.LinkErrorType
-import com.plaid.link.result.LinkExit
-import com.plaid.link.result.LinkSuccess
-import com.plaid.link.result.LinkExitMetadataStatus
 import com.plaid.link.exception.LinkException
+import com.plaid.link.result.LinkAccountSubtype
 import com.plaid.link.result.LinkResultHandler
-import com.plaid.gson.PlaidJsonConverter
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
@@ -46,13 +35,14 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   private var onExitCallback: Callback? = null
 
   companion object {
-    private const val PRODUCTS = "product"
+    private const val PRODUCTS = "products"
     private const val PUBLIC_KEY = "publicKey"
     private const val ACCOUNT_SUBTYPES = "accountSubtypes"
     private const val CLIENT_NAME = "clientName"
     private const val COUNTRY_CODES = "countryCodes"
     private const val LANGUAGE = "language"
-    private const val ENV = "env"
+    private const val LOG_LEVEL = "logLevel"
+    private const val ENV = "environment"
     private const val LINK_CUSTOMIZATION_NAME = "linkCustomizationName"
     private const val TOKEN = "token"
     private const val USER_EMAIL = "userEmailAddress"
@@ -60,9 +50,9 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val USER_PHONE = "userPhoneNumber"
     private const val WEBHOOK = "webhook"
     private const val EXTRAS = "extras"
-    private const val DATA = "data"
-    private const val RESULT_CODE = "resultCode"
     private const val LINK_TOKEN_PREFIX = "link"
+    private const val TYPE = "type"
+    private const val SUBTYPE = "subtype"
   }
 
   override fun getName(): String {
@@ -83,8 +73,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     val extrasMap = mutableMapOf<String, String>()
     maybePopulateExtrasMap(obj, extrasMap)
 
-    val logLevel = LinkLogLevel.ASSERT
-
     if (token == null) {
       return null
     }
@@ -92,6 +80,13 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     if (!token.startsWith(LINK_TOKEN_PREFIX)) {
       return null
     }
+
+    val logLevel =
+      if (obj.has(LOG_LEVEL)) {
+        getLogLevel(obj.getString(LOG_LEVEL))
+      } else {
+        LinkLogLevel.ASSERT
+      }
 
     val builder = LinkTokenConfiguration.Builder()
       .token(token)
@@ -104,13 +99,18 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     return builder.build()
   }
 
+  private fun getLogLevel(logLevelString: String): LinkLogLevel {
+    return LinkLogLevel.values().firstOrNull {
+      it.name.equals(logLevelString, true)
+    } ?: LinkLogLevel.ASSERT
+  }
+
   private fun getLinkPublicKeyConfiguration(
     obj: JSONObject,
     publicKey: String
   ): LinkPublicKeyConfiguration {
     val extrasMap = mutableMapOf<String, String>()
     maybePopulateExtrasMap(obj, extrasMap)
-    val logLevel = LinkLogLevel.ASSERT
 
     val productsArray = ArrayList<PlaidProduct>()
     var jsonArray = obj.getJSONArray(PRODUCTS)
@@ -127,6 +127,13 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       }
     }
 
+    val logLevel =
+      if (obj.has(LOG_LEVEL)) {
+        getLogLevel(obj.getString(LOG_LEVEL))
+      } else {
+        LinkLogLevel.ASSERT
+      }
+
     val builder = LinkPublicKeyConfiguration.Builder()
       .publicKey(publicKey)
       .clientName(obj.getString(CLIENT_NAME))
@@ -134,7 +141,18 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       .logLevel(logLevel)
 
     if (obj.has(ACCOUNT_SUBTYPES)) {
-      extrasMap[ACCOUNT_SUBTYPES] = obj.getJSONObject(ACCOUNT_SUBTYPES).toString()
+      val subtypeList = mutableListOf<LinkAccountSubtype>()
+      val subtypesArray = obj.getJSONArray(ACCOUNT_SUBTYPES)
+      for (i in 0 until subtypesArray.length()) {
+        val subtypeObject = subtypesArray.get(i) as JSONObject
+        subtypeList.add(
+          LinkAccountSubtype.convert(
+            subtypeObject.getString(SUBTYPE),
+            subtypeObject.getString(TYPE)
+          )
+        )
+      }
+      builder.accountSubtypes = subtypeList
     }
 
     if (obj.has(COUNTRY_CODES)) {
@@ -261,12 +279,11 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
   private fun maybePopulateExtrasMap(obj: JSONObject, extrasMap: MutableMap<String, String>) {
     if (obj.has(EXTRAS)) {
-      val extrasObject = obj.getJSONObject("extras")
-      extrasObject.keys().forEach { key: String ->
-        try {
-          extrasMap[key] = extrasObject.getString(key)
-        } catch (e: JSONException) {
-          // Do nothing.
+      val extrasArray = obj.getJSONArray(EXTRAS)
+      for (i in 0 until extrasArray.length()) {
+        val extraObject = extrasArray.get(i) as JSONObject
+        extraObject.keys().forEach { key ->
+          extrasMap[key] = extraObject.getString(key)
         }
       }
     }
@@ -278,16 +295,14 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     resultCode: Int,
     data: Intent?
   ) {
-    val result = WritableNativeMap()
-
     val linkHandler = LinkResultHandler(
       onSuccess = { success ->
-        result.putMap(DATA, convertJsonToMap(JSONObject(jsonConverter.convert(success))))
+        val result = convertJsonToMap(JSONObject(jsonConverter.convert(success)))
         print(result)
         this.onSuccessCallback?.invoke(result)
       },
       onExit = { exit ->
-        result.putMap(DATA, convertJsonToMap(JSONObject(jsonConverter.convert(exit))))
+        val result = convertJsonToMap(JSONObject(jsonConverter.convert(exit)))
         print(result)
         this.onExitCallback?.invoke(result)
       }

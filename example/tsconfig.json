@@ -4,21 +4,17 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "jsx": "react-native",
-    "skipLibCheck": true,
+    "jsx": "react",
     "lib": ["es6"],
     "moduleResolution": "node",
+    "noEmit": true,
     "strict": true,
-    "target": "es6",
-    "module": "es6",
-    "declaration": true,
-    "outDir": "./dist",
+    "target": "esnext"
   },
   "exclude": [
     "node_modules",
     "babel.config.js",
     "metro.config.js",
-    "jest.config.js",
-    "example"
+    "jest.config.js"
   ]
 }

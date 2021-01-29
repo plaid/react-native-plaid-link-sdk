@@ -45,7 +45,7 @@ followed by
 4. Run your project (`Cmd+R`)<
 
 ## Android setup
-[Autolinking][autolinking]  unfortunately isn't supported for Android, because the SDK makes use of [TurboModules][turbomodules] to speed up app cold starts. 
+[Autolinking][autolinking]  unfortunately isn't supported for Android, because the SDK makes use of [TurboModules][turbomodules] to speed up app cold starts. Have a look at [#306](https://github.com/plaid/react-native-plaid-link-sdk/pull/306) for more context.
 
 ### 1. Register your app id
 1. Log into your [Plaid Dashboard][plaid_dashboard] at the API page

@@ -24,6 +24,7 @@ import com.plaid.link.result.LinkErrorCode
 import com.plaid.link.result.LinkErrorType
 import com.plaid.link.result.LinkExit
 import com.plaid.link.result.LinkExitMetadataStatus
+import com.plaid.link.result.LinkInstitution
 import com.plaid.link.result.LinkSuccess
 
 class PlaidJsonConverter {
@@ -33,6 +34,10 @@ class PlaidJsonConverter {
       this.registerTypeAdapter(
         LinkAccount::class.java,
         RNAccountAdapter()
+      )
+      this.registerTypeAdapter(
+        LinkInstitution::class.java,
+        RNLinkInstitutionAdapter()
       )
       this.registerTypeAdapter(
         LinkAccountType::class.java,

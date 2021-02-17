@@ -511,7 +511,7 @@ RCT_EXPORT_METHOD(dismiss) {
         @"publicToken": success.publicToken ?: @"",
         @"metadata": @{
           @"linkSessionId": metadata.linkSessionID ?: @"",
-          @"institution": [self dictionaryFromInstitution:metadata.insitution] ?: @"",
+          @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"",
           @"accounts": [self accountsDictionariesFromAccounts:metadata.accounts] ?: @"",
           @"metadataJson": metadata.metadataJSON ?: @"",
       },

@@ -711,6 +711,7 @@ RCT_EXPORT_METHOD(dismiss) {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         dateFormatter = [[NSISO8601DateFormatter alloc] init];
+        dateFormatter.formatOptions |= NSISO8601DateFormatWithFractionalSeconds;
     });
     return [dateFormatter stringFromDate:date];
 }

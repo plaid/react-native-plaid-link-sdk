@@ -606,7 +606,7 @@ RCT_EXPORT_METHOD(dismiss) {
     PLKEventMetadata *metadata = event.eventMetadata;
     
     return @{
-        @"event": [self stringForEventName:event.eventName] ?: @"",
+        @"eventName": [self stringForEventName:event.eventName] ?: @"",
         @"metadata": @{
             @"errorType": [self errorTypeStringFromError:metadata.error] ?: @"",
             @"errorCode": [self errorCodeStringFromError:metadata.error] ?: @"",

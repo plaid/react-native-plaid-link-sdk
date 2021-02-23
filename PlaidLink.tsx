@@ -39,7 +39,7 @@ export const usePlaidEmitter = (LinkEventListener: LinkEventListener) => {
 
 export const openLink = async (props: PlaidLinkProps) => {
   if (props.tokenConfig == null) {
-    console.log('The public_key is being deprecated. Learn how to upgrade to link_tokens at https://plaid.com/docs/#create-link-token')
+    console.log('The public_key is being deprecated. Learn how to upgrade to link_tokens at https://plaid.com/docs/link-token-migration-guide/')
   }
   let config = props.tokenConfig ? props.tokenConfig : props.publicKeyConfig!;
 

@@ -4,7 +4,7 @@ import {
   NativeEventEmitter,
   NativeModules,
   Platform,
-  Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import {
   LinkError,
@@ -105,5 +105,5 @@ export const useDeepLinkRedirector = () => {
 
 export const PlaidLink = (props: PlaidLinkComponentProps) => {
   useDeepLinkRedirector();
-  return <Pressable onPress={() => openLink(props)}>{props.children}</Pressable>;
+  return <TouchableOpacity onPress={() => openLink(props)}>{props.children}</TouchableOpacity>;
 };

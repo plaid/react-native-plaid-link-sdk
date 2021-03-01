@@ -291,7 +291,7 @@ export interface LinkError {
     errorCode: LinkErrorCode;
     errorType: LinkErrorType;
     errorMessage: string;
-    errorDisplayMessage?: string;
+    displayMessage?: string;
     errorJson?: string;
 }
 

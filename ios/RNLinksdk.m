@@ -598,7 +598,7 @@ RCT_EXPORT_METHOD(dismiss) {
         @"errorType": [self errorTypeStringFromError:error] ?: @"",
         @"errorCode": [self errorCodeStringFromError:error] ?: @"",
         @"errorMessage": [self errorMessageFromError:error] ?: @"",
-        @"errorDisplayMessage": [self errorDisplayMessageFromError:error] ?: @"",
+        @"displayMessage": [self errorDisplayMessageFromError:error] ?: @"",
     };
 }
 

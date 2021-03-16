@@ -686,6 +686,10 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"FAIL_OAUTH";
         case PLKEventNameValueHandoff:
             return @"HANDOFF";
+        case PLKEventNameValueMatchedSelectInstitution:
+            return @"MATCHED_SELECT_INSTITUTION";
+        case PLKEventNameValueMatchedSelectVerifyMethod:
+            return @"MATCHED_SELECT_VERIFY_METHOD";
         case PLKEventNameValueOpen:
             return @"OPEN";
         case PLKEventNameValueOpenMyPlaid:
@@ -785,6 +789,12 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"EXIT";
         case PLKViewNameValueLoading:
             return @"LOADING";
+        case PLKViewNameValueMatchedConsent:
+            return @"MATCHED_CONSENT";
+        case PLKViewNameValueMatchedCredential:
+            return @"MATCHED_CREDENTIAL";
+        case PLKViewNameValueMatchedMFA:
+            return @"MATCHED_MFA";
         case PLKViewNameValueMFA:
             return @"MFA";
         case PLKViewNameValueNumbers:

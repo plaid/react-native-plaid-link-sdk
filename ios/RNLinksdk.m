@@ -598,6 +598,9 @@ RCT_EXPORT_METHOD(dismiss) {
         @"errorType": [self errorTypeStringFromError:error] ?: @"",
         @"errorCode": [self errorCodeStringFromError:error] ?: @"",
         @"errorMessage": [self errorMessageFromError:error] ?: @"",
+        // errorDisplayMessage is the deprecated name for displayMessage, both have to be populated
+        // until errorDisplayMessage is fully removed to avoid breaking the API
+        @"errorDisplayMessage": [self errorDisplayMessageFromError:error] ?: @"",
         @"displayMessage": [self errorDisplayMessageFromError:error] ?: @"",
     };
 }

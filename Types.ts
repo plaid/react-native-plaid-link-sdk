@@ -441,21 +441,22 @@ export interface LinkEventMetadata {
 }
 
 export enum LinkEventName {
-    CLOSE_OAUTH = 'close_oauth',
-    ERROR = 'error',
-    EXIT = 'exit',
-    FAIL_OAUTH = 'fail_oauth',
-    HANDOFF = 'handoff',
-    MATCHED_SELECT_INSTITUTION = 'matched_select_institution',
+    CLOSE_OAUTH = 'CLOSE_OAUTH',
+    ERROR = 'ERROR',
+    EXIT = 'EXIT',
+    FAIL_OAUTH = 'FAIL_OAUTH',
+    HANDOFF = 'HANDOFF',
+    MATCHED_CONSENT = 'MATCHED_CONSENT',
+    MATCHED_SELECT_INSTITUTION = 'MATCHED_SELECT_INSTITUTION',
     MATCHED_SELECT_VERIFY_METHOD = 'matched_select_verify_method',
-    OPEN = 'open',
-    OPEN_MY_PLAID = 'open_my_plaid',
-    OPEN_OAUTH = 'open_oauth',
-    SEARCH_INSTITUTION = 'search_institution',
-    SELECT_INSTITUTION = 'select_institution',
-    SUBMIT_CREDENTIALS = 'submit_credentials',
-    SUBMIT_MFA = 'submit_mfa',
-    TRANSITION_VIEW = 'transition_view',
+    OPEN = 'OPEN',
+    OPEN_MY_PLAID = 'OPEN_MY_PLAID',
+    OPEN_OAUTH = 'OPEN_OAUTH',
+    SEARCH_INSTITUTION = 'SEARCH_INSTITUTION',
+    SELECT_INSTITUTION = 'SELECT_INSTITUTION',
+    SUBMIT_CREDENTIALS = 'SUBMIT_CREDENTIALS',
+    SUBMIT_MFA = 'SUBMIT_MFA',
+    TRANSITION_VIEW = 'TRANSITION_VIEW',
 }
 
 export enum LinkEventViewName {

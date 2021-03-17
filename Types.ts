@@ -291,7 +291,7 @@ export interface LinkError {
     errorCode: LinkErrorCode;
     errorType: LinkErrorType;
     errorMessage: string;
-    /** @deprecated Use displayMessage instead */
+    /** @deprecated DO NOT USE, data not guaranteed. Use `displayMessage` instead */
     errorDisplayMessage?: string;
     displayMessage?: string;
     errorJson?: string;

@@ -53,7 +53,7 @@ NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"7.0.0"; // SDK_VERSION
+    return @"7.0.1"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {

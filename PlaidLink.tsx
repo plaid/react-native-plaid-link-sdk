@@ -53,6 +53,10 @@ export const openLink = async (props: PlaidLinkProps) => {
       },
       (result: LinkExit) => {
         if (props.onExit != null) {
+          if (result.error != null && result.error.displayMessage != null) {
+            //TODO(RNSDK-118): Remove errorDisplayMessage field in next major update.
+            result.error.errorDisplayMessage = result.error.displayMessage
+          }
           props.onExit(result);
         }
       },

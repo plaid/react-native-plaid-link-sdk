@@ -36,6 +36,13 @@ NSString* const kRNLinkKitItemAddTokenPrefix = @"item-add-";
 NSString* const kRNLinkKitPaymentTokenPrefix = @"payment";
 NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
 
+@interface PLKSuccessMetadata (InstitutionTypoFix)
+
+- (PLKInstitution *)institution;
+- (PLKInstitution *)insitution;
+
+@end
+
 @interface RNLinksdk ()
 @property (nonatomic, strong) id<PLKHandler> linkHandler;
 @property (nonatomic, strong) UIViewController* presentingViewController;
@@ -507,11 +514,21 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSDictionary *)dictionaryFromSuccess:(PLKLinkSuccess *)success {
     PLKSuccessMetadata *metadata = success.metadata;
+    PLKInstitution *institution;
+
+    if ([metadata respondsToSelector:@selector(institution)]) {
+        institution = metadata.institution;
+    } else if ([metadata respondsToSelector:@selector(insitution)]) {
+        institution = metadata.insitution;
+    } else {
+        NSAssert(false, @"PLKSuccessMetadata does not respond to new -institution or legacy, typo -insitution. This is a bug in either react-native-plaid-link-sdk, or LinkKit. Please file an issue in: https://github.com/plaid/react-native-plaid-link-sdk.");
+    }
+
     return @{
         @"publicToken": success.publicToken ?: @"",
         @"metadata": @{
           @"linkSessionId": metadata.linkSessionID ?: @"",
-          @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"",
+          @"institution": [self dictionaryFromInstitution:institution] ?: @"",
           @"accounts": [self accountsDictionariesFromAccounts:metadata.accounts] ?: @"",
           @"metadataJson": metadata.metadataJSON ?: @"",
       },

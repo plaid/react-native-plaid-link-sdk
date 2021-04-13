@@ -5,6 +5,8 @@
 #import <React/RCTConvert.h>
 #import <React/RCTUtils.h>
 
+#import <objc/runtime.h>
+
 static NSString* const kRNLinkKitConfigPublicKeyKey = @"publicKey";
 static NSString* const kRNLinkKitConfigEnvKey = @"environment";
 static NSString* const kRNLinkKitConfigProductsKey = @"products";
@@ -36,13 +38,6 @@ NSString* const kRNLinkKitItemAddTokenPrefix = @"item-add-";
 NSString* const kRNLinkKitPaymentTokenPrefix = @"payment";
 NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
 
-@interface PLKSuccessMetadata (InstitutionTypoFix)
-
-- (PLKInstitution *)institution;
-- (PLKInstitution *)insitution;
-
-@end
-
 @interface RNLinksdk ()
 @property (nonatomic, strong) id<PLKHandler> linkHandler;
 @property (nonatomic, strong) UIViewController* presentingViewController;
@@ -54,6 +49,42 @@ NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
 @end
 
 #pragma mark -
+
+@interface PLKSuccessMetadataTypoFix : NSObject
+
+@end
+
+@implementation PLKSuccessMetadataTypoFix
+
++ (void)load {
+    Class targetClass = NSClassFromString(@"PLKSuccessMetadata");
+    SEL typoSel = NSSelectorFromString(@"insitution");
+    SEL correctSel = NSSelectorFromString(@"institution");
+
+    BOOL respondsToCorrectSel = class_respondsToSelector(targetClass, correctSel);
+    BOOL respondsToTypoSel = class_respondsToSelector(targetClass, typoSel);
+
+    if (respondsToCorrectSel && respondsToTypoSel) {
+        return;
+    }
+
+    if (respondsToTypoSel) {
+        Method method = class_getInstanceMethod(targetClass, typoSel);
+        const char* types = method_getTypeEncoding(method);
+        IMP implementation = class_getMethodImplementation(targetClass, typoSel);
+        class_addMethod(targetClass, correctSel, implementation, types);
+    } else if (respondsToCorrectSel) {
+        Method method = class_getInstanceMethod(targetClass, correctSel);
+        const char* types = method_getTypeEncoding(method);
+        IMP implementation = class_getMethodImplementation(targetClass, correctSel);
+        class_addMethod(targetClass, typoSel, implementation, types);
+    } else {
+        NSString *githubIssueURLString = @"https://github.com/plaid/react-native-plaid-link-sdk/issues/new?assignees=&labels=&template=bug_report.md&title=";
+        NSAssert(false, @"PLKSuccessMetadata does not respond to correctly spelled %@ or legacy, typo %@. This is a bug in either react-native-plaid-link-sdk, or LinkKit. Please file an issue at: %@", NSStringFromSelector(correctSel), NSStringFromSelector(typoSel), githubIssueURLString);
+    }
+}
+
+@end
 
 @implementation RNLinksdk
 
@@ -514,21 +545,12 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSDictionary *)dictionaryFromSuccess:(PLKLinkSuccess *)success {
     PLKSuccessMetadata *metadata = success.metadata;
-    PLKInstitution *institution;
-
-    if ([metadata respondsToSelector:@selector(institution)]) {
-        institution = metadata.institution;
-    } else if ([metadata respondsToSelector:@selector(insitution)]) {
-        institution = metadata.insitution;
-    } else {
-        NSAssert(false, @"PLKSuccessMetadata does not respond to new -institution or legacy, typo -insitution. This is a bug in either react-native-plaid-link-sdk, or LinkKit. Please file an issue in: https://github.com/plaid/react-native-plaid-link-sdk.");
-    }
 
     return @{
         @"publicToken": success.publicToken ?: @"",
         @"metadata": @{
           @"linkSessionId": metadata.linkSessionID ?: @"",
-          @"institution": [self dictionaryFromInstitution:institution] ?: @"",
+          @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"",
           @"accounts": [self accountsDictionariesFromAccounts:metadata.accounts] ?: @"",
           @"metadataJson": metadata.metadataJSON ?: @"",
       },

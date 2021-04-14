@@ -50,6 +50,18 @@ NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
 
 #pragma mark -
 
+// Category to ensure both the old, typo spelling of `insitution` and
+// the corrected spelling `institution` are visible to the implementation
+// to allow compiling against any LinkKit dependency
+@interface PLKSuccessMetadata (InstitutionTypoFix)
+
+- (PLKInstitution * __nonnull)institution;
+- (PLKInstitution * __nonnull)insitution;
+
+@end
+
+// Class to have a distinct +load method to hook into the runtime before
+// SDK logic executes
 @interface PLKSuccessMetadataTypoFix : NSObject
 
 @end
@@ -57,31 +69,39 @@ NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
 @implementation PLKSuccessMetadataTypoFix
 
 + (void)load {
-    Class targetClass = NSClassFromString(@"PLKSuccessMetadata");
-    SEL typoSel = NSSelectorFromString(@"insitution");
-    SEL correctSel = NSSelectorFromString(@"institution");
+    static dispatch_once_t onceToken;
+    // dispatch_once out of an abundance of caution in case +load is ever called multiple times
+    dispatch_once(&onceToken, ^{
+        Class targetClass = NSClassFromString(@"PLKSuccessMetadata");
+        SEL typoSel = NSSelectorFromString(@"insitution");
+        SEL correctSel = NSSelectorFromString(@"institution");
 
-    BOOL respondsToCorrectSel = class_respondsToSelector(targetClass, correctSel);
-    BOOL respondsToTypoSel = class_respondsToSelector(targetClass, typoSel);
+        BOOL respondsToCorrectSel = class_respondsToSelector(targetClass, correctSel);
+        BOOL respondsToTypoSel = class_respondsToSelector(targetClass, typoSel);
 
-    if (respondsToCorrectSel && respondsToTypoSel) {
-        return;
-    }
+        BOOL respondsToBoth = respondsToCorrectSel && respondsToTypoSel;
 
-    if (respondsToTypoSel) {
-        Method method = class_getInstanceMethod(targetClass, typoSel);
+        // If PLKSuccessMetadata responds to both, no swizzling is necessary
+        if (respondsToBoth) {
+            return;
+        }
+
+        BOOL respondsToNeither = !(respondsToCorrectSel || respondsToTypoSel);
+        // If PLKSuccessMetadata responds to neither, swizzling cannot fix this
+        if (respondsToNeither) {
+            NSString *githubIssueURLString = @"https://github.com/plaid/react-native-plaid-link-sdk/issues/new?assignees=&labels=&template=bug_report.md&title=";
+            NSAssert(false, @"PLKSuccessMetadata does not respond to correctly spelled %@ or legacy, typo %@. This is a bug in either react-native-plaid-link-sdk, or LinkKit. Please file an issue at: %@", NSStringFromSelector(correctSel), NSStringFromSelector(typoSel), githubIssueURLString);
+            return;
+        }
+
+        SEL existingSel = respondsToCorrectSel ? correctSel : typoSel;
+        SEL missingSel = respondsToTypoSel ? correctSel : typoSel;
+
+        Method method = class_getInstanceMethod(targetClass, existingSel);
         const char* types = method_getTypeEncoding(method);
-        IMP implementation = class_getMethodImplementation(targetClass, typoSel);
-        class_addMethod(targetClass, correctSel, implementation, types);
-    } else if (respondsToCorrectSel) {
-        Method method = class_getInstanceMethod(targetClass, correctSel);
-        const char* types = method_getTypeEncoding(method);
-        IMP implementation = class_getMethodImplementation(targetClass, correctSel);
-        class_addMethod(targetClass, typoSel, implementation, types);
-    } else {
-        NSString *githubIssueURLString = @"https://github.com/plaid/react-native-plaid-link-sdk/issues/new?assignees=&labels=&template=bug_report.md&title=";
-        NSAssert(false, @"PLKSuccessMetadata does not respond to correctly spelled %@ or legacy, typo %@. This is a bug in either react-native-plaid-link-sdk, or LinkKit. Please file an issue at: %@", NSStringFromSelector(correctSel), NSStringFromSelector(typoSel), githubIssueURLString);
-    }
+        IMP implementation = class_getMethodImplementation(targetClass, existingSel);
+        class_addMethod(targetClass, missingSel, implementation, types);
+    });
 }
 
 @end

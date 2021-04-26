@@ -291,7 +291,9 @@ export interface LinkError {
     errorCode: LinkErrorCode;
     errorType: LinkErrorType;
     errorMessage: string;
+    /** @deprecated DO NOT USE, data not guaranteed. Use `displayMessage` instead */
     errorDisplayMessage?: string;
+    displayMessage?: string;
     errorJson?: string;
 }
 
@@ -307,8 +309,12 @@ export enum LinkErrorCode {
     INVALID_SEND_METHOD = "INVALID_SEND_METHOD",
     NO_ACCOUNTS = "NO_ACCOUNTS",
     ITEM_NOT_SUPPORTED = "ITEM_NOT_SUPPORTED",
+
     INVALD_UPDATED_USERNAME = "INVALD_UPDATED_USERNAME",
+    INVALID_UPDATED_USERNAME = "INVALID_UPDATED_USERNAME",
+
     ITEM_NO_ERROR = "ITEM_NO_ERROR",
+    item_no_error = "item-no-error",
     NO_AUTH_ACCOUNTS = "NO_AUTH_ACCOUNTS",
     NO_INVESTMENT_ACCOUNTS = "NO_INVESTMENT_ACCOUNTS",
     NO_INVESTMENT_AUTH_ACCOUNTS = "NO_INVESTMENT_AUTH_ACCOUNTS",
@@ -439,21 +445,22 @@ export interface LinkEventMetadata {
 }
 
 export enum LinkEventName {
-    CLOSE_OAUTH = 'close_oauth',
-    ERROR = 'error',
-    EXIT = 'exit',
-    FAIL_OAUTH = 'fail_oauth',
-    HANDOFF = 'handoff',
-    MATCHED_CONSENT = 'matched_consent',
-    MATCHED_SELECT_INSTITUTION = 'matched_select_institution',
-    OPEN = 'open',
-    OPEN_MY_PLAID = 'open_my_plaid',
-    OPEN_OAUTH = 'open_oauth',
-    SEARCH_INSTITUTION = 'search_institution',
-    SELECT_INSTITUTION = 'select_institution',
-    SUBMIT_CREDENTIALS = 'submit_credentials',
-    SUBMIT_MFA = 'submit_mfa',
-    TRANSITION_VIEW = 'transition_view',
+    CLOSE_OAUTH = 'CLOSE_OAUTH',
+    ERROR = 'ERROR',
+    EXIT = 'EXIT',
+    FAIL_OAUTH = 'FAIL_OAUTH',
+    HANDOFF = 'HANDOFF',
+    MATCHED_CONSENT = 'MATCHED_CONSENT',
+    MATCHED_SELECT_INSTITUTION = 'MATCHED_SELECT_INSTITUTION',
+    MATCHED_SELECT_VERIFY_METHOD = 'MATCHED_SELECT_VERIFY_METHOD',
+    OPEN = 'OPEN',
+    OPEN_MY_PLAID = 'OPEN_MY_PLAID',
+    OPEN_OAUTH = 'OPEN_OAUTH',
+    SEARCH_INSTITUTION = 'SEARCH_INSTITUTION',
+    SELECT_INSTITUTION = 'SELECT_INSTITUTION',
+    SUBMIT_CREDENTIALS = 'SUBMIT_CREDENTIALS',
+    SUBMIT_MFA = 'SUBMIT_MFA',
+    TRANSITION_VIEW = 'TRANSITION_VIEW',
 }
 
 export enum LinkEventViewName {
@@ -463,6 +470,9 @@ export enum LinkEventViewName {
     ERROR = 'ERROR',
     EXIT = 'EXIT',
     LOADING = 'LOADING',
+    MATCHED_CONSENT = 'MATCHED_CONSENT',
+    MATCHED_CREDENTIAL = 'MATCHED_CREDENTIAL',
+    MATCHED_MFA = 'MATCHED_MFA',
     MFA = 'MFA',
     NUMBERS = 'NUMBERS',
     RECAPTCHA = 'RECAPTCHA',

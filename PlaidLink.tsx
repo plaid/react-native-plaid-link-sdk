@@ -4,7 +4,7 @@ import {
   NativeEventEmitter,
   NativeModules,
   Platform,
-  Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import {
   LinkError,
@@ -38,7 +38,11 @@ export const usePlaidEmitter = (LinkEventListener: LinkEventListener) => {
 
 
 export const openLink = async (props: PlaidLinkProps) => {
+  if (props.tokenConfig == null) {
+    console.log('The public_key is being deprecated. Learn how to upgrade to link_tokens at https://plaid.com/docs/link-token-migration-guide/')
+  }
   let config = props.tokenConfig ? props.tokenConfig : props.publicKeyConfig!;
+
   if (Platform.OS === 'android') {
     NativeModules.PlaidAndroid.startLinkActivityForResult(
       JSON.stringify(config),
@@ -49,6 +53,10 @@ export const openLink = async (props: PlaidLinkProps) => {
       },
       (result: LinkExit) => {
         if (props.onExit != null) {
+          if (result.error != null && result.error.displayMessage != null) {
+            //TODO(RNSDK-118): Remove errorDisplayMessage field in next major update.
+            result.error.errorDisplayMessage = result.error.displayMessage
+          }
           props.onExit(result);
         }
       },
@@ -101,5 +109,5 @@ export const useDeepLinkRedirector = () => {
 
 export const PlaidLink = (props: PlaidLinkComponentProps) => {
   useDeepLinkRedirector();
-  return <Pressable onPress={() => openLink(props)}>{props.children}</Pressable>;
+  return <TouchableOpacity onPress={() => openLink(props)}>{props.children}</TouchableOpacity>;
 };

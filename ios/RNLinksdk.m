@@ -53,7 +53,7 @@ NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"7.0.0"; // SDK_VERSION
+    return @"7.0.2"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -511,7 +511,7 @@ RCT_EXPORT_METHOD(dismiss) {
         @"publicToken": success.publicToken ?: @"",
         @"metadata": @{
           @"linkSessionId": metadata.linkSessionID ?: @"",
-          @"institution": [self dictionaryFromInstitution:metadata.insitution] ?: @"",
+          @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"",
           @"accounts": [self accountsDictionariesFromAccounts:metadata.accounts] ?: @"",
           @"metadataJson": metadata.metadataJSON ?: @"",
       },
@@ -598,7 +598,10 @@ RCT_EXPORT_METHOD(dismiss) {
         @"errorType": [self errorTypeStringFromError:error] ?: @"",
         @"errorCode": [self errorCodeStringFromError:error] ?: @"",
         @"errorMessage": [self errorMessageFromError:error] ?: @"",
+        // errorDisplayMessage is the deprecated name for displayMessage, both have to be populated
+        // until errorDisplayMessage is fully removed to avoid breaking the API
         @"errorDisplayMessage": [self errorDisplayMessageFromError:error] ?: @"",
+        @"displayMessage": [self errorDisplayMessageFromError:error] ?: @"",
     };
 }
 
@@ -606,7 +609,7 @@ RCT_EXPORT_METHOD(dismiss) {
     PLKEventMetadata *metadata = event.eventMetadata;
     
     return @{
-        @"event": [self stringForEventName:event.eventName] ?: @"",
+        @"eventName": [self stringForEventName:event.eventName] ?: @"",
         @"metadata": @{
             @"errorType": [self errorTypeStringFromError:metadata.error] ?: @"",
             @"errorCode": [self errorCodeStringFromError:metadata.error] ?: @"",
@@ -686,6 +689,10 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"FAIL_OAUTH";
         case PLKEventNameValueHandoff:
             return @"HANDOFF";
+        case PLKEventNameValueMatchedSelectInstitution:
+            return @"MATCHED_SELECT_INSTITUTION";
+        case PLKEventNameValueMatchedSelectVerifyMethod:
+            return @"MATCHED_SELECT_VERIFY_METHOD";
         case PLKEventNameValueOpen:
             return @"OPEN";
         case PLKEventNameValueOpenMyPlaid:
@@ -711,6 +718,7 @@ RCT_EXPORT_METHOD(dismiss) {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         dateFormatter = [[NSISO8601DateFormatter alloc] init];
+        dateFormatter.formatOptions |= NSISO8601DateFormatWithFractionalSeconds;
     });
     return [dateFormatter stringFromDate:date];
 }
@@ -784,6 +792,12 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"EXIT";
         case PLKViewNameValueLoading:
             return @"LOADING";
+        case PLKViewNameValueMatchedConsent:
+            return @"MATCHED_CONSENT";
+        case PLKViewNameValueMatchedCredential:
+            return @"MATCHED_CREDENTIAL";
+        case PLKViewNameValueMatchedMFA:
+            return @"MATCHED_MFA";
         case PLKViewNameValueMFA:
             return @"MFA";
         case PLKViewNameValueNumbers:

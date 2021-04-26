@@ -59,6 +59,7 @@ android {
 repositories {
     google()
     jcenter()
+    mavencentral()
     maven { url "$rootDir/../node_modules/react-native/android" }
 }
 

@@ -6,10 +6,6 @@ In your react-native project directory:
 npm install --save react-native-plaid-link-sdk
 ```
 
-> Please note that we are updating our SDK with typescript support and an API that aligns closer to our other SDKS. This readme already reflects the installation instructions for the 7.x.x version.
->
-> To try out the new SDK, please use ![version](https://img.shields.io/npm/v/react-native-plaid-link-sdk), to use the latest stable release use [6.0.4](https://www.npmjs.com/package/react-native-plaid-link-sdk/v/6.0.4)
-
 For a full guide and migration guides please vist our [docs][plaid_rndocs]
 
 ## iOS setup

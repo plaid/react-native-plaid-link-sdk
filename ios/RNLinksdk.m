@@ -90,7 +90,7 @@ NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
         // If PLKSuccessMetadata responds to neither, swizzling cannot fix this
         if (respondsToNeither) {
             NSString *githubIssueURLString = @"https://github.com/plaid/react-native-plaid-link-sdk/issues/new?assignees=&labels=&template=bug_report.md&title=";
-            NSAssert(false, @"PLKSuccessMetadata does not respond to correctly spelled %@ or legacy, typo %@. This is a bug in either react-native-plaid-link-sdk, or LinkKit. Please file an issue at: %@", NSStringFromSelector(correctSel), NSStringFromSelector(typoSel), githubIssueURLString);
+            NSAssert(false, @"%@ does not respond to correctly spelled %@ or legacy, typo %@. This is a bug in either react-native-plaid-link-sdk, or LinkKit. Please file an issue at: %@", NSStringFromClass(targetClass), NSStringFromSelector(correctSel), NSStringFromSelector(typoSel), githubIssueURLString);
             return;
         }
 

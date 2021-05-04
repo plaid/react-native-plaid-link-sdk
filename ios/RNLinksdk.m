@@ -73,11 +73,15 @@ NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
     // dispatch_once out of an abundance of caution in case +load is ever called multiple times
     dispatch_once(&onceToken, ^{
         Class targetClass = NSClassFromString(@"PLKSuccessMetadata");
+        if (targetClass == Nil) {
+          return;
+        }
+
         SEL typoSel = NSSelectorFromString(@"insitution");
         SEL correctSel = NSSelectorFromString(@"institution");
 
-        BOOL respondsToCorrectSel = class_respondsToSelector(targetClass, correctSel);
         BOOL respondsToTypoSel = class_respondsToSelector(targetClass, typoSel);
+        BOOL respondsToCorrectSel = class_respondsToSelector(targetClass, correctSel);
 
         BOOL respondsToBoth = respondsToCorrectSel && respondsToTypoSel;
 

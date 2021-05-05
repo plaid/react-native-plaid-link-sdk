@@ -5,14 +5,14 @@ package com.plaid.gson
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.plaid.internal.networking.adapter.AccountSubtypeAdapter
-import com.plaid.internal.networking.adapter.AccountTypeAdapter
-import com.plaid.internal.networking.adapter.LinkAccountVerificationStatusAdapter
-import com.plaid.internal.networking.adapter.LinkEventNameAdapter
-import com.plaid.internal.networking.adapter.LinkEventViewNameAdapter
-import com.plaid.internal.networking.adapter.LinkExitMetadataStatusAdapter
-import com.plaid.internal.networking.adapter.PlaidErrorCodeAdapter
-import com.plaid.internal.networking.adapter.PlaidErrorTypeAdapter
+import com.plaid.internal.classic.networking.adapter.AccountSubtypeAdapter
+import com.plaid.internal.classic.networking.adapter.AccountTypeAdapter
+import com.plaid.internal.classic.networking.adapter.LinkAccountVerificationStatusAdapter
+import com.plaid.internal.classic.networking.adapter.LinkEventNameAdapter
+import com.plaid.internal.classic.networking.adapter.LinkEventViewNameAdapter
+import com.plaid.internal.classic.networking.adapter.LinkExitMetadataStatusAdapter
+import com.plaid.internal.classic.networking.adapter.PlaidErrorCodeAdapter
+import com.plaid.internal.classic.networking.adapter.PlaidErrorTypeAdapter
 import com.plaid.link.event.LinkEvent
 import com.plaid.link.event.LinkEventName
 import com.plaid.link.event.LinkEventViewName

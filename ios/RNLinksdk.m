@@ -5,6 +5,8 @@
 #import <React/RCTConvert.h>
 #import <React/RCTUtils.h>
 
+#import <objc/runtime.h>
+
 static NSString* const kRNLinkKitConfigPublicKeyKey = @"publicKey";
 static NSString* const kRNLinkKitConfigEnvKey = @"environment";
 static NSString* const kRNLinkKitConfigProductsKey = @"products";
@@ -47,6 +49,66 @@ NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
 @end
 
 #pragma mark -
+
+// Category to ensure both the old, typo spelling of `insitution` and
+// the corrected spelling `institution` are visible to the implementation
+// to allow compiling against any LinkKit dependency
+@interface PLKSuccessMetadata (InstitutionTypoFix)
+
+- (PLKInstitution * __nonnull)institution;
+- (PLKInstitution * __nonnull)insitution;
+
+@end
+
+// Class to have a distinct +load method to hook into the runtime before
+// SDK logic executes
+@interface PLKSuccessMetadataTypoFix : NSObject
+
+@end
+
+@implementation PLKSuccessMetadataTypoFix
+
++ (void)load {
+    static dispatch_once_t onceToken;
+    // dispatch_once out of an abundance of caution in case +load is ever called multiple times
+    dispatch_once(&onceToken, ^{
+        Class targetClass = NSClassFromString(@"PLKSuccessMetadata");
+        if (targetClass == Nil) {
+          return;
+        }
+
+        SEL typoSel = NSSelectorFromString(@"insitution");
+        SEL correctSel = NSSelectorFromString(@"institution");
+
+        BOOL respondsToTypoSel = class_respondsToSelector(targetClass, typoSel);
+        BOOL respondsToCorrectSel = class_respondsToSelector(targetClass, correctSel);
+
+        BOOL respondsToBoth = respondsToCorrectSel && respondsToTypoSel;
+
+        // If PLKSuccessMetadata responds to both, no swizzling is necessary
+        if (respondsToBoth) {
+            return;
+        }
+
+        BOOL respondsToNeither = !(respondsToCorrectSel || respondsToTypoSel);
+        // If PLKSuccessMetadata responds to neither, swizzling cannot fix this
+        if (respondsToNeither) {
+            NSString *githubIssueURLString = @"https://github.com/plaid/react-native-plaid-link-sdk/issues/new?assignees=&labels=&template=bug_report.md&title=";
+            NSAssert(false, @"%@ does not respond to correctly spelled %@ or legacy, typo %@. This is a bug in either react-native-plaid-link-sdk, or LinkKit. Please file an issue at: %@", NSStringFromClass(targetClass), NSStringFromSelector(correctSel), NSStringFromSelector(typoSel), githubIssueURLString);
+            return;
+        }
+
+        SEL existingSel = respondsToCorrectSel ? correctSel : typoSel;
+        SEL missingSel = respondsToTypoSel ? correctSel : typoSel;
+
+        Method method = class_getInstanceMethod(targetClass, existingSel);
+        const char* types = method_getTypeEncoding(method);
+        IMP implementation = class_getMethodImplementation(targetClass, existingSel);
+        class_addMethod(targetClass, missingSel, implementation, types);
+    });
+}
+
+@end
 
 @implementation RNLinksdk
 
@@ -507,6 +569,7 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSDictionary *)dictionaryFromSuccess:(PLKLinkSuccess *)success {
     PLKSuccessMetadata *metadata = success.metadata;
+
     return @{
         @"publicToken": success.publicToken ?: @"",
         @"metadata": @{

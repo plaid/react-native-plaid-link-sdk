@@ -95,7 +95,7 @@ NSString* const kRNLinkKitPublicTokenPrefix = @"public-";
         // If PLKSuccessMetadata responds to neither, swizzling cannot fix this
         if (respondsToNeither) {
             NSString *githubIssueURLString = @"https://github.com/plaid/react-native-plaid-link-sdk/issues/new?assignees=&labels=&template=bug_report.md&title=";
-            NSAssert(false, @"%@ does not respond to correctly spelled %@ or legacy, typo %@. This is a bug in either react-native-plaid-link-sdk, or LinkKit. Please file an issue at: %@", NSStringFromClass(targetClass), NSStringFromSelector(correctSel), NSStringFromSelector(typoSel), githubIssueURLString);
+            NSAssert(NO, @"%@ does not respond to correctly spelled %@ or legacy, typo %@. This is a bug in either react-native-plaid-link-sdk, or LinkKit. Please file an issue at: %@", NSStringFromClass(targetClass), NSStringFromSelector(correctSel), NSStringFromSelector(typoSel), githubIssueURLString);
             return;
         }
 
@@ -146,13 +146,13 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)startObserving {
-    self.hasObservers = true;
+    self.hasObservers = YES;
     [super startObserving];
 }
 
 - (void)stopObserving {
     [super stopObserving];
-    self.hasObservers = false;
+    self.hasObservers = NO;
 }
 
 RCT_EXPORT_METHOD(continueFromRedirectUriString:(NSString *)redirectUriString) {
@@ -218,7 +218,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
                                                                 onSuccessHandler:onSuccess];
         config.onEvent = onEvent;
         config.onExit = onExit;
-           NSError *creationError = nil;
+        NSError *creationError = nil;
         self.linkHandler = [PLKPlaid createWithLinkPublicKeyConfiguration:config
                                                                     error:&creationError];
         self.creationError = creationError;
@@ -238,7 +238,7 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBloc
 
         __weak typeof(self) weakSelf = self;
         void(^presentationHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
-            [weakSelf.presentingViewController presentViewController:linkViewController animated:true completion:nil];
+            [weakSelf.presentingViewController presentViewController:linkViewController animated:YES completion:nil];
         };
         void(^dismissalHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
             [weakSelf dismiss];
@@ -253,10 +253,6 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBloc
 RCT_EXPORT_METHOD(dismiss) {
     [self.presentingViewController dismissViewControllerAnimated:YES
                                                       completion:nil];
-    [self cleanupSession];
-}
-
-- (void)cleanupSession {
     self.presentingViewController = nil;
     self.linkHandler = nil;
 }

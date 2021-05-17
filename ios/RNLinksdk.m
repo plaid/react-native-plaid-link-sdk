@@ -37,6 +37,7 @@ NSString* const kRNLinkKitLinkTokenPrefix = @"link-";
 NSString* const kRNLinkKitItemAddTokenPrefix = @"item-add-";
 NSString* const kRNLinkKitPaymentTokenPrefix = @"payment";
 NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
+NSString* const kRNLinkKitPublicTokenPrefix = @"public-";
 
 @interface RNLinksdk ()
 @property (nonatomic, strong) id<PLKHandler> linkHandler;
@@ -285,12 +286,15 @@ RCT_EXPORT_METHOD(dismiss) {
     BOOL isPaymentToken = [tokenInput hasPrefix:kRNLinkKitPaymentTokenPrefix];
     BOOL isItemAddToken = [tokenInput hasPrefix:kRNLinkKitItemAddTokenPrefix];
     BOOL isDepositSwitchToken = [tokenInput hasPrefix:kRNLinkKitDepositSwitchTokenPrefix];
+    BOOL isPublicToken = [tokenInput hasPrefix:kRNLinkKitPublicTokenPrefix];
     if (isPaymentToken) {
         token = [PLKLinkPublicKeyConfigurationToken createWithPaymentToken:tokenInput publicKey:key];
     } else if (isItemAddToken) {
         token = [PLKLinkPublicKeyConfigurationToken createWithPublicToken:tokenInput publicKey:key];
     } else if (isDepositSwitchToken) {
         token = [PLKLinkPublicKeyConfigurationToken createWithDepositSwitchToken:tokenInput publicKey:key];
+    } else if (isPublicToken) {
+        token = [PLKLinkPublicKeyConfigurationToken createWithPublicToken:tokenInput publicKey:key];
     } else {
         token = [PLKLinkPublicKeyConfigurationToken createWithPublicKey:key];
     }

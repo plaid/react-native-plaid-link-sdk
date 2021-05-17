@@ -251,12 +251,9 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBloc
 }
 
 RCT_EXPORT_METHOD(dismiss) {
-    [self dismissLinkViewController];
+    [self.presentingViewController dismissViewControllerAnimated:YES
+                                                      completion:nil];
     [self cleanupSession];
-}
-
-- (void)dismissLinkViewController {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)cleanupSession {

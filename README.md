@@ -73,6 +73,7 @@ dependencies {
 include ':react-native-plaid-link-sdk'
 project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-plaid-link-sdk/android')
 ```
+4. (Optional) Run `npx react-native link`
 
 ## React native setup
 To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create][plaid_tokendocs].

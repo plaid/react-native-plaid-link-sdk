@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
   s.source_files  = "ios/*.{h,m}"
 
   s.dependency 'React-Core'
-  s.dependency 'Plaid', '~> 2.1.3'
+  s.dependency 'Plaid', '~> 2.2.0'
 end

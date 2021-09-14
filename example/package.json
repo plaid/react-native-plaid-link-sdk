@@ -19,7 +19,7 @@
     "react": "16.13.1",
     "react-native": "0.63.3",
     "react-native-gesture-handler": "^1.8.0",
-    "react-native-plaid-link-sdk": "^7.0.2",
+    "react-native-plaid-link-sdk": "^7.1.0",
     "react-native-safe-area-context": "^3.1.8",
     "react-native-screens": "^2.11.0",
     "react-navigation": "^4.4.1",

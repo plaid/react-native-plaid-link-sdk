@@ -11,7 +11,6 @@ From the root of this repo run the following commands in your terminal...
 ```bash
 cd example
 npm install
-npm install react-native
 ```
 
 For each platform, see relevant instructions to continue...
@@ -53,3 +52,7 @@ TODO
 To set a link token, go to `example/components/HomeScreen.tsx` and replace `<INSERT TOKEN>` with your link token.
 
 Build the app again, reload (Command+R) if needed, and you should be good to go!
+
+### Troubleshooting
+
+If the app is not loading correctly, try running `npm install react-native` & rebuild.

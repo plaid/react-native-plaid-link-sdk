@@ -10,7 +10,7 @@ PODS:
     - React-jsi (= 0.64.2)
     - ReactCommon/turbomodule/core (= 0.64.2)
   - glog (0.3.5)
-  - Plaid (2.1.3)
+  - Plaid (2.2.2)
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
     - DoubleConversion
@@ -204,10 +204,10 @@ PODS:
     - React-jsi (= 0.64.2)
     - React-perflogger (= 0.64.2)
   - React-jsinspector (0.64.2)
-  - react-native-plaid-link-sdk (7.0.7):
-    - Plaid (~> 2.1.3)
+  - react-native-plaid-link-sdk (7.1.1):
+    - Plaid (~> 2.2.2)
     - React-Core
-  - react-native-safe-area-context (3.1.9):
+  - react-native-safe-area-context (3.3.2):
     - React-Core
   - React-perflogger (0.64.2)
   - React-RCTActionSheet (0.64.2):
@@ -275,11 +275,11 @@ PODS:
     - React-perflogger (= 0.64.2)
   - RNCClipboard (1.3.0):
     - React-Core
-  - RNCMaskedView (0.1.10):
+  - RNCMaskedView (0.1.11):
     - React
-  - RNGestureHandler (1.8.0):
-    - React
-  - RNScreens (2.15.0):
+  - RNGestureHandler (1.10.3):
+    - React-Core
+  - RNScreens (2.18.1):
     - React-Core
   - Yoga (1.14.0)
 
@@ -288,7 +288,7 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - Plaid (~> 2.1.3)
+  - Plaid (~> 2.2.2)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -399,11 +399,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  DoubleConversion: cde416483dac037923206447da6e1454df403714
+  DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
   FBReactNativeSpec: 3f8c55c7806b3c92b5b34c80d0dddfe3f93b5546
-  glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
-  Plaid: f55c6acdc249245c6778a4045757eb4e839cca61
+  glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
+  Plaid: c8567c09194fe2d4cfc2dcb8d91a086efcd5bea0
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 6d3e854f0e7260a648badd0d44fc364bc9da9728
   RCTTypeSafety: c1f31d19349c6b53085766359caac425926fafaa
@@ -415,8 +415,8 @@ SPEC CHECKSUMS:
   React-jsi: 67747b9722f6dab2ffe15b011bcf6b3f2c3f1427
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
-  react-native-plaid-link-sdk: 437881154600d6bb92a268eba024d752a75a5cd3
-  react-native-safe-area-context: 86612d2c9a9e94e288319262d10b5f93f0b395f5
+  react-native-plaid-link-sdk: 423d96e5b8859e1be3dff7c351845b53f89ce953
+  react-native-safe-area-context: 5cf05f49df9d17261e40e518481f2e334c6cd4b5
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
   React-RCTActionSheet: af7796ba49ffe4ca92e7277a5d992d37203f7da5
   React-RCTAnimation: 6a2e76ab50c6f25b428d81b76a5a45351c4d77aa
@@ -430,11 +430,11 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: a9904c6d0218fb9f8b19d6dd88607225927668f9
   ReactCommon: 149906e01aa51142707a10665185db879898e966
   RNCClipboard: 4182fa9d5e4a782894ed976109ad458464e11281
-  RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
-  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
-  RNScreens: 2ad555d4d9fa10b91bb765ca07fe9b29d59573f0
+  RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
+  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
 
-PODFILE CHECKSUM: d6420c839d8408e0f7ce79c03792fff5c7e85fdb
+PODFILE CHECKSUM: a1bd3b089c75ee144e672fb6606546f21a604dde
 
 COCOAPODS: 1.10.1

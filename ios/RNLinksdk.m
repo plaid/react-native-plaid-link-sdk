@@ -25,7 +25,7 @@ static NSString* const kRNLinkKitConfigInstitutionKey = @"institution";
 static NSString* const kRNLinkKitConfigLongtailAuthKey = @"longtailAuth";
 static NSString* const kRNLinkKitConfigApiVersionKey = @"apiVersion";
 static NSString* const kRNLinkKitConfigOAuthRedirectUriKeyPath = @"oauthConfiguration.redirectUri";
-static NSString* const kRNLinkKitConfigOAuthNonceKeyPath = @"ouathConfiguration.nonce";
+static NSString* const kRNLinkKitConfigOAuthNonceKeyPath = @"oauthConfiguration.nonce";
 
 static NSString* const kRNLinkKitOnEventEvent = @"onEvent";
 static NSString* const kRNLinkKitEventErrorKey = @"error";

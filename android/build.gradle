@@ -65,7 +65,7 @@ repositories {
 
 dependencies {
     implementation "com.facebook.react:react-native:+"
-    implementation "com.plaid.link:sdk-core:3.6.1"
+    implementation "com.plaid.link:sdk-core:3.6.2"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
 }

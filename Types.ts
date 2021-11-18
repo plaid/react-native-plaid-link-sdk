@@ -276,6 +276,7 @@ export interface LinkExitMetadata {
 export enum LinkExitMetadataStatus {
     CONNECTED = 'connected',
     CHOOSE_DEVICE = 'choose_device',
+    INSTITUTION_NOT_FOUND = 'institution_not_found',
     REQUIRES_CODE = 'requires_code',
     REQUIRES_CREDENTIALS = 'requires_credentials',
     REQUIRES_EXTERNAL_ACTION = 'requires_external_action',

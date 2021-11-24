@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "sync-local-pkg": "rsync -ar --progress ../../react-native-plaid-link-sdk node_modules --exclude 'node_modules' --exclude 'example'"
+    "recompile-local": "cd ..; tsc; cd example",
+    "sync-local-pkg": "npm run recompile-local; rsync -ar --progress ../../react-native-plaid-link-sdk node_modules --exclude 'node_modules' --exclude 'example'"
   },
   "dependencies": {
     "@react-native-community/clipboard": "1.3.0",

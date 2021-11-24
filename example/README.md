@@ -58,7 +58,7 @@ TODO
 
 ### Configuring Link Tokens
 
-To set a link token, go to `example/components/HomeScreen.tsx` and replace `<INSERT TOKEN>` with your link token.
+To set a link token, go to `example/components/HomeScreen.tsx` and replace `<INSERT LINK TOKEN>` with your link token.
 
 Build the app again, reload (Command+R) if needed, and you should be good to go!
 

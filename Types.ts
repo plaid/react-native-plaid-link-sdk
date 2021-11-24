@@ -493,6 +493,7 @@ export interface PlaidLinkProps {
     publicKeyConfig?: LinkPublicKeyConfiguration
     onSuccess: LinkSuccessListener
     onExit?: LinkExitListener
+    onPress?(): any
 }
 
 export type PlaidLinkComponentProps = (PlaidLinkProps & {

@@ -91,7 +91,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
     val builder = LinkTokenConfiguration.Builder()
       .token(token)
-      .noLoadingState()
       .logLevel(logLevel)
 
       maybeGetBooleanField(obj, NO_LOADING_STATE)?.let {
@@ -283,7 +282,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     return null
   }
 
-  private fun maybeGetBooleanField(obj: JSONObject, fieldName: String): Bool? {
+  private fun maybeGetBooleanField(obj: JSONObject, fieldName: String): Boolean? {
     if (obj.has(fieldName)) {
       return obj.getBoolean(fieldName);
     }

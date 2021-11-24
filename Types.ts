@@ -5,6 +5,7 @@ interface CommonPlaidLinkOptions {
 
 export type LinkTokenConfiguration = (CommonPlaidLinkOptions & {
     token: string;
+    noLoadingState: boolean;
 });
 
 export type LinkPublicKeyConfiguration = (CommonPlaidLinkOptions & {
@@ -492,6 +493,7 @@ export interface PlaidLinkProps {
     publicKeyConfig?: LinkPublicKeyConfiguration
     onSuccess: LinkSuccessListener
     onExit?: LinkExitListener
+    onPress?(): any
 }
 
 export type PlaidLinkComponentProps = (PlaidLinkProps & {

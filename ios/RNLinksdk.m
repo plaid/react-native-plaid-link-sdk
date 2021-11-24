@@ -22,6 +22,7 @@ static NSString* const kRNLinkKitConfigAccountSubtypes = @"accountSubtypes";
 static NSString* const kRNLinkKitConfigCountryCodesKey = @"countryCodes";
 static NSString* const kRNLinkKitConfigLanguageKey = @"language";
 static NSString* const kRNLinkKitConfigInstitutionKey = @"institution";
+static NSString* const kRNLinkKitConfigNoLoadingStateKey = @"noLoadingState";
 static NSString* const kRNLinkKitConfigLongtailAuthKey = @"longtailAuth";
 static NSString* const kRNLinkKitConfigApiVersionKey = @"apiVersion";
 static NSString* const kRNLinkKitConfigOAuthRedirectUriKeyPath = @"oauthConfiguration.redirectUri";
@@ -116,7 +117,7 @@ NSString* const kRNLinkKitPublicTokenPrefix = @"public-";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"7.1.1"; // SDK_VERSION
+    return @"7.2.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -209,6 +210,8 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
                                                            onSuccessHandler:onSuccess];
         config.onEvent = onEvent;
         config.onExit = onExit;
+        config.noLoadingState = configuration[kRNLinkKitConfigNoLoadingStateKey];
+
         NSError *creationError = nil;
         self.linkHandler = [PLKPlaid createWithLinkTokenConfiguration:config
                                                                 error:&creationError];

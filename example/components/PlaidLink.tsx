@@ -22,6 +22,7 @@ const PlaidComponent = (props: any) => {
         <PlaidLink
             tokenConfig={{
                 token: props.token,
+                noLoadingState: props.noLoadingState,
             }}
             onSuccess={(success: LinkSuccess) => {
                 navigation.navigate('Success', success)

@@ -5,6 +5,7 @@ interface CommonPlaidLinkOptions {
 
 export type LinkTokenConfiguration = (CommonPlaidLinkOptions & {
     token: string;
+    noLoadingState: boolean;
 });
 
 export type LinkPublicKeyConfiguration = (CommonPlaidLinkOptions & {

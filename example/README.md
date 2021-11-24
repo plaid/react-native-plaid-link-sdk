@@ -2,6 +2,27 @@
 
 Sample apps using the React Native Plaid Link SDK on both iOS and Android.
 
+## Local Developement of react-native-plaid-link-sdk
+
+To test local changes to the `react-native-plaid-link-sdk` package...
+
+* Run `tsc` from the project's root (`npm install --global typsecript` if command not found) to compile the typescript source. Ensure the `dist` directory has been created
+* Run `cd example`
+* Run `npm install` to resolve example app dependencies
+* Copy the local package implementation into `example/node_modules`:<br> From `example` run `npm run sync-local-pkg`
+
+Run the `npm run sync-local-package` each time you make changes to the local package, then reload the react native app.
+
+At this point you should be able to build & run the app using the local package as a dependency.
+
+Make sure you do not check these changes in! To get out of local dev mode, revert the 
+changes to `example/package.json` & run `npm install` again. 
+
+### iOS
+
+Make sure you update / install Cocoapods after running `npm run sync-local-pkg`.
+
+
 ## Setup
 
 > cxNote: This assumes you have Cocoapods & NPM installed locally.
@@ -22,24 +43,12 @@ For each platform, see relevant instructions to continue...
 Run the following commands in your terminal...
 
 ```bash
+pod update Plaid
 pod install
 open -a Xcode plaidRNDemo.xcworkspace
 ```
 
 The `plaidRNDemo.xcworkspace` should be open, run the `plaidRNDemo` target.
-
-If you have any build errors with flipper dependencies, try commenting out or removing the flipper specific code (below) in the `Podfile`, and re-run `pod install`.
-
-```rb
-  # Enables Flipper.
-  #
-  # Note that if you have use_frameworks! enabled, Flipper will not work and
-  # you should disable these next few lines.
-  use_flipper!
-  post_install do |installer|
-    flipper_post_install(installer)
-  end 
-```
 
 Now you should be able to build, but Link won't work without a link token. See the [Configuring Link Tokens](#configuring-link-tokens) section below!
 

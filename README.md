@@ -21,8 +21,6 @@ Then install your cocoapods dependencies:
 (cd ios && pod install)
 ```
 
-Add a Run Script build phase (after the [CP] Embed Pods Frameworks step) to your target as [described in Plaid Link for iOS documentation][plaid_iosscripts]. This strips simulator symbols from App Store release builds.
-
 That's it if using a recent react-native version with [autolinking][autolinking] support.
 
 ### Manual Integration
@@ -172,7 +170,6 @@ When upgrading from a previous major version of this library, see the following 
 
 
 [plaid_dashboard]: https://dashboard.plaid.com/team/api
-[plaid_iosscripts]: https://plaid.com/docs/link/ios/#add-run-script
 [plaid_rndocs]: https://plaid.com/docs/link/react-native/
 [plaid_oauthdocs]: https://plaid.com/docs/#oauth
 [plaid_eventdocs]: https://plaid.com/docs/#onevent-callback

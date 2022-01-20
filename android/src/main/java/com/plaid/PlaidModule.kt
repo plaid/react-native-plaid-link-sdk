@@ -92,6 +92,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     val builder = LinkTokenConfiguration.Builder()
       .token(token)
       .logLevel(logLevel)
+      .noLoadingState(false)
 
       maybeGetBooleanField(obj, NO_LOADING_STATE)?.let {
         builder.noLoadingState(it)

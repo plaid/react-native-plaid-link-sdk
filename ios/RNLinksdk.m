@@ -752,6 +752,8 @@ RCT_EXPORT_METHOD(dismiss) {
     switch (eventName.value) {
         case PLKEventNameValueNone:
             return @"";
+        case PLKEventNameValueBankIncomeInsightsCompleted:
+            return @"BANK_INCOME_INSIGHTS_COMPLETED";
         case PLKEventNameValueCloseOAuth:
             return @"CLOSE_OAUTH";
         case PLKEventNameValueError:

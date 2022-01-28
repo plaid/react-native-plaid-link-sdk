@@ -99,7 +99,7 @@ export const useDeepLinkRedirector = () => {
   useEffect(() => {
   const subscription = Linking.addEventListener('url', _handleListenerChange);
   return function cleanup() {
-    if (typeof subscription === 'function') {
+    if (typeof subscription?.remove === 'function') {
       subscription.remove();
     } else {
       Linking.removeEventListener('url', _handleListenerChange);

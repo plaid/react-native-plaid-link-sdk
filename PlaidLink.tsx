@@ -93,17 +93,18 @@ export const dismissLink = () => {
 
 export const useDeepLinkRedirector = () => {
   const _handleListenerChange = (event: { url: string }) => {
-    if (event.url !== null && Platform.OS === 'ios') {
-      NativeModules.RNLinksdk.continueFromRedirectUriString(event.url);
-    }
+    continueFromRedirectUriString(event.url);
   };
 
   useEffect(() => {
-    Linking.addEventListener('url', _handleListenerChange);
-
-    return function cleanup() {
+  const subscription = Linking.addEventListener('url', _handleListenerChange);
+  return function cleanup() {
+    if (typeof subscription?.remove === 'function') {
+      subscription.remove();
+    } else {
       Linking.removeEventListener('url', _handleListenerChange);
-    };
+    }
+  };
   }, []);
 };
 
@@ -116,3 +117,7 @@ export const PlaidLink = (props: PlaidLinkComponentProps) => {
   useDeepLinkRedirector();
   return <TouchableOpacity onPress={onPress}>{props.children}</TouchableOpacity>;
 };
+
+export const continueFromRedirectUriString = Platform.OS === 'ios' ?
+  (uri) => uri && NativeModules.RNLinksdk.continueFromRedirectUriString(uri) :
+  () => {};

@@ -143,6 +143,8 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 
 # Version information
 
+⚠️ React Native Link SDK versions prior to 2.2.2 (released October 2021) will no longer work with the Plaid API as of November 1, 2022. If you are using a version of the iOS Link SDK earlier than 2.2.2, you must upgrade to version 2.2.2 or later before November 1, 2022. 
+
 ## Versions and release candidates
 
 We create release candidates (e.g. 7.0.0-rc1) as beta previews for developers. These are helpful for customers who either are 1. waiting for a specific fix or 2. extremely eager for specific features. They do not hold the same quality guarantee as our official releases, and should NOT be used in production. The official releases come ~2 weeks after the first release candidate (rc1).

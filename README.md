@@ -143,6 +143,8 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 
 # Version information
 
+⚠️ React Native Link SDK versions prior to 7.1.1 (released October 2021) and iOS SDK versions prior to 2.2.2 (released October 2021) will no longer work with the Plaid API as of November 1, 2022. If you are using a version of the iOS Link SDK earlier than 7.1.1, or a version of the iOS SDK prior to 2.2.2, you must upgrade before November 1, 2022. 
+
 ## Versions and release candidates
 
 We create release candidates (e.g. 7.0.0-rc1) as beta previews for developers. These are helpful for customers who either are 1. waiting for a specific fix or 2. extremely eager for specific features. They do not hold the same quality guarantee as our official releases, and should NOT be used in production. The official releases come ~2 weeks after the first release candidate (rc1).
@@ -159,10 +161,10 @@ When upgrading from a previous major version of this library, see the following 
 # Version compatibility
 | React Native SDK | Android SDK | iOS SDK | Status |
 |---|---|---|---|
-| 7.x.x | [3.2.0+]      | >=2.0.11 | Active |
-| 6.x.x | [3.0.0-3.2.0) | >=2.0.1  | Active |
-| 5.x.x | [2.1.0-3.0.0) | >=1.1.34 | Active |
-| 4.x.x | [2.0.0-2.1.0) | <=1.1.33 | Active |
+| 7.x.x | [3.2.0+]      | >=2.0.11 |  Active     |
+| 6.x.x | [3.0.0-3.2.0) | >=2.0.1  |  Deprecated |
+| 5.x.x | [2.1.0-3.0.0) | >=1.1.34 |  Deprecated |
+| 4.x.x | [2.0.0-2.1.0) | <=1.1.33 |  Deprecated |
 | 3.x.x | [1.0.0-2.0.0) | <=1.1.33 |  Deprecated |
 | 2.x.x | [0.3.0-1.0.0) | <=1.1.27 |  Deprecated |
 | 1.x.x | [0.1.0-0.3.0) | <=1.1.24 |  Deprecated |

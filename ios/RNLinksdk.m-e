@@ -390,7 +390,7 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSArray<id<PLKAccountSubtype>> *)accountSubtypesArrayFromAccountSubtypeDictionaries:(NSArray<NSDictionary<NSString *, NSString *> *> *)accountSubtypeDictionaries {
     __block NSMutableArray<id<PLKAccountSubtype>> *results = [NSMutableArray array];
-
+    
     for (NSDictionary *accountSubtypeDictionary in accountSubtypeDictionaries) {
         NSString *type = accountSubtypeDictionary[@"type"];
         NSString *subtype = accountSubtypeDictionary[@"subtype"];
@@ -399,7 +399,7 @@ RCT_EXPORT_METHOD(dismiss) {
             [results addObject:result];
         }
     }
-
+    
     return [results copy];
 }
 
@@ -593,7 +593,7 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSArray<NSDictionary *> *)accountsDictionariesFromAccounts:(NSArray<PLKAccount *> *)accounts {
     NSMutableArray<NSDictionary *> *results = [NSMutableArray arrayWithCapacity:accounts.count];
-
+    
     for (PLKAccount *account in accounts) {
         NSDictionary *accountDictionary = [self dictionaryFromAccount:account];
         [results addObject:accountDictionary];
@@ -680,7 +680,7 @@ RCT_EXPORT_METHOD(dismiss) {
 
 + (NSDictionary *)dictionaryFromEvent:(PLKLinkEvent *)event {
     PLKEventMetadata *metadata = event.eventMetadata;
-
+    
     return @{
         @"eventName": [self stringForEventName:event.eventName] ?: @"",
         @"metadata": @{
@@ -710,9 +710,9 @@ RCT_EXPORT_METHOD(dismiss) {
     if (!error || !errorDomain) {
         return @"";
     }
-
+    
     NSString *normalizedErrorDomain = errorDomain;
-
+    
     return @{
         kPLKExitErrorInvalidRequestDomain: @"INVALID_REQUEST",
         kPLKExitErrorInvalidInputDomain: @"INVALID_INPUT",
@@ -744,7 +744,7 @@ RCT_EXPORT_METHOD(dismiss) {
     if (!eventName) {
         return @"";
     }
-
+    
     if (eventName.unknownStringValue) {
         return eventName.unknownStringValue;
     }

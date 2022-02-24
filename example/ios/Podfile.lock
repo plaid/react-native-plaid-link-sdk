@@ -210,7 +210,7 @@ PODS:
   - React-jsinspector (0.66.4)
   - React-logger (0.66.4):
     - glog
-  - react-native-plaid-link-sdk (7.2.1):
+  - react-native-plaid-link-sdk (7.3.0):
     - Plaid (= 2.3.2)
     - React-Core
   - react-native-safe-area-context (3.3.2):

@@ -443,6 +443,8 @@ export interface LinkEventMetadata {
     institutionId?: string;
     institutionName?: string;
     institutionSearchQuery?: string;
+  // see possible values for selection at https://plaid.com/docs/link/web/#link-web-onevent-selection
+    selection?: null | string;
     timestamp: string;
 }
 

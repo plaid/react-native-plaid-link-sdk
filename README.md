@@ -38,6 +38,45 @@ followed by
 3. In Xcode, in the project navigator, select your project. Add `libRNLinksdk.a` to your project's `Build Phases` ▶ `Link Binary With Libraries`
 4. Run your project (`Cmd+R`)<
 
+### OAuth Requirements
+
+For iOS OAuth to work, specific requirements must be met.
+* Redirect URIs must be registered, and set up as universal links ([docs](https://plaid.com/docs/link/ios/#register-your-redirect-uri))
+* Deep linking must be set up in the application delegate class (see code sample below)
+* The exported `useDeepLinkRedirector` method must be invoked. If you are using the `PlaidLink` component it is invoked automatically, but if you are calling `openLink` programatically you must invoke `useDeepLinkRedirector`.
+
+```objective-c
+#import "AppDelegate.h"
+...
+#import <React/RCTLinkingManager.h>
+
+...
+
+@implementation AppDelegate
+
+...
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+  return [RCTLinkingManager application:application openURL:url
+                      sourceApplication:sourceApplication annotation:annotation];
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity
+ restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
+{
+ return [RCTLinkingManager application:application
+                  continueUserActivity:userActivity
+                    restorationHandler:restorationHandler];
+}
+
+...
+
+@end
+```
+
+
 ## Android setup
 [Autolinking][autolinking]  unfortunately isn't supported for Android, because the SDK makes use of [TurboModules][turbomodules] to speed up app cold starts. Have a look at [#306](https://github.com/plaid/react-native-plaid-link-sdk/pull/306) for more context.
 

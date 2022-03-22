@@ -827,7 +827,7 @@ RCT_EXPORT_METHOD(dismiss) {
         case PLKExitStatusValueInstitutionNotFound:
             return @"institution_not_found";
         case PLKExitStatusValueRequiresAccountSelection:
-            return @"requires_account_selection"
+            return @"requires_account_selection";
     }
     return @"unknown";
 }

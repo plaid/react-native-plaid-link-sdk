@@ -117,7 +117,7 @@ NSString* const kRNLinkKitPublicTokenPrefix = @"public-";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"7.3.0"; // SDK_VERSION
+    return @"7.4.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -784,6 +784,10 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"SUBMIT_MFA";
         case PLKEventNameValueTransitionView:
             return @"TRANSITION_VIEW";
+        case PLKEventNameValueSelectDegradedInstitution:
+            return @"SELECT_DEGRADED_INSTITUTION";
+        case PLKEventNameValueSelectDownInstitution:
+            return @"SELECT_DOWN_INSTITUTION";
      }
      return @"unknown";
 }
@@ -822,6 +826,8 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"requires_credentials";
         case PLKExitStatusValueInstitutionNotFound:
             return @"institution_not_found";
+        case PLKExitStatusValueRequiresAccountSelection:
+            return @"requires_account_selection";
     }
     return @"unknown";
 }

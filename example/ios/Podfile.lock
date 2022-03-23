@@ -11,7 +11,7 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.66.4)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - Plaid (2.3.2)
+  - Plaid (2.5.1)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -210,8 +210,8 @@ PODS:
   - React-jsinspector (0.66.4)
   - React-logger (0.66.4):
     - glog
-  - react-native-plaid-link-sdk (7.3.0):
-    - Plaid (= 2.3.2)
+  - react-native-plaid-link-sdk (7.4.0):
+    - Plaid (~> 2.5.1)
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
@@ -412,7 +412,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: fe08c1cd7e2e205718d77ad14b34957cce949b58
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
-  Plaid: 4d8d4ff0a6d627f5faf3055a9cba8890ea6b5076
+  Plaid: 6beadc0828cfd5396c5905931b9503493bbc139a
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
   RCTRequired: 4bf86c70714490bca4bf2696148638284622644b
   RCTTypeSafety: c475a7059eb77935fa53d2c17db299893f057d5d
@@ -425,7 +425,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 94ce921e1d8ce7023366873ec371f3441383b396
   React-jsinspector: d0374f7509d407d2264168b6d0fad0b54e300b85
   React-logger: 933f80c97c633ee8965d609876848148e3fef438
-  react-native-plaid-link-sdk: 835db848ee18c6ebcc7863ab572208af2469c421
+  react-native-plaid-link-sdk: 77052f329310ff5a36ddda276793f40d27c02bc4
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   React-perflogger: 93075d8931c32cd1fce8a98c15d2d5ccc4d891bd
   React-RCTActionSheet: 7d3041e6761b4f3044a37079ddcb156575fb6d89

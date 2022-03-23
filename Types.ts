@@ -277,6 +277,7 @@ export interface LinkExitMetadata {
 export enum LinkExitMetadataStatus {
     CONNECTED = 'connected',
     CHOOSE_DEVICE = 'choose_device',
+    REQUIRES_ACCOUNT_SELECTION = 'requires_account_selection',
     REQUIRES_CODE = 'requires_code',
     REQUIRES_CREDENTIALS = 'requires_credentials',
     REQUIRES_EXTERNAL_ACTION = 'requires_external_action',
@@ -461,6 +462,8 @@ export enum LinkEventName {
     OPEN_MY_PLAID = 'OPEN_MY_PLAID',
     OPEN_OAUTH = 'OPEN_OAUTH',
     SEARCH_INSTITUTION = 'SEARCH_INSTITUTION',
+    SELECT_DEGRADED_INSTITUTION = 'SELECT_DEGRADED_INSTITUTION',
+    SELECT_DOWN_INSTITUTION = 'SELECT_DOWN_INSTITUTION',
     SELECT_INSTITUTION = 'SELECT_INSTITUTION',
     SUBMIT_CREDENTIALS = 'SUBMIT_CREDENTIALS',
     SUBMIT_MFA = 'SUBMIT_MFA',

@@ -5,6 +5,7 @@ interface CommonPlaidLinkOptions {
 
 export type LinkTokenConfiguration = (CommonPlaidLinkOptions & {
     token: string;
+    noLoadingState: boolean;
 });
 
 export type LinkPublicKeyConfiguration = (CommonPlaidLinkOptions & {
@@ -277,6 +278,7 @@ export enum LinkExitMetadataStatus {
     CONNECTED = 'connected',
     CHOOSE_DEVICE = 'choose_device',
     INSTITUTION_NOT_FOUND = 'institution_not_found',
+    REQUIRES_ACCOUNT_SELECTION = 'requires_account_selection',
     REQUIRES_CODE = 'requires_code',
     REQUIRES_CREDENTIALS = 'requires_credentials',
     REQUIRES_EXTERNAL_ACTION = 'requires_external_action',
@@ -443,6 +445,8 @@ export interface LinkEventMetadata {
     institutionId?: string;
     institutionName?: string;
     institutionSearchQuery?: string;
+  // see possible values for selection at https://plaid.com/docs/link/web/#link-web-onevent-selection
+    selection?: null | string;
     timestamp: string;
 }
 
@@ -452,6 +456,17 @@ export enum LinkEventName {
     EXIT = 'EXIT',
     FAIL_OAUTH = 'FAIL_OAUTH',
     HANDOFF = 'HANDOFF',
+    IDENTITY_VERIFICATION_START_STEP = 'IDENTITY_VERIFICATION_START_STEP',
+    IDENTITY_VERIFICATION_PASS_STEP = 'IDENTITY_VERIFICATION_PASS_STEP',
+    IDENTITY_VERIFICATION_FAIL_STEP = 'IDENTITY_VERIFICATION_FAIL_STEP',
+    IDENTITY_VERIFICATION_PENDING_REVIEW_STEP = 'IDENTITY_VERIFICATION_PENDING_REVIEW_STEP',
+    IDENTITY_VERIFICATION_CREATE_SESSION = 'IDENTITY_VERIFICATION_CREATE_SESSION',
+    IDENTITY_VERIFICATION_RESUME_SESSION = 'IDENTITY_VERIFICATION_RESUME_SESSION',
+    IDENTITY_VERIFICATION_PASS_SESSION = 'IDENTITY_VERIFICATION_PASS_SESSION',
+    IDENTITY_VERIFICATION_FAIL_SESSION = 'IDENTITY_VERIFICATION_FAIL_SESSION',
+    IDENTITY_VERIFICATION_OPEN_UI = 'IDENTITY_VERIFICATION_OPEN_UI',
+    IDENTITY_VERIFICATION_RESUME_UI = 'IDENTITY_VERIFICATION_RESUME_UI',
+    IDENTITY_VERIFICATION_CLOSE_UI = 'IDENTITY_VERIFICATION_CLOSE_UI',
     MATCHED_CONSENT = 'MATCHED_CONSENT',
     MATCHED_SELECT_INSTITUTION = 'MATCHED_SELECT_INSTITUTION',
     MATCHED_SELECT_VERIFY_METHOD = 'MATCHED_SELECT_VERIFY_METHOD',
@@ -459,6 +474,8 @@ export enum LinkEventName {
     OPEN_MY_PLAID = 'OPEN_MY_PLAID',
     OPEN_OAUTH = 'OPEN_OAUTH',
     SEARCH_INSTITUTION = 'SEARCH_INSTITUTION',
+    SELECT_DEGRADED_INSTITUTION = 'SELECT_DEGRADED_INSTITUTION',
+    SELECT_DOWN_INSTITUTION = 'SELECT_DOWN_INSTITUTION',
     SELECT_INSTITUTION = 'SELECT_INSTITUTION',
     SUBMIT_CREDENTIALS = 'SUBMIT_CREDENTIALS',
     SUBMIT_MFA = 'SUBMIT_MFA',
@@ -477,6 +494,7 @@ export enum LinkEventViewName {
     MATCHED_MFA = 'MATCHED_MFA',
     MFA = 'MFA',
     NUMBERS = 'NUMBERS',
+    OAUTH = 'OAUTH',
     RECAPTCHA = 'RECAPTCHA',
     SELECT_ACCOUNT = 'SELECT_ACCOUNT',
     SELECT_INSTITUTION = 'SELECT_INSTITUTION',
@@ -493,6 +511,7 @@ export interface PlaidLinkProps {
     publicKeyConfig?: LinkPublicKeyConfiguration
     onSuccess: LinkSuccessListener
     onExit?: LinkExitListener
+    onPress?(): any
 }
 
 export type PlaidLinkComponentProps = (PlaidLinkProps & {

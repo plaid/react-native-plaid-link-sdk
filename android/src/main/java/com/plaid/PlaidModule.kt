@@ -45,6 +45,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val ENV = "environment"
     private const val LINK_CUSTOMIZATION_NAME = "linkCustomizationName"
     private const val TOKEN = "token"
+    private const val NO_LOADING_STATE = "noLoadingState"
     private const val USER_EMAIL = "userEmailAddress"
     private const val USER_NAME = "userLegalName"
     private const val USER_PHONE = "userPhoneNumber"
@@ -91,6 +92,11 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     val builder = LinkTokenConfiguration.Builder()
       .token(token)
       .logLevel(logLevel)
+      .noLoadingState(false)
+
+      maybeGetBooleanField(obj, NO_LOADING_STATE)?.let {
+        builder.noLoadingState(it)
+      }
 
     if (extrasMap.isNotEmpty()) {
       builder.extraParams(extrasMap)
@@ -273,6 +279,13 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   private fun maybeGetStringField(obj: JSONObject, fieldName: String): String? {
     if (obj.has(fieldName) && !TextUtils.isEmpty(obj.getString(fieldName))) {
       return obj.getString(fieldName)
+    }
+    return null
+  }
+
+  private fun maybeGetBooleanField(obj: JSONObject, fieldName: String): Boolean? {
+    if (obj.has(fieldName)) {
+      return obj.getBoolean(fieldName);
     }
     return null
   }

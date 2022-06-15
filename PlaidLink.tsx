@@ -108,6 +108,11 @@ export const useDeepLinkRedirector = () => {
 };
 
 export const PlaidLink = (props: PlaidLinkComponentProps) => {
+  function onPress() {
+    props.onPress?.()
+    openLink(props)
+  }
+
   useDeepLinkRedirector();
-  return <TouchableOpacity onPress={() => openLink(props)}>{props.children}</TouchableOpacity>;
+  return <TouchableOpacity onPress={onPress}>{props.children}</TouchableOpacity>;
 };

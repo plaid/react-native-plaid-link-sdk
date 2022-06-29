@@ -479,7 +479,7 @@ export enum LinkEventViewName {
     ERROR = 'ERROR',
     EXIT = 'EXIT',
     KYC_CHECK = 'KYC_CHECK',
-    LIVENESS = 'LIVENESS',
+    SELFIE_CHECK = 'SELFIE_CHECK',
     LOADING = 'LOADING',
     OAUTH = 'OAUTH',
     MATCHED_CONSENT = 'MATCHED_CONSENT',

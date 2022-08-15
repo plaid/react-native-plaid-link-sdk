@@ -198,8 +198,8 @@ When upgrading from a previous major version of this library, see the following 
 # Version compatibility
 | React Native SDK | Android SDK | iOS SDK | Status |
 |---|---|---|---|
-| 8.x.x (for Xcode 14) | [3.2.0+]      | >=2.0.11 |  Active     |
-| 7.x.x (for Xcode <=13) | [3.2.0+]      | >=2.0.11 |  Active     |
+| 8.x.x | [3.2.0+]      | >=2.0.11 |  Active, supports Xcode 14     |
+| 7.x.x | [3.2.0+]      | >=2.0.11 |  Active, supports Xcode <= 13     |
 | 6.x.x | [3.0.0-3.2.0) | >=2.0.1  |  Deprecated |
 | 5.x.x | [2.1.0-3.0.0) | >=1.1.34 |  Deprecated |
 | 4.x.x | [2.0.0-2.1.0) | <=1.1.33 |  Deprecated |

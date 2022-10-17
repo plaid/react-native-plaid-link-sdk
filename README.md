@@ -6,7 +6,7 @@ In your react-native project directory:
 npm install --save react-native-plaid-link-sdk
 ```
 
-For a full guide and migration guides please vist our [docs][plaid_rndocs]
+For a sample app demonstrating a minimal integration with this SDK, see the [Tiny Quickstart (React Native)](https://github.com/plaid/tiny-quickstart/tree/main/react_native). For a full guide and migration guides please vist our [docs][plaid_rndocs].
 
 ## iOS setup
 Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The latest version is ![version](https://img.shields.io/cocoapods/v/Plaid).

@@ -239,12 +239,19 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBloc
         self.presentingViewController = RCTPresentedViewController();
         NSDictionary *options = self.institutionID.length > 0 ? @{@"institution_id": self.institutionID} : @{};
 
+        // Some link flows do not need to present UI, so track if presentation happened so dismissal isn't
+        // unnecessarily.
+        bool didPresent = NO;
+
         __weak typeof(self) weakSelf = self;
         void(^presentationHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
             [weakSelf.presentingViewController presentViewController:linkViewController animated:YES completion:nil];
+            didPresent = YES;
         };
         void(^dismissalHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
-            [weakSelf dismiss];
+            if (didPresent) {
+                [weakSelf dismiss];
+            }
         };
         [self.linkHandler openWithPresentationHandler:presentationHandler dismissalHandler:dismissalHandler options:options];
     } else {

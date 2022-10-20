@@ -240,7 +240,7 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBloc
         NSDictionary *options = self.institutionID.length > 0 ? @{@"institution_id": self.institutionID} : @{};
 
         // Some link flows do not need to present UI, so track if presentation happened so dismissal isn't
-        // unnecessarily.
+        // unnecessarily invoked.
         __block bool didPresent = NO;
 
         __weak typeof(self) weakSelf = self;

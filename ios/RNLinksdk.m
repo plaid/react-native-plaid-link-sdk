@@ -241,7 +241,7 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBloc
 
         // Some link flows do not need to present UI, so track if presentation happened so dismissal isn't
         // unnecessarily.
-        bool didPresent = NO;
+        __block bool didPresent = NO;
 
         __weak typeof(self) weakSelf = self;
         void(^presentationHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
@@ -251,6 +251,7 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBloc
         void(^dismissalHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
             if (didPresent) {
                 [weakSelf dismiss];
+                didPresent = NO;
             }
         };
         [self.linkHandler openWithPresentationHandler:presentationHandler dismissalHandler:dismissalHandler options:options];

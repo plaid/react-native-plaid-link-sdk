@@ -6,7 +6,9 @@ In your react-native project directory:
 npm install --save react-native-plaid-link-sdk
 ```
 
-For a full guide and migration guides please vist our [docs][plaid_rndocs]
+For a full guide and migration guides please vist our [docs][plaid_rndocs].
+
+A sample app showing a full, OAuth-compatible implementation of the SDK for both iOS and Android, along with setup instructions, is available at the [Tiny Quickstart repo][tinyquickstart].
 
 ## iOS setup
 Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The latest version is ![version](https://img.shields.io/cocoapods/v/Plaid).
@@ -215,6 +217,7 @@ When upgrading from a previous major version of this library, see the following 
 [plaid_eventdocs]: https://plaid.com/docs/#onevent-callback
 [plaid_tokendocs]: https://plaid.com/docs/#create-link-token
 
+[tinyquickstart]: https://github.com/plaid/tiny-quickstart
 [autolinking]: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md
 [turbomodules]: https://github.com/react-native-community/discussions-and-proposals/issues/40
 [upgrading]: https://plaid.com/docs/link/react-native/#upgrading

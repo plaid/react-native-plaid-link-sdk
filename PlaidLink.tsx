@@ -99,10 +99,10 @@ export const useDeepLinkRedirector = () => {
   };
 
   useEffect(() => {
-    Linking.addEventListener('url', _handleListenerChange);
+    const listener = Linking.addEventListener('url', _handleListenerChange);
 
     return function cleanup() {
-      Linking.removeEventListener('url', _handleListenerChange);
+      listener.remove();
     };
   }, []);
 };

@@ -40,7 +40,7 @@ followed by
 
 ### OAuth Requirements
 
-:warning: All integrations must migrate to version 9.0.0 or later of this SDK by June 30, 2023, to maintain support for Chase OAuth connections on iOS. 
+:warning: All integrations must migrate to version 9.0.0 or later of this SDK by June 30, 2023, to maintain support for Chase OAuth on iOS. 
 
 For iOS OAuth to work, specific requirements must be met.
 * Redirect URIs must be registered, and set up as universal links ([docs](https://plaid.com/docs/link/ios/#register-your-redirect-uri))

@@ -40,6 +40,8 @@ followed by
 
 ### OAuth Requirements
 
+:warning: All integrations must migrate to version 9.0.0 or later of the React Native SDK (requires version 4.1.0 or later of the iOS LinkKit SDK) by June 30, 2023, to maintain support for Chase OAuth on iOS. 
+
 For iOS OAuth to work, specific requirements must be met.
 * Redirect URIs must be registered, and set up as universal links ([docs](https://plaid.com/docs/link/ios/#register-your-redirect-uri))
 * Deep linking must be set up in the application delegate class (see code sample below)
@@ -198,8 +200,9 @@ When upgrading from a previous major version of this library, see the following 
 # Version compatibility
 | React Native SDK | Android SDK | iOS SDK | Status |
 |---|---|---|---|
-| 8.x.x | [3.10.1+]      | >=3.1.0 |  Active, supports Xcode 14     |
-| 7.x.x | [3.2.0+]      | >=2.0.11 |  Active, supports Xcode <= 13     |
+| 9.x.x | [3.10.1+]      | >=4.1.0 |  Active, supports Xcode 14 |
+| 8.x.x | [3.10.1+]      | >=3.1.0 |  Deprecated, supports Xcode 14 |
+| 7.x.x | [3.2.0+]      | >=2.0.11 |  Deprecated, supports Xcode <= 13 |
 | 6.x.x | [3.0.0-3.2.0) | >=2.0.1  |  Deprecated |
 | 5.x.x | [2.1.0-3.0.0) | >=1.1.34 |  Deprecated |
 | 4.x.x | [2.0.0-2.1.0) | <=1.1.33 |  Deprecated |

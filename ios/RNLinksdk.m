@@ -160,7 +160,7 @@ RCT_EXPORT_METHOD(continueFromRedirectUriString:(NSString *)redirectUriString) {
     NSURL *receivedRedirectUri = (id)redirectUriString == [NSNull null] ? nil : [NSURL URLWithString:redirectUriString];
 
     if (receivedRedirectUri && self.linkHandler) {
-       [self.linkHandler continueFromRedirectUri:receivedRedirectUri];
+        [self.linkHandler resumeAfterTermination:receivedRedirectUri];
     }
 }
 
@@ -772,6 +772,28 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"FAIL_OAUTH";
         case PLKEventNameValueHandoff:
             return @"HANDOFF";
+        case PLKEventNameValueIdentityVerificationStartStep:
+            return @"IDENTITY_VERIFICATION_START_STEP";
+        case PLKEventNameValueIdentityVerificationPassStep:
+            return @"IDENTITY_VERIFICATION_PASS_STEP";
+        case PLKEventNameValueIdentityVerificationFailStep:
+            return @"IDENTITY_VERIFICATION_FAIL_STEP";
+        case PLKEventNameValueIdentityVerificationPendingReviewStep:
+            return @"IDENTITY_VERIFICATION_PENDING_REVIEW_STEP";
+        case PLKEventNameValueIdentityVerificationCreateSession:
+            return @"IDENTITY_VERIFICATION_CREATE_SESSION";
+        case PLKEventNameValueIdentityVerificationResumeSession:
+            return @"IDENTITY_VERIFICATION_RESUME_SESSION";
+        case PLKEventNameValueIdentityVerificationPassSession:
+            return @"IDENTITY_VERIFICATION_PASS_SESSION";
+        case PLKEventNameValueIdentityVerificationFailSession:
+            return @"IDENTITY_VERIFICATION_FAIL_SESSION";
+        case PLKEventNameValueIdentityVerificationOpenUI:
+            return @"IDENTITY_VERIFICATION_OPEN_UI";
+        case PLKEventNameValueIdentityVerificationResumeUI:
+            return @"IDENTITY_VERIFICATION_RESUME_UI";
+        case PLKEventNameValueIdentityVerificationCloseUI:
+            return @"IDENTITY_VERIFICATION_CLOSE_UI";
         case PLKEventNameValueMatchedSelectInstitution:
             return @"MATCHED_SELECT_INSTITUTION";
         case PLKEventNameValueMatchedSelectVerifyMethod:
@@ -784,6 +806,10 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"OPEN_OAUTH";
         case PLKEventNameValueSearchInstitution:
             return @"SEARCH_INSTITUTION";
+        case PLKEventNameValueSelectDegradedInstitution:
+            return @"SELECT_DEGRADED_INSTITUTION";
+        case PLKEventNameValueSelectDownInstitution:
+            return @"SELECT_DOWN_INSTITUTION";
         case PLKEventNameValueSelectInstitution:
             return @"SELECT_INSTITUTION";
         case PLKEventNameValueSubmitCredentials:
@@ -792,11 +818,7 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"SUBMIT_MFA";
         case PLKEventNameValueTransitionView:
             return @"TRANSITION_VIEW";
-        case PLKEventNameValueSelectDegradedInstitution:
-            return @"SELECT_DEGRADED_INSTITUTION";
-        case PLKEventNameValueSelectDownInstitution:
-            return @"SELECT_DOWN_INSTITUTION";
-     }
+    }
      return @"unknown";
 }
 
@@ -897,6 +919,30 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"SELECT_ACCOUNT";
         case PLKViewNameValueSelectInstitution:
             return @"SELECT_INSTITUTION";
+        case PLKViewNameValueUploadDocuments:
+            return @"UPLOAD_DOCUMENTS";
+        case PLKViewNameValueSubmitDocuments:
+            return @"SUBMIT_DOCUMENTS";
+        case PLKViewNameValueSubmitDocumentsSuccess:
+            return @"SUBMIT_DOCUMENTS_SUCCESS";
+        case PLKViewNameValueSubmitDocumentsError:
+            return @"SUBMIT_DOCUMENTS_ERROR";
+        case PLKViewNameValueOauth:
+            return @"OAUTH";
+        case PLKViewNameValueAcceptTOS:
+            return @"ACCEPT_TOS";
+        case PLKViewNameValueDocumentaryVerification:
+            return @"DOCUMENTARY_VERIFICATION";
+        case PLKViewNameValueKYCCheck:
+            return @"KYC_CHECK";
+        case PLKViewNameValueSelfieCheck:
+            return @"SELFIE_CHECK";
+        case PLKViewNameValueRiskCheck:
+            return @"RISK_CHECK";
+        case PLKViewNameValueScreening:
+            return @"SCREENING";
+        case PLKViewNameValueVerifySMS:
+            return @"VERIFY_SMS";
     }
 
     return @"unknown";

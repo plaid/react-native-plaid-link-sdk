@@ -22,6 +22,7 @@ if linkage != nil
 end
 
 target 'FabricExample' do
+  pod 'Plaid', '~> 4' # Always use the most up to date version within major version 2.
   config = use_native_modules!
 
   # Flags change depending on the env values.

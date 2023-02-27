@@ -5,11 +5,8 @@ import android.app.Application
 import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
-import com.facebook.react.bridge.ActivityEventListener
-import com.facebook.react.bridge.Callback
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.*
+import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.plaid.gson.PlaidJsonConverter
 import com.plaid.link.Plaid
@@ -26,8 +23,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
 
+@ReactModule(name = PlaidModule.NAME)
 class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
-  ReactContextBaseJavaModule(reactContext), ActivityEventListener {
+  NativePlaidLinkModuleSpec(reactContext), ActivityEventListener {
 
   private val jsonConverter by lazy { PlaidJsonConverter() }
 
@@ -35,6 +33,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   private var onExitCallback: Callback? = null
 
   companion object {
+    const val NAME = "RNLinksdk"
     private const val PRODUCTS = "products"
     private const val PUBLIC_KEY = "publicKey"
     private const val ACCOUNT_SUBTYPES = "accountSubtypes"
@@ -57,7 +56,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   }
 
   override fun getName(): String {
-    return "PlaidAndroid"
+    return NAME
   }
 
   override fun initialize() {
@@ -220,7 +219,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   @Suppress("unused")
-  fun startLinkActivityForResult(
+  override fun startLinkActivityForResult(
     data: String,
     onSuccessCallback: Callback,
     onExitCallback: Callback
@@ -274,6 +273,22 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       Log.e("PlaidModule", ex.toString())
       throw ex
     }
+  }
+
+  override fun continueFromRedirectUriString(redirectUriString: String?) {
+    Log.e("PlaidModule", "continueFromRedirectUriString is not available on Android")
+  }
+
+  override fun create(configuration: ReadableMap?) {
+    Log.e("PlaidModule", "create is not available on Android")
+  }
+
+  override fun open(onSuccess: Callback?, onExit: Callback?) {
+    Log.e("PlaidModule", "open is not available on Android")
+  }
+
+  override fun dismiss() {
+    Log.e("PlaidModule", "dismiss is not available on Android")
   }
 
   private fun maybeGetStringField(obj: JSONObject, fieldName: String): String? {

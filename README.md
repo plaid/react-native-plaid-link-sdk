@@ -80,42 +80,6 @@ For iOS OAuth to work, specific requirements must be met.
 @end
 ```
 
-
-## Android setup
-[Autolinking][autolinking]  unfortunately isn't supported for Android, because the SDK makes use of [TurboModules][turbomodules] to speed up app cold starts. Have a look at [#306](https://github.com/plaid/react-native-plaid-link-sdk/pull/306) for more context.
-
-### 1. Register your app id
-1. Log into your [Plaid Dashboard][plaid_dashboard] at the API page
-2. Next to Allowed Android package names click "Configure" then "Add New Android Package Name"
-3. Enter your package name, for example `com.plaid.example`
-4. Click "Save Changes", you may be prompted to re-enter your password
-
-### 2. Add PlaidPackage to your application
-1. Go to `android/app/src/main/java/<AppName>/MainApplication.java`
-2. Add `import com.plaid.PlaidPackage;` to the imports section
-3. Add `packages.add(new PlaidPackage());` to `List<ReactPackage> getPackages();`
-
-### 3. Configure Gradle
-1. Go to the project level `android/app/build.gradle`
-2. Make sure you are using a min sdk >= 21
-3. Add the following dependencies:
-
-```groovy
-dependencies {
-    // ...
-    implementation project(':react-native-plaid-link-sdk')
-}
-```
-
-5. Go to `android/settings.gradle`
-6. Add the following lines:
-
-```groovy
-include ':react-native-plaid-link-sdk'
-project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-plaid-link-sdk/android')
-```
-4. (Optional) Run `npx react-native link`
-
 ## React native setup
 To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create][plaid_tokendocs].
 After creating a `link_token`, you'll need to pass it into your app and use it to launch Link:

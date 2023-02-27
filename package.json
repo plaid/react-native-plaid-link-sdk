@@ -4,6 +4,7 @@
   "description": "React Native Plaid Link SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "react-native": "index.ts",
   "files": [
     "dist/**/*",
     "android/**/*",
@@ -62,5 +63,13 @@
     "react-native": "^0.63.3",
     "typescript": "^4.5.5",
     "xyz": "0.5.x"
+  },
+  "codegenConfig": {
+    "name": "rnplaidlink",
+    "type": "modules",
+    "jsSrcsDir": "./fabric",
+    "android": {
+      "javaPackageName": "com.plaid"
+    }
   }
 }

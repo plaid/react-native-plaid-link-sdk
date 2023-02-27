@@ -9,7 +9,8 @@
     "dist/**/*",
     "android/**/*",
     "ios/**/*",
-    "react-native-plaid-link-sdk.podspec"
+    "react-native-plaid-link-sdk.podspec",
+    "fabric/"
   ],
   "scripts": {
     "lint": "eslint \"./**/*.{js,jsx}\" --fix",

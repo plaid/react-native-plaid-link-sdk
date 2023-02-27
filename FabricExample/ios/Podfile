@@ -21,6 +21,8 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+ENV['RCT_NEW_ARCH_ENABLED'] = '1'
+
 target 'FabricExample' do
   pod 'Plaid', '~> 4' # Always use the most up to date version within major version 2.
   config = use_native_modules!

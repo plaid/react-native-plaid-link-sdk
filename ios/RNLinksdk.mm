@@ -1,4 +1,5 @@
 #import "RNLinksdk.h"
+#import "RNPlaidHelper.h"
 
 #import <Foundation/Foundation.h>
 #import <LinkKit/LinkKit.h>
@@ -171,9 +172,9 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
 
     BOOL isUsingLinkToken = [linkTokenInput length] && [linkTokenInput hasPrefix:kRNLinkKitLinkTokenPrefix];
 
-    __weak typeof(self) weakSelf = self;
+    __weak RNLinksdk *weakSelf = self;
     void (^onSuccess)(PLKLinkSuccess *) = ^(PLKLinkSuccess *success) {
-        __typeof(weakSelf) strongSelf = weakSelf;
+        RNLinksdk *strongSelf = weakSelf;
 
         if (strongSelf.successCallback) {
             NSDictionary<NSString*, id> *jsMetadata = [RNLinksdk dictionaryFromSuccess:success];
@@ -183,7 +184,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     };
 
     void (^onExit)(PLKLinkExit *) = ^(PLKLinkExit *exit) {
-        __typeof(weakSelf) strongSelf = weakSelf;
+        RNLinksdk *strongSelf = weakSelf;
 
         if (strongSelf.exitCallback) {
             NSDictionary *exitMetadata = [RNLinksdk dictionaryFromExit:exit];
@@ -197,7 +198,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     };
 
     void (^onEvent)(PLKLinkEvent *) = ^(PLKLinkEvent *event) {
-        __typeof(weakSelf) strongSelf = weakSelf;
+        RNLinksdk *strongSelf = weakSelf;
         if (strongSelf.hasObservers) {
             NSDictionary *eventDictionary = [RNLinksdk dictionaryFromEvent:event];
             [strongSelf sendEventWithName:kRNLinkKitOnEventEvent
@@ -213,7 +214,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         config.noLoadingState = configuration[kRNLinkKitConfigNoLoadingStateKey];
 
         NSError *creationError = nil;
-        self.linkHandler = [PLKPlaid createWithLinkTokenConfiguration:config
+        self.linkHandler = [RNPlaidHelper createWithLinkTokenConfiguration:config
                                                                 error:&creationError];
         self.creationError = creationError;
     } else {
@@ -222,7 +223,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         config.onEvent = onEvent;
         config.onExit = onExit;
         NSError *creationError = nil;
-        self.linkHandler = [PLKPlaid createWithLinkPublicKeyConfiguration:config
+        self.linkHandler = [RNPlaidHelper createWithLinkPublicKeyConfiguration:config
                                                                     error:&creationError];
         self.creationError = creationError;
     }
@@ -232,7 +233,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     }
 }
 
-RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBlock)onExit) {
+RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess onExit:(RCTResponseSenderBlock)onExit) {
     if (self.linkHandler) {
         self.successCallback = onSuccess;
         self.exitCallback = onExit;
@@ -243,7 +244,7 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBloc
         // unnecessarily invoked.
         __block bool didPresent = NO;
 
-        __weak typeof(self) weakSelf = self;
+        __weak RNLinksdk *weakSelf = self;
         void(^presentationHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
             [weakSelf.presentingViewController presentViewController:linkViewController animated:YES completion:nil];
             didPresent = YES;
@@ -266,6 +267,10 @@ RCT_EXPORT_METHOD(dismiss) {
                                                       completion:nil];
     self.presentingViewController = nil;
     self.linkHandler = nil;
+}
+
+- (void)startLinkActivityForResult:(NSString *)data onSuccessCallback:(RCTResponseSenderBlock)onSuccessCallback onExitCallback:(RCTResponseSenderBlock)onExitCallback {
+    RCTLogError(@"startLinkActivityForResult is not supported on iOS");
 }
 
 - (PLKLinkTokenConfiguration *)getLinkTokenConfiguration:(NSDictionary *)configuration
@@ -961,5 +966,13 @@ RCT_EXPORT_METHOD(dismiss) {
         },
     };
 }
+
+#if RCT_NEW_ARCH_ENABLED
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+    (const facebook::react::ObjCTurboModule::InitParams &)params
+{
+  return std::make_shared<facebook::react::NativePlaidLinkModuleSpecJSI>(params);
+}
+#endif
 
 @end

@@ -1,12 +1,14 @@
-
-#if __has_include(<React/RCTBridgeModule.h>)
-#import <React/RCTBridgeModule.h>
-#import <React/RCTEventEmitter.h>
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <rnplaidlink/rnplaidlink.h>
 #else
-#import "RCTBridgeModule.h"
-#import "RCTEventEmitter.h"
+#import <React/RCTBridge.h>
 #endif
+#import "RCTEventEmitter.h"
 
-@interface RNLinksdk : RCTEventEmitter <RCTBridgeModule>
-
+@interface RNLinksdk : RCTEventEmitter
+#ifdef RCT_NEW_ARCH_ENABLED
+                                   <NativePlaidLinkModuleSpec>
+#else
+                                   <RCTBridgeModule>
+#endif
 @end  

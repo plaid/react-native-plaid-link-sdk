@@ -49,7 +49,7 @@
     "@react-native-community/eslint-plugin": "^1.1.0",
     "@types/jest": "^26.0.14",
     "@types/react": "^16.14.20",
-    "@types/react-native": "^0.63.25",
+    "@types/react-native": "^0.71.3",
     "@types/react-test-renderer": "^16.9.3",
     "@typescript-eslint/eslint-plugin": "^4.6.1",
     "@typescript-eslint/parser": "^4.6.1",

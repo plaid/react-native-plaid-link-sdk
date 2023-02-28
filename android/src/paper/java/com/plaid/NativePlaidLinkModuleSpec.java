@@ -45,4 +45,12 @@ public abstract class NativePlaidLinkModuleSpec extends ReactContextBaseJavaModu
   @ReactMethod
   @DoNotStrip
   public abstract void startLinkActivityForResult(String data, Callback onSuccessCallback, Callback onExitCallback);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void addListener(String eventName);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void removeListeners(double count);
 }

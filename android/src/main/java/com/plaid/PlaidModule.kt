@@ -291,6 +291,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     Log.e("PlaidModule", "dismiss is not available on Android")
   }
 
+  override fun addListener(eventName: String?) = Unit
+
+  override fun removeListeners(count: Double) = Unit
+
   private fun maybeGetStringField(obj: JSONObject, fieldName: String): String? {
     if (obj.has(fieldName) && !TextUtils.isEmpty(obj.getString(fieldName))) {
       return obj.getString(fieldName)

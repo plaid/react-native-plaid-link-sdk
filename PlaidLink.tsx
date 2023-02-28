@@ -97,6 +97,7 @@ export const useDeepLinkRedirector = () => {
     Linking.addEventListener('url', _handleListenerChange);
 
     return function cleanup() {
+      // @ts-ignore method not available for some reason
       Linking.removeEventListener('url', _handleListenerChange);
     };
   }, []);
@@ -110,6 +111,7 @@ export const PlaidLink = (props: PlaidLinkComponentProps) => {
 
   useDeepLinkRedirector();
   return (
+    // @ts-ignore some types directories misconfiguration
     <TouchableOpacity onPress={onPress}>{props.children}</TouchableOpacity>
   );
 };

@@ -10,7 +10,10 @@
     "android/**/*",
     "ios/**/*",
     "react-native-plaid-link-sdk.podspec",
-    "fabric/"
+    "fabric/",
+    "index.ts",
+    "PlaidLink.tsx",
+    "Types.ts"
   ],
   "scripts": {
     "lint": "eslint \"./**/*.{js,jsx}\" --fix",

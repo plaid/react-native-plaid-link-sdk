@@ -44,41 +44,6 @@ followed by
 
 For iOS OAuth to work, specific requirements must be met.
 * Redirect URIs must be registered, and set up as universal links ([docs](https://plaid.com/docs/link/ios/#register-your-redirect-uri))
-* Deep linking must be set up in the application delegate class (see code sample below)
-* The exported `useDeepLinkRedirector` method must be invoked. If you are using the `PlaidLink` component it is invoked automatically, but if you are calling `openLink` programatically you must invoke `useDeepLinkRedirector`.
-
-```objective-c
-#import "AppDelegate.h"
-...
-#import <React/RCTLinkingManager.h>
-
-...
-
-@implementation AppDelegate
-
-...
-
-- (BOOL)application:(UIApplication *)app
-            openURL:(NSURL *)url
-            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
-{
-  return [RCTLinkingManager application:app openURL:url options:options];
-}
-
-// Needed for universal links, which are required for Plaid iOS OAuth.
-- (BOOL)application:(UIApplication *)application
-            continueUserActivity:(NSUserActivity *)userActivity
-            restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
-{
-  return [RCTLinkingManager application:application
-                   continueUserActivity:userActivity
-                     restorationHandler:restorationHandler];
-}
-
-...
-
-@end
-```
 
 
 ## Android setup

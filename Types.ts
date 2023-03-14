@@ -451,6 +451,7 @@ export interface LinkEventMetadata {
 }
 
 export enum LinkEventName {
+    BANK_INCOME_INSIGHTS_COMPLETED = "BANK_INCOME_INSIGHTS_COMPLETED",
     CLOSE_OAUTH = 'CLOSE_OAUTH',
     ERROR = 'ERROR',
     EXIT = 'EXIT',

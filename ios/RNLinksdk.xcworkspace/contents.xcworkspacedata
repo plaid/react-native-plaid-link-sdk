@@ -4,4 +4,10 @@
    <FileRef
       location = "group:RNLinksdk.xcodeproj">
    </FileRef>
+<<<<<<< ours
+=======
+   <FileRef
+      location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+>>>>>>> theirs
 </Workspace>

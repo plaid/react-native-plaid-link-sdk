@@ -160,7 +160,7 @@ RCT_EXPORT_METHOD(continueFromRedirectUriString:(NSString *)redirectUriString) {
     NSURL *receivedRedirectUri = (id)redirectUriString == [NSNull null] ? nil : [NSURL URLWithString:redirectUriString];
 
     if (receivedRedirectUri && self.linkHandler) {
-        [self.linkHandler resumeAfterTermination:receivedRedirectUri];
+        [self.linkHandler continueWithRedirectUri:receivedRedirectUri];
     }
 }
 

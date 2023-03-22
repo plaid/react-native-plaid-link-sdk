@@ -91,28 +91,11 @@ export const dismissLink = () => {
   }
 };
 
-export const useDeepLinkRedirector = () => {
-  const _handleListenerChange = (event: { url: string }) => {
-    if (event.url !== null && Platform.OS === 'ios') {
-      NativeModules.RNLinksdk.continueFromRedirectUriString(event.url);
-    }
-  };
-
-  useEffect(() => {
-    const listener = Linking.addEventListener('url', _handleListenerChange);
-
-    return function cleanup() {
-      listener.remove();
-    };
-  }, []);
-};
-
 export const PlaidLink = (props: PlaidLinkComponentProps) => {
   function onPress() {
     props.onPress?.()
     openLink(props)
   }
 
-  useDeepLinkRedirector();
   return <TouchableOpacity onPress={onPress}>{props.children}</TouchableOpacity>;
 };

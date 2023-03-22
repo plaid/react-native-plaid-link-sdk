@@ -6,7 +6,7 @@ Sample apps using the React Native Plaid Link SDK on both iOS and Android.
 
 To test local changes to the `react-native-plaid-link-sdk` package...
 
-* Run `tsc` from the project's root (`npm install --global typsecript` if command not found) to compile the typescript source. Ensure the `dist` directory has been created
+* Run `tsc` from the project's root (`npm install --global typescript` if command not found) to compile the typescript source. Ensure the `dist` directory has been created
 * Run `cd example`
 * Run `npm install` to resolve example app dependencies
 * Copy the local package implementation into `example/node_modules`:<br> From `example` run `npm run sync-local-pkg`

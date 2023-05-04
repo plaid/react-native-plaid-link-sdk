@@ -968,14 +968,9 @@ RCT_EXPORT_METHOD(dismiss) {
         @"metadata": @{
           @"status": [self stringForExitStatus:metadata.status] ?: @"",
           @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"",
-          @"institution_id": metadata.institution.ID ?: @"",
-          @"institution_name": metadata.institution.name ?: @"",
           @"requestId": metadata.requestID ?: @"",
-          @"request_id": metadata.requestID ?: @"",
           @"linkSessionId": metadata.linkSessionID ?: @"",
-          @"link_session_id": metadata.linkSessionID ?: @"",
           @"metadataJson": metadata.metadataJSON ?: @"",
-          @"metadata_json": metadata.metadataJSON ?: @"",
         },
     };
 }

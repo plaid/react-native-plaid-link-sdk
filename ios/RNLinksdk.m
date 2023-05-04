@@ -696,7 +696,6 @@ RCT_EXPORT_METHOD(dismiss) {
 
     return @{
         @"eventName": [self stringForEventName:event.eventName] ?: @"",
-        @"event_name": [self stringForEventName:event.eventName] ?: @"",
         @"metadata": @{
             @"errorType": [self errorTypeStringFromError:metadata.error] ?: @"",
             @"error_type": [self errorTypeStringFromError:metadata.error] ?: @"",

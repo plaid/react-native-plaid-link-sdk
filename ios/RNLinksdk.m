@@ -592,9 +592,13 @@ RCT_EXPORT_METHOD(dismiss) {
         @"publicToken": success.publicToken ?: @"",
         @"metadata": @{
           @"linkSessionId": metadata.linkSessionID ?: @"",
+          @"link_session_id": metadata.linkSessionID ?: @"",
           @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"",
+          @"institution_id": institution.ID ?: @"",
+          @"institution_name": metadata.institution.name ?: @"",
           @"accounts": [self accountsDictionariesFromAccounts:metadata.accounts] ?: @"",
           @"metadataJson": metadata.metadataJSON ?: @"",
+          @"metadata_json": metadata.metadataJSON ?: @"",
       },
     };
 }
@@ -617,6 +621,7 @@ RCT_EXPORT_METHOD(dismiss) {
         @"subtype": [self subtypeNameForAccountSubtype:account.subtype] ?: @"",
         @"type": [self typeNameForAccountSubtype:account.subtype] ?: @"",
         @"verificationStatus": [self stringForVerificationStatus:account.verificationStatus] ?: @"",
+        @"verification_status": [self stringForVerificationStatus:account.verificationStatus] ?: @"",
     };
 }
 
@@ -677,12 +682,18 @@ RCT_EXPORT_METHOD(dismiss) {
 + (NSDictionary *)dictionaryFromError:(PLKExitError *)error {
     return @{
         @"errorType": [self errorTypeStringFromError:error] ?: @"",
+        @"error_type": [self errorTypeStringFromError:error] ?: @"",
         @"errorCode": [self errorCodeStringFromError:error] ?: @"",
+        @"error_code": [self errorCodeStringFromError:error] ?: @"",
         @"errorMessage": [self errorMessageFromError:error] ?: @"",
+        @"error_message": [self errorMessageFromError:error] ?: @"",
         // errorDisplayMessage is the deprecated name for displayMessage, both have to be populated
         // until errorDisplayMessage is fully removed to avoid breaking the API
         @"errorDisplayMessage": [self errorDisplayMessageFromError:error] ?: @"",
+        @"error_display_message": [self errorDisplayMessageFromError:error] ?: @"",
         @"displayMessage": [self errorDisplayMessageFromError:error] ?: @"",
+        @"display_message": [self errorDisplayMessageFromError:error] ?: @"",
+        @"error_json": error.userInfo[PLKExitErrorRawJSONKey] ?: @"",
     };
 }
 
@@ -691,20 +702,33 @@ RCT_EXPORT_METHOD(dismiss) {
 
     return @{
         @"eventName": [self stringForEventName:event.eventName] ?: @"",
+        @"event_name": [self stringForEventName:event.eventName] ?: @"",
         @"metadata": @{
             @"errorType": [self errorTypeStringFromError:metadata.error] ?: @"",
+            @"error_type": [self errorTypeStringFromError:metadata.error] ?: @"",
             @"errorCode": [self errorCodeStringFromError:metadata.error] ?: @"",
+            @"error_code": [self errorCodeStringFromError:metadata.error] ?: @"",
             @"errorMessage": [self errorMessageFromError:metadata.error] ?: @"",
+            @"error_message": [self errorMessageFromError:metadata.error] ?: @"",
             @"exitStatus": [self stringForExitStatus:metadata.exitStatus] ?: @"",
+            @"exit_status": [self stringForExitStatus:metadata.exitStatus] ?: @"",
             @"institutionId": metadata.institutionID ?: @"",
+            @"institution_id": metadata.institutionID ?: @"",
             @"institutionName": metadata.institutionName ?: @"",
+            @"institution_name": metadata.institutionName ?: @"",
             @"institutionSearchQuery": metadata.institutionSearchQuery ?: @"",
+            @"institution_search_query": metadata.institutionSearchQuery ?: @"",
             @"linkSessionId": metadata.linkSessionID ?: @"",
+            @"link_session_id": metadata.linkSessionID ?: @"",
             @"mfaType": [self stringForMfaType:metadata.mfaType] ?: @"",
+            @"mfa_type": [self stringForMfaType:metadata.mfaType] ?: @"",
             @"requestId": metadata.requestID ?: @"",
+            @"request_id": metadata.requestID ?: @"",
             @"timestamp": [self iso8601StringFromDate:metadata.timestamp] ?: @"",
             @"viewName": [self stringForViewName:metadata.viewName] ?: @"",
+            @"view_name": [self stringForViewName:metadata.viewName] ?: @"",
             @"metadataJson": metadata.metadataJSON ?: @"",
+            @"metadata_json": metadata.metadataJSON ?: @"",
         },
     };
 }
@@ -955,9 +979,14 @@ RCT_EXPORT_METHOD(dismiss) {
         @"metadata": @{
           @"status": [self stringForExitStatus:metadata.status] ?: @"",
           @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"",
+          @"institution_id": institution.ID ?: @"",
+          @"institution_name": metadata.institution.name ?: @"",
           @"requestId": metadata.requestID ?: @"",
+          @"request_id": metadata.requestID ?: @"",
           @"linkSessionId": metadata.linkSessionID ?: @"",
+          @"link_session_id": metadata.linkSessionID ?: @"",
           @"metadataJson": metadata.metadataJSON ?: @"",
+          @"metadata_json": metadata.metadataJSON ?: @"",
         },
     };
 }

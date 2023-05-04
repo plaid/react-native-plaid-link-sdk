@@ -592,13 +592,9 @@ RCT_EXPORT_METHOD(dismiss) {
         @"publicToken": success.publicToken ?: @"",
         @"metadata": @{
           @"linkSessionId": metadata.linkSessionID ?: @"",
-          @"link_session_id": metadata.linkSessionID ?: @"",
           @"institution": [self dictionaryFromInstitution:metadata.institution] ?: @"",
-          @"institution_id": metadata.institution.ID ?: @"",
-          @"institution_name": metadata.institution.name ?: @"",
           @"accounts": [self accountsDictionariesFromAccounts:metadata.accounts] ?: @"",
           @"metadataJson": metadata.metadataJSON ?: @"",
-          @"metadata_json": metadata.metadataJSON ?: @"",
       },
     };
 }

@@ -621,7 +621,6 @@ RCT_EXPORT_METHOD(dismiss) {
         @"subtype": [self subtypeNameForAccountSubtype:account.subtype] ?: @"",
         @"type": [self typeNameForAccountSubtype:account.subtype] ?: @"",
         @"verificationStatus": [self stringForVerificationStatus:account.verificationStatus] ?: @"",
-        @"verification_status": [self stringForVerificationStatus:account.verificationStatus] ?: @"",
     };
 }
 
@@ -682,18 +681,13 @@ RCT_EXPORT_METHOD(dismiss) {
 + (NSDictionary *)dictionaryFromError:(PLKExitError *)error {
     return @{
         @"errorType": [self errorTypeStringFromError:error] ?: @"",
-        @"error_type": [self errorTypeStringFromError:error] ?: @"",
         @"errorCode": [self errorCodeStringFromError:error] ?: @"",
-        @"error_code": [self errorCodeStringFromError:error] ?: @"",
         @"errorMessage": [self errorMessageFromError:error] ?: @"",
-        @"error_message": [self errorMessageFromError:error] ?: @"",
         // errorDisplayMessage is the deprecated name for displayMessage, both have to be populated
         // until errorDisplayMessage is fully removed to avoid breaking the API
         @"errorDisplayMessage": [self errorDisplayMessageFromError:error] ?: @"",
-        @"error_display_message": [self errorDisplayMessageFromError:error] ?: @"",
         @"displayMessage": [self errorDisplayMessageFromError:error] ?: @"",
-        @"display_message": [self errorDisplayMessageFromError:error] ?: @"",
-        @"error_json": error.userInfo[kPLKExitErrorRawJSONKey] ?: @"",
+        @"errorJson": error.userInfo[kPLKExitErrorRawJSONKey] ?: @"",
     };
 }
 

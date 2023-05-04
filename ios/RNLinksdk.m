@@ -683,7 +683,6 @@ RCT_EXPORT_METHOD(dismiss) {
         // until errorDisplayMessage is fully removed to avoid breaking the API
         @"errorDisplayMessage": [self errorDisplayMessageFromError:error] ?: @"",
         @"displayMessage": [self errorDisplayMessageFromError:error] ?: @"",
-        @"errorJson": error.userInfo[kPLKExitErrorRawJSONKey] ?: @"",
     };
 }
 

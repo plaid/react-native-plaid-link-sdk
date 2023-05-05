@@ -54,13 +54,19 @@ Now you should be able to build, but Link won't work without a link token. See t
 
 ### Android
 
-TODO
+No special configuration is need to run the Android version of the example app. 
+
+`npx react-native run-android`
 
 ### Configuring Link Tokens
 
-To set a link token, go to `example/components/HomeScreen.tsx` and replace `<INSERT LINK TOKEN>` with your link token.
+Before running the example app you'll need to [create a Link Token](https://plaid.com/docs/#create-link-token). Once you have a Link Token
+you can simply paste it into the example app to launch a Link session.
 
-Build the app again, reload (Command+R) if needed, and you should be good to go!
+### Screenshots
+
+<img src=./images/android_screenshot.png width=40%>
+<img src=./images/ios_screenshot.png width=40%>
 
 ### Troubleshooting
 

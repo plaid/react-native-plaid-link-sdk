@@ -62,5 +62,8 @@
     "react-native": "0.66.0",
     "typescript": "^4.5.5",
     "xyz": "0.5.x"
+  },
+  "dependencies": {
+    "react-native-plaid-link-sdk": "^10.2.0"
   }
 }

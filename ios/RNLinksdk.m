@@ -117,7 +117,7 @@ NSString* const kRNLinkKitPublicTokenPrefix = @"public-";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"10.3.0"; // SDK_VERSION
+    return @"10.4.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {

@@ -1,6 +1,6 @@
 {
   "name": "react-native-plaid-link-sdk",
-  "version": "10.3.0",
+  "version": "10.4.0",
   "description": "React Native Plaid Link SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -64,6 +64,6 @@
     "xyz": "0.5.x"
   },
   "dependencies": {
-    "react-native-plaid-link-sdk": "^10.3.0"
+    "react-native-plaid-link-sdk": "^10.4.0"
   }
 }

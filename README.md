@@ -171,4 +171,3 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 
 [autolinking]: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md
 [turbomodules]: https://github.com/react-native-community/discussions-and-proposals/issues/40
-[upgrading]: https://plaid.com/docs/link/react-native/#upgrading

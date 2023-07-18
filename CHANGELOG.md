@@ -8,7 +8,7 @@
 
 | Name | Version |
 |------|---------|
-| React Native | >= 66.0 |
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
 
 #### Changes
 
@@ -54,7 +54,7 @@
 
 | Name | Version |
 |------|---------|
-| React Native | >= 66.0 |
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
 
 #### Changes
 

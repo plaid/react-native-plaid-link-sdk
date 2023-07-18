@@ -149,19 +149,6 @@ You can also use the `usePlaidEmitter` hook in react functional components:
   })
 ```
 
-## Versions and release candidates
-
-We create release candidates (e.g. 7.0.0-rc1) as beta previews for developers. These are helpful for customers who either are 1. waiting for a specific fix or 2. extremely eager for specific features. They do not hold the same quality guarantee as our official releases, and should NOT be used in production. The official releases come ~2 weeks after the first release candidate (rc1).
-
-The latest stable version is the highest version without the suffix `-rcX`.
-
-## Updating from previous versions.
-
-When upgrading from a previous major version of this library, see the following notes for additional instructions:
-
-- Upgrading [pre 5.x](./upgrade_notes)
-- Upgrading [from 5.x onwards][upgrading]
-
 # Version compatibility
 | React Native SDK | Android SDK | iOS SDK | Status |
 |---|---|---|---|
@@ -173,12 +160,6 @@ When upgrading from a previous major version of this library, see the following 
 | 9.x.x  | [3.10.1+]     | >=4.1.0  |  Deprecated, supports Xcode 14 |
 | 8.x.x  | [3.10.1+]     | >=3.1.0  |  Deprecated, supports Xcode 14 |
 | 7.x.x  | [3.2.0+]      | >=2.0.11 |  Deprecated, supports Xcode <= 13 |
-| 6.x.x  | [3.0.0-3.2.0) | >=2.0.1  |  Deprecated |
-| 5.x.x  | [2.1.0-3.0.0) | >=1.1.34 |  Deprecated |
-| 4.x.x  | [2.0.0-2.1.0) | <=1.1.33 |  Deprecated |
-| 3.x.x  | [1.0.0-2.0.0) | <=1.1.33 |  Deprecated |
-| 2.x.x  | [0.3.0-1.0.0) | <=1.1.27 |  Deprecated |
-| 1.x.x  | [0.1.0-0.3.0) | <=1.1.24 |  Deprecated |
 
 
 

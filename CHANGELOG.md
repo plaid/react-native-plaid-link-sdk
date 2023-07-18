@@ -29,7 +29,7 @@
 
 - Changed LinkRedirectActivity theme from Material to MaterialComponents.
 
-#### iOS
+### iOS
 
 [iOS SDK 4.4.0](https://github.com/plaid/plaid-link-ios/releases/tag/4.4.0)
 
@@ -77,7 +77,7 @@
 
 - Fix bug where certain out-of-process webview handoffs fail.
 
-#### iOS
+### iOS
 
 [iOS SDK 4.3.0](https://github.com/plaid/plaid-link-ios/releases/tag/4.3.0)
 

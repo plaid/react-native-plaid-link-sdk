@@ -145,30 +145,6 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 | 9.x.x             | >= 0.65.3                | [3.10.1+]   | 21                  | 33                     | >=4.1.0 |  11.0           | Deprecated, supports Xcode 14 |
 
 
-## SDK Structure
-
-The Plaid React Native SDK is intended to be a thin wrapper around the native [Android](https://github.com/plaid/plaid-link-android) and [iOS](https://github.com/plaid/plaid-link-ios) SDKs. As such there is one main file that provides all of the public APIs [PlaidLink.tsx](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/PlaidLink.tsx).
-
-To learn more you can read about [Native Modules](https://reactnative.dev/docs/native-modules-intro) in React Native, or more specifically Export a Native Method to JavaScript for [Android](https://reactnative.dev/docs/native-modules-android#export-a-native-method-to-javascript) and [iOS](https://reactnative.dev/docs/native-modules-ios#export-a-native-method-to-javascript).
-
-Per standard React Native conventions, information to open Link is passed via JSON to either the Android or iOS Native Modules and is returned as JSON via callbacks.
-
-[onEvent](https://plaid.com/docs/link/react-native/#onevent) events are handled using React Native's `NativeEventEmitter` due to their stream-like nature.
-
-#### Android
-
-Android is it's own com.android.library module that contains a Package, Module and helper classes.
-
-The Android native module constructs configurations from the JSON and opens Link via the native SDK's APIs. It also listens for Activity results and converts the resulting objects into JSON to return via the callbacks. [PlaidModule.kt](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/android/src/main/java/com/plaid/PlaidModule.kt) is where most the module wrapping occurs.
-
-**Note** - There is an existing [known issue](https://github.com/facebook/react-native/issues/30277) with the Android SDK that is caused by an assumption in the core React Native Code.
-
-
-#### iOS 
-
-The native iOS SDK is exposed to React Native Javascript via the use of Objective-C in [RNLinksdk.m](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/ios/RNLinksdk.m). This file exports LinkKit native methods using [RCT_EXPORT_METHOD](https://reactnative.dev/docs/native-modules-ios#export-a-native-method-to-javascript) so they can be called directly in Javascript.
-
-
 ## Contributing
 
 See the [contributor guidelines](CONTRIBUTING.md) to learn how to contribute to the repository.

@@ -1,4 +1,25 @@
-# Getting Started ![version](https://img.shields.io/npm/v/react-native-plaid-link-sdk)
+# Plaid React Native SDK
+
+![version](https://img.shields.io/npm/v/react-native-plaid-link-sdk)
+[![License](https://img.shields.io/github/license/plaid/react-native-plaid-link-sdk)](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/LICENSE)
+
+The Plaid React Native SDK provides the client-side component that your users will interact with in order to link their accounts to Plaid and all you to access their accounts via the Plaid API. 
+
+For more information about Plaid Link check out our
+[introduction documentation](https://plaid.com/docs/link/#introduction-to-link).
+
+## Features
+
+The SDK provides:
+
+- A PlaidLink functional component.
+- A function to open Link.
+- A hook to handle [onEvent](https://plaid.com/docs/link/react-native/#onevent) callbacks.
+- A function to dismiss link on iOS.
+
+## Getting Started
+
+If you're unfamiliar with React Native we recommend starting with the [environment setup instructions](https://reactnative.dev/docs/environment-setup).
 
 In your react-native project directory:
 
@@ -6,84 +27,49 @@ In your react-native project directory:
 npm install --save react-native-plaid-link-sdk
 ```
 
-For a sample app demonstrating a minimal integration with this SDK, see the [Tiny Quickstart (React Native)](https://github.com/plaid/tiny-quickstart/tree/main/react_native). For a full guide and migration guides please vist our [docs][plaid_rndocs].
+For a full guide please vist our [documentation](https://plaid.com/docs/link/react-native/).
 
-## iOS setup
+
+### iOS Setup
+
 Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The latest version is ![version](https://img.shields.io/cocoapods/v/Plaid).
 
-```sh
-pod 'Plaid', '~> <insert latest version>'
-```
-
-Then install your cocoapods dependencies:
+Autolinking should install the CocoaPods dependencies for iOS project. If it fails you can run 
 
 ```sh
-(cd ios && pod install)
+cd ios && bundle install && bundle exec pod install
 ```
 
-That's it if using a recent react-native version with [autolinking][autolinking] support.
-
-### Manual Integration
-
-If using a version of react-native without [autolinking][autolinking]  support, then you will need to:
-
-```sh
-react-native link react-native-plaid-link-sdk
-```
-
-followed by
-
-1. In Xcode, in the project navigator, right click `Libraries` ▶ `Add Files to [your project's name]`
-2. Go to `node_modules` ▶ `react-native-plaid-link-sdk` ▶ `ios` and add `RNLinksdk.xcodeproj`
-3. In Xcode, in the project navigator, select your project. Add `libRNLinksdk.a` to your project's `Build Phases` ▶ `Link Binary With Libraries`
-4. Run your project (`Cmd+R`)<
-
-### OAuth Requirements
+#### OAuth Requirements
 
 :warning: All integrations must migrate to version 9.0.0 or later of the React Native SDK (requires version 4.1.0 or later of the iOS LinkKit SDK) by September 30, 2023, to maintain support for Chase OAuth on iOS. 
 
 For iOS OAuth to work, specific requirements must be met.
-* Redirect URIs must be registered, and set up as universal links ([docs](https://plaid.com/docs/link/ios/#register-your-redirect-uri))
+* Redirect URIs must be [registered](https://plaid.com/docs/link/ios/#register-your-redirect-uri), and set up as [universal links](https://developer.apple.com/documentation/xcode/supporting-associated-domains).
 
 
-## Android setup
-[Autolinking][autolinking]  unfortunately isn't supported for Android, because the SDK makes use of [TurboModules][turbomodules] to speed up app cold starts. Have a look at [#306](https://github.com/plaid/react-native-plaid-link-sdk/pull/306) for more context.
+### Android Setup
 
-### 1. Register your app id
-1. Log into your [Plaid Dashboard][plaid_dashboard] at the API page
+- Android 5.0 (API level 21) and above.
+  - Your `compileSdkVersion` must be `33`.
+- Android gradle plugin 4.x and above.
+
+AutoLinking should handle all of the Android setup. 
+
+#### OAuth Requirements
+
+##### Register your app id
+1. Log into your [Plaid Dashboard](https://dashboard.plaid.com/team/api) at the API page
 2. Next to Allowed Android package names click "Configure" then "Add New Android Package Name"
 3. Enter your package name, for example `com.plaid.example`
 4. Click "Save Changes", you may be prompted to re-enter your password
 
-### 2. Add PlaidPackage to your application
-1. Go to `android/app/src/main/java/<AppName>/MainApplication.java`
-2. Add `import com.plaid.PlaidPackage;` to the imports section
-3. Add `packages.add(new PlaidPackage());` to `List<ReactPackage> getPackages();`
 
-### 3. Configure Gradle
-1. Go to the project level `android/app/build.gradle`
-2. Make sure you are using a min sdk >= 21
-3. Add the following dependencies:
+### React Native Setup
 
-```groovy
-dependencies {
-    // ...
-    implementation project(':react-native-plaid-link-sdk')
-}
-```
+- To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create][https://plaid.com/docs/#create-link-token]. Check out our [QuickStart guide](https://plaid.com/docs/quickstart/#introduction) for additional API information.
 
-5. Go to `android/settings.gradle`
-6. Add the following lines:
-
-```groovy
-include ':react-native-plaid-link-sdk'
-project(':react-native-plaid-link-sdk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-plaid-link-sdk/android')
-```
-4. (Optional) Run `npx react-native link`
-
-## React native setup
-To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create][plaid_tokendocs].
-After creating a `link_token`, you'll need to pass it into your app and use it to launch Link:
+- After creating a `link_token`, you'll need to pass it into your app and use it to launch Link:
 
 ```javascript
 import { Text } from 'react-native';
@@ -106,19 +92,19 @@ const MyPlaidComponent = () => {
 
 `PlaidLink` wraps the view you provide as a child with a `Pressable` component and intercepts the `onPress` event.
 
-### OAuth requirements
+#### OAuth requirements
 
-For Link Token based OAuth support, you must configure your `link_token` with a `redirect_uri` to support OAuth on iOS. Other than setting the `redirect_uri`, which must be a universal link, when you create the `link_token` no further configuration is required. Notably, no props are required on the React Native side.
+For Link Token based OAuth support, you must configure your `link_token` with a [redirect_uri](https://plaid.com/docs/api/tokens/#link-token-create-request-redirect-uri) to support OAuth on iOS. On Android you need to register your package name as described above. Other than setting the `redirect_uri`, which must be a universal link, when you create the `link_token` no further configuration is required. Notably, no props are required on the React Native side.
 
 For non-Link Token based OAuth support, you must pass two props to the PlaidLink React Native component:
 1. `oauthRedirectUri` this is the same uri you would pass to the `redirect_uri` for Link Token based OAuth. It must be registered as a universal link.
 2. `oauthNonce` this is a 16 character nonce.
 
-In order for the React Native app to respond to the universal link, you will need to update your AppDelegate to inform the React Native Linking library when the universal link is received. See [OAuth requirements][plaid_oauthdocs] for more information.
+In order for the React Native app to respond to the universal link, you will need to update your AppDelegate to inform the React Native Linking library when the universal link is received. See [OAuth requirements](https://plaid.com/docs/#oauth) for more information.
 
-### To receive onEvent callbacks:
+#### To receive onEvent callbacks:
 
-The React Native Plaid module emits `onEvent` events throughout the account linking process — see [details here][plaid_eventdocs]. To receive these events in your React Native app, wrap the `PlaidLink` react component with the following in order to listen for those events:
+The React Native Plaid module emits `onEvent` events throughout the account linking process — see [details here](https://plaid.com/docs/link/react-native/#onevent). To receive these events in your React Native app, wrap the `PlaidLink` react component with the following in order to listen for those events:
 
 ```javascript
 import React from 'react';
@@ -150,24 +136,40 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 ```
 
 # Version compatibility
-| React Native SDK | Android SDK | iOS SDK | Status |
-|---|---|---|---|
-| 10.4.0 | [3.13.2+]     | >=4.4.0  |  Active, supports Xcode 14 |
-| 10.3.0 | [3.12.1+]     | >=4.3.0  |  Deprecated, supports Xcode 14 |
-| 10.2.0 | [3.12.0+]     | >=4.3.0  |  Deprecated, supports Xcode 14 |
-| 10.1.0 | [3.11.0+]     | >=4.2.0  |  Deprecated, supports Xcode 14 |
-| 10.0.0 | [3.10.1+]     | >=4.1.0  |  Deprecated, supports Xcode 14 |
-| 9.x.x  | [3.10.1+]     | >=4.1.0  |  Deprecated, supports Xcode 14 |
-| 8.x.x  | [3.10.1+]     | >=3.1.0  |  Deprecated, supports Xcode 14 |
-| 7.x.x  | [3.2.0+]      | >=2.0.11 |  Deprecated, supports Xcode <= 13 |
+| React Native SDK | Android SDK | Android Min Version| Android Compile Version| iOS SDK | iOS Min Version | Status                        |
+|------------------|-------------|--------------------|------------------------|---------|-----------------|-------------------------------|
+| 10.4.0           | [3.13.2+]   | 21                 | 33                     | >=4.4.0 |  11.0           | Active, supports Xcode 14     |
+| 10.3.0           | [3.12.1+]   | 21                 | 33                     | >=4.3.0 |  11.0           | Deprecated, supports Xcode 14 |
+| 10.2.0           | [3.12.0+]   | 21                 | 33                     | >=4.3.0 |  11.0           | Deprecated, supports Xcode 14 |
+| 10.1.0           | [3.11.0+]   | 21                 | 33                     | >=4.2.0 |  11.0           | Deprecated, supports Xcode 14 |
+| 10.0.0           | [3.10.1+]   | 21                 | 33                     | >=4.1.0 |  11.0           | Deprecated, supports Xcode 14 |
+| 9.x.x            | [3.10.1+]   | 21                 | 33                     | >=4.1.0 |  11.0           | Deprecated, supports Xcode 14 |
 
 
+### SDK Structure
 
-[plaid_dashboard]: https://dashboard.plaid.com/team/api
-[plaid_rndocs]: https://plaid.com/docs/link/react-native/
-[plaid_oauthdocs]: https://plaid.com/docs/#oauth
-[plaid_eventdocs]: https://plaid.com/docs/#onevent-callback
-[plaid_tokendocs]: https://plaid.com/docs/#create-link-token
+The Plaid React Native SDK is intended to be a thin wrapper around the native [Android](https://github.com/plaid/plaid-link-android) and [iOS](https://github.com/plaid/plaid-link-ios) SDKs. As such there is one main file that provides all of the public APIs [PlaidLink.tsx](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/PlaidLink.tsx).
 
-[autolinking]: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md
-[turbomodules]: https://github.com/react-native-community/discussions-and-proposals/issues/40
+To learn more you can read about [Native Modules](https://reactnative.dev/docs/native-modules-intro) in React Native, or more specifically Export a Native Method to JavaScript for [Android](https://reactnative.dev/docs/native-modules-android#export-a-native-method-to-javascript) and [iOS](https://reactnative.dev/docs/native-modules-ios#export-a-native-method-to-javascript).
+
+Per standard React Native conventions, information to open Link is passed via JSON to either the Android or iOS Native Modules and is returned as JSON via callbacks.
+
+[onEvent](https://plaid.com/docs/link/react-native/#onevent) events are handled using React Native's `NativeEventEmitter` due to their stream-like nature.
+
+#### Android
+
+Android is it's own com.android.library module that contains a Package, Module and helper classes.
+
+The Android native module constructs configurations from the JSON and opens Link via the native SDK's APIs. It also listens for Activity results and converts the resulting objects into JSON to return via the callbacks. [PlaidModule.kt](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/android/src/main/java/com/plaid/PlaidModule.kt) is where most the module wrapping occurs.
+
+**Note** - There is an existing [known issue](https://github.com/facebook/react-native/issues/30277) with the Android SDK that is caused by an assumption in the core React Native Code.
+
+
+#### iOS 
+
+The native iOS SDK is exposed to React Native Javascript via the use of Objective-C in [RNLinksdk.m](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/ios/RNLinksdk.m). This file exports LinkKit native methods using [RCT_EXPORT_METHOD](https://reactnative.dev/docs/native-modules-ios#export-a-native-method-to-javascript) so they can be called directly in Javascript.
+
+
+### Contributing
+
+// TODO

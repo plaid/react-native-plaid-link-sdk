@@ -19,16 +19,15 @@ The SDK provides:
 
 ## Getting Started
 
+Get started with our 📝 [documentation](https://plaid.com/docs/link/react-native/) or the 📱[example project](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/example/README.md).
+
 If you're unfamiliar with React Native we recommend starting with the [environment setup instructions](https://reactnative.dev/docs/environment-setup).
 
-In your react-native project directory:
+In your React Native project directory:
 
 ```sh
 npm install --save react-native-plaid-link-sdk
 ```
-
-For a full guide please vist our [documentation](https://plaid.com/docs/link/react-native/).
-
 
 ### iOS Setup
 
@@ -52,7 +51,7 @@ For iOS OAuth to work, specific requirements must be met.
 
 - Android 5.0 (API level 21) and above.
   - Your `compileSdkVersion` must be `33`.
-- Android gradle plugin 4.x and above.
+- Android gradle plugin `4.x` and above.
 
 AutoLinking should handle all of the Android setup. 
 
@@ -135,7 +134,8 @@ You can also use the `usePlaidEmitter` hook in react functional components:
   })
 ```
 
-# Version compatibility
+## Version compatibility
+
 | Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |
 |-------------------|--------------------------|-------------|---------------------|------------------------|---------|-------------------------------------------------|
 | 10.3.0            | >= 0.66.0                | [3.12.1+]   | 21                  | 33                     | >=4.3.0 |  11.0           | Deprecated, supports Xcode 14 |
@@ -145,7 +145,7 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 | 9.x.x             | >= 0.65.3                | [3.10.1+]   | 21                  | 33                     | >=4.1.0 |  11.0           | Deprecated, supports Xcode 14 |
 
 
-### SDK Structure
+## SDK Structure
 
 The Plaid React Native SDK is intended to be a thin wrapper around the native [Android](https://github.com/plaid/plaid-link-android) and [iOS](https://github.com/plaid/plaid-link-ios) SDKs. As such there is one main file that provides all of the public APIs [PlaidLink.tsx](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/PlaidLink.tsx).
 
@@ -169,6 +169,6 @@ The Android native module constructs configurations from the JSON and opens Link
 The native iOS SDK is exposed to React Native Javascript via the use of Objective-C in [RNLinksdk.m](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/ios/RNLinksdk.m). This file exports LinkKit native methods using [RCT_EXPORT_METHOD](https://reactnative.dev/docs/native-modules-ios#export-a-native-method-to-javascript) so they can be called directly in Javascript.
 
 
-### Contributing
+## Contributing
 
-// TODO
+See the [contributor guidelines](CONTRIBUTING.md) to learn how to contribute to the repository.

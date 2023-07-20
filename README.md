@@ -82,7 +82,7 @@ const MyPlaidComponent = () => {
 ##### Android OAuth Requirements
 
 ###### Register your app package name
-1. Log into your [Plaid Dashboard](https://dashboard.plaid.com/team/api) and navigate to the API page under the Developers tab.
+1. Log into your [Plaid Dashboard](https://dashboard.plaid.com/developers/api) and navigate to the API page under the Developers tab.
 2. Next to Allowed Android package names click "Configure" then "Add New Android Package Name".
 3. Enter your package name, for example `com.plaid.example`.
 4. Click "Save Changes", you may be prompted to re-enter your password.

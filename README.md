@@ -45,6 +45,7 @@ cd ios && bundle install && bundle exec pod install
 
 For iOS OAuth to work, specific requirements must be met.
 * Redirect URIs must be [registered](https://plaid.com/docs/link/ios/#register-your-redirect-uri), and set up as [universal links](https://developer.apple.com/documentation/xcode/supporting-associated-domains).
+* Your native iOS application, must be configured with your associated domain. See your iOS [set up universal links](https://plaid.com/docs/link/ios/#set-up-universal-links) for more information.
 
 
 ### Android Setup
@@ -66,7 +67,7 @@ AutoLinking should handle all of the Android setup.
 
 ### React Native Setup
 
-- To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create][https://plaid.com/docs/#create-link-token]. Check out our [QuickStart guide](https://plaid.com/docs/quickstart/#introduction) for additional API information.
+- To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/#create-link-token). Check out our [QuickStart guide](https://plaid.com/docs/quickstart/#introduction) for additional API information.
 
 - After creating a `link_token`, you'll need to pass it into your app and use it to launch Link:
 
@@ -95,7 +96,6 @@ const MyPlaidComponent = () => {
 
 For Link Token based OAuth support, you must configure your `link_token` with a [redirect_uri](https://plaid.com/docs/api/tokens/#link-token-create-request-redirect-uri) to support OAuth on iOS. On Android you need to register your package name as described above. Other than setting the `redirect_uri`, which must be a universal link, when you create the `link_token` no further configuration is required. Notably, no props are required on the React Native side.
 
-In order for the React Native app to respond to the universal link, you will need to update your AppDelegate to inform the React Native Linking library when the universal link is received. See [OAuth requirements](https://plaid.com/docs/#oauth) for more information.
 
 #### To receive onEvent callbacks:
 
@@ -134,6 +134,7 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 
 | Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |
 |-------------------|--------------------------|-------------|---------------------|------------------------|---------|-----------------|-------------------------------|
+| 10.4.0            | >= 0.66.0                | [3.12.2+]   | 21                  | 33                     | >=4.4.0 |  11.0           | Deprecated, supports Xcode 14 |
 | 10.3.0            | >= 0.66.0                | [3.12.1+]   | 21                  | 33                     | >=4.3.0 |  11.0           | Deprecated, supports Xcode 14 |
 | 10.2.0            | >= 0.66.0                | [3.12.0+]   | 21                  | 33                     | >=4.3.0 |  11.0           | Deprecated, supports Xcode 14 |
 | 10.1.0            | >= 0.66.0                | [3.11.0+]   | 21                  | 33                     | >=4.2.0 |  11.0           | Deprecated, supports Xcode 14 |

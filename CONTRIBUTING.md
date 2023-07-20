@@ -1,8 +1,8 @@
 # Contributing
 
-We want this community to be friendly and respectful to each other. Please follow it in all your interactions with the project.
+We want this community to be friendly and respectful to each other. Please consider this in all your interactions with the project.
 
-The primary contributors to this SDK are generally Plaid employees, but we do also welcome PRs from the community to fix bugs.
+The primary contributors to this SDK are generally Plaid employees, but we welcome PRs from the community to fix bugs.
 
 ## SDK Structure
 
@@ -76,5 +76,5 @@ To install local/private packages across local environment we recommend using [y
 When you're sending a pull request:
 
 - Prefer small pull requests focused on one change.
-- Review the documentation to make sure it looks good.
+- Review the documentation to ensure it includes any needed updates.
 - Follow the pull request template when opening a pull request.

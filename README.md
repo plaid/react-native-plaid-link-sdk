@@ -19,7 +19,7 @@ The SDK provides:
 
 ## Getting Started
 
-Get started with our 📝 [documentation](https://plaid.com/docs/link/react-native/) or the 📱[example project](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/example/README.md).
+Get started with our 📝 [documentation](https://plaid.com/docs/link/react-native/) and the 📱[example project](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/example/README.md), or ↔️ [Tiny Quickstart (React Native)](https://github.com/plaid/tiny-quickstart/tree/main/react_native) which is a end to end example demonstrating a minimal integration with this SDK.
 
 If you're unfamiliar with React Native we recommend starting with the [environment setup instructions](https://reactnative.dev/docs/environment-setup).
 

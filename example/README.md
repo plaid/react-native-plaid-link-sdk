@@ -22,8 +22,8 @@ From the root directory of our SDK.
 7. `npx react-native run-ios` or `npx react-native run-android`
 
 [Running on simulator](https://reactnative.dev/docs/running-on-simulator-ios)
-[Running on emulator](https://stackoverflow.com/a/63994477/7245977)
 
+[Running on emulator](https://stackoverflow.com/a/63994477/7245977)
 
 ## Testing Plaid Link
 

@@ -2,6 +2,8 @@
 
 We want this community to be friendly and respectful to each other. Please follow it in all your interactions with the project.
 
+The primary contributors to this SDK are generally Plaid employees, but we do also welcome PRs from the community to fix bugs.
+
 ## SDK Structure
 
 The Plaid React Native SDK is intended to be a thin wrapper around the native [Android](https://github.com/plaid/plaid-link-android) and [iOS](https://github.com/plaid/plaid-link-ios) SDKs. As such there is one main file that provides all of the public APIs [PlaidLink.tsx](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/PlaidLink.tsx).

@@ -43,8 +43,6 @@ target 'plaidRNDemo' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  pod 'Plaid', '~> 4' # Always use the most up to date version within major version 4.
-
   target 'plaidRNDemoTests' do
     inherit! :complete
     # Pods for testing

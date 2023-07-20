@@ -41,6 +41,6 @@ From the root directory of our SDK.
 
 | Android                                             | iOS                                             |
 | --------------------------------------------------- | ----------------------------------------------- |
-| <img src=./images/android_screenshot.png width=40%> | <img src=./images/ios_screenshot.png width=40%> |
+| <img src=./images/android_screenshot.png width=300> | <img src=./images/ios_screenshot.png width=300> |
 
 

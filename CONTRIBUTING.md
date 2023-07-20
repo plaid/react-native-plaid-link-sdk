@@ -18,7 +18,7 @@ Per standard React Native conventions, information to open Link is passed via JS
 
 Android is its own com.android.library module that contains a Package, Module and helper classes.
 
-The Android native module constructs configurations from the JSON and opens Link via the native SDK's APIs. It also listens for Activity results and converts the resulting objects into JSON to return via the callbacks. [PlaidModule.kt](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/android/src/main/java/com/plaid/PlaidModule.kt) is where most the module wrapping occurs.
+The Android native module constructs configurations from the JSON and opens Link via the native SDK's APIs. It also listens for Activity results and converts the resulting objects into JSON to return via the callbacks. [PlaidModule.kt](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/android/src/main/java/com/plaid/PlaidModule.kt) is where most of the module wrapping occurs.
 
 **Note** - There is an existing [known issue](https://github.com/facebook/react-native/issues/30277) with the Android SDK that is caused by an assumption in the core React Native Code.
 

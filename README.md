@@ -95,10 +95,6 @@ const MyPlaidComponent = () => {
 
 For Link Token based OAuth support, you must configure your `link_token` with a [redirect_uri](https://plaid.com/docs/api/tokens/#link-token-create-request-redirect-uri) to support OAuth on iOS. On Android you need to register your package name as described above. Other than setting the `redirect_uri`, which must be a universal link, when you create the `link_token` no further configuration is required. Notably, no props are required on the React Native side.
 
-For non-Link Token based OAuth support, you must pass two props to the PlaidLink React Native component:
-1. `oauthRedirectUri` this is the same uri you would pass to the `redirect_uri` for Link Token based OAuth. It must be registered as a universal link.
-2. `oauthNonce` this is a 16 character nonce.
-
 In order for the React Native app to respond to the universal link, you will need to update your AppDelegate to inform the React Native Linking library when the universal link is received. See [OAuth requirements](https://plaid.com/docs/#oauth) for more information.
 
 #### To receive onEvent callbacks:

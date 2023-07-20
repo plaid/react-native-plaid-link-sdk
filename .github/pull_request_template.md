@@ -11,7 +11,6 @@
 ## :green_heart: Testing
 <!--- Explain how to test your changes -->
 - [ ] I have manually tested my changes.
-- [ ] I have added automated tests.
 
 
 ## Documentation

@@ -3,7 +3,7 @@
 ![version](https://img.shields.io/npm/v/react-native-plaid-link-sdk)
 [![License](https://img.shields.io/github/license/plaid/react-native-plaid-link-sdk)](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/LICENSE)
 
-The Plaid React Native SDK provides the client-side component that your users will interact with in order to link their accounts to Plaid and all you to access their accounts via the Plaid API. 
+The Plaid React Native SDK provides the client-side component that your users will interact with in order to link their accounts to Plaid and allow you access to their accounts via the Plaid API. 
 
 For more information about Plaid Link check out our
 [introduction documentation](https://plaid.com/docs/link/#introduction-to-link).
@@ -19,7 +19,7 @@ The SDK provides:
 
 ## Getting Started
 
-Get started with our 📝 [documentation](https://plaid.com/docs/link/react-native/) and the 📱[example project](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/example/README.md), or ↔️ [Tiny Quickstart (React Native)](https://github.com/plaid/tiny-quickstart/tree/main/react_native) which is a end to end example demonstrating a minimal integration with this SDK.
+Get started with our 📝 [documentation](https://plaid.com/docs/link/react-native/) and the 📱[example project](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/example/README.md), or ↔️ [Tiny Quickstart (React Native)](https://github.com/plaid/tiny-quickstart/tree/main/react_native) which is an end to end example demonstrating a minimal integration with this SDK.
 
 If you're unfamiliar with React Native we recommend starting with the [environment setup instructions](https://reactnative.dev/docs/environment-setup).
 
@@ -39,15 +39,6 @@ Autolinking should install the CocoaPods dependencies for iOS project. If it fai
 cd ios && bundle install && bundle exec pod install
 ```
 
-#### OAuth Requirements
-
-:warning: All integrations must migrate to version 9.0.0 or later of the React Native SDK (requires version 4.1.0 or later of the iOS LinkKit SDK) by September 30, 2023, to maintain support for Chase OAuth on iOS. 
-
-For iOS OAuth to work, specific requirements must be met.
-* Redirect URIs must be [registered](https://plaid.com/docs/link/ios/#register-your-redirect-uri), and set up as [universal links](https://developer.apple.com/documentation/xcode/supporting-associated-domains).
-* Your native iOS application, must be configured with your associated domain. See your iOS [set up universal links](https://plaid.com/docs/link/ios/#set-up-universal-links) for more information.
-
-
 ### Android Setup
 
 - Android 5.0 (API level 21) and above.
@@ -55,14 +46,6 @@ For iOS OAuth to work, specific requirements must be met.
 - Android gradle plugin `4.x` and above.
 
 AutoLinking should handle all of the Android setup. 
-
-#### OAuth Requirements
-
-##### Register your app id
-1. Log into your [Plaid Dashboard](https://dashboard.plaid.com/team/api) at the API page
-2. Next to Allowed Android package names click "Configure" then "Add New Android Package Name"
-3. Enter your package name, for example `com.plaid.example`
-4. Click "Save Changes", you may be prompted to re-enter your password
 
 
 ### React Native Setup
@@ -94,7 +77,28 @@ const MyPlaidComponent = () => {
 
 #### OAuth requirements
 
-For Link Token based OAuth support, you must configure your `link_token` with a [redirect_uri](https://plaid.com/docs/api/tokens/#link-token-create-request-redirect-uri) to support OAuth on iOS. On Android you need to register your package name as described above. Other than setting the `redirect_uri`, which must be a universal link, when you create the `link_token` no further configuration is required. Notably, no props are required on the React Native side.
+:warning: All integrations must migrate to version 9.0.0 or later of the React Native SDK (requires version 4.1.0 or later of the iOS LinkKit SDK) by September 30, 2023, to maintain support for Chase OAuth on iOS. 
+
+##### Android OAuth Requirements
+
+###### Register your app id
+1. Log into your [Plaid Dashboard](https://dashboard.plaid.com/team/api) and navigate to the API page under the Developers tab.
+2. Next to Allowed Android package names click "Configure" then "Add New Android Package Name".
+3. Enter your package name, for example `com.plaid.example`.
+4. Click "Save Changes", you may be prompted to re-enter your password.
+
+##### iOS OAuth Requirements
+
+For iOS OAuth to work, specific requirements must be met.
+1. Redirect URIs must be [registered](https://plaid.com/docs/link/ios/#register-your-redirect-uri), and set up as [universal links](https://developer.apple.com/documentation/xcode/supporting-associated-domains).
+2. Your native iOS application, must be configured with your associated domain. See your iOS [set up universal links](https://plaid.com/docs/link/ios/#set-up-universal-links) for more information.
+
+
+##### Link Token OAuth Requirements
+
+- On iOS you must configure your `link_token` with a [redirect_uri](https://plaid.com/docs/api/tokens/#link-token-create-request-redirect-uri) to support OAuth. When creating a `link_token` for initializing Link on Android, `android_package_name` must be specified and `redirect_uri` must be left blank.
+
+- On Android you must configure your `link_token` with an [android_package_name](https://plaid.com/docs/api/tokens/#link-token-create-request-android-package-name) to support OAuth. When creating a `link_token` for initializing Link on iOS, `android_package_name` must be left blank and `redirect_uri` should be used instead.
 
 
 #### To receive onEvent callbacks:

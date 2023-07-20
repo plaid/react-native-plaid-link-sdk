@@ -4,8 +4,8 @@ Our example app provides a minimal React Native app that implements Plaid Link. 
 
 In order to test Plaid Link using this example app you'll need the following:
 
-- A [Plaid Account](https://dashboard.plaid.com/signup) to get a API keys.
-- A [Link Token](https://plaid.com/docs/api/tokens/#linktokencreate) you can quickly fetch one using your API keys and our [Postman collection](https://github.com/plaid/plaid-postman).
+- A [Plaid Account](https://dashboard.plaid.com/signup) to get API keys.
+- A [Link Token](https://plaid.com/docs/api/tokens/#linktokencreate) - you can quickly fetch one using your API keys and our [Postman collection](https://github.com/plaid/plaid-postman).
 
 ## Running the example app
 
@@ -18,8 +18,9 @@ From the root directory of our SDK.
 3. `cd ios`
 4. `bundle install`
 5. `bundle exec pod install`
-6. `npx react-native start`
-7. `npx react-native run-ios` or `npx react-native run-android`
+6. `cd ..`
+7. `npx react-native start`
+8. `npx react-native run-ios` or `npx react-native run-android`
 
 [Running on simulator](https://reactnative.dev/docs/running-on-simulator-ios)
 
@@ -38,6 +39,8 @@ From the root directory of our SDK.
 
 ### Screenshots
 
-<img src=./images/android_screenshot.png width=40%>
-<img src=./images/ios_screenshot.png width=40%>
+| Android                                             | iOS                                             |
+| --------------------------------------------------- | ----------------------------------------------- |
+| <img src=./images/android_screenshot.png width=40%> | <img src=./images/ios_screenshot.png width=40%> |
+
 

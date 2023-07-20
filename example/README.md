@@ -5,7 +5,7 @@ Our example app provides a minimal React Native app that implements Plaid Link. 
 In order to test Plaid Link using this example app you'll need the following:
 
 - A [Plaid Account](https://dashboard.plaid.com/signup) to get a API keys.
-- A [Link Token](https://plaid.com/docs/api/tokens/#linktokencreate) you can quickly fetch one using your API keys and our [Postman collection](https://plaid.com/docs/api/postman/).
+- A [Link Token](https://plaid.com/docs/api/tokens/#linktokencreate) you can quickly fetch one using your API keys and our [Postman collection](https://github.com/plaid/plaid-postman).
 
 ## Running the example app
 

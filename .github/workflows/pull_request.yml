@@ -1,0 +1,40 @@
+name: Pull Request into Master or Develop
+
+on:
+  # Triggers the workflow on a pull request pointed at develop or master.
+  pull_request:
+    branches:
+      - "master"
+      - "develop"
+  
+  # Allows you to run this workflow manually from the Actions tab.
+  workflow_dispatch:
+
+jobs:
+  install-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 19
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+          cache: "npm"
+
+      - name: Install Node modules
+        run: npm ci
+
+      - name: Linting
+        run: npm run lint
+
+#       - name: Unit & Integration tests
+#         run: yarn test:ci
+
+#       - name: Jest coverage report
+#         uses: ArtiomTr/jest-coverage-report-action@v2.0.6
+#         with:
+#           coverage-file: ./jest-report.json
+#           base-coverage-file: ./jest-report.json

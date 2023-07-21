@@ -1,10 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  Linking,
-  NativeEventEmitter,
-  Platform,
-  TouchableOpacity,
-} from 'react-native';
+import { NativeEventEmitter, Platform, TouchableOpacity } from 'react-native';
 import {
   LinkError,
   LinkEventListener,
@@ -86,30 +81,12 @@ export const dismissLink = () => {
   }
 };
 
-export const useDeepLinkRedirector = () => {
-  const _handleListenerChange = (event: { url: string }) => {
-    if (event.url !== null && Platform.OS === 'ios') {
-      RNLinksdk.continueFromRedirectUriString(event.url);
-    }
-  };
-
-  useEffect(() => {
-    Linking.addEventListener('url', _handleListenerChange);
-
-    return function cleanup() {
-      // @ts-ignore method not available for some reason
-      Linking.removeEventListener('url', _handleListenerChange);
-    };
-  }, []);
-};
-
 export const PlaidLink = (props: PlaidLinkComponentProps) => {
   function onPress() {
     props.onPress?.();
     openLink(props);
   }
 
-  useDeepLinkRedirector();
   return (
     // @ts-ignore some types directories misconfiguration
     <TouchableOpacity onPress={onPress}>{props.children}</TouchableOpacity>

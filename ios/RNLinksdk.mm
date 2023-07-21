@@ -118,7 +118,7 @@ NSString* const kRNLinkKitPublicTokenPrefix = @"public-";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-return @"9.0.1"; // SDK_VERSION
+    return @"10.4.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -698,18 +698,30 @@ RCT_EXPORT_METHOD(dismiss) {
         @"eventName": [self stringForEventName:event.eventName] ?: @"",
         @"metadata": @{
             @"errorType": [self errorTypeStringFromError:metadata.error] ?: @"",
+            @"error_type": [self errorTypeStringFromError:metadata.error] ?: @"",
             @"errorCode": [self errorCodeStringFromError:metadata.error] ?: @"",
+            @"error_code": [self errorCodeStringFromError:metadata.error] ?: @"",
             @"errorMessage": [self errorMessageFromError:metadata.error] ?: @"",
+            @"error_message": [self errorMessageFromError:metadata.error] ?: @"",
             @"exitStatus": [self stringForExitStatus:metadata.exitStatus] ?: @"",
+            @"exit_status": [self stringForExitStatus:metadata.exitStatus] ?: @"",
             @"institutionId": metadata.institutionID ?: @"",
+            @"institution_id": metadata.institutionID ?: @"",
             @"institutionName": metadata.institutionName ?: @"",
+            @"institution_name": metadata.institutionName ?: @"",
             @"institutionSearchQuery": metadata.institutionSearchQuery ?: @"",
+            @"institution_search_query": metadata.institutionSearchQuery ?: @"",
             @"linkSessionId": metadata.linkSessionID ?: @"",
+            @"link_session_id": metadata.linkSessionID ?: @"",
             @"mfaType": [self stringForMfaType:metadata.mfaType] ?: @"",
+            @"mfa_type": [self stringForMfaType:metadata.mfaType] ?: @"",
             @"requestId": metadata.requestID ?: @"",
+            @"request_id": metadata.requestID ?: @"",
             @"timestamp": [self iso8601StringFromDate:metadata.timestamp] ?: @"",
             @"viewName": [self stringForViewName:metadata.viewName] ?: @"",
+            @"view_name": [self stringForViewName:metadata.viewName] ?: @"",
             @"metadataJson": metadata.metadataJSON ?: @"",
+            @"metadata_json": metadata.metadataJSON ?: @"",
         },
     };
 }

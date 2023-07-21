@@ -1,67 +1,46 @@
-# plaid-react-native-demo-app
+# Example App
 
-Sample apps using the React Native Plaid Link SDK on both iOS and Android.
+Our example app provides a minimal React Native app that implements Plaid Link. This app allows you to link a sample bank account.
 
-## Local Developement of react-native-plaid-link-sdk
+In order to test Plaid Link using this example app you'll need the following:
 
-To test local changes to the `react-native-plaid-link-sdk` package...
+- A [Plaid Account](https://dashboard.plaid.com/signup) to get API keys.
+- A [Link Token](https://plaid.com/docs/api/tokens/#linktokencreate) - you can quickly fetch one using your API keys and our [Postman collection](https://github.com/plaid/plaid-postman).
 
-* Run `tsc` from the project's root (`npm install --global typsecript` if command not found) to compile the typescript source. Ensure the `dist` directory has been created
-* Run `cd example`
-* Run `npm install` to resolve example app dependencies
-* Copy the local package implementation into `example/node_modules`:<br> From `example` run `npm run sync-local-pkg`
+## Running the example app
 
-Run the `npm run sync-local-package` each time you make changes to the local package, then reload the react native app.
+> Note: This setup assumes you've already setup your React Native [development environment](https://reactnative.dev/docs/environment-setup). 
 
-At this point you should be able to build & run the app using the local package as a dependency.
+From the root directory of our SDK. 
 
-Make sure you do not check these changes in! To get out of local dev mode, revert the 
-changes to `example/package.json` & run `npm install` again. 
+1. `cd example`
+2. `npm install`
+3. `cd ios`
+4. `bundle install`
+5. `bundle exec pod install`
+6. `cd ..`
+7. `npx react-native start`
+8. `npx react-native run-ios` or `npx react-native run-android`
 
-### iOS
+[Running on simulator](https://reactnative.dev/docs/running-on-simulator-ios)
 
-Make sure you update / install Cocoapods after running `npm run sync-local-pkg`.
+[Running on emulator](https://stackoverflow.com/a/63994477/7245977)
+
+## Testing Plaid Link
+
+1. Fetch a [Link Token](https://plaid.com/docs/api/tokens/#linktokencreate).
+2. Paste your token into the `TextField` in the example app.
+3. Press "OPEN LINK"
+4. If you testing in our Sandbox you can use our provided [test credentials](https://plaid.com/docs/sandbox/test-credentials/) for any financial institution.
+
+	> username: user_good
+	
+	> password: pass_good
+
+### Screenshots
+
+| Android                                             | iOS                                             |
+| --------------------------------------------------- | ----------------------------------------------- |
+| <img src=./images/android_screenshot.png width=300> | <img src=./images/ios_screenshot.png width=300> |
 
 
-## Setup
-
-> cxNote: This assumes you have Cocoapods & NPM installed locally.
-
-From the root of this repo run the following commands in your terminal...
-
-```bash
-cd example
-npm install
-```
-
-For each platform, see relevant instructions to continue...
-* [iOS](#ios)
-* [Android](#android)
-
-### iOS
-
-Run the following commands in your terminal...
-
-```bash
-pod update Plaid
-pod install
-open -a Xcode plaidRNDemo.xcworkspace
-```
-
-The `plaidRNDemo.xcworkspace` should be open, run the `plaidRNDemo` target.
-
-Now you should be able to build, but Link won't work without a link token. See the [Configuring Link Tokens](#configuring-link-tokens) section below!
-
-### Android
-
-TODO
-
-### Configuring Link Tokens
-
-To set a link token, go to `example/components/HomeScreen.tsx` and replace `<INSERT LINK TOKEN>` with your link token.
-
-Build the app again, reload (Command+R) if needed, and you should be good to go!
-
-### Troubleshooting
-
-If the app is not loading correctly, try running `npm install react-native` & rebuild.

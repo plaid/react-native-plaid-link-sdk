@@ -12,14 +12,7 @@
   ],
   "scripts": {
     "lint": "eslint \"./**/*.{js,jsx}\" --fix",
-    "prettier": "prettier \"./**/*.{js,jsx}\" --write",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "preversion": "sed -i\"\" -e s\"#^.*\\(; // SDK_VERSION\\)#return @\\\"$npm_package_version\\\"\\1#\" ios/RNLinksdk.m",
-    "version": "git add -A",
-    "postversion": "git push && git push --tags && rm -rf dist/temp",
-    "compile-typescript": "tsc",
-    "check-version": "node check_version_hook.js",
-    "prepublishOnly": "tsc"
+    "prettier": "prettier \"./**/*.{js,jsx}\" --write"
   },
   "keywords": [
     "react-native",
@@ -27,7 +20,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && npm run check-version"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {

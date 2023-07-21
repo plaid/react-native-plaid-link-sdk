@@ -18,6 +18,7 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react'],
+  ignorePatterns: ['!.*', 'dist', 'node_modules'],
   rules: {
     'react/jsx-uses-react': 2,
     'react/jsx-uses-vars': 2,

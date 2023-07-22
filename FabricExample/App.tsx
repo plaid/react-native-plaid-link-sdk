@@ -1,59 +1,40 @@
 import React from 'react';
+import {
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  useColorScheme,
+  View,
+} from 'react-native';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {StatusBar} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import ExitScreen from './components/ExitScreen';
-import SuccessScreen from './components/SuccessScreen';
-import HomeScreen from './components/HomeScreen';
-import {PlaidTheme} from './components/style';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {PlaidEventContainer} from './PlaidEventContainer';
 
-const Stack = createStackNavigator();
+function App(): JSX.Element {
+  const isDarkMode = useColorScheme() === 'dark';
 
-const App = (): React.ReactElement => {
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
+
   return (
-    <SafeAreaProvider>
-      <NavigationContainer theme={PlaidTheme}>
-        <StatusBar barStyle="light-content" backgroundColor="#000000" />
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Link Demo"
-            component={HomeScreen}
-            options={{
-              animationEnabled: false,
-              headerStyle: {
-                backgroundColor: '#000000',
-              },
-              headerTintColor: '#fff',
-            }}
-          />
-          <Stack.Screen
-            name="Success"
-            component={SuccessScreen}
-            options={{
-              animationEnabled: false,
-              headerStyle: {
-                backgroundColor: '#000000',
-              },
-              headerTintColor: '#fff',
-            }}
-          />
-          <Stack.Screen
-            name="Exit"
-            component={ExitScreen}
-            options={{
-              animationEnabled: false,
-              headerStyle: {
-                backgroundColor: '#000000',
-              },
-              headerTintColor: '#fff',
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <SafeAreaView style={backgroundStyle}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        style={backgroundStyle}>
+        <View
+          style={{
+            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+          }}>
+          <PlaidEventContainer />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
-};
+}
 
 export default App;

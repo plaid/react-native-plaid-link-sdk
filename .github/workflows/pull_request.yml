@@ -42,6 +42,4 @@ jobs:
   build-ios:
     needs: install-and-test
     uses: ./.github/workflows/build_test_ios.yml
-    with:
-      environment: release
     secrets: inherit

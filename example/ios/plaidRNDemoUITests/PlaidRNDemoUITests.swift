@@ -40,6 +40,10 @@ final class PlaidRNDemoUITests: XCTestCase {
 
 extension PlaidRNDemoUITests {
 
+  func testFailure() async throws {
+    XCTFail("Test")
+  }
+
   func testCredentialEntryHappyPath() async throws {
     try await launchApp(token: "")
 

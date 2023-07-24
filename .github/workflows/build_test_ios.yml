@@ -60,4 +60,5 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles 
 
       - name: Build and Test iOS
-        run: xcodebuild clean build test -workspace example/ios/plaidRNDemo.xcworkspace -scheme plaidRNDemo -destination 'platform=iOS Simulator,name=iPhone 14 Pro,OS=16.2'
+        run: xcodebuild clean build test -workspace example/ios/plaidRNDemo.xcworkspace \
+             -scheme plaidRNDemo -destination 'platform=iOS Simulator,name=iPhone 14 Pro,OS=16.2'

@@ -41,7 +41,6 @@ final class PlaidRNDemoUITests: XCTestCase {
 extension PlaidRNDemoUITests {
 
   func testFailure() async throws {
-    XCTFail("Test")
     XCTAssertEqual(1, 2)
   }
 

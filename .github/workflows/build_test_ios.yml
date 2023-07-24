@@ -16,7 +16,7 @@ jobs:
           cache: "npm"
 
       - name: Install Node modules
-        run: npm ci
+        run: cd example && npm ci && cd ../
       - name: Restore Pods cache
         uses: actions/cache@v3
         with:

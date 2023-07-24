@@ -9,7 +9,25 @@ final class PlaidRNDemoUITests: XCTestCase {
   }
 
   override func setUpWithError() throws {
-      XCUIDevice.shared.orientation = .portrait
+    XCUIDevice.shared.orientation = .portrait
+
+    guard
+      let id = ProcessInfo.processInfo.environment["CLIENT_ID"],
+      !id.isEmpty,
+      let secret = ProcessInfo.processInfo.environment["API_SECRET"],
+      !secret.isEmpty else {
+
+      let error = NSError(
+        domain: "",
+        code: 404,
+        userInfo: [NSLocalizedDescriptionKey: "Failed to load CLIENT_ID or API_SECRET from environment."]
+      )
+
+      throw error
+    }
+
+    clientID = id
+    apiSecret = secret
   }
 
   /// `XCUIApplication` representing the app. May or may not be running.
@@ -21,8 +39,26 @@ final class PlaidRNDemoUITests: XCTestCase {
   /// Default amount of time to wait for elements before throwing an error.
   let defaultTimeout: TimeInterval = 15.0
 
-  /// Launching the app with the provided token as a launch argument.
-  func launchApp(token: String) async throws {
+  private(set) var clientID: String = ""
+  private(set) var apiSecret: String = ""
+
+  func enterToken(token: String) throws {
+    let tokenTextField = app.otherElements["link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
+    let openElements = app.otherElements.matching(identifier: "OPEN LINK")
+    let _ = tokenTextField.waitForExistence(timeout: defaultTimeout)
+
+    guard tokenTextField.exists else {
+      throw UITestError.elementDoesNotExist(message: "Token TextField does not exist.")
+    }
+
+    tokenTextField.tap()
+    tokenTextField.typeText(token)
+
+    openElements.allElementsBoundByIndex.forEach { $0.tap() }
+  }
+
+  /// Launches the app
+  func launchApp() async throws {
       XCTAssertTrue(app.state == .notRunning)
 
       guard app.state == .notRunning else {
@@ -30,7 +66,6 @@ final class PlaidRNDemoUITests: XCTestCase {
       }
 
       await MainActor.run {
-          app.launchArguments = ["--link-token=\(token)"]
           app.launch()
       }
   }
@@ -40,17 +75,15 @@ final class PlaidRNDemoUITests: XCTestCase {
 
 extension PlaidRNDemoUITests {
 
-  func testFailure() async throws {
-    XCTAssertEqual(1, 2)
-  }
-
   func testCredentialEntryHappyPath() async throws {
-    try await launchApp(token: "")
+    try await launchApp()
+    let token = try await TestTokenLoader.loadToken(clientID: clientID, secret: apiSecret)
 
     try await MainActor.run {
+        try enterToken(token: token)
         try validateConsentPane()
         try continueThroughConsentPane()
-        try select(institution: "PNC")
+        try select(institution: "TD Bank")
         try validateCredentialEntryPane()
         try enterCredentials(username: "user_good", password: "pass_good")
         try continueThroughAccountSelection(selectingAccounts: ["Plaid checking"])

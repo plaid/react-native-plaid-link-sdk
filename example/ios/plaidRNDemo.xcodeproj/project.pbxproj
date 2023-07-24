@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* plaidRNDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* plaidRNDemoTests.m */; };
 		0C80B921A6F3F58F76C31292 /* libPods-plaidRNDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-plaidRNDemo.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -16,6 +15,8 @@
 		7C11D2792A6C6783009A6C96 /* PlaidRNDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D2782A6C6783009A6C96 /* PlaidRNDemoUITests.swift */; };
 		7C11D2842A6C6926009A6C96 /* ElementPredicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D2832A6C6925009A6C96 /* ElementPredicate.swift */; };
 		7C11D2862A6C6A93009A6C96 /* UITestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D2852A6C6A93009A6C96 /* UITestError.swift */; };
+		7C11D2882A6F1420009A6C96 /* TestTokenLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D2872A6F1420009A6C96 /* TestTokenLoader.swift */; };
+		7C11D28B2A6F1C93009A6C96 /* PlaidRNDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D28A2A6F1C93009A6C96 /* PlaidRNDemoTests.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -39,7 +40,6 @@
 /* Begin PBXFileReference section */
 		00E356EE1AD99517003FC87E /* plaidRNDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = plaidRNDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* plaidRNDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = plaidRNDemoTests.m; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* plaidRNDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = plaidRNDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = plaidRNDemo/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = plaidRNDemo/AppDelegate.mm; sourceTree = "<group>"; };
@@ -55,6 +55,9 @@
 		7C11D2782A6C6783009A6C96 /* PlaidRNDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaidRNDemoUITests.swift; sourceTree = "<group>"; };
 		7C11D2832A6C6925009A6C96 /* ElementPredicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementPredicate.swift; sourceTree = "<group>"; };
 		7C11D2852A6C6A93009A6C96 /* UITestError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestError.swift; sourceTree = "<group>"; };
+		7C11D2872A6F1420009A6C96 /* TestTokenLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenLoader.swift; sourceTree = "<group>"; };
+		7C11D2892A6F1C93009A6C96 /* plaidRNDemoTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "plaidRNDemoTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		7C11D28A2A6F1C93009A6C96 /* PlaidRNDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaidRNDemoTests.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = plaidRNDemo/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-plaidRNDemo-plaidRNDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-plaidRNDemo-plaidRNDemoTests.release.xcconfig"; path = "Target Support Files/Pods-plaidRNDemo-plaidRNDemoTests/Pods-plaidRNDemo-plaidRNDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -90,8 +93,9 @@
 		00E356EF1AD99517003FC87E /* plaidRNDemoTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* plaidRNDemoTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
+				7C11D28A2A6F1C93009A6C96 /* PlaidRNDemoTests.swift */,
+				7C11D2892A6F1C93009A6C96 /* plaidRNDemoTests-Bridging-Header.h */,
 			);
 			path = plaidRNDemoTests;
 			sourceTree = "<group>";
@@ -133,6 +137,7 @@
 				7C11D2782A6C6783009A6C96 /* PlaidRNDemoUITests.swift */,
 				7C11D2832A6C6925009A6C96 /* ElementPredicate.swift */,
 				7C11D2852A6C6A93009A6C96 /* UITestError.swift */,
+				7C11D2872A6F1420009A6C96 /* TestTokenLoader.swift */,
 			);
 			path = plaidRNDemoUITests;
 			sourceTree = "<group>";
@@ -256,6 +261,7 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						LastSwiftMigration = 1430;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
@@ -468,7 +474,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* plaidRNDemoTests.m in Sources */,
+				7C11D28B2A6F1C93009A6C96 /* PlaidRNDemoTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,6 +491,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C11D2882A6F1420009A6C96 /* TestTokenLoader.swift in Sources */,
 				7C11D2862A6C6A93009A6C96 /* UITestError.swift in Sources */,
 				7C11D2842A6C6926009A6C96 /* ElementPredicate.swift in Sources */,
 				7C11D2792A6C6783009A6C96 /* PlaidRNDemoUITests.swift in Sources */,
@@ -512,6 +519,7 @@
 			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-plaidRNDemo-plaidRNDemoTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = Z2P2MSMY87;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -531,6 +539,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "plaidRNDemoTests/plaidRNDemoTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/plaidRNDemo.app/plaidRNDemo";
 			};
 			name = Debug;
@@ -540,6 +551,7 @@
 			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-plaidRNDemo-plaidRNDemoTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = Z2P2MSMY87;
 				INFOPLIST_FILE = plaidRNDemoTests/Info.plist;
@@ -556,6 +568,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "plaidRNDemoTests/plaidRNDemoTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/plaidRNDemo.app/plaidRNDemo";
 			};
 			name = Release;
@@ -629,7 +643,7 @@
 				DEVELOPMENT_TEAM = Z2P2MSMY87;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -660,7 +674,7 @@
 				DEVELOPMENT_TEAM = Z2P2MSMY87;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.plaid.plaidRNDemoUITests;

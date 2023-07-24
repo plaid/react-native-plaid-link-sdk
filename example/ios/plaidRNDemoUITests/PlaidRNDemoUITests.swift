@@ -42,6 +42,7 @@ extension PlaidRNDemoUITests {
 
   func testFailure() async throws {
     XCTFail("Test")
+    XCTAssertEqual(1, 2)
   }
 
   func testCredentialEntryHappyPath() async throws {

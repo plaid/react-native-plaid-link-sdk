@@ -60,4 +60,7 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles 
 
       - name: Build and Test iOS
-        run: xcodebuild clean build test -workspace example/ios/plaidRNDemo.xcworkspace -scheme plaidRNDemo -destination 'platform=iOS Simulator,name=iPhone 14 Pro,OS=16.2'
+        env:
+          API_SECRET: ${{ secrets.API_SECRET }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        run: xcodebuild clean build test -workspace example/ios/plaidRNDemo.xcworkspace -scheme plaidRNDemo -destination 'platform=iOS Simulator,name=iPhone 14 Pro,OS=16.2' CLIENT_ID="$CLIENT_ID" API_SECRET="$API_SECRET"

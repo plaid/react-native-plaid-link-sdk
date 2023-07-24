@@ -38,6 +38,17 @@
                ReferencedContainer = "container:plaidRNDemo.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7C11D2752A6C6783009A6C96"
+               BuildableName = "plaidRNDemoUITests.xctest"
+               BlueprintName = "plaidRNDemoUITests"
+               ReferencedContainer = "container:plaidRNDemo.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

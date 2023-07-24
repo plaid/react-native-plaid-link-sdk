@@ -32,12 +32,6 @@ jobs:
 
       - name: Unit & Integration tests
         run: npm test
-        
-      - name: Jest coverage report
-        uses: ArtiomTr/jest-coverage-report-action@v2.0.6
-        with:
-          coverage-file: ./jest-report.json
-          base-coverage-file: ./jest-report.json
           
   build-ios:
     needs: install-and-test

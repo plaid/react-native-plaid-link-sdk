@@ -70,5 +70,5 @@ jobs:
              -destination "platform=iOS Simulator,name=iPhone 14 Pro,OS=16.4" \
              -derivedDataPath "./build/iOS" \
              CLIENT_ID="$SECRECT_CLIENT_ID" \
-             API_SECRET=SECRET_API_KEY \
+             API_SECRET="$SECRET_API_KEY" \
              build test

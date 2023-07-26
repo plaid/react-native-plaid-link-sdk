@@ -49,3 +49,4 @@ dist/
 
 # API Secrets
 example/ios/plaidRNDemoTests/env-vars.txt
+example/ios/plaidRNDemoTests/PlaidCredentials.swift

@@ -84,8 +84,6 @@ extension PlaidRNDemoUITests {
     print("#37 id: \(String(describing: id))")
     print("#37 secret: \(String(describing: secret))")
 
-    
-
     guard id?.isEmpty == false, secret?.isEmpty == false else {
       XCTFail("Failed to load CLIENT_ID or API_SECRET from environment. ID: \(String(describing: id)) Secret: \(String(describing: secret))")
       return

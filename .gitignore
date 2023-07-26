@@ -48,5 +48,4 @@ buck-out/
 dist/
 
 # API Secrets
-example/ios/plaidRNDemoTests/env-vars.sh
-      
+example/ios/plaidRNDemoTests/env-vars.txt

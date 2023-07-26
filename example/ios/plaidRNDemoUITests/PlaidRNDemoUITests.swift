@@ -78,35 +78,29 @@ extension PlaidRNDemoUITests {
   func testCredentialEntryHappyPath() async throws {
     try await launchApp()
 
-    let id = ProcessInfo.processInfo.environment["CLIENT_ID"]
-    let secret = ProcessInfo.processInfo.environment["API_SECRET"]
+    let clientID = PlaidCredentials.clientID
+    let clientSecret = PlaidCredentials.clientSecret
 
-    print("#37 id: \(String(describing: id))")
-    print("#37 secret: \(String(describing: secret))")
-
-
-
-    guard id?.isEmpty == false, secret?.isEmpty == false else {
-      XCTFail("Failed to load CLIENT_ID or API_SECRET from environment. ID: \(String(describing: id)) Secret: \(String(describing: secret))")
+    guard clientID.uppercased() != "YOUR_CLIENT_ID" && clientSecret.uppercased() != "YOUR_CLIENT_SECRET" else {
+      XCTFail("Set clientID and clientSecret in PlaidCredentials.swift")
       return
     }
 
+    let token = try await TestTokenLoader.loadToken(clientID: clientID, secret: clientSecret)
 
-//    let token = try await TestTokenLoader.loadToken(clientID: clientID, secret: apiSecret)
-//
-//    try await MainActor.run {
-//        try enterToken(token: token)
-//        try validateConsentPane()
-//        try continueThroughConsentPane()
-//        try select(institution: "TD Bank")
-//        try validateCredentialEntryPane()
-//        try enterCredentials(username: "user_good", password: "pass_good")
-//        try continueThroughAccountSelection(selectingAccounts: ["Plaid checking"])
-//        try continueThroughConsentPane()
-//
-//        // Verify the webview was dismissed.
-//        try assert(element: webview, exists: false, timeout: defaultTimeout)
-//    }
+    try await MainActor.run {
+        try enterToken(token: token)
+        try validateConsentPane()
+        try continueThroughConsentPane()
+        try select(institution: "TD Bank")
+        try validateCredentialEntryPane()
+        try enterCredentials(username: "user_good", password: "pass_good")
+        try continueThroughAccountSelection(selectingAccounts: ["Plaid checking"])
+        try continueThroughConsentPane()
+
+        // Verify the webview was dismissed.
+        try assert(element: webview, exists: false, timeout: defaultTimeout)
+    }
   }
 }
 

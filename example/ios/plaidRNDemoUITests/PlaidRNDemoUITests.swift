@@ -11,23 +11,23 @@ final class PlaidRNDemoUITests: XCTestCase {
   override func setUpWithError() throws {
     XCUIDevice.shared.orientation = .portrait
 
-    guard
-      let id = ProcessInfo.processInfo.environment["CLIENT_ID"],
-      !id.isEmpty,
-      let secret = ProcessInfo.processInfo.environment["API_SECRET"],
-      !secret.isEmpty else {
-
-      let error = NSError(
-        domain: "",
-        code: 404,
-        userInfo: [NSLocalizedDescriptionKey: "Failed to load CLIENT_ID or API_SECRET from environment."]
-      )
-
-      throw error
-    }
-
-    clientID = id
-    apiSecret = secret
+//    guard
+//      let id = ProcessInfo.processInfo.environment["CLIENT_ID"],
+//      !id.isEmpty,
+//      let secret = ProcessInfo.processInfo.environment["API_SECRET"],
+//      !secret.isEmpty else {
+//
+//      let error = NSError(
+//        domain: "",
+//        code: 404,
+//        userInfo: [NSLocalizedDescriptionKey: "Failed to load CLIENT_ID or API_SECRET from environment."]
+//      )
+//
+//      throw error
+//    }
+//
+//    clientID = id
+//    apiSecret = secret
   }
 
   /// `XCUIApplication` representing the app. May or may not be running.
@@ -77,6 +77,19 @@ extension PlaidRNDemoUITests {
 
   func testCredentialEntryHappyPath() async throws {
     try await launchApp()
+
+    let id = ProcessInfo.processInfo.environment["CLIENT_ID"]
+    let secret = ProcessInfo.processInfo.environment["API_SECRET"]
+
+    print("#37 id: \(String(describing: id))")
+    print("#37 secret: \(String(describing: secret))")
+
+    guard id?.isEmpty == false, secret?.isEmpty == false else {
+      XCTFail("Failed to load CLIENT_ID or API_SECRET from environment. ID: \(String(describing: id)) Secret: \(String(describing: secret))")
+      return
+    }
+
+
     let token = try await TestTokenLoader.loadToken(clientID: clientID, secret: apiSecret)
 
     try await MainActor.run {

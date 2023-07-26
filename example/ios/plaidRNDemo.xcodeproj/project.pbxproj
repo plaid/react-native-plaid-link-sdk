@@ -17,12 +17,12 @@
 		7C11D2862A6C6A93009A6C96 /* UITestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D2852A6C6A93009A6C96 /* UITestError.swift */; };
 		7C11D2882A6F1420009A6C96 /* TestTokenLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D2872A6F1420009A6C96 /* TestTokenLoader.swift */; };
 		7C11D28B2A6F1C93009A6C96 /* PlaidRNDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D28A2A6F1C93009A6C96 /* PlaidRNDemoTests.swift */; };
-		7C11D28D2A718186009A6C96 /* PlaidCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D28C2A718186009A6C96 /* PlaidCredentials.swift */; };
 		7C11D2942A71836C009A6C96 /* create_credentials_swift_struct.rb in Resources */ = {isa = PBXBuildFile; fileRef = 7C11D2932A71836C009A6C96 /* create_credentials_swift_struct.rb */; };
-		7C11D2982A718BE0009A6C96 /* PlaidCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D28C2A718186009A6C96 /* PlaidCredentials.swift */; };
 		7C11D29A2A718BE6009A6C96 /* create_credentials_swift_struct.rb in Resources */ = {isa = PBXBuildFile; fileRef = 7C11D2932A71836C009A6C96 /* create_credentials_swift_struct.rb */; };
 		7C11D2A52A71D163009A6C96 /* env-vars.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C11D2A42A71D163009A6C96 /* env-vars.txt */; };
 		7C11D2A62A71D164009A6C96 /* env-vars.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7C11D2A42A71D163009A6C96 /* env-vars.txt */; };
+		7C11D2AB2A71E39E009A6C96 /* PlaidCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D2AA2A71E39E009A6C96 /* PlaidCredentials.swift */; };
+		7C11D2AC2A71E39E009A6C96 /* PlaidCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D2AA2A71E39E009A6C96 /* PlaidCredentials.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -64,9 +64,9 @@
 		7C11D2872A6F1420009A6C96 /* TestTokenLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenLoader.swift; sourceTree = "<group>"; };
 		7C11D2892A6F1C93009A6C96 /* plaidRNDemoTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "plaidRNDemoTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		7C11D28A2A6F1C93009A6C96 /* PlaidRNDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaidRNDemoTests.swift; sourceTree = "<group>"; };
-		7C11D28C2A718186009A6C96 /* PlaidCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaidCredentials.swift; sourceTree = "<group>"; };
 		7C11D2932A71836C009A6C96 /* create_credentials_swift_struct.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = create_credentials_swift_struct.rb; sourceTree = "<group>"; };
 		7C11D2A42A71D163009A6C96 /* env-vars.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "env-vars.txt"; sourceTree = "<group>"; };
+		7C11D2AA2A71E39E009A6C96 /* PlaidCredentials.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaidCredentials.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = plaidRNDemo/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-plaidRNDemo-plaidRNDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-plaidRNDemo-plaidRNDemoTests.release.xcconfig"; path = "Target Support Files/Pods-plaidRNDemo-plaidRNDemoTests/Pods-plaidRNDemo-plaidRNDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -102,7 +102,7 @@
 		00E356EF1AD99517003FC87E /* plaidRNDemoTests */ = {
 			isa = PBXGroup;
 			children = (
-				7C11D28C2A718186009A6C96 /* PlaidCredentials.swift */,
+				7C11D2AA2A71E39E009A6C96 /* PlaidCredentials.swift */,
 				7C11D2A42A71D163009A6C96 /* env-vars.txt */,
 				7C11D2932A71836C009A6C96 /* create_credentials_swift_struct.rb */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
@@ -513,7 +513,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C11D28B2A6F1C93009A6C96 /* PlaidRNDemoTests.swift in Sources */,
-				7C11D28D2A718186009A6C96 /* PlaidCredentials.swift in Sources */,
+				7C11D2AB2A71E39E009A6C96 /* PlaidCredentials.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,7 +532,7 @@
 			files = (
 				7C11D2882A6F1420009A6C96 /* TestTokenLoader.swift in Sources */,
 				7C11D2862A6C6A93009A6C96 /* UITestError.swift in Sources */,
-				7C11D2982A718BE0009A6C96 /* PlaidCredentials.swift in Sources */,
+				7C11D2AC2A71E39E009A6C96 /* PlaidCredentials.swift in Sources */,
 				7C11D2842A6C6926009A6C96 /* ElementPredicate.swift in Sources */,
 				7C11D2792A6C6783009A6C96 /* PlaidRNDemoUITests.swift in Sources */,
 			);

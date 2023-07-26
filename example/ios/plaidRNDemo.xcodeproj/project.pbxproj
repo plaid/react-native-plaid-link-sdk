@@ -17,6 +17,10 @@
 		7C11D2862A6C6A93009A6C96 /* UITestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D2852A6C6A93009A6C96 /* UITestError.swift */; };
 		7C11D2882A6F1420009A6C96 /* TestTokenLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D2872A6F1420009A6C96 /* TestTokenLoader.swift */; };
 		7C11D28B2A6F1C93009A6C96 /* PlaidRNDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D28A2A6F1C93009A6C96 /* PlaidRNDemoTests.swift */; };
+		7C11D28D2A718186009A6C96 /* PlaidCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D28C2A718186009A6C96 /* PlaidCredentials.swift */; };
+		7C11D28E2A718186009A6C96 /* PlaidCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11D28C2A718186009A6C96 /* PlaidCredentials.swift */; };
+		7C11D2902A7181FE009A6C96 /* env-vars.sh in Resources */ = {isa = PBXBuildFile; fileRef = 7C11D28F2A7181FE009A6C96 /* env-vars.sh */; };
+		7C11D2912A7181FE009A6C96 /* env-vars.sh in Resources */ = {isa = PBXBuildFile; fileRef = 7C11D28F2A7181FE009A6C96 /* env-vars.sh */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +62,8 @@
 		7C11D2872A6F1420009A6C96 /* TestTokenLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenLoader.swift; sourceTree = "<group>"; };
 		7C11D2892A6F1C93009A6C96 /* plaidRNDemoTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "plaidRNDemoTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		7C11D28A2A6F1C93009A6C96 /* PlaidRNDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaidRNDemoTests.swift; sourceTree = "<group>"; };
+		7C11D28C2A718186009A6C96 /* PlaidCredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaidCredentials.swift; sourceTree = "<group>"; };
+		7C11D28F2A7181FE009A6C96 /* env-vars.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "env-vars.sh"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = plaidRNDemo/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-plaidRNDemo-plaidRNDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-plaidRNDemo-plaidRNDemoTests.release.xcconfig"; path = "Target Support Files/Pods-plaidRNDemo-plaidRNDemoTests/Pods-plaidRNDemo-plaidRNDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -96,6 +102,8 @@
 				00E356F01AD99517003FC87E /* Supporting Files */,
 				7C11D28A2A6F1C93009A6C96 /* PlaidRNDemoTests.swift */,
 				7C11D2892A6F1C93009A6C96 /* plaidRNDemoTests-Bridging-Header.h */,
+				7C11D28C2A718186009A6C96 /* PlaidCredentials.swift */,
+				7C11D28F2A7181FE009A6C96 /* env-vars.sh */,
 			);
 			path = plaidRNDemoTests;
 			sourceTree = "<group>";
@@ -298,6 +306,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C11D2902A7181FE009A6C96 /* env-vars.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +323,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C11D2912A7181FE009A6C96 /* env-vars.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +485,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C11D28B2A6F1C93009A6C96 /* PlaidRNDemoTests.swift in Sources */,
+				7C11D28D2A718186009A6C96 /* PlaidCredentials.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,6 +502,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C11D28E2A718186009A6C96 /* PlaidCredentials.swift in Sources */,
 				7C11D2882A6F1420009A6C96 /* TestTokenLoader.swift in Sources */,
 				7C11D2862A6C6A93009A6C96 /* UITestError.swift in Sources */,
 				7C11D2842A6C6926009A6C96 /* ElementPredicate.swift in Sources */,

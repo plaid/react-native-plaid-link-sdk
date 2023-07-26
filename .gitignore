@@ -46,4 +46,7 @@ buck-out/
 
 # React Native ts
 dist/
+
+# API Secrets
+example/ios/plaidRNDemoTests/env-vars.sh
       

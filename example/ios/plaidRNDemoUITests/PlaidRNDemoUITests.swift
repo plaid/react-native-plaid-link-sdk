@@ -84,7 +84,7 @@ extension PlaidRNDemoUITests {
     print("#37 id: \(String(describing: id))")
     print("#37 secret: \(String(describing: secret))")
 
-    
+
 
     guard id?.isEmpty == false, secret?.isEmpty == false else {
       XCTFail("Failed to load CLIENT_ID or API_SECRET from environment. ID: \(String(describing: id)) Secret: \(String(describing: secret))")
@@ -92,10 +92,10 @@ extension PlaidRNDemoUITests {
     }
 
 
-    let token = try await TestTokenLoader.loadToken(clientID: clientID, secret: apiSecret)
-
-    try await MainActor.run {
-        try enterToken(token: token)
+//    let token = try await TestTokenLoader.loadToken(clientID: clientID, secret: apiSecret)
+//
+//    try await MainActor.run {
+//        try enterToken(token: token)
 //        try validateConsentPane()
 //        try continueThroughConsentPane()
 //        try select(institution: "TD Bank")

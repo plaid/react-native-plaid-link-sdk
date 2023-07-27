@@ -48,6 +48,7 @@ final class PlaidRNDemoUITests: XCTestCase {
   func launchApp() async throws {
 
       await MainActor.run {
+          app.activate()
           app.launch()
       }
   }

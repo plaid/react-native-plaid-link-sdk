@@ -39,6 +39,6 @@ struct PlaidCredentials {
 }
 CREDS_FILE_STRING
 
-file = File.new("plaidRNDemoTests/PlaidCredentials.swift", "w")
+file = File.new("PlaidCredentials.swift", "w")
 file.puts(file_content)
 file.close

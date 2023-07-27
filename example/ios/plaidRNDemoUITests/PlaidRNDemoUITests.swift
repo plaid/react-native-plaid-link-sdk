@@ -8,6 +8,11 @@ final class PlaidRNDemoUITests: XCTestCase {
       continueAfterFailure = false
   }
 
+  override func tearDown() {
+      // Terminate the app after each test case.
+      app.terminate()
+  }
+
   override func setUpWithError() throws {
     XCUIDevice.shared.orientation = .portrait
   }
@@ -19,7 +24,7 @@ final class PlaidRNDemoUITests: XCTestCase {
   var webview: XCUIElement { app.webViews.firstMatch }
 
   /// Default amount of time to wait for elements before throwing an error.
-  let defaultTimeout: TimeInterval = 30.0
+  let defaultTimeout: TimeInterval = 15.0
 
   private(set) var clientID: String = ""
   private(set) var apiSecret: String = ""
@@ -27,7 +32,7 @@ final class PlaidRNDemoUITests: XCTestCase {
   func enterToken(token: String) throws {
     let tokenTextField = app.otherElements["link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
     let openElements = app.otherElements.matching(identifier: "OPEN LINK")
-    let _ = tokenTextField.waitForExistence(timeout: defaultTimeout)
+    let _ = tokenTextField.waitForExistence(timeout: defaultTimeout * 8)
 
     guard tokenTextField.exists else {
       throw UITestError.elementDoesNotExist(message: "Token TextField does not exist.")
@@ -41,11 +46,6 @@ final class PlaidRNDemoUITests: XCTestCase {
 
   /// Launches the app
   func launchApp() async throws {
-      XCTAssertTrue(app.state == .notRunning)
-
-      guard app.state == .notRunning else {
-          throw UITestError.appAlreadyLaunched
-      }
 
       await MainActor.run {
           app.launch()

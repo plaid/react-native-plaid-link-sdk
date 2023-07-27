@@ -65,6 +65,7 @@ jobs:
           SECRET_API_KEY: ${{ secrets.API_SECRET }}
         shell: bash  
         run: |
+          echo "$PWD"
           echo "PLAID_CLIENT_ID=$SECRECT_CLIENT_ID" >> "example/ios/plaidRNDemoTests/env-vars.txt"
           echo "PLAID_SECRET=$SECRET_API_KEY" >> "example/ios/plaidRNDemoTests/env-vars.txt"
           cat example/ios/plaidRNDemoTests/env-vars.txt

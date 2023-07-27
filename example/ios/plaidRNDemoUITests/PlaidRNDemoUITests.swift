@@ -10,24 +10,6 @@ final class PlaidRNDemoUITests: XCTestCase {
 
   override func setUpWithError() throws {
     XCUIDevice.shared.orientation = .portrait
-
-//    guard
-//      let id = ProcessInfo.processInfo.environment["CLIENT_ID"],
-//      !id.isEmpty,
-//      let secret = ProcessInfo.processInfo.environment["API_SECRET"],
-//      !secret.isEmpty else {
-//
-//      let error = NSError(
-//        domain: "",
-//        code: 404,
-//        userInfo: [NSLocalizedDescriptionKey: "Failed to load CLIENT_ID or API_SECRET from environment."]
-//      )
-//
-//      throw error
-//    }
-//
-//    clientID = id
-//    apiSecret = secret
   }
 
   /// `XCUIApplication` representing the app. May or may not be running.

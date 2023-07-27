@@ -3,14 +3,16 @@ import XCTest
 final class PlaidRNDemoUITests: XCTestCase {
 
   override func setUp() async throws {
-      // Reset the app for each test.
-      app = XCUIApplication()
-      continueAfterFailure = false
+    try await super.setUp()
+    // Reset the app for each test.
+    app = XCUIApplication()
+    continueAfterFailure = false
   }
 
   override func tearDown() {
-      // Terminate the app after each test case.
-      app.terminate()
+    super.tearDown()
+    // Terminate the app after each test case.
+    app.terminate()
   }
 
   override func setUpWithError() throws {
@@ -32,25 +34,32 @@ final class PlaidRNDemoUITests: XCTestCase {
   func enterToken(token: String) throws {
     let tokenTextField = app.otherElements["link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
     let openElements = app.otherElements.matching(identifier: "OPEN LINK")
-    let _ = tokenTextField.waitForExistence(timeout: defaultTimeout * 8)
+    let _ = tokenTextField.waitForExistence(timeout: defaultTimeout * 2)
 
     guard tokenTextField.exists else {
       throw UITestError.elementDoesNotExist(message: "Token TextField does not exist.")
     }
 
-    tokenTextField.tap()
-    tokenTextField.typeText(token)
+    UIPasteboard.general.string = token
+    tokenTextField.doubleTap()
+    tokenTextField.doubleTap()
+    app.menuItems["Paste"].tap()
 
     openElements.allElementsBoundByIndex.forEach { $0.tap() }
   }
 
   /// Launches the app
   func launchApp() async throws {
+    XCTAssertTrue(app.state == .notRunning)
 
-      await MainActor.run {
-          app.activate()
-          app.launch()
-      }
+    guard app.state == .notRunning else {
+        throw UITestError.appAlreadyLaunched
+    }
+
+    await MainActor.run {
+      app.launchEnvironment["isUITest"] = "true"
+      app.launch()
+    }
   }
 }
 

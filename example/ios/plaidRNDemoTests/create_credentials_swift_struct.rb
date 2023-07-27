@@ -11,7 +11,12 @@ file_content = <<-CREDS_FILE_STRING
 import Foundation
 
 // Run git update-index --skip-worktree example/ios/plaidRNDemoTests/PlaidCredentials.swift
-// before modifying this file to prevent git from picking up any changes.
+// to ensure this files changes are not picked up by git.
+//
+// Enter your secrets into env-vars.text like this
+// PLAID_CLIENT_ID=xxxxxxxxxxxxxx
+// PLAID_SECRET=xxxxxxxxxxxxxx
+// The build script will copy use vars for unit tests.
 
 struct PlaidCredentials {
     static let clientID = "#{ENV['PLAID_CLIENT_ID']}"

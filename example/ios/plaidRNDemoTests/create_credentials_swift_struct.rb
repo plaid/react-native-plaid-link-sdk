@@ -19,7 +19,7 @@ import Foundation
 // Then run git update-index --skip-worktree example/ios/plaidRNDemoTests/env-vars.txt
 // to avoid adding any of these changes to git.
 //
-// The build script will copy use vars for unit tests.
+// The build script will copy those vars for unit tests.
 
 struct PlaidCredentials {
     static let clientID = "#{ENV['PLAID_CLIENT_ID']}"

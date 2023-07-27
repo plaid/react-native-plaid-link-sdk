@@ -24,8 +24,6 @@ final class TestTokenLoader {
     let request = try makeRequest(rawJSON: rawJSON)
     let (data, _) = try await URLSession.shared.data(for: request)
 
-    print(data.prettyJson)
-
     do {
       let token = try JSONDecoder().decode(LinkTokenCreateResponse.self, from: data)
       return token.linkToken

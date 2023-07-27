@@ -4,7 +4,6 @@ puts Dir.pwd
 
 File.readlines("plaidRNDemoTests/env-vars.txt").each do |line|
   values = line.split("=")
-
   stripped_value = values[1].strip
 
   if(stripped_value != nil)

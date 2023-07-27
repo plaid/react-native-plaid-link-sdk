@@ -4,41 +4,24 @@ CLIENT_ID = ARGV[0]
 SECRET = ARGV[1]
 
 if(CLIENT_ID != nil and SECRET != nil)
-  ENV['PLAID_CLIENT_ID'] = CLIENT_ID
-  ENV['PLAID_SECRET'] = SECRET
+  file_content = <<-CREDS_FILE_STRING
+  import Foundation
+
+  // Run git update-index --skip-worktree example/ios/plaidRNDemoTests/PlaidCredentials.swift
+  // to ensure this files changes are not picked up by git.
+  //
+  // Enter your client id and secret into this file.
+  // Then you can run the unit tests for the iOS project.
+
+  struct PlaidCredentials {
+      static let clientID = "#{CLIENT_ID}"
+      static let clientSecret = "#{SECRET}"
+  }
+  CREDS_FILE_STRING
+
+  file = File.new("example/ios/plaidRNDemoTests/PlaidCredentials.swift", "w")
+  file.puts(file_content)
+  file.close
 else
-  File.readlines("plaidRNDemoTests/env-vars.txt").each do |line|
-    values = line.split("=")
-    stripped_value = values[1].strip
-
-    if(stripped_value != nil)
-      ENV[values[0]] = stripped_value
-    else
-      ENV[values[0]] = values[1]
-    end
-  end
+  abort("Failed to pass client id and secret.")
 end
-
-file_content = <<-CREDS_FILE_STRING
-import Foundation
-
-// Run git update-index --skip-worktree example/ios/plaidRNDemoTests/PlaidCredentials.swift
-// to ensure this files changes are not picked up by git.
-//
-// Enter your secrets into env-vars.text like this
-// PLAID_CLIENT_ID=xxxxxxxxxxxxxx
-// PLAID_SECRET=xxxxxxxxxxxxxx
-// Then run git update-index --skip-worktree example/ios/plaidRNDemoTests/env-vars.txt
-// to avoid adding any of these changes to git.
-//
-// The build script will copy those vars for unit tests.
-
-struct PlaidCredentials {
-    static let clientID = "#{ENV['PLAID_CLIENT_ID']}"
-    static let clientSecret = "#{ENV['PLAID_SECRET']}"
-}
-CREDS_FILE_STRING
-
-file = File.new("PlaidCredentials.swift", "w")
-file.puts(file_content)
-file.close

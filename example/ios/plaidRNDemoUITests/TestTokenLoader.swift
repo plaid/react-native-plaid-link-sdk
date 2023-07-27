@@ -29,7 +29,6 @@ final class TestTokenLoader {
       return token.linkToken
     } catch let tokenDecodingError {
       if let apiError = try? JSONDecoder().decode(LinkTokenCreateErrorResponse.self, from: data) {
-        print("Error fetching token: \(apiError)")
         throw apiError
       } else {
         throw tokenDecodingError

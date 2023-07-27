@@ -83,7 +83,7 @@ jobs:
         
       - name: Start Metro Server
         shell: bash
-        run: npx react-native start
+        run:  cd example && npx react-native start && cd ../ 
 
       - name: Build and Test iOS
         run: xcodebuild -workspace example/ios/plaidRNDemo.xcworkspace -scheme plaidRNDemo -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 14 Pro,OS=16.4" ONLY_ACTIVE_ARCH=YES  -resultBundlePath CIiOSResults -derivedDataPath "./build/iOS" build test

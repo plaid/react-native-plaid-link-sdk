@@ -4,7 +4,7 @@ puts Dir.pwd
 
 File.readlines("plaidRNDemoTests/env-vars.txt").each do |line|
   values = line.split("=")
-  ENV[values[0]] = values[1].strip
+  ENV[values[0]] = values[1]
 end
 
 file_content = <<-CREDS_FILE_STRING

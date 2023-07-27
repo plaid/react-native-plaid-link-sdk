@@ -16,6 +16,9 @@ import Foundation
 // Enter your secrets into env-vars.text like this
 // PLAID_CLIENT_ID=xxxxxxxxxxxxxx
 // PLAID_SECRET=xxxxxxxxxxxxxx
+// Then run git update-index --skip-worktree example/ios/plaidRNDemoTests/env-vars.txt
+// to avoid adding any of these changes to git.
+//
 // The build script will copy use vars for unit tests.
 
 struct PlaidCredentials {

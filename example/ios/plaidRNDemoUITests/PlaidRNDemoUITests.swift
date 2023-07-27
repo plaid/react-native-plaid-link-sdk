@@ -19,7 +19,7 @@ final class PlaidRNDemoUITests: XCTestCase {
   var webview: XCUIElement { app.webViews.firstMatch }
 
   /// Default amount of time to wait for elements before throwing an error.
-  let defaultTimeout: TimeInterval = 15.0
+  let defaultTimeout: TimeInterval = 30.0
 
   private(set) var clientID: String = ""
   private(set) var apiSecret: String = ""

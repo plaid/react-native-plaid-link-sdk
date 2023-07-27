@@ -372,6 +372,7 @@
 		};
 		7C11D2972A718703009A6C96 /* Write Environment Variables */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -389,7 +390,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif [ -f ${SRCROOT}/plaidRNDemoTests/env-vars.txt ]; then\necho \"Environment text file exists. Setting secrets.\"\nruby ${SRCROOT}/plaidRNDemoTests/create_credentials_swift_struct.rb\nelse\necho \"Environment text file does not exist\"\nfi\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# if [ -f ${SRCROOT}/plaidRNDemoTests/env-vars.txt ]; then\n# echo \"Environment text file exists. Setting secrets.\"\n# ruby ${SRCROOT}/plaidRNDemoTests/create_credentials_swift_struct.rb\n# else\n# echo \"Environment text file does not exist\"\n# fi\n";
 		};
 		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

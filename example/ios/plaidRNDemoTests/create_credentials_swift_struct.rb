@@ -1,15 +1,21 @@
 #!/usr/bin/ruby
 
-puts Dir.pwd
+CLIENT_ID = ARGV[0]
+SECRET = ARGV[1]
 
-File.readlines("plaidRNDemoTests/env-vars.txt").each do |line|
-  values = line.split("=")
-  stripped_value = values[1].strip
+if(CLIENT_ID != nil and SECRET != nil)
+  ENV['PLAID_CLIENT_ID'] = CLIENT_ID
+  ENV['PLAID_SECRET'] = SECRET
+else
+  File.readlines("plaidRNDemoTests/env-vars.txt").each do |line|
+    values = line.split("=")
+    stripped_value = values[1].strip
 
-  if(stripped_value != nil)
-    ENV[values[0]] = stripped_value
-  else
-    ENV[values[0]] = values[1]
+    if(stripped_value != nil)
+      ENV[values[0]] = stripped_value
+    else
+      ENV[values[0]] = values[1]
+    end
   end
 end
 

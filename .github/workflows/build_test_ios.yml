@@ -73,6 +73,14 @@ jobs:
           ruby example/ios/plaidRNDemoTests/create_credentials_swift_struct.rb "$SECRECT_CLIENT_ID" "$SECRET_API_KEY"
           cat example/ios/plaidRNDemoTests/PlaidCredentials.swift
 
+      - name: Select Xcode Version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "14.3.1"
+    
+      - name: "Display Xcode Version"
+        run: sudo xcode-select -p
+
       - name: Build and Test iOS
         run: xcodebuild -workspace example/ios/plaidRNDemo.xcworkspace -scheme plaidRNDemo -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 14 Pro,OS=16.4" ONLY_ACTIVE_ARCH=YES  -resultBundlePath CIiOSResults -derivedDataPath "./build/iOS" build test
       - uses: kishikawakatsumi/xcresulttool@v1

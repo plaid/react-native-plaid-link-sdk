@@ -66,6 +66,7 @@ jobs:
         shell: bash  
         run: |
           echo "$PWD"
+          sudo chmod 777 example/ios/plaidRNDemoTests/env-vars.txt
           echo "PLAID_CLIENT_ID=$SECRECT_CLIENT_ID" >> "example/ios/plaidRNDemoTests/env-vars.txt"
           echo "PLAID_SECRET=$SECRET_API_KEY" >> "example/ios/plaidRNDemoTests/env-vars.txt"
           cat example/ios/plaidRNDemoTests/env-vars.txt

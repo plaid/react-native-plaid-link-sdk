@@ -1,5 +1,14 @@
 #!/usr/bin/ruby
 
+# This script sets the value of PlaidCredentials.clientID and PlaidCredentials.clientSecret in
+# PlaidCredentials.swift.
+#
+# The script is called on CI and the CLIENT_ID and SECRET need to be passed into the script.
+#
+# Ex: ruby example/ios/plaidRNDemoTests/create_credentials_swift_struct.rb "$SECRECT_CLIENT_ID" "$SECRET_API_KEY"
+#
+##################################################################################################################
+
 CLIENT_ID = ARGV[0]
 SECRET = ARGV[1]
 

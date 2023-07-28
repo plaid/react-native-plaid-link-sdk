@@ -43,6 +43,10 @@ final class PlaidRNDemoUITests: XCTestCase {
     UIPasteboard.general.string = token
     tokenTextField.doubleTap()
     tokenTextField.doubleTap()
+
+    // Typing in the link token caused issues where it would type "lnk-token-xxxx" which resulted
+    // in the inability to fetch a token. I am not sure what caused this issue, but that's why I am
+    // using copy paste.
     app.menuItems["Paste"].tap()
 
     openElements.allElementsBoundByIndex.forEach { $0.tap() }
@@ -67,6 +71,7 @@ final class PlaidRNDemoUITests: XCTestCase {
 
 extension PlaidRNDemoUITests {
 
+  /// Tests that credential entry FI works as expected on iOS.
   func testCredentialEntryHappyPath() async throws {
     try await launchApp()
 

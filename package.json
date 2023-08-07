@@ -65,6 +65,6 @@
     "xyz": "0.5.x"
   },
   "dependencies": {
-    "react-native-plaid-link-sdk": "file:.yalc/react-native-plaid-link-sdk"
+    "react-native-plaid-link-sdk": "^10.4.0"
   }
 }

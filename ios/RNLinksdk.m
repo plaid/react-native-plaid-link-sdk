@@ -245,6 +245,42 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBloc
 
         __weak typeof(self) weakSelf = self;
         void(^presentationHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
+            [linkViewController setModalPresentationStyle:UIModalPresentationFullScreen];
+            [weakSelf.presentingViewController presentViewController:linkViewController animated:YES completion:nil];
+            didPresent = YES;
+        };
+        void(^dismissalHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
+            if (didPresent) {
+                [weakSelf dismiss];
+                didPresent = NO;
+            }
+        };
+        [self.linkHandler openWithPresentationHandler:presentationHandler dismissalHandler:dismissalHandler options:options];
+    } else {
+        id error = self.creationError ? RCTJSErrorFromNSError(self.creationError) : RCTMakeError(@"create was not called", nil, nil);
+        onExit(@[error]);
+    }
+}
+
+RCT_EXPORT_METHOD(open: (BOOL)fullScreen, (RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBlock)onExit) {
+    if (self.linkHandler) {
+        self.successCallback = onSuccess;
+        self.exitCallback = onExit;
+        self.presentingViewController = RCTPresentedViewController();
+        NSDictionary *options = self.institutionID.length > 0 ? @{@"institution_id": self.institutionID} : @{};
+
+        // Some link flows do not need to present UI, so track if presentation happened so dismissal isn't
+        // unnecessarily invoked.
+        __block bool didPresent = NO;
+
+        __weak typeof(self) weakSelf = self;
+        void(^presentationHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
+
+            if (fullScreen) {
+                [linkViewController setModalPresentationStyle:UIModalPresentationOverFullScreen];
+                [linkViewController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            }
+
             [weakSelf.presentingViewController presentViewController:linkViewController animated:YES completion:nil];
             didPresent = YES;
         };

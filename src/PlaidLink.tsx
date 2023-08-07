@@ -10,6 +10,7 @@ import {
   LinkError,
   LinkEventListener,
   LinkExit,
+  LinkIosPresentationStyle,
   LinkSuccess,
   PlaidLinkComponentProps,
   PlaidLinkProps,
@@ -63,7 +64,10 @@ export const openLink = async (props: PlaidLinkProps) => {
     );
   } else {
     NativeModules.RNLinksdk.create(config);
-    NativeModules.RNLinksdk.open(
+
+    let presentFullScreen = props.iOSPresentationStyle == LinkIosPresentationStyle.FULL_SCREEN
+
+    NativeModules.RNLinksdk.open(presentFullScreen,
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {
           props.onSuccess(result);
@@ -79,7 +83,7 @@ export const openLink = async (props: PlaidLinkProps) => {
             props.onExit(result);
           }
         }
-      }
+      },
     );
   }
 };

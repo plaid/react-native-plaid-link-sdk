@@ -508,6 +508,12 @@ export enum LinkEventViewName {
     VERIFY_SMS = 'VERIFY_SMS',
 }
 
+// qwe comment
+export enum LinkIosPresentationStyle {
+    FULL_SCREEN,
+    MODAL
+}
+
 export type LinkSuccessListener = (LinkSuccess: LinkSuccess) => void
 
 export type LinkExitListener = (LinkExit: LinkExit) => void
@@ -519,6 +525,7 @@ export interface PlaidLinkProps {
     publicKeyConfig?: LinkPublicKeyConfiguration
     onSuccess: LinkSuccessListener
     onExit?: LinkExitListener
+    iOSPresentationStyle?: LinkIosPresentationStyle
     onPress?(): any
 }
 

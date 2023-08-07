@@ -46,3 +46,7 @@ buck-out/
 
 # React Native ts
 dist/
+
+.vscode
+example/.yalc
+example/yalc.lock

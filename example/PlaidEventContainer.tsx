@@ -11,6 +11,7 @@ import {
   dismissLink,
   PlaidLinkProps,
   usePlaidEmitter,
+  LinkIosPresentationStyle,
 } from 'react-native-plaid-link-sdk';
 
 // Create PlaidLinkProps from the provided token string.
@@ -19,7 +20,8 @@ function makeLinkTokenProps(token: string): PlaidLinkProps {
     tokenConfig: {
       token: token,
       logLevel: LinkLogLevel.ERROR,
-      noLoadingState: false, // Hides native activity indicator if true.
+      // Hides native activity indicator if true.
+      noLoadingState: false, 
     },
     onSuccess: (success: LinkSuccess) => {
       // User was able to successfully link their account.
@@ -31,6 +33,8 @@ function makeLinkTokenProps(token: string): PlaidLinkProps {
       console.log('Exit: ', linkExit);
       dismissLink();
     },
+    // MODAL or FULL_SCREEEN presentation on iOS. Defaults to MODAL.
+    iOSPresentationStyle: LinkIosPresentationStyle.MODAL,
   };
 }
 

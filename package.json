@@ -2,8 +2,8 @@
   "name": "react-native-plaid-link-sdk",
   "version": "10.4.0",
   "description": "React Native Plaid Link SDK",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/**/*",
     "android/**/*",
@@ -32,7 +32,10 @@
     ]
   },
   "jest": {
-    "testPathIgnorePatterns": ["/node_modules/", "/example/"]
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/example/"
+    ]
   },
   "author": "Plaid",
   "license": "MIT",
@@ -62,6 +65,6 @@
     "xyz": "0.5.x"
   },
   "dependencies": {
-    "react-native-plaid-link-sdk": "^10.4.0"
+    "react-native-plaid-link-sdk": "file:.yalc/react-native-plaid-link-sdk"
   }
 }

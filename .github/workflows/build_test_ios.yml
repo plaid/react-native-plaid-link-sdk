@@ -22,7 +22,7 @@ jobs:
         run: yalc publish
 
       - name: Link yalc to local development
-        run: ed example && yalc add react-native-plaid-link-sdk && cd ../
+        run: cd example && yalc add react-native-plaid-link-sdk && cd ../
 
       - name: Install Node modules
         run: cd example && npm ci && cd ../

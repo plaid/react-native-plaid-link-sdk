@@ -26,7 +26,16 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "NO">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "7C11D2752A6C6783009A6C96"
+            BuildableName = "plaidRNDemoUITests.xctest"
+            BlueprintName = "plaidRNDemoUITests"
+            ReferencedContainer = "container:plaidRNDemo.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -35,6 +44,17 @@
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
                BuildableName = "plaidRNDemoTests.xctest"
                BlueprintName = "plaidRNDemoTests"
+               ReferencedContainer = "container:plaidRNDemo.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7C11D2752A6C6783009A6C96"
+               BuildableName = "plaidRNDemoUITests.xctest"
+               BlueprintName = "plaidRNDemoUITests"
                ReferencedContainer = "container:plaidRNDemo.xcodeproj">
             </BuildableReference>
          </TestableReference>

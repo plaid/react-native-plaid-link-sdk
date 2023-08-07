@@ -9,9 +9,6 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
-# This points at internal endpoints which shouldn't be exposed to the public repo.
-package-lock.json
-
 # Xcode
 #
 build/
@@ -49,4 +46,3 @@ buck-out/
 
 # React Native ts
 dist/
-      

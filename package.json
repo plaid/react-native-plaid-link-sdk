@@ -13,13 +13,7 @@
   "scripts": {
     "lint": "eslint \"./**/*.{js,jsx}\" --fix",
     "prettier": "prettier \"./**/*.{js,jsx}\" --write",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "preversion": "sed -i\"\" -e s\"#^.*\\(; // SDK_VERSION\\)#return @\\\"$npm_package_version\\\"\\1#\" ios/RNLinksdk.m",
-    "version": "git add -A",
-    "postversion": "git push && git push --tags && rm -rf dist/temp",
-    "compile-typescript": "tsc",
-    "check-version": "node check_version_hook.js",
-    "prepublishOnly": "tsc"
+    "test": "jest"
   },
   "keywords": [
     "react-native",
@@ -27,7 +21,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && npm run check-version"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
@@ -36,6 +30,9 @@
       "eslint --fix",
       "git add"
     ]
+  },
+  "jest": {
+    "testPathIgnorePatterns": ["/node_modules/", "/example/"]
   },
   "author": "Plaid",
   "license": "MIT",
@@ -56,6 +53,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.16.0",
     "husky": "^3.1.0",
+    "jest": "^29.6.1",
     "lint-staged": "^9.4.2",
     "prettier": "^1.18.2",
     "react": "17.0.2",

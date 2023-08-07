@@ -14,16 +14,7 @@ jobs:
         with:
           node-version: 19
           cache: "npm"
-          
-      - name: Install yalc
-        run: npm i yalc -g
 
-      - name: Publish local changes
-        run: yalc publish
-
-      - name: Link yalc to local development
-        run: cd example && yalc add react-native-plaid-link-sdk && cd ../
-        
       - name: Install Node modules
         run: cd example && npm install && cd ../
 
@@ -40,6 +31,15 @@ jobs:
 
       - name: Install pod dependencies
         run: cd example/ios && bundle install && bundle exec pod install && cd ..
+
+      - name: Install yalc
+        run: npm i yalc -g
+
+      - name: Publish local changes
+        run: yalc publish
+
+      - name: Link yalc to local development
+        run: cd example && yalc add react-native-plaid-link-sdk && cd ../
 
       - name: Install the Apple certificate and provisioning profile
         env:

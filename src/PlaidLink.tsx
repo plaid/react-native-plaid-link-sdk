@@ -83,7 +83,7 @@ export const openLink = async (props: PlaidLinkProps) => {
             props.onExit(result);
           }
         }
-      },
+      }
     );
   }
 };

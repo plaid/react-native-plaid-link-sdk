@@ -11,7 +11,7 @@ import {
   dismissLink,
   PlaidLinkProps,
   usePlaidEmitter,
-  LinkIosPresentationStyle,
+  LinkIOSPresentationStyle,
 } from 'react-native-plaid-link-sdk';
 
 // Create PlaidLinkProps from the provided token string.
@@ -34,7 +34,7 @@ function makeLinkTokenProps(token: string): PlaidLinkProps {
       dismissLink();
     },
     // MODAL or FULL_SCREEEN presentation on iOS. Defaults to MODAL.
-    iOSPresentationStyle: LinkIosPresentationStyle.MODAL,
+    iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
   };
 }
 

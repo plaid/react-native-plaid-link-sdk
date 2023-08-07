@@ -508,8 +508,10 @@ export enum LinkEventViewName {
     VERIFY_SMS = 'VERIFY_SMS',
 }
 
-// qwe comment
-export enum LinkIosPresentationStyle {
+/// Methods to present Link on iOS.
+/// FULL_SCREEN is the converts to UIModalPresentationOverFullScreen on the native side.
+/// MODAL will use the default presentation style for iOS which is UIModalPresentationAutomatic.
+export enum LinkIOSPresentationStyle {
     FULL_SCREEN,
     MODAL
 }
@@ -525,7 +527,7 @@ export interface PlaidLinkProps {
     publicKeyConfig?: LinkPublicKeyConfiguration
     onSuccess: LinkSuccessListener
     onExit?: LinkExitListener
-    iOSPresentationStyle?: LinkIosPresentationStyle
+    iOSPresentationStyle?: LinkIOSPresentationStyle
     onPress?(): any
 }
 

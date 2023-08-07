@@ -34,7 +34,7 @@ function makeLinkTokenProps(token: string): PlaidLinkProps {
       dismissLink();
     },
     // MODAL or FULL_SCREEEN presentation on iOS. Defaults to MODAL.
-    // iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
+    iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
   };
 }
 

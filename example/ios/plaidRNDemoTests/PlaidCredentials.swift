@@ -8,7 +8,7 @@ import Foundation
 //
 // After making changes you'll need to run
 // git update-index --no-skip-worktree example/ios/plaidRNDemoTests/PlaidCredentials.swift
-// git git stash -- example/ios/plaidRNDemoTests/PlaidCredentials.swift
+// git stash -- example/ios/plaidRNDemoTests/PlaidCredentials.swift
 //
 // Before you can switch branches.
 

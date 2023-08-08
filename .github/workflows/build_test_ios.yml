@@ -25,7 +25,7 @@ jobs:
         run: cd example && yalc add react-native-plaid-link-sdk && cd ../
 
       - name: Delete package.lock
-        run: cd example && rm package-lock.json
+        run: cd example && rm package-lock.json && cd ../
         
       - name: Install Node modules
         run: cd example && npm install && cd ../

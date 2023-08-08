@@ -6,7 +6,7 @@ final class PlaidRNDemoTests: XCTestCase {
   func testVersion() {
     let version = LinkKitVersion
 
-    XCTAssertEqual(version, "4.5.0")
+    XCTAssertEqual(version, "4.5.1")
   }
 
   func testPlaidCredentialsExist() {

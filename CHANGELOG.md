@@ -13,7 +13,7 @@
 #### Changes
 
 - Update iOS Native SDK.
-- Add support
+- Add support to present Link full screen. `PlaidLinkProps` not supports passing a `LinkIOSPresentationStyle`. Pass `FULL_SCREEN` to present Link full screen instead of as a modal. For more information checkout the [pull-request](https://github.com/plaid/react-native-plaid-link-sdk/pull/543).
 
 ### Android
 

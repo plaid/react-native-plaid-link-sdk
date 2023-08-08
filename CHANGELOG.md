@@ -1,5 +1,51 @@
 # RELEASES
 
+## LinkKit V10.4.0 — 2023-08-08
+
+### React Native
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
+
+#### Changes
+
+- Update iOS Native SDK.
+- Add support
+
+### Android
+
+[Android SDK 3.13.2](https://github.com/plaid/plaid-link-android/releases/tag/v3.13.2)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+
+
+#### Changes
+
+- Changed LinkRedirectActivity theme from Material to MaterialComponents.
+
+### iOS
+
+[iOS SDK 4.5.1](https://github.com/plaid/plaid-link-ios/releases/tag/4.5.1)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 14.0 |
+| iOS | >= 11.0 |
+
+#### Changes
+
+- Add identityVerificationPendingReviewSession event name.
+- Bug fixes.
+
 ## LinkKit V10.4.0 — 2023-06-13
 
 ### React Native

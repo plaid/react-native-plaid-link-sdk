@@ -32,7 +32,10 @@
     ]
   },
   "jest": {
-    "testPathIgnorePatterns": ["/node_modules/", "/example/"]
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/example/"
+    ]
   },
   "author": "Plaid",
   "license": "MIT",

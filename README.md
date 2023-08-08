@@ -56,16 +56,23 @@ AutoLinking should handle all of the Android setup.
 
 ```javascript
 import { Text } from 'react-native';
-import { PlaidLink, LinkSuccess, LinkExit } from 'react-native-plaid-link-sdk';
+import { PlaidLink, LinkSuccess, LinkExit, LinkLogLevel, LinkIOSPresentationStyle } from 'react-native-plaid-link-sdk';
 
 const MyPlaidComponent = () => {
   return (
     <PlaidLink
         tokenConfig={{
             token: "#GENERATED_LINK_TOKEN#",
+            // OPTIONAL - log level.
+            logLevel: LinkLogLevel.ERROR,
+            // OPTIONAL - Hides native activity indicator if true.
+            noLoadingState: false,
         }}
         onSuccess={(success: LinkSuccess) => { console.log(success) }}
         onExit={(exit: LinkExit) => { console.log(exit) }}
+        // OPTIONAL - MODAL or FULL_SCREEEN presentation on iOS. Defaults to MODAL.
+        // UI is always presented in full screen on Android.
+        iOSPresentationStyle={LinkIOSPresentationStyle.MODAL}
     >
         <Text>Add Account</Text>
     </PlaidLink>

@@ -232,7 +232,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     }
 }
 
-RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBlock)onExit) {
+RCT_EXPORT_METHOD(open: (BOOL)fullScreen :(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBlock)onExit) {
     if (self.linkHandler) {
         self.successCallback = onSuccess;
         self.exitCallback = onExit;
@@ -245,6 +245,12 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBloc
 
         __weak typeof(self) weakSelf = self;
         void(^presentationHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
+
+            if (fullScreen) {
+                [linkViewController setModalPresentationStyle:UIModalPresentationOverFullScreen];
+                [linkViewController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            }
+
             [weakSelf.presentingViewController presentViewController:linkViewController animated:YES completion:nil];
             didPresent = YES;
         };

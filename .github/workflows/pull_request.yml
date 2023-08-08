@@ -4,7 +4,6 @@ on:
   # Triggers the workflow on a pull request pointed at develop or master.
   pull_request:
     branches:
-      - "master"
       - "develop"
   
   # Allows you to run this workflow manually from the Actions tab.

@@ -15,6 +15,15 @@ jobs:
           node-version: 19
           cache: "npm"
 
+      - name: Publish local changes
+        run: yalc publish
+
+      - name: Link yalc to local development
+        run: cd example && yalc add react-native-plaid-link-sdk && cd ../
+
+      - name: Delete package.lock
+        run: cd example && rm package-lock.json
+        
       - name: Install Node modules
         run: cd example && npm install && cd ../
 

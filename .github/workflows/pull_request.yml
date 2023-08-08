@@ -1,10 +1,9 @@
 name: Pull Request into Master or Develop
 
 on:
-  # Triggers the workflow on a pull request pointed at develop or master.
+  # Triggers the workflow on a pull request pointed at develop.
   pull_request:
     branches:
-      - "master"
       - "develop"
   
   # Allows you to run this workflow manually from the Actions tab.

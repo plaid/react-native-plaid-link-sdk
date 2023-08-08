@@ -2,6 +2,7 @@ import React from 'react';
 import {TextInput, Text, TouchableOpacity, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {styles} from './Styles';
+
 import {
   LinkExit,
   LinkEvent,

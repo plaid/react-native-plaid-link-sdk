@@ -42,7 +42,7 @@ jobs:
             ${{ runner.os }}-pods-
 
       - name: Install pod dependencies
-        run: cd example/ios && bundle install && bundle exec pod install && cd ../
+        run: cd example/ios && bundle install && bundle exec pod update && cd ../
 
       - name: Install the Apple certificate and provisioning profile
         env:

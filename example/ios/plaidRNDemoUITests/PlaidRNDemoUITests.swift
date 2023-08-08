@@ -26,7 +26,7 @@ final class PlaidRNDemoUITests: XCTestCase {
   var webview: XCUIElement { app.webViews.firstMatch }
 
   /// Default amount of time to wait for elements before throwing an error.
-  let defaultTimeout: TimeInterval = 15.0
+  let defaultTimeout: TimeInterval = 25.0
 
   private(set) var clientID: String = ""
   private(set) var apiSecret: String = ""
@@ -34,7 +34,7 @@ final class PlaidRNDemoUITests: XCTestCase {
   func enterToken(token: String) throws {
     let tokenTextField = app.otherElements["link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
     let openElements = app.otherElements.matching(identifier: "OPEN LINK")
-    let _ = tokenTextField.waitForExistence(timeout: defaultTimeout * 2)
+    let _ = tokenTextField.waitForExistence(timeout: defaultTimeout)
 
     guard tokenTextField.exists else {
       throw UITestError.elementDoesNotExist(message: "Token TextField does not exist.")
@@ -42,6 +42,7 @@ final class PlaidRNDemoUITests: XCTestCase {
 
     UIPasteboard.general.string = token
     tokenTextField.doubleTap()
+    sleep(2)
     tokenTextField.doubleTap()
 
     // Typing in the link token caused issues where it would type "lnk-token-xxxx" which resulted

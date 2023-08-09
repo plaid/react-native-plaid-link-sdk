@@ -1,6 +1,7 @@
 name: Test SDK After Release
   
-  # Allows you to run this workflow manually from the Actions tab.
+# configure manual trigger
+on:
   workflow_dispatch:
 
 jobs:

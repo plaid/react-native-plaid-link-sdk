@@ -1,12 +1,7 @@
-name: Pull Request into Develop
-
-on:
-  # Triggers the workflow on a pull request pointed at develop.
-  pull_request:
-    branches:
-      - "develop"
+name: Test SDK After Release
   
-  # Allows you to run this workflow manually from the Actions tab.
+# configure manual trigger
+on:
   workflow_dispatch:
 
 jobs:
@@ -34,5 +29,5 @@ jobs:
           
   build-ios:
     needs: install-and-test
-    uses: ./.github/workflows/build_test_ios.yml
+    uses: ./.github/workflows/release_ios.yml
     secrets: inherit

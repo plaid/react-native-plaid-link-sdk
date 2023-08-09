@@ -1,4 +1,4 @@
-name: Pull Request into Master or Develop
+name: Pull Request into Develop
 
 on:
   # Triggers the workflow on a pull request pointed at develop.

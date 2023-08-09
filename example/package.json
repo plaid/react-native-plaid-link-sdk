@@ -13,7 +13,7 @@
    "dependencies": {
       "react": "18.2.0",
       "react-native": "0.71.7",
-      "react-native-plaid-link-sdk": "^10.4.0"
+      "react-native-plaid-link-sdk": "^10.5.0"
    },
    "devDependencies": {
       "@babel/core": "^7.20.0",

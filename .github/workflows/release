@@ -1,10 +1,4 @@
-name: Pull Request into Master or Develop
-
-on:
-  # Triggers the workflow on a push to master.
-  push:
-    branches:
-      - master
+name: Test SDK After Release
   
   # Allows you to run this workflow manually from the Actions tab.
   workflow_dispatch:

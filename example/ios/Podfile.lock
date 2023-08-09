@@ -78,7 +78,7 @@ PODS:
   - hermes-engine/Pre-built (0.71.7)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
-  - Plaid (4.4.0)
+  - Plaid (4.5.1)
   - RCT-Folly (2021.07.22.00):
     - boost
     - DoubleConversion
@@ -330,8 +330,8 @@ PODS:
   - React-jsinspector (0.71.7)
   - React-logger (0.71.7):
     - glog
-  - react-native-plaid-link-sdk (10.4.0):
-    - Plaid (~> 4.4.0)
+  - react-native-plaid-link-sdk (10.5.0):
+    - Plaid (~> 4.5.1)
     - React-Core
   - React-perflogger (0.71.7)
   - React-RCTActionSheet (0.71.7):
@@ -595,7 +595,7 @@ SPEC CHECKSUMS:
   hermes-engine: 4438d2b8bf8bebaba1b1ac0451160bab59e491f8
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  Plaid: 29a5506900d372d6d3d77199090b9a7a3af475bd
+  Plaid: 5b1b9afc7b61b41a3e689fe781f98e7209fb6682
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 5a4a30ac20c86eeadd6844a9328f78d4168cf9b2
   RCTTypeSafety: 279fc5861a89f0f37db3a585f27f971485b4b734
@@ -610,7 +610,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: eaa5f71eb8f6861cf0e57f1a0f52aeb020d9e18e
   React-jsinspector: 9885f6f94d231b95a739ef7bb50536fb87ce7539
   React-logger: 3f8ebad1be1bf3299d1ab6d7f971802d7395c7ef
-  react-native-plaid-link-sdk: a9fdfbd280a913b324e13021e7e112352efaefd0
+  react-native-plaid-link-sdk: c1c98d22229bf053654851deabd0bc35523a958b
   React-perflogger: 2d505bbe298e3b7bacdd9e542b15535be07220f6
   React-RCTActionSheet: 0e96e4560bd733c9b37efbf68f5b1a47615892fb
   React-RCTAnimation: fd138e26f120371c87e406745a27535e2c8a04ef

@@ -7,7 +7,7 @@
   "files": [
     "dist/**/*",
     "android/**/*",
-    "ios/**/*",
+    "ios",
     "react-native-plaid-link-sdk.podspec"
   ],
   "scripts": {

@@ -15,3 +15,5 @@ export {
     dismissLink,
     usePlaidEmitter,
 };
+
+export {MyCustomView} from './MyCustomView';

@@ -1,6 +1,6 @@
 import UIKit
 
-class MyCustomView: UIView {
+class PLKEmbeddedView: UIView {
 
     @objc var status = false {
         didSet {
@@ -22,17 +22,4 @@ class MyCustomView: UIView {
       self.backgroundColor = self.status ? .green : .red
       self.isUserInteractionEnabled = true
     }
-}
-
-@objc(RCTMyCustomViewManager)
-class RCTMyCustomViewManager: RCTViewManager {
-
-    override static func requiresMainQueueSetup() -> Bool {
-        return true
-    }
-
-    override func view() -> UIView! {
-        return MyCustomView()
-    }
-
 }

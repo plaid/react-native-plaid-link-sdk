@@ -531,6 +531,14 @@ export interface PlaidLinkProps {
     onPress?(): any
 }
 
+export interface PlaidLinkEmbeddedProps {
+    tokenConfig: LinkTokenConfiguration
+    onSuccess: LinkSuccessListener
+    onExit?: LinkExitListener
+    iOSPresentationStyle?: LinkIOSPresentationStyle
+    onPress?(): any
+}
+
 export type PlaidLinkComponentProps = (PlaidLinkProps & {
     children: React.ReactNode
 });

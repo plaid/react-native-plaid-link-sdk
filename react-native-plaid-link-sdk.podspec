@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "11.0"
 
   s.source       = { :git => "https://github.com/plaid/react-native-plaid-link-sdk.git", :tag => "v#{s.version}" }
-  s.source_files  = "ios/*.{h,m}"
+  s.source_files  = "ios/*.{h,m,swift}"
 
   s.dependency 'React-Core'
   s.dependency 'Plaid', '~> 4.5.1'

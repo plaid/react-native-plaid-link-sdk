@@ -7,6 +7,11 @@
 #import "RCTEventEmitter.h"
 #endif
 
+#import <LinkKit/LinkKit.h>
+
 @interface RNLinksdk : RCTEventEmitter <RCTBridgeModule>
 
-@end  
++ (NSDictionary *)dictionaryFromSuccess:(PLKLinkSuccess *)success;
++ (NSDictionary *)dictionaryFromEvent:(PLKLinkEvent *)event;
++ (NSDictionary *)dictionaryFromExit:(PLKLinkExit *)exit;
+@end

@@ -1,35 +1,27 @@
 import * as React from 'react';
-import {TextInput, Text, View } from 'react-native';
+import { TextInput, Text, View } from 'react-native';
 import { styles } from '../Styles';
-
-// Import Native UI Component from SDK.
-import {MyNativeCustomView, LinkIOSPresentationStyle, LinkEvent} from 'react-native-plaid-link-sdk';
+import { EmbeddedLinkView, LinkIOSPresentationStyle, LinkEvent, LinkExit, LinkSuccess } from 'react-native-plaid-link-sdk';
 
 // Simple conditional view to display Embedded Link once a token has been entered.
 var EmbeddedView = ({token}: {token: string}) => {
     let content
 
-    console.log('token ', token);
-
     if (token) {
         content = <View>
-            <MyNativeCustomView
+            <EmbeddedLinkView
                 token={token}
                 iOSPresentationStyle={LinkIOSPresentationStyle.FULL_SCREEN}
                 onEvent={(event: LinkEvent) => {
-                    // console.log('onEvent', event);
-                    console.log('event name', event.eventName);
-                    console.log('metadata', event.metadata);
+                    console.log('onEvent', event);
                 }}
-                onSuccess={(success: Object) => {
+                onSuccess={(success: LinkSuccess) => {
                     console.log('onSuccess', success);
                 }}
-                onExit={(exit: Object) => {
+                onExit={(exit: LinkExit) => {
                     console.log('onExit', exit);
                 }}
                 style={styles.embedded}
-                
-                
             />
         </View>
     } else {

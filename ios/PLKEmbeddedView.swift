@@ -5,7 +5,7 @@ internal final class PLKEmbeddedView: UIView {
 
     // Properties exposed to React Native.
 
-    @objc var presentationStyle: String = "" {
+    @objc var iOSPresentationStyle: String = "" {
         didSet {
             createNativeEmbeddedView()
         }
@@ -25,10 +25,7 @@ internal final class PLKEmbeddedView: UIView {
 
     private var linkHandler: Handler?
 
-    private func createNativeEmbeddedView() {
-        guard let rctViewController = RCTPresentedViewController() else { return }
-        guard !token.isEmpty, !presentationStyle.isEmpty, linkHandler == nil else { return }
-
+    private func makeHandler() throws -> Handler {
         var config = LinkTokenConfiguration(
             token: token,
             onSuccess: { [weak self] success in
@@ -50,8 +47,51 @@ internal final class PLKEmbeddedView: UIView {
         }
 
         let handlerCreationResult = Plaid.create(config)
+
         switch handlerCreationResult {
         case .failure(let error):
+            throw(error)
+        case .success(let handler):
+            return handler
+        }
+    }
+
+    private func makeEmbeddedView(rctViewController: UIViewController, handler: Handler) throws -> UIView {
+        self.linkHandler = handler
+
+        let presentationMethod: PresentationMethod
+
+        if iOSPresentationStyle.uppercased() == "FULL_SCREEN" {
+            presentationMethod = .custom({ viewController in
+                viewController.modalPresentationStyle = .overFullScreen
+                viewController.modalTransitionStyle = .coverVertical
+
+                rctViewController.present(viewController, animated: true)
+            })
+        } else {
+            presentationMethod = .viewController(rctViewController)
+        }
+
+        let embeddedResult = handler.createEmbeddedView(presentUsing: presentationMethod)
+
+        switch embeddedResult {
+        case .failure(let error):
+            throw error
+
+        case .success(let embeddedView):
+            return embeddedView
+        }
+    }
+
+    private func createNativeEmbeddedView() {
+        guard let rctViewController = RCTPresentedViewController() else { return }
+        guard !token.isEmpty, !iOSPresentationStyle.isEmpty, linkHandler == nil else { return }
+
+        do {
+            let handler = try makeHandler()
+            let embeddedView = try makeEmbeddedView(rctViewController: rctViewController, handler: handler)
+            setup(embeddedView: embeddedView)
+        } catch {
             let metadata = PLKExitMetadata(
                 status: nil,
                 institution: nil,
@@ -63,42 +103,6 @@ internal final class PLKEmbeddedView: UIView {
             let exit = PLKLinkExit(error: error, metadata: metadata)
             let dictionary = RNLinksdk.dictionary(from: exit)
             onExit?(dictionary)
-
-        case .success(let handler):
-            self.linkHandler = handler
-
-            let presentationMethod: PresentationMethod
-
-            if presentationStyle.uppercased() == "FULL_SCREEN" {
-                presentationMethod = .custom({ viewController in
-                    viewController.modalPresentationStyle = .overFullScreen
-                    viewController.modalTransitionStyle = .coverVertical
-
-                    rctViewController.present(viewController, animated: true)
-                })
-            } else {
-                presentationMethod = .viewController(rctViewController)
-            }
-
-            let embeddedResult = handler.createEmbeddedView(presentUsing: presentationMethod)
-
-            switch embeddedResult {
-            case .failure(let error):
-                let metadata = PLKExitMetadata(
-                    status: nil,
-                    institution: nil,
-                    requestID: nil,
-                    linkSessionID: nil,
-                    metadataJSON: nil
-                )
-
-                let exit = PLKLinkExit(error: error, metadata: metadata)
-                let dictionary = RNLinksdk.dictionary(from: exit)
-                onExit?(dictionary)
-
-            case .success(let embeddedView):
-                setup(embeddedView: embeddedView)
-            }
         }
     }
 

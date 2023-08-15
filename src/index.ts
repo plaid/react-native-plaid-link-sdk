@@ -16,6 +16,6 @@ export {
     usePlaidEmitter,
 };
 
-// export {PlaidEmbeddedView} from './EmbeddedLink/PlaidEmbeddedView';
+// Components
 
-export { MyNativeCustomView } from './EmbeddedLink/EmbeddedLinkView';
+export { EmbeddedLinkView } from './EmbeddedLink/EmbeddedLinkView';

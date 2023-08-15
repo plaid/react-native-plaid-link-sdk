@@ -520,7 +520,7 @@ export type LinkSuccessListener = (LinkSuccess: LinkSuccess) => void
 
 export type LinkExitListener = (LinkExit: LinkExit) => void
 
-export type LinkOnEventListener = (LinkEvent: LinkEvent) => void // qwe delete?
+export type LinkOnEventListener = (LinkEvent: LinkEvent) => void
 
 export type PlaidLinkConfiguration = LinkTokenConfiguration | LinkPublicKeyConfiguration
 

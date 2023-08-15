@@ -32,60 +32,70 @@ internal final class PLKEmbeddedView: UIView {
         var config = LinkTokenConfiguration(
             token: token,
             onSuccess: { [weak self] success in
-                // TODO: pipe to onSuccess
-                print(success)
-
-//                let dict: [String : Any] = [
-//                    "publicToken": success.publicToken,
-//                    "metadata": [
-//                        "linkSessionId": success.metadata.linkSessionID ?? "",
-//                        "institution": success.metadata.institution.name,
-//                        "acounts": success.metadata.accounts.flatMap({$0.name})
-//                        "metadataJson": success.metadata.metadataJSON ?? ""
-//                    ]
-//                ]
+                let plkLinkSuccess = success.toObjC
+                let dictionary = RNLinksdk.dictionary(from: plkLinkSuccess)
+                self?.onSuccess?(dictionary)
         })
 
         config.onEvent = { [weak self] event in
-            // TODO: pipe to onEvent
-            print(event)
-
-            let dict: [String: Any] = [
-                "eventName": event.eventName.description
-            ]
-
-            self?.onEvent?(dict)
-
-//            self?.onEvent?(["\(event.eventName.description)", dict])
+            let plkLinkEvent = event.toObjC
+            let dictionary = RNLinksdk.dictionary(from: plkLinkEvent)
+            self?.onEvent?(dictionary)
         }
 
         config.onExit = { [weak self] exit in
-            // TODO: pipe to onExit
-
-
-
-//            let plkLinkExit = exit.toObjC
-//            let metadata = RNLinksdk.dictionary(from: plkLinkExit)
-
-//            onExit(m)
+            let plkLinkExit = exit.toObjC
+            let dictionary = RNLinksdk.dictionary(from: plkLinkExit)
+            self?.onExit?(dictionary)
         }
 
         let handlerCreationResult = Plaid.create(config)
         switch handlerCreationResult {
         case .failure(let error):
-            guard let onExit = onExit else { return }
-            onExit(["error": error.localizedDescription])
+            let metadata = PLKExitMetadata(
+                status: nil,
+                institution: nil,
+                requestID: nil,
+                linkSessionID: nil,
+                metadataJSON: nil
+            )
+
+            let exit = PLKLinkExit(error: error, metadata: metadata)
+            let dictionary = RNLinksdk.dictionary(from: exit)
+            onExit?(dictionary)
 
         case .success(let handler):
             self.linkHandler = handler
 
-            // TODO: Support custom presentation if `FULL_SCREEN`.
-            let embeddedResult = handler.createEmbeddedView(presentUsing: .viewController(rctViewController))
+            let presentationMethod: PresentationMethod
+
+            if presentationStyle.uppercased() == "FULL_SCREEN" {
+                presentationMethod = .custom({ viewController in
+                    viewController.modalPresentationStyle = .overFullScreen
+                    viewController.modalTransitionStyle = .coverVertical
+
+                    rctViewController.present(viewController, animated: true)
+                })
+            } else {
+                presentationMethod = .viewController(rctViewController)
+            }
+
+            let embeddedResult = handler.createEmbeddedView(presentUsing: presentationMethod)
 
             switch embeddedResult {
             case .failure(let error):
-                // TODO: Send to on exit
-                break
+                let metadata = PLKExitMetadata(
+                    status: nil,
+                    institution: nil,
+                    requestID: nil,
+                    linkSessionID: nil,
+                    metadataJSON: nil
+                )
+
+                let exit = PLKLinkExit(error: error, metadata: metadata)
+                let dictionary = RNLinksdk.dictionary(from: exit)
+                onExit?(dictionary)
+
             case .success(let embeddedView):
                 setup(embeddedView: embeddedView)
             }
@@ -102,18 +112,5 @@ internal final class PLKEmbeddedView: UIView {
             embeddedView.trailingAnchor.constraint(equalTo: trailingAnchor),
             embeddedView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-    }
-
-    // qwe delete me
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-
-        let dict: [String: Any] = [
-            "eventName": "touches ended"
-        ]
-
-        print("Touches ended!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-
-        self.onEvent?(dict)
     }
 }

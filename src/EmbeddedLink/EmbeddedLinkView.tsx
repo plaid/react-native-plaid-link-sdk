@@ -2,31 +2,73 @@ import React from 'react';
 import { NativeSyntheticEvent, StyleProp, ViewStyle } from 'react-native';
 import NativeEmbeddedLinkView from './NativeEmbeddedLinkView';
 import { LinkSuccessListener, LinkExitListener, LinkIOSPresentationStyle, LinkOnEventListener } from '../Types';
+import { LinkEvent, LinkEventMetadata, LinkEventName } from 'react-native-plaid-link-sdk';
 
-type IProps = {
+type EmbeddedLinkProps = {
     token: String,
-    onClick: Function,
+    iOSPresentationStyle: LinkIOSPresentationStyle,
+    onEvent: LinkOnEventListener | undefined,
+    onSuccess: Function,
+    onExit: Function | undefined,
     style: StyleProp<ViewStyle> | undefined,
 }
-  
-export const MyNativeCustomView: React.FC<IProps> = (props) => {
 
-const {token, onClick, style} = props;
-const _onClick = (event: any) => {
-    if (!onClick) {
-    return;
+class EmbeddedEvent implements LinkEvent {
+    eventName: LinkEventName;
+    metadata: LinkEventMetadata;
+
+    constructor(event: any) {
+        this.eventName = event.eventName
+        this.metadata = event.metadata
+    }
+}
+  
+export const MyNativeCustomView: React.FC<EmbeddedLinkProps> = (props) => {
+
+    const {token, iOSPresentationStyle, onEvent, onSuccess, onExit, style} = props;
+
+    const _onEvent = (event: any) => {
+        
+        if (!onEvent) {
+            return;
+        }
+
+        const embeddedEvent = new EmbeddedEvent(event.nativeEvent);
+        onEvent(embeddedEvent);
     }
 
-    console.log('raw event', event);
+    const _onSuccess = (event: any) => {
 
-    onClick(event.nativeEvent.eventName);
-}
+        if (!onSuccess) {
+            return;
+        }
 
-return <NativeEmbeddedLinkView
-        token={token}
-        onEvent={_onClick}
-        style={style}
-        />
+        const json = JSON.stringify(event.nativeEvent);
+        console.log('JSON ', json);
+
+        onSuccess(event.nativeEvent);
+    }
+
+    const _onExit = (event: any) => {
+
+        if (!onExit) {
+            return;
+        }
+
+        const json = JSON.stringify(event.nativeEvent);
+        console.log('JSON ', json);
+
+        onExit(event.nativeEvent);
+    }
+
+    return <NativeEmbeddedLinkView
+                token={token}
+                presentationStyle={iOSPresentationStyle.toString()}
+                onEvent={_onEvent}
+                onSuccess={_onSuccess}
+                onExit={_onExit}
+                style={style}
+            />
 };
 
 // export interface PlaidEmbeddedLinkProps {

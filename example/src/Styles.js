@@ -29,6 +29,5 @@ export const styles = StyleSheet.create({
     width: '95%',
     alignSelf: 'center',
     height: 310,
-    backgroundColor: '#2196F3',
   },
 });

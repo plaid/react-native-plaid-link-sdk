@@ -84,8 +84,6 @@ export const EmbeddedLinkView: React.FC<EmbeddedLinkProps> = (props) => {
 
         const embeddedExit = new EmbeddedExit(event.nativeEvent);
         onExit(embeddedExit);
-
-        // qwe dismiss link???
     }
 
     return <NativeEmbeddedLinkView

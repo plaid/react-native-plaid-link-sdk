@@ -92,17 +92,7 @@ internal final class PLKEmbeddedView: UIView {
             let embeddedView = try makeEmbeddedView(rctViewController: rctViewController, handler: handler)
             setup(embeddedView: embeddedView)
         } catch {
-            let metadata = PLKExitMetadata(
-                status: nil,
-                institution: nil,
-                requestID: nil,
-                linkSessionID: nil,
-                metadataJSON: nil
-            )
-
-            let exit = PLKLinkExit(error: error, metadata: metadata)
-            let dictionary = RNLinksdk.dictionary(from: exit)
-            onExit?(dictionary)
+            onExit?(["error": "\(error)"])
         }
     }
 

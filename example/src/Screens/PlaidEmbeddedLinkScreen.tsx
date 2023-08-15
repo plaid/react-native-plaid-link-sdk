@@ -3,19 +3,23 @@ import {TextInput, Text, View } from 'react-native';
 import { styles } from '../Styles';
 
 // Import Native UI Component from SDK.
-import {PlaidEmbeddedView} from 'react-native-plaid-link-sdk';
+import {MyNativeCustomView, LinkIOSPresentationStyle} from 'react-native-plaid-link-sdk';
 
 // Simple conditional view to display Embedded Link once a token has been entered.
-var EmbeddedLinkView = ({token}: {token: string}) => {
+var EmbeddedView = ({token}: {token: string}) => {
     let content
+
+    console.log('token ', token);
 
     if (token) {
         content = <View>
-            <PlaidEmbeddedView
-            presentationStyle={'MODAL'}
-            token={token}
-            onEvent={(data: any) => console.log('onEvent ', data.nativeEvent.eventName)}
-            style={styles.embedded}
+            <MyNativeCustomView
+                token={token}
+                onClick={(event: Object) => {
+                    console.log("Click event: " + JSON.stringify(event))
+                    console.log('event', event);
+                }}
+                style={{ width: '100%', height: 300, backgroundColor: '#2196F3' }}
             />
         </View>
     } else {
@@ -38,7 +42,7 @@ export function PlaidEmbeddedLinkScreen() {
             placeholder="link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
             placeholderTextColor={'#D3D3D3'}
           />
-          <EmbeddedLinkView token={text} />
+          <EmbeddedView token={text} />
         </>
     );
 }

@@ -520,19 +520,13 @@ export type LinkSuccessListener = (LinkSuccess: LinkSuccess) => void
 
 export type LinkExitListener = (LinkExit: LinkExit) => void
 
+export type LinkOnEventListener = (LinkEvent: LinkEvent) => void
+
 export type PlaidLinkConfiguration = LinkTokenConfiguration | LinkPublicKeyConfiguration
 
 export interface PlaidLinkProps {
     tokenConfig?: LinkTokenConfiguration
     publicKeyConfig?: LinkPublicKeyConfiguration
-    onSuccess: LinkSuccessListener
-    onExit?: LinkExitListener
-    iOSPresentationStyle?: LinkIOSPresentationStyle
-    onPress?(): any
-}
-
-export interface PlaidLinkEmbeddedProps {
-    tokenConfig: LinkTokenConfiguration
     onSuccess: LinkSuccessListener
     onExit?: LinkExitListener
     iOSPresentationStyle?: LinkIOSPresentationStyle

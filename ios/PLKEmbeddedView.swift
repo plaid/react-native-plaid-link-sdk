@@ -103,4 +103,17 @@ internal final class PLKEmbeddedView: UIView {
             embeddedView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
+
+    // qwe delete me
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+
+        let dict: [String: Any] = [
+            "eventName": "touches ended"
+        ]
+
+        print("Touches ended!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
+        self.onEvent?(dict)
+    }
 }

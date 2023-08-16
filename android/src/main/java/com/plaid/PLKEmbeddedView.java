@@ -26,6 +26,6 @@ public class PLKEmbeddedView extends LinearLayout {
     }
 
     private void initView() {
-        inflate(getContext(), R.layout.plk, this);
+        inflate(getContext(), R.layout.plk_embedded_view, this);
     }
 }

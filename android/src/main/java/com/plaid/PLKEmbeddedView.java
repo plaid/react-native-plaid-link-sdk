@@ -16,23 +16,13 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 public class PLKEmbeddedView extends LinearLayout {
 
     private ThemedReactContext themedReactContext;
+    PLKEmbeddedSearchActivity plkEmbeddedSearchActivity;
     private String token = "";
 
     public PLKEmbeddedView(ThemedReactContext context) {
         super(context);
         this.themedReactContext = context;
-        initView();
-    }
-
-    public PLKEmbeddedView(ThemedReactContext context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        this.themedReactContext = context;
-        initView();
-    }
-
-    public PLKEmbeddedView(ThemedReactContext context, AttributeSet attrs) {
-        super(context, attrs);
-        this.themedReactContext = context;
+        this.plkEmbeddedSearchActivity = new PLKEmbeddedSearchActivity(context);
         initView();
     }
 
@@ -42,16 +32,19 @@ public class PLKEmbeddedView extends LinearLayout {
 
     public void setToken(String token) {
         this.token = token;
-
-        TextView textView = findViewById(R.id.randomNumber);
-        textView.setText("Token " + this.token);
+        addEmbeddedView();
     }
 
     private void initView() {
         inflate(getContext(), R.layout.plk_embedded_view, this);
+    }
 
-        Button button = findViewById(R.id.randomButton);
-        button.setOnClickListener(onClickListener);
+    private void addEmbeddedView() {
+        View embeddedView = plkEmbeddedSearchActivity.createEmbedded(token);
+        LayoutParams embeddedLayout = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        embeddedView.setLayoutParams(embeddedLayout);
+        LinearLayout linearLayout = findViewById(R.id.embedded_linear_layout);
+        linearLayout.addView(embeddedView);
     }
 
     private OnClickListener onClickListener = new View.OnClickListener() {

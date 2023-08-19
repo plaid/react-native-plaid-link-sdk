@@ -9,36 +9,33 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.uimanager.ThemedReactContext;
 
 import com.plaid.link.Plaid;
 import com.plaid.link.PlaidHandler;
 import com.plaid.link.configuration.EmbeddedSessionInfo;
 import com.plaid.link.configuration.LinkTokenConfiguration;
-import com.plaid.link.result.LinkExit;
-import com.plaid.link.result.LinkResult;
-import com.plaid.link.result.LinkSuccess;
+//import com.plaid.link.result.LinkExit;
+//import com.plaid.link.result.LinkResult;
+//import com.plaid.link.result.LinkSuccess;
 import com.plaid.link.OpenPlaidLink;
 
-public class PLKEmbeddedSearchActivity extends AppCompatActivity implements ActivityResultHandler {
+public class PLKEmbeddedSearchActivity extends AppCompatActivity  {
 
     private final ThemedReactContext themedReactContext;
-    private final Integer LINK_ACTIVITY_REQUEST_CODE = 3364;
-    private String TAG = "EmbeddedSearch";
+//    private final Integer LINK_ACTIVITY_REQUEST_CODE = 3364;
+//    private String TAG = "EmbeddedSearch";
 
     PLKEmbeddedSearchActivity(ThemedReactContext context) {
         super();
         this.themedReactContext = context;
 
-        // qwe
-
-//        if (themedReactContext.hasCurrentActivity()) {
-//            Activity activity =  themedReactContext.getCurrentActivity();
+//        NativeModule nativeModule = themedReactContext.getNativeModule(PlaidModule.class);
 //
-//            if (activity instanceof MainActivity) {
-//                MainActivity mainActivity = (MainActivity) activity;
-//                mainActivity.getActivityResultManager().put(LINK_ACTIVITY_REQUEST_CODE, this);
-//            }
+//        if (nativeModule instanceof PlaidModule) {
+//            PlaidModule plaidModule = (PlaidModule) nativeModule;
+//            plaidModule.getMActivityResultManager().put(LINK_ACTIVITY_REQUEST_CODE, this);
 //        }
     }
 
@@ -58,19 +55,19 @@ public class PLKEmbeddedSearchActivity extends AppCompatActivity implements Acti
         return Plaid.createLinkEmbeddedViewReact(themedReactContext, linkTokenConfiguration, callback);
     }
 
-    @Override
-    public void handleActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == LINK_ACTIVITY_REQUEST_CODE) {
-            OpenPlaidLink openPlaidLink = new OpenPlaidLink();
-            LinkResult linkResult = openPlaidLink.parseResult(resultCode, data);
-
-            if (linkResult instanceof LinkSuccess) {
-                Log.d(TAG, "Link Success: " + linkResult); // qwe
-            } else if (linkResult instanceof LinkExit) {
-                Log.d(TAG, "Link Exit: " + linkResult);
-            } else {
-                Log.d(TAG, "Unhandled Result: " + linkResult);
-            }
-        }
-    }
+//    @Override
+//    public void handleActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == LINK_ACTIVITY_REQUEST_CODE) {
+//            OpenPlaidLink openPlaidLink = new OpenPlaidLink();
+//            LinkResult linkResult = openPlaidLink.parseResult(resultCode, data);
+//
+//            if (linkResult instanceof LinkSuccess) {
+//                Log.d(TAG, "Link Success: " + linkResult);
+//            } else if (linkResult instanceof LinkExit) {
+//                Log.d(TAG, "Link Exit: " + linkResult);
+//            } else {
+//                Log.d(TAG, "Unhandled Result: " + linkResult);
+//            }
+//        }
+//    }
 }

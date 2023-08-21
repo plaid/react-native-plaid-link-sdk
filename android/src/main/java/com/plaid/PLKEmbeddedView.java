@@ -1,40 +1,63 @@
 package com.plaid;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
+
+import static com.plaid.GlobalFunctionsKt.convertJsonToMap;
+
+import com.plaid.gson.PlaidJsonConverter;
+import com.plaid.link.Plaid;
+import com.plaid.link.PlaidHandler;
+import com.plaid.link.configuration.EmbeddedSessionInfo;
+import com.plaid.link.configuration.LinkTokenConfiguration;
 import com.plaid.link.result.LinkExit;
 import com.plaid.link.result.LinkResult;
 import com.plaid.link.result.LinkSuccess;
 import com.plaid.link.OpenPlaidLink;
 
+import java.util.HashMap;
+
+import kotlin.Unit;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class PLKEmbeddedView extends LinearLayout implements ActivityResultHandler {
 
     private ThemedReactContext themedReactContext;
-    private PLKEmbeddedSearchActivity plkEmbeddedSearchActivity;
     private String token = "";
 
-    private String TAG = "EmbeddedSearch";
+    private final String TAG = "EmbeddedSearch";
     private final Integer LINK_ACTIVITY_REQUEST_CODE = 3364;
+    private final String EVENT_NAME = "OnEmbeddedEvent";
+    private final PlaidJsonConverter jsonConverter = new PlaidJsonConverter();
 
     public PLKEmbeddedView(ThemedReactContext context) {
         super(context);
         this.themedReactContext = context;
-        this.plkEmbeddedSearchActivity = new PLKEmbeddedSearchActivity(context);
+
         initView();
+        setupOnEventListener();
     }
 
     public void onFinishInflate(){
@@ -44,17 +67,31 @@ public class PLKEmbeddedView extends LinearLayout implements ActivityResultHandl
     public void setToken(String token) {
         this.token = token;
         addEmbeddedView();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
 
         NativeModule nativeModule = themedReactContext.getNativeModule(PlaidModule.class);
 
         if (nativeModule instanceof PlaidModule) {
             PlaidModule plaidModule = (PlaidModule) nativeModule;
-            plaidModule.getMActivityResultManager().put(LINK_ACTIVITY_REQUEST_CODE, this); // qwe have to remove this?
-        } else {
+            // Add our handler so we can get the callback result.
+            plaidModule.getMActivityResultManager().put(LINK_ACTIVITY_REQUEST_CODE, this);
+        }
+    }
 
-            Log.d(TAG, "nativeMode: " + nativeModule);
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
 
-            throw new RuntimeException("no plaid module");
+        NativeModule nativeModule = themedReactContext.getNativeModule(PlaidModule.class);
+
+        if (nativeModule instanceof PlaidModule) {
+            PlaidModule plaidModule = (PlaidModule) nativeModule;
+            // Remove the handler so the module can handle it.
+            plaidModule.getMActivityResultManager().remove(LINK_ACTIVITY_REQUEST_CODE);
         }
     }
 
@@ -62,12 +99,70 @@ public class PLKEmbeddedView extends LinearLayout implements ActivityResultHandl
         inflate(getContext(), R.layout.plk_embedded_view, this);
     }
 
+    private View createEmbedded(String token) {
+        LinkTokenConfiguration linkTokenConfiguration = new LinkTokenConfiguration.Builder()
+                .token(token)
+                .build();
+
+        Plaid.EmbeddedViewResultCallback callback = new Plaid.EmbeddedViewResultCallback() {
+            @Override
+            public void onEmbeddedSessionInfoReceived(@NonNull EmbeddedSessionInfo embeddedSessionInfo) {
+                PlaidHandler plaidHandler = Plaid.create( (Application) themedReactContext.getApplicationContext(), embeddedSessionInfo);
+                Activity activity = themedReactContext.getCurrentActivity();
+                if (activity != null) { plaidHandler.open(activity); }
+            }
+        };
+
+        return Plaid.createLinkEmbeddedViewReact(themedReactContext, linkTokenConfiguration, callback);
+    }
+
     private void addEmbeddedView() {
-        View embeddedView = plkEmbeddedSearchActivity.createEmbedded(token);
+        View embeddedView = createEmbedded(token);
         LayoutParams embeddedLayout = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         embeddedView.setLayoutParams(embeddedLayout);
         LinearLayout linearLayout = findViewById(R.id.embedded_linear_layout);
         linearLayout.addView(embeddedView);
+    }
+
+    private void setupOnEventListener() {
+        Log.d(TAG, "setupOnEventListener");
+        Plaid.setLinkEventListener(event -> {
+            Log.d(TAG, "onEvent " + event.toString());
+
+            try {
+                String jsonString = jsonConverter.convert(event);
+                JSONObject jsonObject = new JSONObject(jsonString);
+                WritableMap eventMap = convertJsonToMap(jsonObject);
+
+                themedReactContext.getJSModule(DeviceEventManagerModule
+                        .RCTDeviceEventEmitter.class).emit("onEvent", eventMap);
+
+                return Unit.INSTANCE;
+            } catch (JSONException e) {
+                Log.e(TAG, "JSON Exception: " + e);
+                return Unit.INSTANCE;
+            }
+        });
+    }
+
+    private void observeVisibility() {
+        setTag(getVisibility());
+
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int newVisibility = getVisibility();
+                if ((int) getTag() != newVisibility) {
+
+                    setTag(getVisibility());
+
+                    switch (newVisibility) {
+                        case View.VISIBLE: setupOnEventListener();
+                        default: break;
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -78,32 +173,39 @@ public class PLKEmbeddedView extends LinearLayout implements ActivityResultHandl
 
             if (linkResult instanceof LinkSuccess) {
                 Log.d(TAG, "Link Success: " + linkResult);
+                LinkSuccess linkSuccess = (LinkSuccess) linkResult;
 
-                WritableMap metadataMap = Arguments.createMap();
-                metadataMap.putString("linkSessionId", "abc123");
-                metadataMap.putString("viewName", "CONSENT");
+                try {
+                    String jsonString = jsonConverter.convert(linkSuccess);
+                    JSONObject jsonObject = new JSONObject(jsonString);
+                    WritableMap successMap = convertJsonToMap(jsonObject);
+                    String eventName = PLKEmbeddedViewManager.EVENT_NAME;
+                    ReactContext reactContext = (ReactContext)getContext();
 
-                WritableMap event = Arguments.createMap();
-                event.putString("eventName","TRANSITION_VIEW");
-                event.putMap("metadata", metadataMap);
+                    reactContext.getJSModule(RCTEventEmitter.class)
+                            .receiveEvent(getId(), eventName, successMap);
 
-                ReactContext reactContext = (ReactContext)getContext();
-                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "onEventEvent", event);
-
+                } catch (JSONException e) {
+                    Log.e(TAG, "JSON Exception: " + e); // qwe exit?
+                }
 
             } else if (linkResult instanceof LinkExit) {
                 Log.d(TAG, "Link Exit: " + linkResult);
+                LinkExit linkExit = (LinkExit) linkResult;
 
-                WritableMap metadataMap = Arguments.createMap();
-                metadataMap.putString("linkSessionId", "abc123");
-                metadataMap.putString("viewName", "CONSENT");
+                try {
+                    String jsonString = jsonConverter.convert(linkExit);
+                    JSONObject jsonObject = new JSONObject(jsonString);
+                    WritableMap exitMap = convertJsonToMap(jsonObject);
+                    String eventName = PLKEmbeddedViewManager.EVENT_NAME;
+                    ReactContext reactContext = (ReactContext)getContext();
 
-                WritableMap event = Arguments.createMap();
-                event.putString("eventName","TRANSITION_VIEW");
-                event.putMap("metadata", metadataMap);
+                    reactContext.getJSModule(RCTEventEmitter.class)
+                            .receiveEvent(getId(), eventName, exitMap);
 
-                ReactContext reactContext = (ReactContext)getContext();
-                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "onEventEvent", event);
+                } catch (JSONException e) {
+                    Log.e(TAG, "JSON Exception: " + e); // qwe exit?
+                }
 
             } else {
                 Log.d(TAG, "Unhandled Result: " + linkResult);

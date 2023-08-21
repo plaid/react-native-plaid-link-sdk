@@ -319,8 +319,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     // Dispath to embedded to handle the callback.
     if (mActivityResultManager[requestCode] != null) {
       mActivityResultManager.dispatch(requestCode, resultCode, data)
-    } else {
-      throw RuntimeException("No activity handler for code: $requestCode")
+      return
     }
 
     val linkHandler = LinkResultHandler(

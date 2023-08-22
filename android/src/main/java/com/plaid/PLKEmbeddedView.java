@@ -36,6 +36,7 @@ import com.plaid.link.result.LinkSuccess;
 import com.plaid.link.OpenPlaidLink;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import kotlin.Unit;
 
@@ -180,13 +181,15 @@ public class PLKEmbeddedView extends LinearLayout implements ActivityResultHandl
                     JSONObject jsonObject = new JSONObject(jsonString);
                     WritableMap successMap = convertJsonToMap(jsonObject);
                     String eventName = PLKEmbeddedViewManager.EVENT_NAME;
-                    ReactContext reactContext = (ReactContext)getContext();
+                    successMap.putString("embeddedEventName", "onSuccess");
 
+                    ReactContext reactContext = (ReactContext)getContext();
                     reactContext.getJSModule(RCTEventEmitter.class)
                             .receiveEvent(getId(), eventName, successMap);
 
                 } catch (JSONException e) {
-                    Log.e(TAG, "JSON Exception: " + e); // qwe exit?
+                    Log.e(TAG, "JSON Exception: " + e);
+                    sendLinkExitFrom(e);
                 }
 
             } else if (linkResult instanceof LinkExit) {
@@ -198,18 +201,44 @@ public class PLKEmbeddedView extends LinearLayout implements ActivityResultHandl
                     JSONObject jsonObject = new JSONObject(jsonString);
                     WritableMap exitMap = convertJsonToMap(jsonObject);
                     String eventName = PLKEmbeddedViewManager.EVENT_NAME;
-                    ReactContext reactContext = (ReactContext)getContext();
+                    exitMap.putString("embeddedEventName", "onExit");
 
+                    ReactContext reactContext = (ReactContext)getContext();
                     reactContext.getJSModule(RCTEventEmitter.class)
                             .receiveEvent(getId(), eventName, exitMap);
 
                 } catch (JSONException e) {
-                    Log.e(TAG, "JSON Exception: " + e); // qwe exit?
+                    Log.e(TAG, "JSON Exception: " + e);
+                    sendLinkExitFrom(e);
                 }
-
             } else {
                 Log.d(TAG, "Unhandled Result: " + linkResult);
             }
         }
+    }
+
+    private void sendLinkExitFrom(JSONException e) {
+        WritableMap map = Arguments.createMap();
+        WritableMap errorMap = Arguments.createMap();
+        WritableMap exitMetadataMap = Arguments.createMap();
+
+        errorMap.putString("error_message", e.getMessage());
+        errorMap.putString("json", e.getMessage());
+        errorMap.putString("error_type", "JSONException");
+        errorMap.putInt("error_code", 499);
+
+        exitMetadataMap.putString("error_message", e.getMessage());
+        exitMetadataMap.putString("json", e.getMessage());
+        exitMetadataMap.putString("error_type", "JSONException");
+        exitMetadataMap.putInt("error_code", 499);
+
+        map.putString("eventName", "EXIT");
+        map.putMap("metadata", exitMetadataMap);
+        map.putMap("error", errorMap);
+        map.putString("embeddedEventName", "onExit");
+
+        ReactContext reactContext = (ReactContext)getContext();
+        reactContext.getJSModule(RCTEventEmitter.class)
+                .receiveEvent(getId(), PLKEmbeddedViewManager.EVENT_NAME, map);
     }
 }

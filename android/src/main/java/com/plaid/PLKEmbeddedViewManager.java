@@ -13,7 +13,7 @@ import java.util.Map;
 public class PLKEmbeddedViewManager extends SimpleViewManager<PLKEmbeddedView> {
 
     public static final String REACT_CLASS = "PLKEmbeddedView";
-    public static final  String EVENT_NAME = "OnEmbeddedEvent";
+    public static final  String EVENT_NAME = "onEmbeddedEvent";
 
     @Override
     public String getName() { return REACT_CLASS; }
@@ -30,7 +30,7 @@ public class PLKEmbeddedViewManager extends SimpleViewManager<PLKEmbeddedView> {
     }
 
     public Map getExportedCustomBubblingEventTypeConstants() {
-        String propName = "onEvent"; // qwe this is what it gets sent through as. So we rename this
+        String propName = "onEmbeddedEvent";
         Map handler = MapBuilder.of("phasedRegistrationNames",MapBuilder.of("bubbled", propName));
 
         MapBuilder.Builder events = MapBuilder.builder();

@@ -308,7 +308,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     }
   }
 
-  // qwe
   override fun onActivityResult(
     activity: Activity,
     requestCode: Int,

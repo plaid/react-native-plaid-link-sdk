@@ -126,7 +126,6 @@ public class PLKEmbeddedView extends LinearLayout implements ActivityResultHandl
     }
 
     private void setupOnEventListener() {
-        Log.d(TAG, "setupOnEventListener");
         Plaid.setLinkEventListener(event -> {
             Log.d(TAG, "onEvent " + event.toString());
 
@@ -135,8 +134,12 @@ public class PLKEmbeddedView extends LinearLayout implements ActivityResultHandl
                 JSONObject jsonObject = new JSONObject(jsonString);
                 WritableMap eventMap = convertJsonToMap(jsonObject);
 
-                themedReactContext.getJSModule(DeviceEventManagerModule
-                        .RCTDeviceEventEmitter.class).emit("onEvent", eventMap);
+                String eventName = PLKEmbeddedViewManager.EVENT_NAME;
+                eventMap.putString("embeddedEventName", "onEvent");
+
+                ReactContext reactContext = (ReactContext)getContext();
+                reactContext.getJSModule(RCTEventEmitter.class)
+                        .receiveEvent(getId(), eventName, eventMap);
 
                 return Unit.INSTANCE;
             } catch (JSONException e) {

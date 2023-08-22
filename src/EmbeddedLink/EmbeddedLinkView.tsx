@@ -59,16 +59,6 @@ export const EmbeddedLinkView: React.FC<EmbeddedLinkProps> = (props) => {
 
     const {token, iOSPresentationStyle, onEvent, onSuccess, onExit, style} = props;
 
-    // qwe still need to handle this case??
-    const _onEvent = (event: any) => {
-        if (!onEvent) {
-            return;
-        }
-
-        const embeddedEvent = new EmbeddedEvent(event.nativeEvent);
-        onEvent(embeddedEvent);
-    }
-
     const onEmbeddedEvent = (event: any) => {
         console.log('onEmbeddedEvent ', event.nativeEvent);
         console.log('onEmbeddedEvent ', event.nativeEvent.embeddedEventName);
@@ -86,6 +76,12 @@ export const EmbeddedLinkView: React.FC<EmbeddedLinkProps> = (props) => {
                 onExit(embeddedExit);
                 break;
             }
+            case 'onEvent': {
+                if (!onEvent) { return; }
+                const embeddedEvent = new EmbeddedEvent(event.nativeEvent);
+                onEvent(embeddedEvent);
+                break;
+            }
             default: {
                 return;
             }
@@ -95,9 +91,6 @@ export const EmbeddedLinkView: React.FC<EmbeddedLinkProps> = (props) => {
     return <NativeEmbeddedLinkView
                 token={token}
                 iOSPresentationStyle={iOSPresentationStyle.toString()}
-                // onSuccess={_onSuccess}
-                // onEvent={_onEvent}
-                // onExit={_onExit}
                 onEmbeddedEvent={onEmbeddedEvent}
                 style={style}
             />

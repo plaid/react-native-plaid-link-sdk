@@ -80,7 +80,6 @@ class PlaidJsonConverter {
 
   fun convert(linkExit: LinkExit): String {
     return gson.toJson(linkExit)
-
   }
 
   fun convert(linkEvent: LinkEvent): String {

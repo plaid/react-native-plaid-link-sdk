@@ -17,33 +17,41 @@ internal final class PLKEmbeddedView: UIView {
         }
     }
 
-    @objc var onSuccess: RCTDirectEventBlock?
-    @objc var onEvent: RCTBubblingEventBlock?
-    @objc var onExit: RCTDirectEventBlock?
+    @objc var onEmbeddedEvent: RCTDirectEventBlock?
 
     // MARK: Private
 
     private var linkHandler: Handler?
+    private let embeddedEventName: String = "embeddedEventName"
 
     private func makeHandler() throws -> Handler {
         var config = LinkTokenConfiguration(
             token: token,
             onSuccess: { [weak self] success in
+                guard let self = self else { return }
+
                 let plkLinkSuccess = success.toObjC
-                let dictionary = RNLinksdk.dictionary(from: plkLinkSuccess)
-                self?.onSuccess?(dictionary)
+                var dictionary = RNLinksdk.dictionary(from: plkLinkSuccess) ?? [:]
+                dictionary[embeddedEventName] = "onSuccess"
+                self.onEmbeddedEvent?(dictionary)
         })
 
         config.onEvent = { [weak self] event in
+            guard let self = self else { return }
+
             let plkLinkEvent = event.toObjC
-            let dictionary = RNLinksdk.dictionary(from: plkLinkEvent)
-            self?.onEvent?(dictionary)
+            var dictionary = RNLinksdk.dictionary(from: plkLinkEvent) ?? [:]
+            dictionary[embeddedEventName] = "onEvent"
+            self.onEmbeddedEvent?(dictionary)
         }
 
         config.onExit = { [weak self] exit in
+            guard let self = self else { return }
+
             let plkLinkExit = exit.toObjC
-            let dictionary = RNLinksdk.dictionary(from: plkLinkExit)
-            self?.onExit?(dictionary)
+            var dictionary = RNLinksdk.dictionary(from: plkLinkExit) ?? [:]
+            dictionary[embeddedEventName] = "onExit"
+            self.onEmbeddedEvent?(dictionary)
         }
 
         let handlerCreationResult = Plaid.create(config)
@@ -92,7 +100,12 @@ internal final class PLKEmbeddedView: UIView {
             let embeddedView = try makeEmbeddedView(rctViewController: rctViewController, handler: handler)
             setup(embeddedView: embeddedView)
         } catch {
-            onExit?(["error": "\(error)"])
+            let dict: [String: Any] = [
+                embeddedEventName: "onExit",
+                "error": "\(error)"
+            ]
+
+            onEmbeddedEvent?(dict)
         }
     }
 

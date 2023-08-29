@@ -59,39 +59,39 @@ export const EmbeddedLinkView: React.FC<EmbeddedLinkProps> = (props) => {
 
     const {token, iOSPresentationStyle, onEvent, onSuccess, onExit, style} = props;
 
-    const _onEvent = (event: any) => {
-        if (!onEvent) {
-            return;
+    const onEmbeddedEvent = (event: any) => {
+        console.log('onEmbeddedEvent ', event.nativeEvent);
+        console.log('onEmbeddedEvent ', event.nativeEvent.embeddedEventName);
+
+        switch (event.nativeEvent.embeddedEventName) {
+            case 'onSuccess': {
+                if (!onSuccess) { return; }
+                const embeddedSuccess = new EmbeddedSuccess(event.nativeEvent);
+                onSuccess(embeddedSuccess);
+                break;
+            }
+            case 'onExit': {
+                if (!onExit) {return; }
+                const embeddedExit = new EmbeddedExit(event.nativeEvent);
+                onExit(embeddedExit);
+                break;
+            }
+            case 'onEvent': {
+                if (!onEvent) { return; }
+                const embeddedEvent = new EmbeddedEvent(event.nativeEvent);
+                onEvent(embeddedEvent);
+                break;
+            }
+            default: {
+                return;
+            }
         }
-
-        const embeddedEvent = new EmbeddedEvent(event.nativeEvent);
-        onEvent(embeddedEvent);
-    }
-
-    const _onSuccess = (event: any) => {
-        if (!onSuccess) {
-            return;
-        }
-
-        const embeddedSuccess = new EmbeddedSuccess(event.nativeEvent);
-        onSuccess(embeddedSuccess);
-    }
-
-    const _onExit = (event: any) => {
-        if (!onExit) {
-            return;
-        }
-
-        const embeddedExit = new EmbeddedExit(event.nativeEvent);
-        onExit(embeddedExit);
     }
 
     return <NativeEmbeddedLinkView
                 token={token}
                 iOSPresentationStyle={iOSPresentationStyle.toString()}
-                onSuccess={_onSuccess}
-                onEvent={_onEvent}
-                onExit={_onExit}
+                onEmbeddedEvent={onEmbeddedEvent}
                 style={style}
             />
 };

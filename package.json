@@ -39,7 +39,8 @@
   "jest": {
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/example/"
+      "/example/",
+      "/FabricExample"
     ]
   },
   "author": "Plaid",

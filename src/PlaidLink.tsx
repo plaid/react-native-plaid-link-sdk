@@ -4,6 +4,7 @@ import {
   LinkError,
   LinkEventListener,
   LinkExit,
+  LinkIOSPresentationStyle,
   LinkSuccess,
   PlaidLinkComponentProps,
   PlaidLinkProps,
@@ -53,8 +54,11 @@ export const openLink = async (props: PlaidLinkProps) => {
       },
     );
   } else {
-    RNLinksdk.create(config);
-    RNLinksdk.open(
+    NativeModules.RNLinksdk.create(config);
+
+    let presentFullScreen = props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN
+
+    NativeModules.RNLinksdk.open(presentFullScreen,
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {
           props.onSuccess(result);

@@ -31,8 +31,3 @@ jobs:
 
       - name: Unit & Integration tests
         run: npm test
-          
-  build-ios:
-    needs: install-and-test
-    uses: ./.github/workflows/build_test_ios.yml
-    secrets: inherit

@@ -1,4 +1,8 @@
 module.exports = {
   root: true,
-  extends: '@react-native',
+  parser: 'babel-eslint',
+  extends: 'eslint:recommended',
+  env: {
+    node: true,
+  },
 };

@@ -68,7 +68,7 @@ PODS:
   - hermes-engine/Pre-built (0.72.3)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
-  - Plaid (4.5.2)
+  - Plaid (4.4.0)
   - RCT-Folly (2021.07.22.00):
     - boost
     - DoubleConversion
@@ -933,8 +933,8 @@ PODS:
   - React-jsinspector (0.72.3)
   - React-logger (0.72.3):
     - glog
-  - react-native-plaid-link-sdk (10.5.0):
-    - Plaid (~> 4.5.1)
+  - react-native-plaid-link-sdk (10.4.0):
+    - Plaid (~> 4.4.0)
     - React-Core
   - React-NativeModulesApple (0.72.3):
     - hermes-engine
@@ -1116,7 +1116,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - react-native-plaid-link-sdk (from `../node_modules/react-native-plaid-link-sdk`)
+  - react-native-plaid-link-sdk (from `../../node_modules/react-native-plaid-link-sdk`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -1204,7 +1204,7 @@ EXTERNAL SOURCES:
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-plaid-link-sdk:
-    :path: "../node_modules/react-native-plaid-link-sdk"
+    :path: "../../node_modules/react-native-plaid-link-sdk"
   React-NativeModulesApple:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios"
   React-perflogger:
@@ -1262,7 +1262,7 @@ SPEC CHECKSUMS:
   hermes-engine: 10fbd3f62405c41ea07e71973ea61e1878d07322
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  Plaid: 6a08a13b6d569371537604fa82855498d44b02f5
+  Plaid: 29a5506900d372d6d3d77199090b9a7a3af475bd
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: a2faf4bad4e438ca37b2040cb8f7799baa065c18
   RCTTypeSafety: cb09f3e4747b6d18331a15eb05271de7441ca0b3
@@ -1281,7 +1281,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 59d1eb03af7d30b7d66589c410f13151271e8006
   React-jsinspector: b511447170f561157547bc0bef3f169663860be7
   React-logger: c5b527272d5f22eaa09bb3c3a690fee8f237ae95
-  react-native-plaid-link-sdk: c1c98d22229bf053654851deabd0bc35523a958b
+  react-native-plaid-link-sdk: a9fdfbd280a913b324e13021e7e112352efaefd0
   React-NativeModulesApple: c57f3efe0df288a6532b726ad2d0322a9bf38472
   React-perflogger: 6bd153e776e6beed54c56b0847e1220a3ff92ba5
   React-RCTActionSheet: c0b62af44e610e69d9a2049a682f5dba4e9dff17

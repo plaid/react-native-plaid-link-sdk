@@ -64,3 +64,7 @@ yarn-error.log
 
 # testing
 /coverage
+
+# yalc
+.yalc
+yalc.lock

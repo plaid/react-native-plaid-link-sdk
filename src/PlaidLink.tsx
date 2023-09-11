@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
-import { NativeEventEmitter, Platform, TouchableOpacity } from 'react-native';
+import { NativeEventEmitter, Platform, TouchableOpacity, NativeModules } from 'react-native';
+import RNLinksdk from '../fabric/NativePlaidLinkModule';
+
 import {
   LinkError,
   LinkEventListener,
@@ -9,7 +11,7 @@ import {
   PlaidLinkComponentProps,
   PlaidLinkProps,
 } from './Types';
-import RNLinksdk from './fabric/NativePlaidLinkModule';
+
 /**
  * A hook that registers a listener on the Plaid emitter for the 'onEvent' type.
  * The listener is cleaned up when this view is unmounted

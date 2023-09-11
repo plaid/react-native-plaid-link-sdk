@@ -68,7 +68,7 @@ PODS:
   - hermes-engine/Pre-built (0.72.3)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
-  - Plaid (4.4.0)
+  - Plaid (4.5.2)
   - RCT-Folly (2021.07.22.00):
     - boost
     - DoubleConversion
@@ -933,23 +933,9 @@ PODS:
   - React-jsinspector (0.72.3)
   - React-logger (0.72.3):
     - glog
-  - react-native-plaid-link-sdk (10.4.0):
-    - hermes-engine
-    - Plaid (~> 4.4.0)
-    - RCT-Folly (= 2021.07.22.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
+  - react-native-plaid-link-sdk (10.5.0):
+    - Plaid (~> 4.5.1)
     - React-Core
-    - React-debug
-    - React-Fabric
-    - React-graphics
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - React-NativeModulesApple (0.72.3):
     - hermes-engine
     - React-callinvoker
@@ -1276,7 +1262,7 @@ SPEC CHECKSUMS:
   hermes-engine: 10fbd3f62405c41ea07e71973ea61e1878d07322
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  Plaid: 29a5506900d372d6d3d77199090b9a7a3af475bd
+  Plaid: 6a08a13b6d569371537604fa82855498d44b02f5
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: a2faf4bad4e438ca37b2040cb8f7799baa065c18
   RCTTypeSafety: cb09f3e4747b6d18331a15eb05271de7441ca0b3
@@ -1295,12 +1281,12 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 59d1eb03af7d30b7d66589c410f13151271e8006
   React-jsinspector: b511447170f561157547bc0bef3f169663860be7
   React-logger: c5b527272d5f22eaa09bb3c3a690fee8f237ae95
-  react-native-plaid-link-sdk: 1a37be7f12b73666eecf04dcf1e5245f8ef92334
+  react-native-plaid-link-sdk: c1c98d22229bf053654851deabd0bc35523a958b
   React-NativeModulesApple: c57f3efe0df288a6532b726ad2d0322a9bf38472
   React-perflogger: 6bd153e776e6beed54c56b0847e1220a3ff92ba5
   React-RCTActionSheet: c0b62af44e610e69d9a2049a682f5dba4e9dff17
   React-RCTAnimation: f9bf9719258926aea9ecb8a2aa2595d3ff9a6022
-  React-RCTAppDelegate: 0b70b35bd7ac7a5680a7e7e964765db80e393f51
+  React-RCTAppDelegate: a91f6e68523cf7b046bde6744ef1e0eb07ff7346
   React-RCTBlob: c4f1e69a6ef739aa42586b876d637dab4e3b5bed
   React-RCTFabric: 125e7d77057cb62f94e79ac977fd68be042a3bc5
   React-RCTImage: e5798f01aba248416c02a506cf5e6dfcba827638
@@ -1320,4 +1306,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 453224fd59fb85b2ee1e250aa879a4f0c78e2707
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

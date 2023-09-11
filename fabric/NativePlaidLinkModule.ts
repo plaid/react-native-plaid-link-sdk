@@ -1,6 +1,6 @@
 // we use Object type because methods on the native side use NSDictionary and ReadableMap
 // and we want to stay compatible with those
-import {TurboModuleRegistry, TurboModule} from 'react-native';
+import { TurboModuleRegistry, TurboModule } from 'react-native';
 import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 // we do it in this hacky way to trick codegen which does not care about types in callbacks,
 // and at the same time to satisfy ts types

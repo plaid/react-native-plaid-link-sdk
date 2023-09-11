@@ -4,16 +4,13 @@
   "description": "React Native Plaid Link SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "react-native": "index.ts",
+  "react-native": "dist/index.d.ts",
   "files": [
     "dist/**/*",
     "android/**/*",
     "ios/**/*",
     "react-native-plaid-link-sdk.podspec",
-    "fabric/",
-    "index.ts",
-    "PlaidLink.tsx",
-    "Types.ts"
+    "fabric/*",
   ],
   "scripts": {
     "lint": "eslint \"./**/*.{js,jsx}\" --fix",
@@ -40,7 +37,7 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/example/",
-      "/FabricExample"
+      "/fabricExample"
     ]
   },
   "author": "Plaid",

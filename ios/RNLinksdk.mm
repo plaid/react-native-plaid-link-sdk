@@ -118,7 +118,7 @@ NSString* const kRNLinkKitPublicTokenPrefix = @"public-";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"10.4.0"; // SDK_VERSION
+    return @"10.5.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -233,7 +233,7 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
     }
 }
 
-RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess onExit:(RCTResponseSenderBlock)onExit) {
+RCT_EXPORT_METHOD(open:(BOOL)fullScreen onSuccess:(RCTResponseSenderBlock)onSuccess onExit:(RCTResponseSenderBlock)onExit) {
     if (self.linkHandler) {
         self.successCallback = onSuccess;
         self.exitCallback = onExit;
@@ -246,6 +246,12 @@ RCT_EXPORT_METHOD(open:(RCTResponseSenderBlock)onSuccess onExit:(RCTResponseSend
 
         __weak RNLinksdk *weakSelf = self;
         void(^presentationHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
+
+            if (fullScreen) {
+                [linkViewController setModalPresentationStyle:UIModalPresentationOverFullScreen];
+                [linkViewController setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            }
+
             [weakSelf.presentingViewController presentViewController:linkViewController animated:YES completion:nil];
             didPresent = YES;
         };

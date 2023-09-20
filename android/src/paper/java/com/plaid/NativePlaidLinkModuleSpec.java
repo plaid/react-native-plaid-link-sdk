@@ -20,10 +20,18 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReactModuleWithSpec;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
+import javax.annotation.Nonnull;
 
 public abstract class NativePlaidLinkModuleSpec extends ReactContextBaseJavaModule implements ReactModuleWithSpec, TurboModule {
+  public static final String NAME = "RNLinksdk";
+
   public NativePlaidLinkModuleSpec(ReactApplicationContext reactContext) {
     super(reactContext);
+  }
+
+  @Override
+  public @Nonnull String getName() {
+    return NAME;
   }
 
   @ReactMethod
@@ -36,7 +44,7 @@ public abstract class NativePlaidLinkModuleSpec extends ReactContextBaseJavaModu
 
   @ReactMethod
   @DoNotStrip
-  public abstract void open(Callback onSuccess, Callback onExit);
+  public abstract void open(boolean fullScreen, Callback onSuccess, Callback onExit);
 
   @ReactMethod
   @DoNotStrip

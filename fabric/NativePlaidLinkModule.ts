@@ -4,12 +4,13 @@ import {TurboModuleRegistry, TurboModule} from 'react-native';
 import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 // we do it in this hacky way to trick codegen which does not care about types in callbacks,
 // and at the same time to satisfy ts types
-import { LinkSuccess as UnsafeObject, LinkExit as Double, LinkError as Float } from '../Types';
+import { LinkSuccess as UnsafeObject, LinkExit as Double, LinkError as Float } from '../src/Types';
 
 export interface Spec extends TurboModule {
     continueFromRedirectUriString(redirectUriString: string): void;
     create(configuration: Object): void;
     open(
+        fullScreen: boolean,
         onSuccess: (success: UnsafeObject) => void,
         onExit: (error: Float, result: Double) => void,
       ): void;

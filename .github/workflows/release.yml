@@ -1,0 +1,33 @@
+name: Test SDK After Release
+  
+# configure manual trigger
+on:
+  workflow_dispatch:
+
+jobs:
+  install-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 19
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+          cache: "npm"
+
+      - name: Install Node modules
+        run: npm ci
+
+      - name: Linting
+        run: npm run lint
+
+      - name: Unit & Integration tests
+        run: npm test
+          
+  build-ios:
+    needs: install-and-test
+    uses: ./.github/workflows/release_ios.yml
+    secrets: inherit

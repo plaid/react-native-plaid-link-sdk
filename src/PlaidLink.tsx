@@ -4,11 +4,12 @@ import {
   LinkError,
   LinkEventListener,
   LinkExit,
+  LinkIOSPresentationStyle,
   LinkSuccess,
   PlaidLinkComponentProps,
   PlaidLinkProps,
 } from './Types';
-import RNLinksdk from './fabric/NativePlaidLinkModule';
+import RNLinksdk from '../fabric/NativePlaidLinkModule';
 /**
  * A hook that registers a listener on the Plaid emitter for the 'onEvent' type.
  * The listener is cleaned up when this view is unmounted
@@ -54,7 +55,12 @@ export const openLink = async (props: PlaidLinkProps) => {
     );
   } else {
     RNLinksdk.create(config);
+
+    let presentFullScreen =
+      props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN;
+
     RNLinksdk.open(
+      presentFullScreen,
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {
           props.onSuccess(result);

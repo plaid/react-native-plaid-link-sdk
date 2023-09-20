@@ -283,7 +283,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     Log.e("PlaidModule", "create is not available on Android")
   }
 
-  override fun open(onSuccess: Callback?, onExit: Callback?) {
+  override fun open(fullScreen: Boolean, onSuccess: Callback?, onExit: Callback?) {
     Log.e("PlaidModule", "open is not available on Android")
   }
 

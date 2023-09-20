@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   if fabric_enabled
     install_modules_dependencies(s)
   else
-    s.platforms = { :ios => "9.0", :tvos => "9.0" }
+    s.platforms = { :ios => "11.0", :tvos => "11.0" }
 
     s.dependency "React-Core"
   end

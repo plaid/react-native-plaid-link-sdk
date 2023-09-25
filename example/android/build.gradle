@@ -21,9 +21,3 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version" // <- add this line
     }
 }
-
-repositories {
-    google()
-    mavenCentral()
-    maven { url = "https://artifact.plaid.io/artifactory/maven-plaid" }
-}

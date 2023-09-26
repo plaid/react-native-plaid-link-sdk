@@ -13,7 +13,7 @@ import java.util.Map;
 public class PLKEmbeddedViewManager extends SimpleViewManager<PLKEmbeddedView> {
 
     public static final String REACT_CLASS = "PLKEmbeddedView";
-    public static final  String EVENT_NAME = "onEmbeddedEvent";
+    public static final String EVENT_NAME = "onEmbeddedEvent";
 
     @Override
     public String getName() { return REACT_CLASS; }

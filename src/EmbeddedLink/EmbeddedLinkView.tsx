@@ -60,9 +60,7 @@ export const EmbeddedLinkView: React.FC<EmbeddedLinkProps> = (props) => {
     const {token, iOSPresentationStyle, onEvent, onSuccess, onExit, style} = props;
 
     const onEmbeddedEvent = (event: any) => {
-        console.log('onEmbeddedEvent ', event.nativeEvent);
-        console.log('onEmbeddedEvent ', event.nativeEvent.embeddedEventName);
-
+        
         switch (event.nativeEvent.embeddedEventName) {
             case 'onSuccess': {
                 if (!onSuccess) { return; }

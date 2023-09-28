@@ -80,7 +80,6 @@ class PLKEmbeddedView @JvmOverloads constructor(
 
   private fun setupOnEventListener() {
     setLinkEventListener { event: LinkEvent ->
-      Log.d(TAG, "onEvent $event")
       try {
         val jsonString = jsonConverter.convert(event)
         val jsonObject = JSONObject(jsonString)
@@ -100,26 +99,27 @@ class PLKEmbeddedView @JvmOverloads constructor(
   override fun handleActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
     if (requestCode == LINK_ACTIVITY_REQUEST_CODE) {
       val openPlaidLink = OpenPlaidLink()
-      val linkResult = openPlaidLink.parseResult(resultCode, data)
-      if (linkResult is LinkSuccess) {
-        Log.d(TAG, "Link Success: $linkResult")
-        try {
-          val jsonString = jsonConverter.convert(linkResult)
-          val jsonObject = JSONObject(jsonString)
-          val successMap = convertJsonToMap(jsonObject)
-          val eventName = PLKEmbeddedViewManager.EVENT_NAME
-          successMap.putString("embeddedEventName", "onSuccess")
-          val reactContext = context as ReactContext
-          reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, eventName, successMap)
-        } catch (e: JSONException) {
-          Log.e(TAG, "JSON Exception: $e")
-          sendLinkExitFrom(e)
+      when (val linkResult = openPlaidLink.parseResult(resultCode, data)) {
+        is LinkSuccess -> {
+          try {
+            val jsonString = jsonConverter.convert(linkResult)
+            val jsonObject = JSONObject(jsonString)
+            val successMap = convertJsonToMap(jsonObject)
+            val eventName = PLKEmbeddedViewManager.EVENT_NAME
+            successMap.putString("embeddedEventName", "onSuccess")
+            val reactContext = context as ReactContext
+            reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, eventName, successMap)
+          } catch (e: JSONException) {
+            Log.e(TAG, "JSON Exception parsing LinkSuccess")
+            sendLinkExitFrom(e)
+          }
         }
-      } else if (linkResult is LinkExit) {
-        Log.d(TAG, "Link Exit: $linkResult")
-        handleLinkExit(linkResult)
-      } else {
-        Log.d(TAG, "Unhandled Result: $linkResult")
+        is LinkExit -> {
+          handleLinkExit(linkResult)
+        }
+        else -> {
+          Log.e(TAG, "Unhandled LinkResult")
+        }
       }
     }
   }

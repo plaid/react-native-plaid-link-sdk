@@ -28,6 +28,6 @@ export const styles = StyleSheet.create({
   embedded: {
     width: '95%',
     alignSelf: 'center',
-    height: 310,
+    height: 360,
   },
 });

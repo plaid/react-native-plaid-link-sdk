@@ -512,13 +512,15 @@ export enum LinkEventViewName {
 /// FULL_SCREEN is the converts to UIModalPresentationOverFullScreen on the native side.
 /// MODAL will use the default presentation style for iOS which is UIModalPresentationAutomatic.
 export enum LinkIOSPresentationStyle {
-    FULL_SCREEN,
-    MODAL
+    FULL_SCREEN = 'FULL_SCREEN',
+    MODAL = 'MODAL'
 }
 
 export type LinkSuccessListener = (LinkSuccess: LinkSuccess) => void
 
 export type LinkExitListener = (LinkExit: LinkExit) => void
+
+export type LinkOnEventListener = (LinkEvent: LinkEvent) => void
 
 export type PlaidLinkConfiguration = LinkTokenConfiguration | LinkPublicKeyConfiguration
 

@@ -10,6 +10,7 @@ import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.plaid.gson.PlaidJsonConverter
 import com.plaid.link.Plaid
@@ -26,8 +27,11 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
 
+@ReactModule(name = PlaidModule.TAG)
 class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext), ActivityEventListener {
+
+  val mActivityResultManager by lazy { ActivityResultManager() }
 
   private val jsonConverter by lazy { PlaidJsonConverter() }
 
@@ -54,6 +58,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     private const val LINK_TOKEN_PREFIX = "link"
     private const val TYPE = "type"
     private const val SUBTYPE = "subtype"
+
+    const val TAG = "PlaidAndroid"
   }
 
   override fun getName(): String {
@@ -308,6 +314,13 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     resultCode: Int,
     data: Intent?
   ) {
+
+    // Dispath to embedded to handle the callback.
+    if (mActivityResultManager[requestCode] != null) {
+      mActivityResultManager.dispatch(requestCode, resultCode, data)
+      return
+    }
+
     val linkHandler = LinkResultHandler(
       onSuccess = { success ->
         val result = convertJsonToMap(JSONObject(jsonConverter.convert(success)))

@@ -1,5 +1,6 @@
 package com.plaidrndemo;
 
+import android.os.Bundle;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
@@ -14,6 +15,15 @@ public class MainActivity extends ReactActivity {
   @Override
   protected String getMainComponentName() {
     return "plaidRNDemo";
+  }
+
+  /**
+   * A workaround for a crash introduced by the react-native-screens package.
+   * For more details see <a href="https://github.com/software-mansion/react-native-screens/issues/17#issuecomment-424704067">[github issue.]</a>
+   */
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(null);
   }
 
   /**

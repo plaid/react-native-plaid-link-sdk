@@ -1007,6 +1007,24 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"SCREENING";
         case PLKViewNameValueVerifySMS:
             return @"VERIFY_SMS";
+        case PLKViewNameValueDataTransparency:
+            return @"DATA_TRANSPARENCY";
+        case PLKViewNameValueDataTransparencyConsent:
+            return @"DATA_TRANSPARENCY_CONSENT";
+        case PLKViewNameValueSelectAuthType:
+            return @"SELECT_AUTH_TYPE";
+        case PLKViewNameValueSelectBrand:
+            return @"SELECT_BRAND";
+        case PLKViewNameValueNumbersSelectInstitution:
+            return @"NUMBERS_SELECT_INSTITUTION";
+        case PLKViewNameValueSubmitPhone:
+            return @"SUBMIT_PHONE";
+        case PLKViewNameValueVerifyPhone:
+            return @"VERIFY_PHONE";
+        case PLKViewNameValueSelectSavedInstitution:
+            return @"SELECT_SAVED_INSTITUTION";
+        case PLKViewNameValueSelectSavedAccount:
+            return @"SELECT_SAVED_ACCOUNT";
     }
 
     return @"unknown";

@@ -262,8 +262,26 @@ RCT_EXPORT_METHOD(open: (BOOL)fullScreen :(RCTResponseSenderBlock)onSuccess :(RC
         };
         [self.linkHandler openWithPresentationHandler:presentationHandler dismissalHandler:dismissalHandler options:options];
     } else {
-        id error = self.creationError ? RCTJSErrorFromNSError(self.creationError) : RCTMakeError(@"create was not called", nil, nil);
-        onExit(@[error]);
+        NSString *errorMessage = self.creationError ? self.creationError.userInfo[@"message"] : @"Create was not called.";
+        NSString *errorCode = self.creationError ? [@(self.creationError.code) stringValue] : @"-1";
+
+        NSDictionary *linkExit = @{
+            @"displayMessage": errorMessage,
+            @"errorCode": errorCode,
+            @"errorType": @"creation error",
+            @"errorMessage": errorMessage,
+            @"errorDisplayMessage": errorMessage,
+            @"errorJson": [NSNull null],
+            @"metadata": @{
+                @"linkSessionId": [NSNull null],
+                @"institution": [NSNull null],
+                @"status": [NSNull null],
+                @"requestId": [NSNull null],
+                @"metadataJson": [NSNull null],
+            },
+        };
+
+        onExit(@[linkExit]);
     }
 }
 

@@ -14,8 +14,8 @@ class PLKEmbeddedViewManager : SimpleViewManager<PLKEmbeddedView>() {
   }
 
   @ReactProp(name = "token")
-  fun setToken(view: PLKEmbeddedView, token: String) {
-    view.setToken(token)
+  fun setToken(view: PLKEmbeddedView, token: String?) {
+    view.setToken(token ?: "")
   }
 
   override fun getExportedCustomBubblingEventTypeConstants(): Map<String, Any> {

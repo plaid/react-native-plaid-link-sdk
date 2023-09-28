@@ -40,8 +40,8 @@ class PLKEmbeddedView @JvmOverloads constructor(
     setupOnEventListener()
   }
 
-  fun setToken(token: String?) {
-    val embeddedView = createEmbedded(token ?: "")
+  fun setToken(token: String) {
+    val embeddedView = createEmbedded(token)
     val frameLayout = findViewById<FrameLayout>(R.id.embedded_frame_layout)
     frameLayout.addView(embeddedView)
   }

@@ -434,6 +434,7 @@ export interface LinkEvent {
 }
 
 export interface LinkEventMetadata {
+    accountNumberMask?: string;
     linkSessionId: string;
     mfaType?: string;
     requestId?: string;
@@ -445,6 +446,8 @@ export interface LinkEventMetadata {
     institutionId?: string;
     institutionName?: string;
     institutionSearchQuery?: string;
+    isUpdateMode?: string;
+    matchReason?: string;
   // see possible values for selection at https://plaid.com/docs/link/web/#link-web-onevent-selection
     selection?: null | string;
     timestamp: string;

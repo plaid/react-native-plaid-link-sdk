@@ -15,3 +15,7 @@ export {
     dismissLink,
     usePlaidEmitter,
 };
+
+// Components
+
+export { EmbeddedLinkView } from './EmbeddedLink/EmbeddedLinkView';

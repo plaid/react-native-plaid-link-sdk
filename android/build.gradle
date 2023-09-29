@@ -29,6 +29,10 @@ apply plugin: 'com.android.library'
 apply plugin: "kotlin-android"
 
 android {
+    def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0].toInteger()
+    if (agpVersion >= 7) {
+      namespace 'com.plaid'
+    }
     compileSdkVersion 31
 
     defaultConfig {
@@ -40,9 +44,12 @@ android {
     lintOptions {
         abortOnError false
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+
+    if (agpVersion < 8) { 
+      compileOptions {
+          sourceCompatibility JavaVersion.VERSION_1_8
+          targetCompatibility JavaVersion.VERSION_1_8
+      }
     }
 
     buildTypes {
@@ -63,7 +70,7 @@ repositories {
 
 dependencies {
     implementation "com.facebook.react:react-native:+"
-    implementation "com.plaid.link:sdk-core:3.13.2"
+    implementation "com.plaid.link:sdk-core:3.14.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
 }

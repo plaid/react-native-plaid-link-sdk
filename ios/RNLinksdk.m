@@ -117,7 +117,7 @@ NSString* const kRNLinkKitPublicTokenPrefix = @"public-";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"10.5.0"; // SDK_VERSION
+    return @"10.6.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -262,8 +262,26 @@ RCT_EXPORT_METHOD(open: (BOOL)fullScreen :(RCTResponseSenderBlock)onSuccess :(RC
         };
         [self.linkHandler openWithPresentationHandler:presentationHandler dismissalHandler:dismissalHandler options:options];
     } else {
-        id error = self.creationError ? RCTJSErrorFromNSError(self.creationError) : RCTMakeError(@"create was not called", nil, nil);
-        onExit(@[error]);
+        NSString *errorMessage = self.creationError ? self.creationError.userInfo[@"message"] : @"Create was not called.";
+        NSString *errorCode = self.creationError ? [@(self.creationError.code) stringValue] : @"-1";
+
+        NSDictionary *linkExit = @{
+            @"displayMessage": errorMessage,
+            @"errorCode": errorCode,
+            @"errorType": @"creation error",
+            @"errorMessage": errorMessage,
+            @"errorDisplayMessage": errorMessage,
+            @"errorJson": [NSNull null],
+            @"metadata": @{
+                @"linkSessionId": [NSNull null],
+                @"institution": [NSNull null],
+                @"status": [NSNull null],
+                @"requestId": [NSNull null],
+                @"metadataJson": [NSNull null],
+            },
+        };
+
+        onExit(@[linkExit]);
     }
 }
 
@@ -712,6 +730,15 @@ RCT_EXPORT_METHOD(dismiss) {
             @"institution_name": metadata.institutionName ?: @"",
             @"institutionSearchQuery": metadata.institutionSearchQuery ?: @"",
             @"institution_search_query": metadata.institutionSearchQuery ?: @"",
+            @"accountNumberMask": metadata.accountNumberMask ?: @"",
+            @"account_number_mask": metadata.accountNumberMask ?: @"",
+            @"isUpdateMode": metadata.isUpdateMode ?: @"",
+            @"is_update_mode": metadata.isUpdateMode ?: @"",
+            @"matchReason": metadata.matchReason ?: @"",
+            @"match_reason": metadata.matchReason ?: @"",
+            @"routingNumber": metadata.routingNumber ?: @"",
+            @"routing_number": metadata.routingNumber ?: @"",
+            @"selection": metadata.selection ?: @"",
             @"linkSessionId": metadata.linkSessionID ?: @"",
             @"link_session_id": metadata.linkSessionID ?: @"",
             @"mfaType": [self stringForMfaType:metadata.mfaType] ?: @"",
@@ -836,6 +863,34 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"SUBMIT_MFA";
         case PLKEventNameValueTransitionView:
             return @"TRANSITION_VIEW";
+        case PLKEventNameValueIdentityVerificationPendingReviewSession:
+            return @"IDENTITY_VERIFICATION_PENDING_REVIEW_SESSION";
+        case PLKEventNameValueSelectFilteredInstitution:
+            return @"SELECT_FILTERED_INSTITUTION";
+        case PLKEventNameValueSelectBrand:
+            return @"SELECT_BRAND";
+        case PLKEventNameValueSelectAuthType:
+            return @"SELECT_AUTH_TYPE";
+        case PLKEventNameValueSubmitAccountNumber:
+            return @"SUBMIT_ACCOUNT_NUMBER";
+        case PLKEventNameValueSubmitDocuments:
+            return @"SUBMIT_DOCUMENTS";
+        case PLKEventNameValueSubmitDocumentsSuccess:
+            return @"SUBMIT_DOCUMENTS_SUCCESS";
+        case PLKEventNameValueSubmitDocumentsError:
+            return @"SUBMIT_DOCUMENTS_ERROR";
+        case PLKEventNameValueSubmitRoutingNumber:
+            return @"SUBMIT_ROUTING_NUMBER";
+        case PLKEventNameValueViewDataTypes:
+            return @"VIEW_DATA_TYPES";
+        case PLKEventNameValueSubmitPhone:
+            return @"SUBMIT_PHONE";
+        case PLKEventNameValueSkipSubmitPhone:
+            return @"SKIP_SUBMIT_PHONE";
+        case PLKEventNameValueVerifyPhone:
+            return @"VERIFY_PHONE";
+        case PLKEventNameValueConnectNewInstitution:
+            return @"CONNECT_NEW_INSTITUTION";
     }
      return @"unknown";
 }
@@ -961,6 +1016,24 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"SCREENING";
         case PLKViewNameValueVerifySMS:
             return @"VERIFY_SMS";
+        case PLKViewNameValueDataTransparency:
+            return @"DATA_TRANSPARENCY";
+        case PLKViewNameValueDataTransparencyConsent:
+            return @"DATA_TRANSPARENCY_CONSENT";
+        case PLKViewNameValueSelectAuthType:
+            return @"SELECT_AUTH_TYPE";
+        case PLKViewNameValueSelectBrand:
+            return @"SELECT_BRAND";
+        case PLKViewNameValueNumbersSelectInstitution:
+            return @"NUMBERS_SELECT_INSTITUTION";
+        case PLKViewNameValueSubmitPhone:
+            return @"SUBMIT_PHONE";
+        case PLKViewNameValueVerifyPhone:
+            return @"VERIFY_PHONE";
+        case PLKViewNameValueSelectSavedInstitution:
+            return @"SELECT_SAVED_INSTITUTION";
+        case PLKViewNameValueSelectSavedAccount:
+            return @"SELECT_SAVED_ACCOUNT";
     }
 
     return @"unknown";

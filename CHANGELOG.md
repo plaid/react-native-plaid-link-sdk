@@ -14,9 +14,10 @@
 
 - Resolve Issue [501](https://github.com/plaid/react-native-plaid-link-sdk/issues/501). You will now receive a LinkExit for any configuration errors.
 
+
 ### Android
 
-[Android SDK 3.13.2](https://github.com/plaid/plaid-link-android/releases/tag/v3.13.2)
+Update Android SDK from [3.13.2](https://github.com/plaid/plaid-link-android/releases/tag/v3.13.2) to [3.14.0](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.0)
 
 #### Requirements
 
@@ -27,11 +28,13 @@
 
 #### Changes
 
-- Changed LinkRedirectActivity theme from Material to MaterialComponents.
+- Add IDENTITY_VERIFICATION_PENDING_REVIEW_SESSION, SELECT_BRAND, SELECT_FILTERED_INSTITUTION, SUBMIT_ACCOUNT_NUMBER, SUBMIT_DOCUMENTS, SUBMIT_DOCUMENTS_SUCCESS, SUBMIT_DOCUMENTS_ERROR, VIEW_DATA_TYPES, SUBMIT_PHONE, SKIP_SUBMIT_PHONE, VERIFY_PHONE, and CONNECT_NEW_INSTITUTION event names.
+- Add DATA_TRANSPARENCY, DATA_TRANSPARENCY_CONSENT, NUMBERS_SELECT_INSTITUTION, SUBMIT_PHONE, VERIFY_PHONE, SELECT_SAVED_INSTITUTION, SELECT_SAVED_ACCOUNT, and SELECT_BRAND event view names.
+- Add is_update_mode, match_reason, and account_number_mask event metadata fields.
 
 ### iOS
 
-[iOS SDK 4.5.1](https://github.com/plaid/plaid-link-ios/releases/tag/4.5.1)
+Update iOS SDK from [4.5.1](https://github.com/plaid/plaid-link-ios/releases/tag/4.5.1) to [4.6.2](https://github.com/plaid/plaid-link-ios/releases/tag/4.6.2)
 
 #### Requirements
 
@@ -42,8 +45,14 @@
 
 #### Changes
 
-- Add identityVerificationPendingReviewSession event name.
-- Bug fixes.
+- Reduce SDK Size from 17.6MB to 14.7MB.
+- Expose toObjC methods for React Native SDK.
+- Only displays initial loading indicator for sessions with high latency on initial load.
+- Fix double navigation bar for charles schwab.
+- Add new event and view names.
+- Add missing event metadata fields.
+- Fix transparent loading state during OAuth redirect.
+- Resolves bug where half-pane Link header could overlap the status bar.
 
 ## LinkKit V10.5.0 — 2023-08-08
 

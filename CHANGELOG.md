@@ -38,7 +38,7 @@ Update Android SDK from [3.13.2](https://github.com/plaid/plaid-link-android/rel
 
 ### iOS
 
-Update iOS SDK from [4.5.1](https://github.com/plaid/plaid-link-ios/releases/tag/4.5.1) to [4.6.2](https://github.com/plaid/plaid-link-ios/releases/tag/4.6.2)
+Update iOS SDK from [4.5.1](https://github.com/plaid/plaid-link-ios/releases/tag/4.5.1) to [4.6.4](https://github.com/plaid/plaid-link-ios/releases/tag/4.6.4)
 
 #### Requirements
 

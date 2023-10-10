@@ -1,5 +1,43 @@
 # RELEASES
 
+## LinkKit V10.6.1 — 2023-10-10
+
+### React Native
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
+
+#### Changes
+
+- Resolve Issue [565](https://github.com/plaid/react-native-plaid-link-sdk/issues/565). Where NPM package was in excess of 100mb.
+
+
+### Android
+
+Android SDK [3.14.0](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.0)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+
+
+### iOS
+
+iOS SDK [4.6.4](https://github.com/plaid/plaid-link-ios/releases/tag/4.6.4)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 14.0 |
+| iOS | >= 11.0 |
+
+
 ## LinkKit V10.6.0 — 2023-09-29
 
 ### React Native

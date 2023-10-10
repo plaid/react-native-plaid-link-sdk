@@ -4,7 +4,7 @@
   <application>
     <meta-data
       android:name="com.plaid.link.react_native"
-      android:value="10.6.0" />
+      android:value="10.6.1" />
   </application>
 
 </manifest>

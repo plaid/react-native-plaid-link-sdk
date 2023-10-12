@@ -32,7 +32,7 @@ internal final class PLKEmbeddedView: UIView {
 
                 let plkLinkSuccess = success.toObjC
                 var dictionary = RNLinksdk.dictionary(from: plkLinkSuccess) ?? [:]
-                dictionary[embeddedEventName] = "onSuccess"
+                dictionary[self.embeddedEventName] = "onSuccess"
                 self.onEmbeddedEvent?(dictionary)
         })
 
@@ -41,7 +41,7 @@ internal final class PLKEmbeddedView: UIView {
 
             let plkLinkEvent = event.toObjC
             var dictionary = RNLinksdk.dictionary(from: plkLinkEvent) ?? [:]
-            dictionary[embeddedEventName] = "onEvent"
+            dictionary[self.embeddedEventName] = "onEvent"
             self.onEmbeddedEvent?(dictionary)
         }
 
@@ -50,7 +50,7 @@ internal final class PLKEmbeddedView: UIView {
 
             let plkLinkExit = exit.toObjC
             var dictionary = RNLinksdk.dictionary(from: plkLinkExit) ?? [:]
-            dictionary[embeddedEventName] = "onExit"
+            dictionary[self.embeddedEventName] = "onExit"
             self.onEmbeddedEvent?(dictionary)
         }
 

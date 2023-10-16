@@ -64,7 +64,7 @@ internal final class PLKEmbeddedView: UIView {
         }
     }
 
-    private func makeEmbeddedView(rctViewController: UIViewController, handler: Handler) throws -> UIView {
+    private func makeEmbeddedView(rctViewController: UIViewController, handler: Handler) -> UIView {
         self.linkHandler = handler
 
         let presentationMethod: PresentationMethod
@@ -80,15 +80,7 @@ internal final class PLKEmbeddedView: UIView {
             presentationMethod = .viewController(rctViewController)
         }
 
-        let embeddedResult = handler.createEmbeddedView(presentUsing: presentationMethod)
-
-        switch embeddedResult {
-        case .failure(let error):
-            throw error
-
-        case .success(let embeddedView):
-            return embeddedView
-        }
+        return handler.createEmbeddedView(presentUsing: presentationMethod)
     }
 
     private func createNativeEmbeddedView() {
@@ -97,7 +89,7 @@ internal final class PLKEmbeddedView: UIView {
 
         do {
             let handler = try makeHandler()
-            let embeddedView = try makeEmbeddedView(rctViewController: rctViewController, handler: handler)
+            let embeddedView = makeEmbeddedView(rctViewController: rctViewController, handler: handler)
             setup(embeddedView: embeddedView)
         } catch {
             let dict: [String: Any] = [

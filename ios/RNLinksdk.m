@@ -5,40 +5,11 @@
 #import <React/RCTConvert.h>
 #import <React/RCTUtils.h>
 
-#import <objc/runtime.h>
-
-static NSString* const kRNLinkKitConfigPublicKeyKey = @"publicKey";
-static NSString* const kRNLinkKitConfigEnvKey = @"environment";
-static NSString* const kRNLinkKitConfigProductsKey = @"products";
-static NSString* const kRNLinkKitConfigClientNameKey = @"clientName";
-static NSString* const kRNLinkKitConfigWebhookKey = @"webhook";
-static NSString* const kRNLinkKitConfigLinkCustomizationName = @"linkCustomizationName";
-static NSString* const kRNLinkKitConfigLinkTokenKey = @"token";
-static NSString* const kRNLinkKitConfigSelectAccountKey = @"selectAccount";
-static NSString* const kRNLinkKitConfigUserLegalNameKey = @"userLegalName";
-static NSString* const kRNLinkKitConfigUserEmailAddressKey = @"userEmailAddress";
-static NSString* const kRNLinkKitConfigUserPhoneNumberKey = @"userPhoneNumber";
-static NSString* const kRNLinkKitConfigAccountSubtypes = @"accountSubtypes";
-static NSString* const kRNLinkKitConfigCountryCodesKey = @"countryCodes";
-static NSString* const kRNLinkKitConfigLanguageKey = @"language";
-static NSString* const kRNLinkKitConfigInstitutionKey = @"institution";
-static NSString* const kRNLinkKitConfigNoLoadingStateKey = @"noLoadingState";
-static NSString* const kRNLinkKitConfigLongtailAuthKey = @"longtailAuth";
-static NSString* const kRNLinkKitConfigApiVersionKey = @"apiVersion";
-static NSString* const kRNLinkKitConfigOAuthRedirectUriKeyPath = @"oauthConfiguration.redirectUri";
-static NSString* const kRNLinkKitConfigOAuthNonceKeyPath = @"oauthConfiguration.nonce";
-
 static NSString* const kRNLinkKitOnEventEvent = @"onEvent";
 static NSString* const kRNLinkKitEventErrorKey = @"error";
 static NSString* const kRNLinkKitEventNameKey = @"event";
 static NSString* const kRNLinkKitEventMetadataKey = @"metadata";
 static NSString* const kRNLinkKitVersionConstant = @"version";
-
-NSString* const kRNLinkKitLinkTokenPrefix = @"link-";
-NSString* const kRNLinkKitItemAddTokenPrefix = @"item-add-";
-NSString* const kRNLinkKitPaymentTokenPrefix = @"payment";
-NSString* const kRNLinkKitDepositSwitchTokenPrefix = @"deposit-switch-";
-NSString* const kRNLinkKitPublicTokenPrefix = @"public-";
 
 @interface RNLinksdk ()
 @property (nonatomic, strong) id<PLKHandler> linkHandler;
@@ -50,78 +21,17 @@ NSString* const kRNLinkKitPublicTokenPrefix = @"public-";
 @property (nonatomic, nullable, strong) NSError *creationError;
 @end
 
-#pragma mark -
-
-// Category to ensure both the old, typo spelling of `insitution` and
-// the corrected spelling `institution` are visible to the implementation
-// to allow compiling against any LinkKit dependency
-@interface PLKSuccessMetadata (InstitutionTypoFix)
-
-- (PLKInstitution * __nonnull)institution;
-- (PLKInstitution * __nonnull)insitution;
-
-@end
-
-// Class to have a distinct +load method to hook into the runtime before
-// SDK logic executes
-@interface PLKSuccessMetadataTypoFix : NSObject
-
-@end
-
-@implementation PLKSuccessMetadataTypoFix
-
-+ (void)load {
-    static dispatch_once_t onceToken;
-    // dispatch_once out of an abundance of caution in case +load is ever called multiple times
-    dispatch_once(&onceToken, ^{
-        Class targetClass = NSClassFromString(@"PLKSuccessMetadata");
-        if (targetClass == Nil) {
-          return;
-        }
-
-        SEL typoSel = NSSelectorFromString(@"insitution");
-        SEL correctSel = NSSelectorFromString(@"institution");
-
-        BOOL respondsToTypoSel = class_respondsToSelector(targetClass, typoSel);
-        BOOL respondsToCorrectSel = class_respondsToSelector(targetClass, correctSel);
-
-        BOOL respondsToBoth = respondsToCorrectSel && respondsToTypoSel;
-
-        // If PLKSuccessMetadata responds to both, no swizzling is necessary
-        if (respondsToBoth) {
-            return;
-        }
-
-        BOOL respondsToNeither = !(respondsToCorrectSel || respondsToTypoSel);
-        // If PLKSuccessMetadata responds to neither, swizzling cannot fix this
-        if (respondsToNeither) {
-            NSString *githubIssueURLString = @"https://github.com/plaid/react-native-plaid-link-sdk/issues/new?assignees=&labels=&template=bug_report.md&title=";
-            NSAssert(NO, @"%@ does not respond to correctly spelled %@ or legacy, typo %@. This is a bug in either react-native-plaid-link-sdk, or LinkKit. Please file an issue at: %@", NSStringFromClass(targetClass), NSStringFromSelector(correctSel), NSStringFromSelector(typoSel), githubIssueURLString);
-            return;
-        }
-
-        SEL existingSel = respondsToCorrectSel ? correctSel : typoSel;
-        SEL missingSel = respondsToTypoSel ? correctSel : typoSel;
-
-        Method method = class_getInstanceMethod(targetClass, existingSel);
-        const char* types = method_getTypeEncoding(method);
-        IMP implementation = class_getMethodImplementation(targetClass, existingSel);
-        class_addMethod(targetClass, missingSel, implementation, types);
-    });
-}
-
-@end
 
 @implementation RNLinksdk
 
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"10.6.3"; // SDK_VERSION
+    return @"11.0.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
-    return @"1.1.0";
+    return @"2.0.0";
 }
 
 + (BOOL)requiresMainQueueSetup
@@ -156,22 +66,9 @@ RCT_EXPORT_MODULE();
     self.hasObservers = NO;
 }
 
-RCT_EXPORT_METHOD(continueFromRedirectUriString:(NSString *)redirectUriString) {
-    NSURL *receivedRedirectUri = (id)redirectUriString == [NSNull null] ? nil : [NSURL URLWithString:redirectUriString];
-
-    if (receivedRedirectUri && self.linkHandler) {
-        [self.linkHandler continueWithRedirectUri:receivedRedirectUri];
-    }
-}
-
-RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
-    // Configuration
-    NSString *linkTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
-    NSString *institution = [RCTConvert NSString:configuration[kRNLinkKitConfigInstitutionKey]];
-
-    BOOL isUsingLinkToken = [linkTokenInput length] && [linkTokenInput hasPrefix:kRNLinkKitLinkTokenPrefix];
-
+RCT_EXPORT_METHOD(create:(NSString*)token :(BOOL)noLoadingState) {
     __weak typeof(self) weakSelf = self;
+
     void (^onSuccess)(PLKLinkSuccess *) = ^(PLKLinkSuccess *success) {
         __typeof(weakSelf) strongSelf = weakSelf;
 
@@ -205,31 +102,14 @@ RCT_EXPORT_METHOD(create:(NSDictionary*)configuration) {
         }
     };
 
-    if (isUsingLinkToken) {
-        PLKLinkTokenConfiguration *config = [self getLinkTokenConfiguration:configuration
-                                                           onSuccessHandler:onSuccess];
-        config.onEvent = onEvent;
-        config.onExit = onExit;
-        config.noLoadingState = configuration[kRNLinkKitConfigNoLoadingStateKey];
+    PLKLinkTokenConfiguration *config = [PLKLinkTokenConfiguration createWithToken:token onSuccess:onSuccess];
+    config.onEvent = onEvent;
+    config.onExit = onExit;
+    config.noLoadingState = noLoadingState;
 
-        NSError *creationError = nil;
-        self.linkHandler = [PLKPlaid createWithLinkTokenConfiguration:config
-                                                                error:&creationError];
-        self.creationError = creationError;
-    } else {
-        PLKLinkPublicKeyConfiguration *config = [self getLegacyLinkConfiguration:configuration
-                                                                onSuccessHandler:onSuccess];
-        config.onEvent = onEvent;
-        config.onExit = onExit;
-        NSError *creationError = nil;
-        self.linkHandler = [PLKPlaid createWithLinkPublicKeyConfiguration:config
-                                                                    error:&creationError];
-        self.creationError = creationError;
-    }
-
-    if ([institution length] > 0) {
-        self.institutionID = institution;
-    }
+    NSError *creationError = nil;
+    self.linkHandler = [PLKPlaid createWithLinkTokenConfiguration:config error:&creationError];
+    self.creationError = creationError;
 }
 
 RCT_EXPORT_METHOD(open: (BOOL)fullScreen :(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBlock)onExit) {
@@ -260,7 +140,7 @@ RCT_EXPORT_METHOD(open: (BOOL)fullScreen :(RCTResponseSenderBlock)onSuccess :(RC
                 didPresent = NO;
             }
         };
-        [self.linkHandler openWithPresentationHandler:presentationHandler dismissalHandler:dismissalHandler options:options];
+        [self.linkHandler openWithPresentationHandler:presentationHandler dismissalHandler:dismissalHandler];
     } else {
         NSString *errorMessage = self.creationError ? self.creationError.userInfo[@"message"] : @"Create was not called.";
         NSString *errorCode = self.creationError ? [@(self.creationError.code) stringValue] : @"-1";
@@ -292,87 +172,6 @@ RCT_EXPORT_METHOD(dismiss) {
     self.linkHandler = nil;
 }
 
-- (PLKLinkTokenConfiguration *)getLinkTokenConfiguration:(NSDictionary *)configuration
-                                        onSuccessHandler:(void(^)(PLKLinkSuccess *))onSuccessHandler {
-    NSString *linkTokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
-
-    return [PLKLinkTokenConfiguration createWithToken:linkTokenInput onSuccess:onSuccessHandler];
-}
-
-- (PLKLinkPublicKeyConfiguration *)getLegacyLinkConfiguration:(NSDictionary *)configuration
-                                             onSuccessHandler:(void(^)(PLKLinkSuccess *))onSuccessHandler  {
-    NSString *key = [RCTConvert NSString:configuration[kRNLinkKitConfigPublicKeyKey]];
-    NSString *tokenInput = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkTokenKey]];
-    NSString *env = [RCTConvert NSString:configuration[kRNLinkKitConfigEnvKey]];
-    NSArray<NSString*> *productsInput = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigProductsKey]];
-    NSString *clientName = [RCTConvert NSString:configuration[kRNLinkKitConfigClientNameKey]];
-    NSString *webhook = [RCTConvert NSString:configuration[kRNLinkKitConfigWebhookKey]];
-    NSString *linkCustomizationName = [RCTConvert NSString:configuration[kRNLinkKitConfigLinkCustomizationName]];
-    NSString *userLegalName = [RCTConvert NSString:configuration[kRNLinkKitConfigUserLegalNameKey]];
-    NSString *userEmailAddress = [RCTConvert NSString:configuration[kRNLinkKitConfigUserEmailAddressKey]];
-    NSString *userPhoneNumber = [RCTConvert NSString:configuration[kRNLinkKitConfigUserPhoneNumberKey]];
-    NSString *oauthRedirectUriInput = [configuration valueForKeyPath:kRNLinkKitConfigOAuthRedirectUriKeyPath];
-    NSString *oauthRedirectUriString = [RCTConvert NSString:oauthRedirectUriInput];
-    NSString *oauthNonceInput = [configuration valueForKeyPath:kRNLinkKitConfigOAuthNonceKeyPath];
-    NSString *oauthNonce = [RCTConvert NSString:oauthNonceInput];
-    id accountSubtypesInput = configuration[kRNLinkKitConfigAccountSubtypes];
-    NSArray<NSDictionary<NSString*, NSString *>*> *accountSubtypeDictionaries = [RCTConvert NSDictionaryArray:accountSubtypesInput];
-    NSArray<NSString*> *countryCodes = [RCTConvert NSStringArray:configuration[kRNLinkKitConfigCountryCodesKey]];
-    NSString *language = [RCTConvert NSString:configuration[kRNLinkKitConfigLanguageKey]];
-
-    PLKLinkPublicKeyConfigurationToken *token;
-    BOOL isPaymentToken = [tokenInput hasPrefix:kRNLinkKitPaymentTokenPrefix];
-    BOOL isItemAddToken = [tokenInput hasPrefix:kRNLinkKitItemAddTokenPrefix];
-    BOOL isDepositSwitchToken = [tokenInput hasPrefix:kRNLinkKitDepositSwitchTokenPrefix];
-    BOOL isPublicToken = [tokenInput hasPrefix:kRNLinkKitPublicTokenPrefix];
-    if (isPaymentToken) {
-        token = [PLKLinkPublicKeyConfigurationToken createWithPaymentToken:tokenInput publicKey:key];
-    } else if (isItemAddToken) {
-        token = [PLKLinkPublicKeyConfigurationToken createWithPublicToken:tokenInput publicKey:key];
-    } else if (isDepositSwitchToken) {
-        token = [PLKLinkPublicKeyConfigurationToken createWithDepositSwitchToken:tokenInput publicKey:key];
-    } else if (isPublicToken) {
-        token = [PLKLinkPublicKeyConfigurationToken createWithPublicToken:tokenInput publicKey:key];
-    } else {
-        token = [PLKLinkPublicKeyConfigurationToken createWithPublicKey:key];
-    }
-
-    PLKEnvironment environment = [RNLinksdk environmentFromString:env];
-    NSArray<NSNumber *> *products = [RNLinksdk productsArrayFromProductsStringArray:productsInput];
-    PLKLinkPublicKeyConfiguration *linkConfiguration = [[PLKLinkPublicKeyConfiguration alloc] initWithClientName:clientName
-                                                                                                     environment:environment
-                                                                                                        products:products
-                                                                                                        language:language
-                                                                                                           token:token
-                                                                                                    countryCodes:countryCodes
-                                                                                                       onSuccess:onSuccessHandler];
-  if ([linkCustomizationName length] > 0) {
-      linkConfiguration.linkCustomizationName = linkCustomizationName;
-  }
-  if ([webhook length] > 0) {
-     linkConfiguration.webhook = [NSURL URLWithString:webhook];
-  }
-  if ([userLegalName length] > 0) {
-     linkConfiguration.userLegalName = userLegalName;
-  }
-  if ([userEmailAddress length] > 0) {
-     linkConfiguration.userEmailAddress = userEmailAddress;
-  }
-  if ([userPhoneNumber length] > 0) {
-      linkConfiguration.userPhoneNumber = userPhoneNumber;
-  }
-  if ([oauthRedirectUriString length] > 0 && [oauthNonce length] > 0) {
-      NSURL* oauthRedirectUri = [NSURL URLWithString:oauthRedirectUriString];
-      linkConfiguration.oauthConfiguration = [PLKOAuthNonceConfiguration createWithNonce:oauthNonce
-                                                                             redirectUri:oauthRedirectUri];
-  }
-  if ([accountSubtypeDictionaries count] > 0) {
-      linkConfiguration.accountSubtypes = [RNLinksdk accountSubtypesArrayFromAccountSubtypeDictionaries:accountSubtypeDictionaries];
-  }
-
-  return linkConfiguration;
-}
-
 #pragma mark - Bridging
 
 + (PLKEnvironment)environmentFromString:(NSString *)string {
@@ -391,222 +190,6 @@ RCT_EXPORT_METHOD(dismiss) {
     // Default to Development
     NSLog(@"Unexpected environment string value: %@. Expected one of: production, sandbox, or development.", string);
     return PLKEnvironmentDevelopment;
-}
-
-+ (NSArray<NSNumber *> *)productsArrayFromProductsStringArray:(NSArray<NSString *> *)productsStringArray {
-    NSMutableArray<NSNumber *> *results = [NSMutableArray arrayWithCapacity:productsStringArray.count];
-
-    for (NSString *productString in productsStringArray) {
-        NSNumber *product = [self productFromProductString:productString];
-        if (product) {
-            [results addObject:product];
-        }
-    }
-
-    return [results copy];
-}
-
-+ (NSNumber * __nullable)productFromProductString:(NSString *)productString {
-    NSDictionary *productStringMap = @{
-        @"auth": @(PLKProductAuth),
-        @"identity": @(PLKProductIdentity),
-        @"income": @(PLKProductIncome),
-        @"transactions": @(PLKProductTransactions),
-        @"assets": @(PLKProductAssets),
-        @"liabilities": @(PLKProductLiabilities),
-        @"investments": @(PLKProductInvestments),
-        @"deposit_switch": @(PLKProductDepositSwitch),
-    };
-    return productStringMap[productString.lowercaseString];
-}
-
-+ (NSArray<id<PLKAccountSubtype>> *)accountSubtypesArrayFromAccountSubtypeDictionaries:(NSArray<NSDictionary<NSString *, NSString *> *> *)accountSubtypeDictionaries {
-    __block NSMutableArray<id<PLKAccountSubtype>> *results = [NSMutableArray array];
-
-    for (NSDictionary *accountSubtypeDictionary in accountSubtypeDictionaries) {
-        NSString *type = accountSubtypeDictionary[@"type"];
-        NSString *subtype = accountSubtypeDictionary[@"subtype"];
-        id<PLKAccountSubtype> result = [self accountSubtypeFromTypeString:type subtypeString:subtype];
-        if (result) {
-            [results addObject:result];
-        }
-    }
-
-    return [results copy];
-}
-
-+ (id<PLKAccountSubtype>)accountSubtypeFromTypeString:(NSString *)typeString
-                                        subtypeString:(NSString *)subtypeString {
-    NSString *normalizedTypeString = typeString.lowercaseString;
-    NSString *normalizedSubtypeString = subtypeString.lowercaseString;
-    if ([normalizedTypeString isEqualToString:@"other"]) {
-        if ([normalizedSubtypeString isEqualToString:@"all"]) {
-            return [PLKAccountSubtypeOther createWithValue:PLKAccountSubtypeValueOtherAll];
-        } else if ([normalizedSubtypeString isEqualToString:@"other"]) {
-            return [PLKAccountSubtypeOther createWithValue:PLKAccountSubtypeValueOtherOther];
-        } else {
-            return [PLKAccountSubtypeOther createWithRawStringValue:normalizedSubtypeString];
-        }
-    } else if ([normalizedTypeString isEqualToString:@"credit"]) {
-        if ([normalizedSubtypeString isEqualToString:@"all"]) {
-            return [PLKAccountSubtypeCredit createWithValue:PLKAccountSubtypeValueCreditAll];
-        } else if ([normalizedSubtypeString isEqualToString:@"credit card"]) {
-            return [PLKAccountSubtypeCredit createWithValue:PLKAccountSubtypeValueCreditCreditCard];
-        } else if ([normalizedSubtypeString isEqualToString:@"paypal"]) {
-            return [PLKAccountSubtypeCredit createWithValue:PLKAccountSubtypeValueCreditPaypal];
-        } else {
-            return [PLKAccountSubtypeCredit createWithUnknownValue:subtypeString];
-        }
-    } else if ([normalizedTypeString isEqualToString:@"loan"]) {
-        if ([normalizedSubtypeString isEqualToString:@"all"]) {
-            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanAll];
-        } else if ([normalizedSubtypeString isEqualToString:@"auto"]) {
-            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanAuto];
-        } else if ([normalizedSubtypeString isEqualToString:@"business"]) {
-            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanBusiness];
-        } else if ([normalizedSubtypeString isEqualToString:@"commercial"]) {
-            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanCommercial];
-        } else if ([normalizedSubtypeString isEqualToString:@"construction"]) {
-            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanConstruction];
-        } else if ([normalizedSubtypeString isEqualToString:@"consumer"]) {
-            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanConsumer];
-        } else if ([normalizedSubtypeString isEqualToString:@"home equity"]) {
-            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanHomeEquity];
-        } else if ([normalizedSubtypeString isEqualToString:@"line of credit"]) {
-            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanLineOfCredit];
-        } else if ([normalizedSubtypeString isEqualToString:@"loan"]) {
-            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanLoan];
-        } else if ([normalizedSubtypeString isEqualToString:@"mortgage"]) {
-            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanMortgage];
-        } else if ([normalizedSubtypeString isEqualToString:@"overdraft"]) {
-            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanOverdraft];
-        } else if ([normalizedSubtypeString isEqualToString:@"student"]) {
-            return [PLKAccountSubtypeLoan createWithValue:PLKAccountSubtypeValueLoanStudent];
-        } else {
-            return [PLKAccountSubtypeLoan createWithUnknownValue:subtypeString];
-        }
-    } else if ([normalizedTypeString isEqualToString:@"depository"]) {
-        if ([normalizedSubtypeString isEqualToString:@"all"]) {
-            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryAll];
-        } else if ([normalizedSubtypeString isEqualToString:@"cash management"]) {
-            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryCashManagement];
-        } else if ([normalizedSubtypeString isEqualToString:@"cd"]) {
-            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryCd];
-        } else if ([normalizedSubtypeString isEqualToString:@"checking"]) {
-            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryChecking];
-        } else if ([normalizedSubtypeString isEqualToString:@"ebt"]) {
-            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryEbt];
-        } else if ([normalizedSubtypeString isEqualToString:@"hsa"]) {
-            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryHsa];
-        } else if ([normalizedSubtypeString isEqualToString:@"money market"]) {
-            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryMoneyMarket];
-        } else if ([normalizedSubtypeString isEqualToString:@"paypal"]) {
-            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryPaypal];
-        } else if ([normalizedSubtypeString isEqualToString:@"prepaid"]) {
-            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositoryPrepaid];
-        } else if ([normalizedSubtypeString isEqualToString:@"savings"]) {
-            return [PLKAccountSubtypeDepository createWithValue:PLKAccountSubtypeValueDepositorySavings];
-        } else {
-            return [PLKAccountSubtypeDepository createWithUnknownValue:subtypeString];
-        }
-
-    } else if ([normalizedTypeString isEqualToString:@"investment"]) {
-        if ([normalizedSubtypeString isEqualToString:@"all"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentAll];
-        } else if ([normalizedSubtypeString isEqualToString:@"401a"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment401a];
-        } else if ([normalizedSubtypeString isEqualToString:@"401k"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment401k];
-        } else if ([normalizedSubtypeString isEqualToString:@"403B"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment403B];
-        } else if ([normalizedSubtypeString isEqualToString:@"457b"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment457b];
-        } else if ([normalizedSubtypeString isEqualToString:@"529"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestment529];
-        } else if ([normalizedSubtypeString isEqualToString:@"brokerage"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentBrokerage];
-        } else if ([normalizedSubtypeString isEqualToString:@"cash isa"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentCashIsa];
-        } else if ([normalizedSubtypeString isEqualToString:@"education savings account"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentEducationSavingsAccount];
-        } else if ([normalizedSubtypeString isEqualToString:@"fixed annuity"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentFixedAnnuity];
-        } else if ([normalizedSubtypeString isEqualToString:@"gic"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentGic];
-        } else if ([normalizedSubtypeString isEqualToString:@"health reimbursement arrangement"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentHealthReimbursementArrangement];
-        } else if ([normalizedSubtypeString isEqualToString:@"hsa"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentHsa];
-        } else if ([normalizedSubtypeString isEqualToString:@"ira"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentIra];
-        } else if ([normalizedSubtypeString isEqualToString:@"isa"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentIsa];
-        } else if ([normalizedSubtypeString isEqualToString:@"keogh"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentKeogh];
-        } else if ([normalizedSubtypeString isEqualToString:@"lif"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentLif];
-        } else if ([normalizedSubtypeString isEqualToString:@"lira"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentLira];
-        } else if ([normalizedSubtypeString isEqualToString:@"lrif"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentLrif];
-        } else if ([normalizedSubtypeString isEqualToString:@"lrsp"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentLrsp];
-        } else if ([normalizedSubtypeString isEqualToString:@"mutual fund"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentMutualFund];
-        } else if ([normalizedSubtypeString isEqualToString:@"non-taxable brokerage account"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentNonTaxableBrokerageAccount];
-        } else if ([normalizedSubtypeString isEqualToString:@"pension"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentPension];
-        } else if ([normalizedSubtypeString isEqualToString:@"plan"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentPlan];
-        } else if ([normalizedSubtypeString isEqualToString:@"prif"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentPrif];
-        } else if ([normalizedSubtypeString isEqualToString:@"profit sharing plan"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentProfitSharingPlan];
-        } else if ([normalizedSubtypeString isEqualToString:@"rdsp"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRdsp];
-        } else if ([normalizedSubtypeString isEqualToString:@"resp"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentResp];
-        } else if ([normalizedSubtypeString isEqualToString:@"retirement"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRetirement];
-        } else if ([normalizedSubtypeString isEqualToString:@"rlif"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRlif];
-        } else if ([normalizedSubtypeString isEqualToString:@"roth 401k"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRoth401k];
-        } else if ([normalizedSubtypeString isEqualToString:@"roth"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRoth];
-        } else if ([normalizedSubtypeString isEqualToString:@"rrif"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRrif];
-        } else if ([normalizedSubtypeString isEqualToString:@"rrsp"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentRrsp];
-        } else if ([normalizedSubtypeString isEqualToString:@"sarsep"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentSarsep];
-        } else if ([normalizedSubtypeString isEqualToString:@"sep ira"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentSepIra];
-        } else if ([normalizedSubtypeString isEqualToString:@"simple ira"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentSimpleIra];
-        } else if ([normalizedSubtypeString isEqualToString:@"sipp"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentSipp];
-        } else if ([normalizedSubtypeString isEqualToString:@"stock plan"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentStockPlan];
-        } else if ([normalizedSubtypeString isEqualToString:@"tfsa"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentTfsa];
-        } else if ([normalizedSubtypeString isEqualToString:@"thrift savings plan"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentThriftSavingsPlan];
-        } else if ([normalizedSubtypeString isEqualToString:@"trust"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentTrust];
-        } else if ([normalizedSubtypeString isEqualToString:@"ugma"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentUgma];
-        } else if ([normalizedSubtypeString isEqualToString:@"utma"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentUtma];
-        } else if ([normalizedSubtypeString isEqualToString:@"variable annuity"]) {
-          return [PLKAccountSubtypeInvestment createWithValue:PLKAccountSubtypeValueInvestmentVariableAnnuity];
-        } else {
-          return [PLKAccountSubtypeInvestment createWithUnknownValue:subtypeString];
-        }
-    }
-
-    return [PLKAccountSubtypeUnknown createWithRawTypeStringValue:typeString rawSubtypeStringValue:subtypeString];
 }
 
 + (NSDictionary *)dictionaryFromSuccess:(PLKLinkSuccess *)success {
@@ -716,39 +299,23 @@ RCT_EXPORT_METHOD(dismiss) {
     return @{
         @"eventName": [self stringForEventName:event.eventName] ?: @"",
         @"metadata": @{
-            @"errorType": [self errorTypeStringFromError:metadata.error] ?: @"",
             @"error_type": [self errorTypeStringFromError:metadata.error] ?: @"",
-            @"errorCode": [self errorCodeStringFromError:metadata.error] ?: @"",
             @"error_code": [self errorCodeStringFromError:metadata.error] ?: @"",
-            @"errorMessage": [self errorMessageFromError:metadata.error] ?: @"",
             @"error_message": [self errorMessageFromError:metadata.error] ?: @"",
-            @"exitStatus": [self stringForExitStatus:metadata.exitStatus] ?: @"",
             @"exit_status": [self stringForExitStatus:metadata.exitStatus] ?: @"",
-            @"institutionId": metadata.institutionID ?: @"",
             @"institution_id": metadata.institutionID ?: @"",
-            @"institutionName": metadata.institutionName ?: @"",
             @"institution_name": metadata.institutionName ?: @"",
-            @"institutionSearchQuery": metadata.institutionSearchQuery ?: @"",
             @"institution_search_query": metadata.institutionSearchQuery ?: @"",
-            @"accountNumberMask": metadata.accountNumberMask ?: @"",
             @"account_number_mask": metadata.accountNumberMask ?: @"",
-            @"isUpdateMode": metadata.isUpdateMode ?: @"",
             @"is_update_mode": metadata.isUpdateMode ?: @"",
-            @"matchReason": metadata.matchReason ?: @"",
             @"match_reason": metadata.matchReason ?: @"",
-            @"routingNumber": metadata.routingNumber ?: @"",
             @"routing_number": metadata.routingNumber ?: @"",
             @"selection": metadata.selection ?: @"",
-            @"linkSessionId": metadata.linkSessionID ?: @"",
             @"link_session_id": metadata.linkSessionID ?: @"",
-            @"mfaType": [self stringForMfaType:metadata.mfaType] ?: @"",
             @"mfa_type": [self stringForMfaType:metadata.mfaType] ?: @"",
-            @"requestId": metadata.requestID ?: @"",
             @"request_id": metadata.requestID ?: @"",
             @"timestamp": [self iso8601StringFromDate:metadata.timestamp] ?: @"",
-            @"viewName": [self stringForViewName:metadata.viewName] ?: @"",
             @"view_name": [self stringForViewName:metadata.viewName] ?: @"",
-            @"metadataJson": metadata.metadataJSON ?: @"",
             @"metadata_json": metadata.metadataJSON ?: @"",
         },
     };

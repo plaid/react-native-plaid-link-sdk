@@ -117,7 +117,6 @@ RCT_EXPORT_METHOD(open: (BOOL)fullScreen :(RCTResponseSenderBlock)onSuccess :(RC
         self.successCallback = onSuccess;
         self.exitCallback = onExit;
         self.presentingViewController = RCTPresentedViewController();
-        NSDictionary *options = self.institutionID.length > 0 ? @{@"institution_id": self.institutionID} : @{};
 
         // Some link flows do not need to present UI, so track if presentation happened so dismissal isn't
         // unnecessarily invoked.

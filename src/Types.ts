@@ -535,6 +535,7 @@ export interface PlaidLinkProps {
     onSuccess: LinkSuccessListener
     onExit?: LinkExitListener
     iOSPresentationStyle?: LinkIOSPresentationStyle
+    logLevel?: LinkLogLevel
     onPress?(): any
 }
 

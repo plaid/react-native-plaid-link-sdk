@@ -2,104 +2,104 @@ import XCTest
 
 final class PlaidRNDemoUITests: XCTestCase {
 
-  override func setUp() async throws {
-    try await super.setUp()
-    // Reset the app for each test.
-    app = XCUIApplication()
-    continueAfterFailure = false
-  }
-
-  override func tearDown() {
-    super.tearDown()
-    // Terminate the app after each test case.
-    app.terminate()
-  }
-
-  override func setUpWithError() throws {
-    XCUIDevice.shared.orientation = .portrait
-  }
-
-  /// `XCUIApplication` representing the app. May or may not be running.
-  var app: XCUIApplication = XCUIApplication()
-
-  /// `XCUIElement` representing the apps first webview match.
-  var webview: XCUIElement { app.webViews.firstMatch }
-
-  /// Default amount of time to wait for elements before throwing an error.
-  let defaultTimeout: TimeInterval = 25.0
-
-  private(set) var clientID: String = ""
-  private(set) var apiSecret: String = ""
-
-  func enterToken(token: String) throws {
-    let tokenTextField = app.otherElements["link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
-    let openElements = app.otherElements.matching(identifier: "OPEN LINK")
-    let _ = tokenTextField.waitForExistence(timeout: defaultTimeout)
-
-    guard tokenTextField.exists else {
-      throw UITestError.elementDoesNotExist(message: "Token TextField does not exist.")
+    override func setUp() async throws {
+        try await super.setUp()
+        // Reset the app for each test.
+        app = XCUIApplication()
+        continueAfterFailure = false
     }
 
-    UIPasteboard.general.string = token
-    tokenTextField.doubleTap()
-    sleep(2)
-    tokenTextField.doubleTap()
-
-    // Typing in the link token caused issues where it would type "lnk-token-xxxx" which resulted
-    // in the inability to fetch a token. I am not sure what caused this issue, but that's why I am
-    // using copy paste.
-    app.menuItems["Paste"].tap()
-
-    openElements.allElementsBoundByIndex.forEach { $0.tap() }
-  }
-
-  /// Launches the app
-  func launchApp() async throws {
-    XCTAssertTrue(app.state == .notRunning)
-
-    guard app.state == .notRunning else {
-        throw UITestError.appAlreadyLaunched
+    override func tearDown() {
+        super.tearDown()
+        // Terminate the app after each test case.
+        app.terminate()
     }
 
-    await MainActor.run {
-      app.launchEnvironment["isUITest"] = "true"
-      app.launch()
+    override func setUpWithError() throws {
+        XCUIDevice.shared.orientation = .portrait
     }
-  }
+
+    /// `XCUIApplication` representing the app. May or may not be running.
+    var app: XCUIApplication = XCUIApplication()
+
+    /// `XCUIElement` representing the apps first webview match.
+    var webview: XCUIElement { app.webViews.firstMatch }
+
+    /// Default amount of time to wait for elements before throwing an error.
+    let defaultTimeout: TimeInterval = 25.0
+
+    private(set) var clientID: String = ""
+    private(set) var apiSecret: String = ""
+
+    func enterToken(token: String) throws {
+        let tokenTextField = app.otherElements["link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
+        let openElements = app.otherElements.matching(identifier: "OPEN LINK")
+        let _ = tokenTextField.waitForExistence(timeout: defaultTimeout)
+
+        guard tokenTextField.exists else {
+            throw UITestError.elementDoesNotExist(message: "Token TextField does not exist.")
+        }
+
+        UIPasteboard.general.string = token
+        tokenTextField.doubleTap()
+        sleep(2)
+        tokenTextField.doubleTap()
+
+        // Typing in the link token caused issues where it would type "lnk-token-xxxx" which resulted
+        // in the inability to fetch a token. I am not sure what caused this issue, but that's why I am
+        // using copy paste.
+        app.menuItems["Paste"].tap()
+
+        openElements.allElementsBoundByIndex.forEach { $0.tap() }
+    }
+
+    /// Launches the app
+    func launchApp() async throws {
+        XCTAssertTrue(app.state == .notRunning)
+
+        guard app.state == .notRunning else {
+            throw UITestError.appAlreadyLaunched
+        }
+
+        await MainActor.run {
+            app.launchEnvironment["isUITest"] = "true"
+            app.launch()
+        }
+    }
 }
 
 // MARK: Tests
 
 extension PlaidRNDemoUITests {
 
-  /// Tests that credential entry FI works as expected on iOS.
-  func testCredentialEntryHappyPath() async throws {
-    try await launchApp()
+    /// Tests that credential entry FI works as expected on iOS.
+    func testCredentialEntryHappyPath() async throws {
+        try await launchApp()
 
-    let clientID = PlaidCredentials.clientID
-    let clientSecret = PlaidCredentials.clientSecret
+        let clientID = PlaidCredentials.clientID
+        let clientSecret = PlaidCredentials.clientSecret
 
-    guard clientID.uppercased() != "YOUR_CLIENT_ID" && clientSecret.uppercased() != "YOUR_CLIENT_SECRET" else {
-      XCTFail("Set clientID and clientSecret in PlaidCredentials.swift")
-      return
+        guard clientID.uppercased() != "YOUR_CLIENT_ID" && clientSecret.uppercased() != "YOUR_CLIENT_SECRET" else {
+            XCTFail("Set clientID and clientSecret in PlaidCredentials.swift")
+            return
+        }
+
+        let token = try await TestTokenLoader.loadToken(clientID: clientID, secret: clientSecret)
+
+        try await MainActor.run {
+            try enterToken(token: token)
+            try validateConsentPane()
+            try continueThroughConsentPane()
+            try select(institution: "TD Bank")
+            try validateCredentialEntryPane()
+            try enterCredentials(username: "user_good", password: "pass_good")
+            try continueThroughAccountSelection(selectingAccounts: ["Plaid checking"])
+            try continueThroughConsentPane()
+
+            // Verify the webview was dismissed.
+            try assert(element: webview, exists: false, timeout: defaultTimeout)
+        }
     }
-
-    let token = try await TestTokenLoader.loadToken(clientID: clientID, secret: clientSecret)
-
-    try await MainActor.run {
-        try enterToken(token: token)
-        try validateConsentPane()
-        try continueThroughConsentPane()
-        try select(institution: "TD Bank")
-        try validateCredentialEntryPane()
-        try enterCredentials(username: "user_good", password: "pass_good")
-        try continueThroughAccountSelection(selectingAccounts: ["Plaid checking"])
-        try continueThroughConsentPane()
-
-        // Verify the webview was dismissed.
-        try assert(element: webview, exists: false, timeout: defaultTimeout)
-    }
-  }
 }
 
 // MARK: Pane Actions

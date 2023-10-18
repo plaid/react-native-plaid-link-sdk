@@ -34,7 +34,8 @@ internal final class PLKEmbeddedView: UIView {
                 var dictionary = RNLinksdk.dictionary(from: plkLinkSuccess) ?? [:]
                 dictionary[embeddedEventName] = "onSuccess"
                 self.onEmbeddedEvent?(dictionary)
-        })
+            }
+        )
 
         config.onEvent = { [weak self] event in
             guard let self = self else { return }
@@ -58,7 +59,7 @@ internal final class PLKEmbeddedView: UIView {
 
         switch handlerCreationResult {
         case .failure(let error):
-            throw(error)
+            throw (error)
         case .success(let handler):
             return handler
         }
@@ -94,7 +95,7 @@ internal final class PLKEmbeddedView: UIView {
         } catch {
             let dict: [String: Any] = [
                 embeddedEventName: "onExit",
-                "error": "\(error)"
+                "error": "\(error)",
             ]
 
             onEmbeddedEvent?(dict)
@@ -109,7 +110,7 @@ internal final class PLKEmbeddedView: UIView {
             embeddedView.topAnchor.constraint(equalTo: topAnchor),
             embeddedView.leadingAnchor.constraint(equalTo: leadingAnchor),
             embeddedView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            embeddedView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            embeddedView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
 }

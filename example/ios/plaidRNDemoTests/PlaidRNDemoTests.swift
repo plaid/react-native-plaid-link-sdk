@@ -1,23 +1,23 @@
-import XCTest
 import LinkKit
+import XCTest
 
 final class PlaidRNDemoTests: XCTestCase {
 
-  func testVersion() {
-    let version = LinkKitVersion
+    func testVersion() {
+        let version = LinkKitVersion
 
-    XCTAssertEqual(version, "4.5.1")
-  }
+        XCTAssertEqual(version, "4.5.1")
+    }
 
-  func testPlaidCredentialsExist() {
-    let clientID = PlaidCredentials.clientID
+    func testPlaidCredentialsExist() {
+        let clientID = PlaidCredentials.clientID
 
-    XCTAssertNotEqual(clientID, "YOUR_CLIENT_ID")
-    XCTAssertFalse(clientID.contains("*"))
+        XCTAssertNotEqual(clientID, "YOUR_CLIENT_ID")
+        XCTAssertFalse(clientID.contains("*"))
 
-    let secret = PlaidCredentials.clientSecret
+        let secret = PlaidCredentials.clientSecret
 
-    XCTAssertNotEqual(secret, "YOUR_CLIENT_SECRET")
-    XCTAssertFalse(secret.contains("*"))
-  }
+        XCTAssertNotEqual(secret, "YOUR_CLIENT_SECRET")
+        XCTAssertFalse(secret.contains("*"))
+    }
 }

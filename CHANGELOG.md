@@ -1,5 +1,42 @@
 # RELEASES
 
+## LinkKit V10.6.4 — 2023-10-12
+
+### React Native
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
+
+#### Changes
+
+- Resolve Issue where PLKEmbeddedView doesn't compile on Xcode < 14.3.
+
+
+### Android
+
+Android SDK [3.14.0](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.0)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+
+
+### iOS
+
+iOS SDK [4.6.4](https://github.com/plaid/plaid-link-ios/releases/tag/4.6.4)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 14.0 |
+| iOS | >= 11.0 |
+
 ## LinkKit V10.6.3 — 2023-10-11
 
 ### React Native

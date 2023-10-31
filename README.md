@@ -84,7 +84,7 @@ const MyPlaidComponent = () => {
 
 #### OAuth requirements
 
-:warning: All integrations must migrate to version 9.0.0 or later of the React Native SDK (requires version 4.1.0 or later of the iOS LinkKit SDK) by September 30, 2023, to maintain support for Chase OAuth on iOS. 
+:warning: All integrations must migrate to version 9.0.0 or later of the React Native SDK (requires version 4.1.0 or later of the iOS LinkKit SDK) by January 1, 2024, to maintain support for Chase OAuth on iOS. 
 
 ##### Android OAuth Requirements
 

@@ -16,8 +16,6 @@ import com.plaid.gson.PlaidJsonConverter
 import com.plaid.link.Plaid
 import com.plaid.link.configuration.LinkLogLevel
 import com.plaid.link.configuration.LinkTokenConfiguration
-import com.plaid.link.configuration.PlaidEnvironment
-import com.plaid.link.configuration.PlaidProduct
 import com.plaid.link.event.LinkEvent
 import com.plaid.link.exception.LinkException
 import com.plaid.link.result.LinkAccountSubtype

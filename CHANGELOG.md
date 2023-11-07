@@ -12,7 +12,7 @@
 
 #### Changes
 
-- Resolve Issue [589](https://github.com/plaid/react-native-plaid-link-sdk/issues/589)
+- Update iOS SDK to [4.7.0](https://github.com/plaid/plaid-link-ios/releases/tag/4.7.0)
 
 
 ### Android

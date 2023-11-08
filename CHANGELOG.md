@@ -1,5 +1,80 @@
 # RELEASES
 
+## LinkKit V10.8.0 — 2023-11-07
+
+### React Native
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
+
+#### Changes
+
+- Update iOS SDK to [4.7.0](https://github.com/plaid/plaid-link-ios/releases/tag/4.7.0)
+
+
+### Android
+
+Android SDK [3.14.0](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.0)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+
+
+### iOS
+
+iOS SDK [4.7.0](https://github.com/plaid/plaid-link-ios/releases/tag/4.7.0)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 14.0 |
+| iOS | >= 11.0 |
+
+## LinkKit V10.7.0 — 2023-11-07
+
+### React Native
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
+
+#### Changes
+
+- Resolve Issue [589](https://github.com/plaid/react-native-plaid-link-sdk/issues/589)
+
+
+### Android
+
+Android SDK [3.14.0](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.0)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+
+
+### iOS
+
+iOS SDK [4.6.4](https://github.com/plaid/plaid-link-ios/releases/tag/4.6.4)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 14.0 |
+| iOS | >= 11.0 |
+
+
 ## LinkKit V10.6.4 — 2023-10-12
 
 ### React Native

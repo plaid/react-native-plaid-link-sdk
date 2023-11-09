@@ -16,13 +16,6 @@
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
-
-  NSDictionary *environment = [[NSProcessInfo processInfo] environment];
-
-  if (environment[@"isUITest"]) {
-      // Running in a UI test
-    return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-  }
   
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];

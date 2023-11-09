@@ -1,6 +1,6 @@
 {
   "name": "react-native-plaid-link-sdk",
-  "version": "10.8.0",
+  "version": "11.0.0",
   "description": "React Native Plaid Link SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -41,7 +41,7 @@
   "license": "MIT",
   "peerDependencies": {
     "react": "*",
-    "react-native": ">=0.66.0"
+    "react-native": "*"
   },
   "devDependencies": {
     "@react-native-community/eslint-plugin": "^1.1.0",

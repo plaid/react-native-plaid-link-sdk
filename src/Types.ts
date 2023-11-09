@@ -8,28 +8,6 @@ export type LinkTokenConfiguration = (CommonPlaidLinkOptions & {
     noLoadingState: boolean;
 });
 
-export type LinkPublicKeyConfiguration = (CommonPlaidLinkOptions & {
-    token?: string;
-    publicKey?: string;
-    clientName: string;
-    environment: PlaidEnvironment;
-    products: Array<PlaidProduct>;
-    language: string;
-    countryCodes: Array<string>;
-    webhook?: string;
-    userLegalName?: string;
-    userEmailAddress?: string;
-    userPhoneNumber?: string;
-    linkCustomizationName?: string;
-    accountSubtypes?: Array<LinkAccountSubtype>;
-    oauthConfiguration?: OAuthConfiguration
-});
-
-export interface OAuthConfiguration {
-    nonce?: string;
-    redirectUri?: string;
-}
-
 export enum LinkLogLevel {
     DEBUG="debug",
     INFO="info",
@@ -552,14 +530,12 @@ export type LinkExitListener = (LinkExit: LinkExit) => void
 
 export type LinkOnEventListener = (LinkEvent: LinkEvent) => void
 
-export type PlaidLinkConfiguration = LinkTokenConfiguration | LinkPublicKeyConfiguration
-
 export interface PlaidLinkProps {
-    tokenConfig?: LinkTokenConfiguration
-    publicKeyConfig?: LinkPublicKeyConfiguration
+    tokenConfig: LinkTokenConfiguration
     onSuccess: LinkSuccessListener
     onExit?: LinkExitListener
     iOSPresentationStyle?: LinkIOSPresentationStyle
+    logLevel?: LinkLogLevel
     onPress?(): any
 }
 

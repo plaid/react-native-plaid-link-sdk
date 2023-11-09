@@ -34,7 +34,8 @@ internal final class PLKEmbeddedView: UIView {
                 var dictionary = RNLinksdk.dictionary(from: plkLinkSuccess) ?? [:]
                 dictionary[self.embeddedEventName] = "onSuccess"
                 self.onEmbeddedEvent?(dictionary)
-        })
+            }
+        )
 
         config.onEvent = { [weak self] event in
             guard let self = self else { return }
@@ -58,13 +59,13 @@ internal final class PLKEmbeddedView: UIView {
 
         switch handlerCreationResult {
         case .failure(let error):
-            throw(error)
+            throw (error)
         case .success(let handler):
             return handler
         }
     }
 
-    private func makeEmbeddedView(rctViewController: UIViewController, handler: Handler) throws -> UIView {
+    private func makeEmbeddedView(rctViewController: UIViewController, handler: Handler) -> UIView {
         self.linkHandler = handler
 
         let presentationMethod: PresentationMethod
@@ -80,15 +81,7 @@ internal final class PLKEmbeddedView: UIView {
             presentationMethod = .viewController(rctViewController)
         }
 
-        let embeddedResult = handler.createEmbeddedView(presentUsing: presentationMethod)
-
-        switch embeddedResult {
-        case .failure(let error):
-            throw error
-
-        case .success(let embeddedView):
-            return embeddedView
-        }
+        return handler.createEmbeddedView(presentUsing: presentationMethod)
     }
 
     private func createNativeEmbeddedView() {
@@ -97,12 +90,12 @@ internal final class PLKEmbeddedView: UIView {
 
         do {
             let handler = try makeHandler()
-            let embeddedView = try makeEmbeddedView(rctViewController: rctViewController, handler: handler)
+            let embeddedView = makeEmbeddedView(rctViewController: rctViewController, handler: handler)
             setup(embeddedView: embeddedView)
         } catch {
             let dict: [String: Any] = [
                 embeddedEventName: "onExit",
-                "error": "\(error)"
+                "error": "\(error)",
             ]
 
             onEmbeddedEvent?(dict)
@@ -117,7 +110,7 @@ internal final class PLKEmbeddedView: UIView {
             embeddedView.topAnchor.constraint(equalTo: topAnchor),
             embeddedView.leadingAnchor.constraint(equalTo: leadingAnchor),
             embeddedView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            embeddedView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            embeddedView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
 }

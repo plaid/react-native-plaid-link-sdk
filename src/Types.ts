@@ -34,7 +34,7 @@ export enum PlaidProduct {
     TRANSACTIONS="transactions",
 }
 
-enum LinkAccountType {
+export enum LinkAccountType {
     CREDIT = 'credit',
     DEPOSITORY = 'depository',
     INVESTMENT = 'investment',

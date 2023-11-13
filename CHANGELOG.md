@@ -1,5 +1,54 @@
 # RELEASES
 
+## LinkKit V10.9.0 — 2023-11-07
+
+### React Native
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
+
+#### Changes
+
+- Update iOS SDK to [4.7.0](https://github.com/plaid/plaid-link-ios/releases/tag/4.7.0)
+
+
+### Android
+
+Android SDK [3.14.1](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.1)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+
+### Additions
+
+- Flutter usage tracking.
+
+### Changes
+
+- Change LinkActivity to SingleInstance to fix issue with OAuth Redirects on Android 14.
+
+### Removals
+
+- None
+
+
+### iOS
+
+iOS SDK [4.7.0](https://github.com/plaid/plaid-link-ios/releases/tag/4.7.0)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 14.0 |
+| iOS | >= 11.0 |
+
 ## LinkKit V10.8.0 — 2023-11-07
 
 ### React Native

@@ -11,6 +11,7 @@ import {
   LinkEventListener,
   LinkExit,
   LinkIOSPresentationStyle,
+  LinkLogLevel,
   LinkSuccess,
   PlaidLinkComponentProps,
   PlaidLinkProps,
@@ -45,7 +46,7 @@ export const openLink = async (props: PlaidLinkProps) => {
     NativeModules.PlaidAndroid.startLinkActivityForResult(
       config.token,
       config.noLoadingState,
-      config.logLevel,
+      config.logLevel ?? LinkLogLevel.ERROR,
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {
           props.onSuccess(result);
@@ -86,7 +87,6 @@ export const openLink = async (props: PlaidLinkProps) => {
     );
   }
 };
-
 
 export const dismissLink = () => {
   if (Platform.OS === 'ios') {

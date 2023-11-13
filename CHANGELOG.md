@@ -1,6 +1,6 @@
 # RELEASES
 
-## LinkKit V10.9.0 — 2023-11-07
+## LinkKit V10.9.0 — 2023-11-13
 
 ### React Native
 

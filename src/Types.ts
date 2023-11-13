@@ -42,7 +42,7 @@ export enum LinkAccountType {
     OTHER = 'other',
 }
 
-enum LinkAccountSubtypes {
+export enum LinkAccountSubtypes {
     ALL = 'all',
     CREDIT_CARD = 'credit card',
     PAYPAL = 'paypal',

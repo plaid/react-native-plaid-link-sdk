@@ -8,6 +8,8 @@ The Plaid React Native SDK provides the client-side component that your users wi
 For more information about Plaid Link check out our
 [introduction documentation](https://plaid.com/docs/link/#introduction-to-link).
 
+Plaid currently supports two versions of the Plaid React Native SDK v10.x and v11.x. You can find v10 on the [master-v10](https://github.com/plaid/react-native-plaid-link-sdk/tree/master-v10) branch.
+
 ## Features
 
 The SDK provides:
@@ -145,8 +147,10 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 
 | Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |
 |-------------------|--------------------------|-------------|---------------------|------------------------|---------|-----------------|-------------------------------|
+| 11.0.2            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
 | 11.0.1            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
 | 11.0.0            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 10.9.0            | >= 0.66.0                | [3.14.1+]   | 21                  | 33                     | >=4.7.0 |  11.0           | Active, supports Xcode 14     |
 | 10.8.0            | >= 0.66.0                | [3.14.0+]   | 21                  | 33                     | >=4.7.0 |  11.0           | Active, supports Xcode 14     |
 | 10.7.0            | >= 0.66.0                | [3.14.0+]   | 21                  | 33                     | >=4.6.4 |  11.0           | Active, supports Xcode 14     |
 | 10.6.4            | >= 0.66.0                | [3.14.0+]   | 21                  | 33                     | >=4.6.4 |  11.0           | Active, supports Xcode 14     |

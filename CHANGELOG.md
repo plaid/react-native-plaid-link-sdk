@@ -1,5 +1,73 @@
 # RELEASES
 
+## LinkKit V11.0.2 — 2023-11-13
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- `LinkAccountSubtypes` is now exported
+
+The update to the next major version of our mobile SDKs **includes breaking changes**. Please see our [migration guide]
+(https://github.com/plaid/react-native-plaid-link-sdk/blob/master/v11-migration-guide.md) for full details.
+
+
+### Android
+
+Android SDK [4.0.0](https://github.com/plaid/plaid-link-android/releases/tag/v4.0.0)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+#### Additions
+
+- Flutter usage tracking.
+
+#### Changes
+
+- Upgrade to Kotlin 1.8.22
+- Change LinkActivity to SingleInstance to fix issue with OAuth Redirects on Android 14.
+
+#### Removals
+
+- Remove deprecated support for public key authentication.
+- Remove extraParams Map field from API.
+
+[Android migration guide](https://github.com/plaid/plaid-link-android#migration-guide)
+
+### iOS
+
+iOS SDK [5.0.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.0.0)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
+
+#### Changes
+
+- Drop support for iOS 11, 12, & 13.
+- Reduce iOS SDK size from 15 megabytes to 11 megabytes.
+- Remove deprecated support for public key authentication.
+- Remove deprecated continue from method (this method no longer needs to be called for OAuth redirects).
+- Remove deprecated continue method (this method no longer needs to be called for OAuth redirects).
+- Remove deprecated open with OpenOptions function.
+- Make webview inspectable on iOS >= 16.4.
+- Add Privacy Manifest for `UserDefaults` use.
+
+[iOS migration guide](https://github.com/plaid/plaid-link-ios/blob/master/v5-migration-guide.md)
+
 ## LinkKit V11.0.1 — 2023-11-13
 
 ### React Native
@@ -68,6 +136,55 @@ iOS SDK [5.0.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.0.0)
 - Add Privacy Manifest for `UserDefaults` use.
 
 [iOS migration guide](https://github.com/plaid/plaid-link-ios/blob/master/v5-migration-guide.md)
+
+## LinkKit V10.9.0 — 2023-11-13
+
+### React Native
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
+
+#### Changes
+
+- Update iOS SDK to [4.7.0](https://github.com/plaid/plaid-link-ios/releases/tag/4.7.0)
+
+
+### Android
+
+Android SDK [3.14.1](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.1)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+
+### Additions
+
+- Flutter usage tracking.
+
+### Changes
+
+- Change LinkActivity to SingleInstance to fix issue with OAuth Redirects on Android 14.
+
+### Removals
+
+- None
+
+
+### iOS
+
+iOS SDK [4.7.0](https://github.com/plaid/plaid-link-ios/releases/tag/4.7.0)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 14.0 |
+| iOS | >= 11.0 |
 
 ## LinkKit V11.0.0 — 2023-11-09
 

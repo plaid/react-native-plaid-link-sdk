@@ -56,7 +56,7 @@ export enum PlaidProduct {
     TRANSACTIONS="transactions",
 }
 
-enum LinkAccountType {
+export enum LinkAccountType {
     CREDIT = 'credit',
     DEPOSITORY = 'depository',
     INVESTMENT = 'investment',
@@ -64,7 +64,7 @@ enum LinkAccountType {
     OTHER = 'other',
 }
 
-enum LinkAccountSubtypes {
+export enum LinkAccountSubtypes {
     ALL = 'all',
     CREDIT_CARD = 'credit card',
     PAYPAL = 'paypal',

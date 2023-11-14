@@ -330,7 +330,7 @@ PODS:
   - React-jsinspector (0.71.10)
   - React-logger (0.71.10):
     - glog
-  - react-native-plaid-link-sdk (10.9.0):
+  - react-native-plaid-link-sdk (10.9.1):
     - Plaid (~> 4.7.0)
     - React-Core
   - react-native-safe-area-context (4.7.4):
@@ -627,7 +627,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 4bb480a183a354e4dbfb1012936b1a2bb9357de7
   React-jsinspector: cdc854f8b13abd202afa54bc12578e5afb9cfae1
   React-logger: ef2269b3afa6ba868da90496c3e17a4ec4f4cee0
-  react-native-plaid-link-sdk: 2f7b01372095bba301ff4018954498c1ebb59c4c
+  react-native-plaid-link-sdk: 808764c0ce5fff54361c4252381d62551eb0a3ea
   react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
   React-perflogger: 217095464d5c4bb70df0742fa86bf2a363693468
   React-RCTActionSheet: 8deae9b85a4cbc6a2243618ea62a374880a2c614

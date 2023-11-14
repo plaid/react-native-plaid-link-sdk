@@ -151,6 +151,7 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 | 11.0.2            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
 | 11.0.1            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
 | 11.0.0            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 10.9.1            | >= 0.66.0                | [3.14.1+]   | 21                  | 33                     | >=4.7.0 |  11.0           | Active, supports Xcode 14     |
 | 10.9.0            | >= 0.66.0                | [3.14.1+]   | 21                  | 33                     | >=4.7.0 |  11.0           | Active, supports Xcode 14     |
 | 10.8.0            | >= 0.66.0                | [3.14.0+]   | 21                  | 33                     | >=4.7.0 |  11.0           | Active, supports Xcode 14     |
 | 10.7.0            | >= 0.66.0                | [3.14.0+]   | 21                  | 33                     | >=4.6.4 |  11.0           | Active, supports Xcode 14     |

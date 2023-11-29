@@ -143,6 +143,14 @@ You can also use the `usePlaidEmitter` hook in react functional components:
   })
 ```
 
+## Upgrading
+
+Plaid releases updates to the SDK approximately every few months. For the best user experience, we recommend using the latest version of the SDK.
+
+Major SDK versions are released annually. SDK versions are supported for two years; with each major SDK release, Plaid will stop officially supporting any previous SDK versions that are more than two years old. 
+
+While these older versions are expected to continue to work without disruption, Plaid will not provide assistance with unsupported SDK versions. 
+
 ## Version compatibility
 
 | Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |

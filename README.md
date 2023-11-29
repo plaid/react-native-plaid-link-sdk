@@ -145,6 +145,8 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 
 ## Version compatibility
 
+Major SDK versions are released annually. SDK versions are supported for two years; with each major SDK release, Plaid will stop officially supporting any previous SDK versions that are more than two years old. While these older versions are expected to continue to work without disruption, Plaid will not provide assistance with unsupported SDK versions. 
+
 | Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |
 |-------------------|--------------------------|-------------|---------------------|------------------------|---------|-----------------|-------------------------------|
 | 11.0.3            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |

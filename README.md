@@ -142,6 +142,11 @@ You can also use the `usePlaidEmitter` hook in react functional components:
     console.log(event)
   })
 ```
+## Upgrading
+
+Plaid regularly updates the SDK. For the best user experience, we recommend updating your SDK regularly.
+
+Major SDK versions are released annually. SDK versions are supported for two years; with each major SDK release, Plaid will stop officially supporting any previous SDK versions that are more than two years old. While these older versions are expected to continue to work without disruption, Plaid will not provide assistance with unsupported SDK versions. 
 
 ## Version compatibility
 

@@ -5,6 +5,12 @@ interface CommonPlaidLinkOptions {
 
 export type LinkTokenConfiguration = (CommonPlaidLinkOptions & {
     token: string;
+    // A `Bool` indicating that Link should skip displaying a loading animation until the Link UI is fully loaded.
+    // This can be used to display custom loading UI while Link content is loading (and will skip any initial loading UI in Link).
+    // Note: Dismiss custom loading UI on the OPEN & EXIT events.
+    //
+    // Note: This should be set to `true` when setting the `eu_config.headless` field in /link/token/create requests to `true`.
+    // For reference, see https://plaid.com/docs/api/tokens/#link-token-create-request-eu-config-headless
     noLoadingState: boolean;
 });
 

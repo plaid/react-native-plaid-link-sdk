@@ -67,7 +67,8 @@ const MyPlaidComponent = () => {
             token: "#GENERATED_LINK_TOKEN#",
             // OPTIONAL - log level.
             logLevel: LinkLogLevel.ERROR,
-            // OPTIONAL - Hides native activity indicator if true.
+            // A `Bool` indicating that Link should skip displaying a loading animation until the Link UI is fully loaded.
+            // See Types.ts for more information.
             noLoadingState: false,
         }}
         onSuccess={(success: LinkSuccess) => { console.log(success) }}

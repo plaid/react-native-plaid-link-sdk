@@ -10,11 +10,11 @@ Pod::Spec.new do |s|
 
   s.authors      = package['author']
   s.homepage     = "https://plaid.com/docs/link/ios/"
-  s.platform     = :ios, "11.0"
+  s.platform     = :ios, "14.0"
 
   s.source       = { :git => "https://github.com/plaid/react-native-plaid-link-sdk.git", :tag => "v#{s.version}" }
   s.source_files  = "ios/*.{h,m,swift}"
 
   s.dependency 'React-Core'
-  s.dependency 'Plaid', '~> 5.0.0'
+  s.dependency 'Plaid', '~> 5.1.0'
 end

@@ -41,11 +41,12 @@ export const usePlaidEmitter = (LinkEventListener: LinkEventListener) => {
 
 export const openLink = async (props: PlaidLinkProps) => {
   let config = props.tokenConfig;
+  let noLoadingState = config.noLoadingState ?? false;
 
   if (Platform.OS === 'android') {
     NativeModules.PlaidAndroid.startLinkActivityForResult(
       config.token,
-      config.noLoadingState,
+      noLoadingState,
       config.logLevel ?? LinkLogLevel.ERROR,
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {
@@ -63,7 +64,7 @@ export const openLink = async (props: PlaidLinkProps) => {
       },
     );
   } else {
-    NativeModules.RNLinksdk.create(config.token, config.noLoadingState);
+    NativeModules.RNLinksdk.create(config.token, noLoadingState);
 
     let presentFullScreen = props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN
 

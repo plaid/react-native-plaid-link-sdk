@@ -4,6 +4,53 @@
 
 ### React Native
 
+- Stability Improvements
+- Updates Android SDK to `3.14.2`
+- Updates iOS SDK to `4.7.1`
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
+
+#### Changes
+
+- Update iOS SDK to [4.7.1](https://github.com/plaid/plaid-link-ios/releases/tag/4.7.1)
+
+### Android
+
+Android SDK [3.14.2](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.2)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+
+### Additions
+
+- Stability Improvements.
+
+### iOS
+
+iOS SDK [4.7.1](https://github.com/plaid/plaid-link-ios/releases/tag/4.7.1)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 14.0 |
+| iOS | >= 11.0 |
+
+### Additions
+
+- Stability Improvements.
+
+## LinkKit V10.9.1 — 2023-11-13
+
+### React Native
+
 - Removes circular dependency.
 
 #### Requirements

@@ -32,6 +32,7 @@ class RNAccountAdapter : JsonSerializer<LinkAccount> {
       src.verificationStatus?.let { status ->
         context?.serialize(status)?.asJsonObject?.let {
           addProperty("verification_status", it.get("json").asString)
+          addProperty("verificationStatus", it.get("json").asString)
         }
       }
 

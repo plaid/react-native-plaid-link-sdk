@@ -12,18 +12,16 @@ Pod::Spec.new do |s|
 
   s.authors      = package['author']
   s.homepage     = "https://plaid.com/docs/link/ios/"
-  s.platform     = :ios, "11.0"
+  s.platform     = :ios, "14.0"
 
   s.source       = { :git => "https://github.com/plaid/react-native-plaid-link-sdk.git", :tag => "v#{s.version}" }
-  s.source_files  = "ios/**/*.{h,m,mm}"
+  s.source_files  = "ios/**/*.{h,m,mm,swift}"
 
   if fabric_enabled
     install_modules_dependencies(s)
   else
-    s.platforms = { :ios => "11.0", :tvos => "11.0" }
-
     s.dependency "React-Core"
   end
 
-  s.dependency 'Plaid', '~> 4.5.1'
+  s.dependency 'Plaid', '~> 5.1.0'
 end

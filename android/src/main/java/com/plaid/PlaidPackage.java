@@ -1,5 +1,6 @@
 package com.plaid;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,11 @@ public class PlaidPackage extends TurboReactPackage implements ViewManagerOnDema
       default:
         return null;
     }
+  }
+
+  @Override
+  public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+    return Arrays.<ViewManager>asList( new PLKEmbeddedViewManager() );
   }
 
   @Override

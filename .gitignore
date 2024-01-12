@@ -38,6 +38,7 @@ build/
 local.properties
 *.iml
 *.hprof
+android/build/
 
 # BUCK
 buck-out/
@@ -48,5 +49,6 @@ buck-out/
 dist/
 
 .vscode
+example/android/build/
 example/.yalc
 example/yalc.lock

@@ -5,30 +5,14 @@ interface CommonPlaidLinkOptions {
 
 export type LinkTokenConfiguration = (CommonPlaidLinkOptions & {
     token: string;
-    noLoadingState: boolean;
+    // A `Bool` indicating that Link should skip displaying a loading animation until the Link UI is fully loaded.
+    // This can be used to display custom loading UI while Link content is loading (and will skip any initial loading UI in Link).
+    // Note: Dismiss custom loading UI on the OPEN & EXIT events.
+    //
+    // Note: This should be set to `true` when setting the `eu_config.headless` field in /link/token/create requests to `true`.
+    // For reference, see https://plaid.com/docs/api/tokens/#link-token-create-request-eu-config-headless
+    noLoadingState?: boolean;
 });
-
-export type LinkPublicKeyConfiguration = (CommonPlaidLinkOptions & {
-    token?: string;
-    publicKey?: string;
-    clientName: string;
-    environment: PlaidEnvironment;
-    products: Array<PlaidProduct>;
-    language: string;
-    countryCodes: Array<string>;
-    webhook?: string;
-    userLegalName?: string;
-    userEmailAddress?: string;
-    userPhoneNumber?: string;
-    linkCustomizationName?: string;
-    accountSubtypes?: Array<LinkAccountSubtype>;
-    oauthConfiguration?: OAuthConfiguration
-});
-
-export interface OAuthConfiguration {
-    nonce?: string;
-    redirectUri?: string;
-}
 
 export enum LinkLogLevel {
     DEBUG="debug",
@@ -56,7 +40,7 @@ export enum PlaidProduct {
     TRANSACTIONS="transactions",
 }
 
-enum LinkAccountType {
+export enum LinkAccountType {
     CREDIT = 'credit',
     DEPOSITORY = 'depository',
     INVESTMENT = 'investment',
@@ -64,7 +48,7 @@ enum LinkAccountType {
     OTHER = 'other',
 }
 
-enum LinkAccountSubtypes {
+export enum LinkAccountSubtypes {
     ALL = 'all',
     CREDIT_CARD = 'credit card',
     PAYPAL = 'paypal',
@@ -434,6 +418,7 @@ export interface LinkEvent {
 }
 
 export interface LinkEventMetadata {
+    accountNumberMask?: string;
     linkSessionId: string;
     mfaType?: string;
     requestId?: string;
@@ -445,6 +430,8 @@ export interface LinkEventMetadata {
     institutionId?: string;
     institutionName?: string;
     institutionSearchQuery?: string;
+    isUpdateMode?: string;
+    matchReason?: string;
   // see possible values for selection at https://plaid.com/docs/link/web/#link-web-onevent-selection
     selection?: null | string;
     timestamp: string;
@@ -461,6 +448,7 @@ export enum LinkEventName {
     IDENTITY_VERIFICATION_PASS_STEP = 'IDENTITY_VERIFICATION_PASS_STEP',
     IDENTITY_VERIFICATION_FAIL_STEP = 'IDENTITY_VERIFICATION_FAIL_STEP',
     IDENTITY_VERIFICATION_PENDING_REVIEW_STEP = 'IDENTITY_VERIFICATION_PENDING_REVIEW_STEP',
+    IDENTITY_VERIFICATION_PENDING_REVIEW_SESSION = 'IDENTITY_VERIFICATION_PENDING_REVIEW_SESSION',
     IDENTITY_VERIFICATION_CREATE_SESSION = 'IDENTITY_VERIFICATION_CREATE_SESSION',
     IDENTITY_VERIFICATION_RESUME_SESSION = 'IDENTITY_VERIFICATION_RESUME_SESSION',
     IDENTITY_VERIFICATION_PASS_SESSION = 'IDENTITY_VERIFICATION_PASS_SESSION',
@@ -477,10 +465,23 @@ export enum LinkEventName {
     SEARCH_INSTITUTION = 'SEARCH_INSTITUTION',
     SELECT_DEGRADED_INSTITUTION = 'SELECT_DEGRADED_INSTITUTION',
     SELECT_DOWN_INSTITUTION = 'SELECT_DOWN_INSTITUTION',
+    SELECT_FILTERED_INSTITUTION = 'SELECT_FILTERED_INSTITUTION',
     SELECT_INSTITUTION = 'SELECT_INSTITUTION',
+    SELECT_BRAND = 'SELECT_BRAND',
+    SELECT_AUTH_TYPE = 'SELECT_AUTH_TYPE',
+    SUBMIT_ACCOUNT_NUMBER = 'SUBMIT_ACCOUNT_NUMBER',
+    SUBMIT_DOCUMENTS = 'SUBMIT_DOCUMENTS',
+    SUBMIT_DOCUMENTS_SUCCESS = 'SUBMIT_DOCUMENTS_SUCCESS',
+    SUBMIT_DOCUMENTS_ERROR = 'SUBMIT_DOCUMENTS_ERROR',
+    SUBMIT_ROUTING_NUMBER = 'SUBMIT_ROUTING_NUMBER',
+    VIEW_DATA_TYPES = 'VIEW_DATA_TYPES',
+    SUBMIT_PHONE = 'SUBMIT_PHONE',
+    SKIP_SUBMIT_PHONE = 'SKIP_SUBMIT_PHONE',
+    VERIFY_PHONE = 'VERIFY_PHONE',
     SUBMIT_CREDENTIALS = 'SUBMIT_CREDENTIALS',
     SUBMIT_MFA = 'SUBMIT_MFA',
     TRANSITION_VIEW = 'TRANSITION_VIEW',
+    CONNECT_NEW_INSTITUTION = 'CONNECT_NEW_INSTITUTION',
 }
 
 export enum LinkEventViewName {
@@ -488,6 +489,8 @@ export enum LinkEventViewName {
     CONNECTED = 'CONNECTED',
     CONSENT = 'CONSENT',
     CREDENTIAL = 'CREDENTIAL',
+    DATA_TRANSPARENCY = 'DATA_TRANSPARENCY',
+    DATA_TRANSPARENCY_CONSENT = 'DATA_TRANSPARENCY_CONSENT',
     DOCUMENTARY_VERIFICATION = 'DOCUMENTARY_VERIFICATION',
     ERROR = 'ERROR',
     EXIT = 'EXIT',
@@ -499,12 +502,23 @@ export enum LinkEventViewName {
     MATCHED_MFA = 'MATCHED_MFA',
     MFA = 'MFA',
     NUMBERS = 'NUMBERS',
+    NUMBERS_SELECT_INSTITUTION = 'NUMBERS_SELECT_INSTITUTION',
     OAUTH = 'OAUTH',
     RECAPTCHA = 'RECAPTCHA',
     RISK_CHECK = 'RISK_CHECK',
     SCREENING = 'SCREENING',
     SELECT_ACCOUNT = 'SELECT_ACCOUNT',
+    SELECT_AUTH_TYPE = 'SELECT_AUTH_TYPE',
+    SUBMIT_PHONE = 'SUBMIT_PHONE',
+    VERIFY_PHONE = 'VERIFY_PHONE',
+    SELECT_SAVED_INSTITUTION = 'SELECT_SAVED_INSTITUTION',
+    SELECT_SAVED_ACCOUNT = 'SELECT_SAVED_ACCOUNT',
+    SELECT_BRAND = 'SELECT_BRAND',
     SELECT_INSTITUTION = 'SELECT_INSTITUTION',
+    SUBMIT_DOCUMENTS = 'SUBMIT_DOCUMENTS',
+    SUBMIT_DOCUMENTS_SUCCESS = 'SUBMIT_DOCUMENTS_SUCCESS',
+    SUBMIT_DOCUMENTS_ERROR = 'SUBMIT_DOCUMENTS_ERROR',
+    UPLOAD_DOCUMENTS = 'UPLOAD_DOCUMENTS',
     VERIFY_SMS = 'VERIFY_SMS',
 }
 
@@ -512,22 +526,22 @@ export enum LinkEventViewName {
 /// FULL_SCREEN is the converts to UIModalPresentationOverFullScreen on the native side.
 /// MODAL will use the default presentation style for iOS which is UIModalPresentationAutomatic.
 export enum LinkIOSPresentationStyle {
-    FULL_SCREEN,
-    MODAL
+    FULL_SCREEN = 'FULL_SCREEN',
+    MODAL = 'MODAL'
 }
 
 export type LinkSuccessListener = (LinkSuccess: LinkSuccess) => void
 
 export type LinkExitListener = (LinkExit: LinkExit) => void
 
-export type PlaidLinkConfiguration = LinkTokenConfiguration | LinkPublicKeyConfiguration
+export type LinkOnEventListener = (LinkEvent: LinkEvent) => void
 
 export interface PlaidLinkProps {
-    tokenConfig?: LinkTokenConfiguration
-    publicKeyConfig?: LinkPublicKeyConfiguration
+    tokenConfig: LinkTokenConfiguration
     onSuccess: LinkSuccessListener
     onExit?: LinkExitListener
     iOSPresentationStyle?: LinkIOSPresentationStyle
+    logLevel?: LinkLogLevel
     onPress?(): any
 }
 

@@ -13,7 +13,7 @@ allprojects {
 
 buildscript {
     ext {
-        kotlin_version = '1.7.10'
+        kotlin_version = '1.8.22'
     }
     ext.safeExtGet = {prop, fallback ->
         rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -105,7 +105,7 @@ repositories {
 
 dependencies {
     implementation "com.facebook.react:react-native:+"
-    implementation "com.plaid.link:sdk-core:3.13.2"
+    implementation "com.plaid.link:sdk-core:4.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
 }

@@ -5,11 +5,12 @@ import {
   LinkEventListener,
   LinkExit,
   LinkIOSPresentationStyle,
+  LinkLogLevel,
   LinkSuccess,
   PlaidLinkComponentProps,
   PlaidLinkProps,
 } from './Types';
-import RNLinksdk from '../fabric/NativePlaidLinkModule';
+import RNLinksdk from './fabric/NativePlaidLinkModule';
 /**
  * A hook that registers a listener on the Plaid emitter for the 'onEvent' type.
  * The listener is cleaned up when this view is unmounted
@@ -28,16 +29,14 @@ export const usePlaidEmitter = (LinkEventListener: LinkEventListener) => {
 };
 
 export const openLink = async (props: PlaidLinkProps) => {
-  if (props.tokenConfig == null) {
-    console.log(
-      'The public_key is being deprecated. Learn how to upgrade to link_tokens at https://plaid.com/docs/link-token-migration-guide/',
-    );
-  }
-  let config = props.tokenConfig ? props.tokenConfig : props.publicKeyConfig!;
+  let config = props.tokenConfig;
+  let noLoadingState = config.noLoadingState ?? false;
 
   if (Platform.OS === 'android') {
     RNLinksdk.startLinkActivityForResult(
-      JSON.stringify(config),
+      config.token,
+      noLoadingState,
+      config.logLevel ?? LinkLogLevel.ERROR,
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {
           props.onSuccess(result);
@@ -54,7 +53,7 @@ export const openLink = async (props: PlaidLinkProps) => {
       },
     );
   } else {
-    RNLinksdk.create(config);
+    RNLinksdk.create(config.token, noLoadingState);
 
     let presentFullScreen =
       props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN;

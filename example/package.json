@@ -1,19 +1,28 @@
 {
    "name": "plaidRNDemo",
-   "version": "0.0.1",
+   "version": "0.1.0",
    "private": true,
    "scripts": {
       "android": "react-native run-android",
-      "ios": "react-native run-ios --simulator=\"iPhone 13 Pro Simulator (15.5)\"",
+      "ios": "react-native run-ios --simulator=\"iPhone 14 Pro (16.4)\"",
       "lint": "eslint \"./**/*.{js,jsx}\" --fix",
       "prettier": "prettier \"./**/*.{js,jsx}\" --write",
       "start": "react-native start",
-      "test": "jest"
+      "test": "jest",
+      "yalc-plaid": "yalc add react-native-plaid-link-sdk"
    },
    "dependencies": {
+      "@react-navigation/bottom-tabs": "^6.5.8",
+      "@react-navigation/native": "^6.1.7",
+      "@react-navigation/stack": "^6.3.17",
+      "@typescript-eslint/parser": "^5.62.0",
+      "add": "^2.0.6",
       "react": "18.2.0",
-      "react-native": "0.71.7",
-      "react-native-plaid-link-sdk": "^10.5.0"
+      "react-native": "0.71.10",
+      "react-native-gesture-handler": "^2.12.1",
+      "react-native-plaid-link-sdk": "^11.1.0",
+      "react-native-safe-area-context": "^4.7.1",
+      "react-native-screens": "^3.24.0"
    },
    "devDependencies": {
       "@babel/core": "^7.20.0",

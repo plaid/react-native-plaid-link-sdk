@@ -8,6 +8,8 @@ The Plaid React Native SDK provides the client-side component that your users wi
 For more information about Plaid Link check out our
 [introduction documentation](https://plaid.com/docs/link/#introduction-to-link).
 
+Plaid currently supports two versions of the Plaid React Native SDK v10.x and v11.x. You can find v10 on the [master-v10](https://github.com/plaid/react-native-plaid-link-sdk/tree/master-v10) branch.
+
 ## Features
 
 The SDK provides:
@@ -66,22 +68,19 @@ import {
 const MyPlaidComponent = () => {
   return (
     <PlaidLink
-      tokenConfig={{
-        token: '#GENERATED_LINK_TOKEN#',
-        // OPTIONAL - log level.
-        logLevel: LinkLogLevel.ERROR,
-        // OPTIONAL - Hides native activity indicator if true.
-        noLoadingState: false,
-      }}
-      onSuccess={(success: LinkSuccess) => {
-        console.log(success);
-      }}
-      onExit={(exit: LinkExit) => {
-        console.log(exit);
-      }}
-      // OPTIONAL - MODAL or FULL_SCREEEN presentation on iOS. Defaults to MODAL.
-      // UI is always presented in full screen on Android.
-      iOSPresentationStyle={LinkIOSPresentationStyle.MODAL}
+        tokenConfig={{
+            token: "#GENERATED_LINK_TOKEN#",
+            // OPTIONAL - log level.
+            logLevel: LinkLogLevel.ERROR,
+            // OPTIONAL - A `Bool` indicating that Link should skip displaying a loading animation until the Link UI is fully loaded.
+            // See Types.ts for more information.
+            noLoadingState: false,
+        }}
+        onSuccess={(success: LinkSuccess) => { console.log(success) }}
+        onExit={(exit: LinkExit) => { console.log(exit) }}
+        // OPTIONAL - MODAL or FULL_SCREEEN presentation on iOS. Defaults to MODAL.
+        // UI is always presented in full screen on Android.
+        iOSPresentationStyle={LinkIOSPresentationStyle.MODAL}
     >
       <Text>Add Account</Text>
     </PlaidLink>
@@ -93,7 +92,7 @@ const MyPlaidComponent = () => {
 
 #### OAuth requirements
 
-:warning: All integrations must migrate to version 9.0.0 or later of the React Native SDK (requires version 4.1.0 or later of the iOS LinkKit SDK) by September 30, 2023, to maintain support for Chase OAuth on iOS.
+:warning: All integrations must migrate to version 9.0.0 or later of the React Native SDK (requires version 4.1.0 or later of the iOS LinkKit SDK) by January 1, 2024, to maintain support for Chase OAuth on iOS. 
 
 ##### Android OAuth Requirements
 
@@ -150,19 +149,42 @@ usePlaidEmitter((event: LinkEvent) => {
 });
 ```
 
+## Upgrading
+
+Plaid releases updates to the SDK approximately every few months. For the best user experience, we recommend using the latest version of the SDK.
+
+Major SDK versions are released annually. SDK versions are supported for two years; with each major SDK release, Plaid will stop officially supporting any previous SDK versions that are more than two years old. 
+
+While these older versions are expected to continue to work without disruption, Plaid will not provide assistance with unsupported SDK versions. 
+
 ## Version compatibility
 
-| Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version | iOS SDK | iOS Min Version | Status                        |
-| ----------------- | ------------------------ | ----------- | ------------------- | ----------------------- | ------- | --------------- | ----------------------------- |
-| 10.5.0            | >= 0.66.0                | [3.12.2+]   | 21                  | 33                      | >=4.5.1 | 11.0            | Active, supports Xcode 14     |
-| 10.4.0            | >= 0.66.0                | [3.12.2+]   | 21                  | 33                      | >=4.4.0 | 11.0            | Deprecated, supports Xcode 14 |
-| 10.3.0            | >= 0.66.0                | [3.12.1+]   | 21                  | 33                      | >=4.3.0 | 11.0            | Deprecated, supports Xcode 14 |
-| 10.2.0            | >= 0.66.0                | [3.12.0+]   | 21                  | 33                      | >=4.3.0 | 11.0            | Deprecated, supports Xcode 14 |
-| 10.1.0            | >= 0.66.0                | [3.11.0+]   | 21                  | 33                      | >=4.2.0 | 11.0            | Deprecated, supports Xcode 14 |
-| 10.0.0            | >= 0.66.0                | [3.10.1+]   | 21                  | 33                      | >=4.1.0 | 11.0            | Deprecated, supports Xcode 14 |
-| 9.1.0             | >= 0.65.3                | [3.13.2+]   | 21                  | 33                      | >=4.4.0 | 11.0            | Deprecated, supports Xcode 14 |
-| 9.0.1             | >= 0.65.3                | [3.10.1+]   | 21                  | 33                      | >=4.1.0 | 11.0            | Deprecated, supports Xcode 14 |
-| 9.0.0             | >= 0.65.3                | [3.10.1+]   | 21                  | 33                      | >=4.1.0 | 11.0            | Deprecated, supports Xcode 14 |
+| Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |
+|-------------------|--------------------------|-------------|---------------------|------------------------|---------|-----------------|-------------------------------|
+| 11.2.0            | *                        | [4.1.0+]    | 21                  | 33                     | >=5.1.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.1.0            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.1.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.0.3            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.0.2            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.0.1            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.0.0            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 10.9.1            | >= 0.66.0                | [3.14.1+]   | 21                  | 33                     | >=4.7.0 |  11.0           | Active, supports Xcode 14     |
+| 10.9.0            | >= 0.66.0                | [3.14.1+]   | 21                  | 33                     | >=4.7.0 |  11.0           | Active, supports Xcode 14     |
+| 10.8.0            | >= 0.66.0                | [3.14.0+]   | 21                  | 33                     | >=4.7.0 |  11.0           | Active, supports Xcode 14     |
+| 10.7.0            | >= 0.66.0                | [3.14.0+]   | 21                  | 33                     | >=4.6.4 |  11.0           | Active, supports Xcode 14     |
+| 10.6.4            | >= 0.66.0                | [3.14.0+]   | 21                  | 33                     | >=4.6.4 |  11.0           | Active, supports Xcode 14     |
+| 10.6.3            | >= 0.66.0                | [3.14.0+]   | 21                  | 33                     | >=4.6.4 |  11.0           | Active, supports Xcode 14     |
+| 10.6.2            | >= 0.66.0                | [3.14.0+]   | 21                  | 33                     | >=4.6.4 |  11.0           | Deprecated, supports Xcode 14 |
+| 10.6.0            | >= 0.66.0                | [3.14.0+]   | 21                  | 33                     | >=4.6.4 |  11.0           | Deprecated, supports Xcode 14 |
+| 10.5.0            | >= 0.66.0                | [3.12.2+]   | 21                  | 33                     | >=4.5.1 |  11.0           | Deprecated, supports Xcode 14 |
+| 10.4.0            | >= 0.66.0                | [3.12.2+]   | 21                  | 33                     | >=4.4.0 |  11.0           | Deprecated, supports Xcode 14 |
+| 10.3.0            | >= 0.66.0                | [3.12.1+]   | 21                  | 33                     | >=4.3.0 |  11.0           | Deprecated, supports Xcode 14 |
+| 10.2.0            | >= 0.66.0                | [3.12.0+]   | 21                  | 33                     | >=4.3.0 |  11.0           | Deprecated, supports Xcode 14 |
+| 10.1.0            | >= 0.66.0                | [3.11.0+]   | 21                  | 33                     | >=4.2.0 |  11.0           | Deprecated, supports Xcode 14 |
+| 10.0.0            | >= 0.66.0                | [3.10.1+]   | 21                  | 33                     | >=4.1.0 |  11.0           | Deprecated, supports Xcode 14 |
+| 9.1.0             | >= 0.65.3                | [3.13.2+]   | 21                  | 33                     | >=4.4.0 |  11.0           | Deprecated, supports Xcode 14 |
+| 9.0.1             | >= 0.65.3                | [3.10.1+]   | 21                  | 33                     | >=4.1.0 |  11.0           | Deprecated, supports Xcode 14 |
+| 9.0.0             | >= 0.65.3                | [3.10.1+]   | 21                  | 33                     | >=4.1.0 |  11.0           | Deprecated, supports Xcode 14 |
+
 
 ## Contributing
 

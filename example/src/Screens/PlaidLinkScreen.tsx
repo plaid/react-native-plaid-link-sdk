@@ -1,7 +1,6 @@
 import React from 'react';
-import {TextInput, Text, TouchableOpacity, useColorScheme} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {styles} from './Styles';
+import { TextInput, Text, TouchableOpacity } from 'react-native';
+import { styles } from '../Styles';
 
 import {
   LinkExit,
@@ -39,27 +38,27 @@ function makeLinkTokenProps(token: string): PlaidLinkProps {
   };
 }
 
-export const PlaidEventContainer = () => {
+export function PlaidLinkScreen() {
   // Render using the link_token integration. Refer to the docs
   // https://plaid.com/docs/#create-link-token on how to create
   // a new link_token.
 
+  // Use event emitter to get real time events during a Link Session.
   usePlaidEmitter((event: LinkEvent) => {
     // Log Link Session events to console.
     console.log(event);
   });
 
   const [text, onChangeText] = React.useState('');
-  const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <>
       <TextInput
-        style={isDarkMode ? styles.inputDark : styles.input}
+        style={styles.input}
         onChangeText={onChangeText}
         value={text}
         placeholder="link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-        placeholderTextColor={isDarkMode ? Colors.white : '#D3D3D3'}
+        placeholderTextColor={'#D3D3D3'}
       />
       <TouchableOpacity
         style={styles.button}
@@ -71,4 +70,4 @@ export const PlaidEventContainer = () => {
       </TouchableOpacity>
     </>
   );
-};
+}

@@ -145,7 +145,8 @@ You can also use the `usePlaidEmitter` hook in react functional components:
 
 | Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |
 |-------------------|--------------------------|-------------|---------------------|------------------------|---------|-----------------|-------------------------------|
-| 10.10.0           | >= 0.66.0                | [3.14.2+]   | 21                  | 33                     | >=4.7.1 |  11.0           | Active, supports Xcode 14     |
+| 10.11.0           | >= 0.66.0                | [3.14.2+]   | 21                  | 33                     | >=4.7.1 |  11.0           | Active, supports Xcode 14     |
+| ~10.10.0~         | >= 0.66.0                | [3.14.2+]   | 21                  | 33                     | >=4.7.1 |  11.0           | Deprecated                    |
 | 10.9.1            | >= 0.66.0                | [3.14.1+]   | 21                  | 33                     | >=4.7.0 |  11.0           | Active, supports Xcode 14     |
 | 10.9.0            | >= 0.66.0                | [3.14.1+]   | 21                  | 33                     | >=4.7.0 |  11.0           | Active, supports Xcode 14     |
 | 10.8.0            | >= 0.66.0                | [3.14.0+]   | 21                  | 33                     | >=4.7.0 |  11.0           | Active, supports Xcode 14     |

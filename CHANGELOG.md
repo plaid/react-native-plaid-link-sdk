@@ -16,7 +16,7 @@
 
 ### Android
 
-Android SDK [3.14.2](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.2)
+Android SDK [3.14.3](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.3)
 
 #### Requirements
 

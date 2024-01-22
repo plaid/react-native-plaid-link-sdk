@@ -1,5 +1,41 @@
 # RELEASES
 
+## LinkKit V10.12.0 — 2024-01-22
+
+### React Native
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
+
+#### Changes
+
+- Updates Android SDK SDK to 3.14.3. To prevent issue [620](https://github.com/plaid/react-native-plaid-link-sdk/issues/620).
+
+### Android
+
+Android SDK [3.14.2](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.2)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+
+### iOS
+
+iOS SDK [4.7.1](https://github.com/plaid/plaid-link-ios/releases/tag/4.7.1)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 14.0 |
+| iOS | >= 11.0 |
+
+
 ## LinkKit V10.11.0 — 2024-01-18
 
 ### React Native

@@ -1,5 +1,51 @@
 # RELEASES
 
+## LinkKit V11.4.0 — 2024-01-22
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Updates Android SDK SDK to `4.1.1` to fix bug where certain Link sessions close after initial loading.
+
+
+### Android
+
+Android SDK [4.1.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.1.1)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+#### Additions
+
+- Improved Remember Me experience.
+
+### iOS
+
+iOS SDK [5.1.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.1.0)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
+
+#### Changes
+
+- Resolve issue where PrivacyInfo.xcprivacy was missing NSPrivacyCollectedDataTypes.
+- Improved Remember Me experience.
+- Improved OAuth out-of-process webview open options.
+
 ## LinkKit V11.3.0 — 2024-01-18
 
 ### React Native

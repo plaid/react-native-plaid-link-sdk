@@ -42,9 +42,7 @@ iOS SDK [5.2.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.2.0)
 
 #### Changes
 
-- Resolve issue where PrivacyInfo.xcprivacy was missing NSPrivacyCollectedDataTypes.
 - Improved Remember Me experience.
-- Improved OAuth out-of-process webview open options.
 
 ## LinkKit V11.4.0 — 2024-01-22
 

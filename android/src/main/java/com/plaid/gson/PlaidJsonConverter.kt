@@ -14,6 +14,7 @@ import com.plaid.internal.classic.networking.adapter.LinkExitMetadataStatusAdapt
 import com.plaid.internal.classic.networking.adapter.PlaidErrorCodeAdapter
 import com.plaid.internal.classic.networking.adapter.PlaidErrorTypeAdapter
 import com.plaid.link.event.LinkEvent
+import com.plaid.link.event.LinkEventMetadata
 import com.plaid.link.event.LinkEventName
 import com.plaid.link.event.LinkEventViewName
 import com.plaid.link.result.LinkAccount
@@ -60,6 +61,10 @@ class PlaidJsonConverter {
         LinkEventNameAdapter()
       )
       this.registerTypeAdapter(
+        LinkEventMetadata::class.java,
+        RNEventMetadataAdapter()
+      )
+      this.registerTypeAdapter(
         LinkErrorCode::class.java,
         PlaidErrorCodeAdapter()
       )
@@ -83,6 +88,7 @@ class PlaidJsonConverter {
   }
 
   fun convert(linkEvent: LinkEvent): String {
-    return gson.toJson(linkEvent).replace("event_name", "event")
+    return gson.toJson(linkEvent)
+              .replace("event_name", "event")
   }
 }

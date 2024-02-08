@@ -24,7 +24,7 @@ export var PlaidProduct;
   PlaidProduct['PAYMENT_INITIATION'] = 'payment_initiation';
   PlaidProduct['TRANSACTIONS'] = 'transactions';
 })(PlaidProduct || (PlaidProduct = {}));
-var LinkAccountType;
+export var LinkAccountType;
 (function(LinkAccountType) {
   LinkAccountType['CREDIT'] = 'credit';
   LinkAccountType['DEPOSITORY'] = 'depository';
@@ -32,7 +32,7 @@ var LinkAccountType;
   LinkAccountType['LOAN'] = 'loan';
   LinkAccountType['OTHER'] = 'other';
 })(LinkAccountType || (LinkAccountType = {}));
-var LinkAccountSubtypes;
+export var LinkAccountSubtypes;
 (function(LinkAccountSubtypes) {
   LinkAccountSubtypes['ALL'] = 'all';
   LinkAccountSubtypes['CREDIT_CARD'] = 'credit card';
@@ -533,6 +533,8 @@ export var LinkErrorCode;
   LinkErrorCode['INVALID_PROCESSOR_TOKEN'] = 'INVALID_PROCESSOR_TOKEN';
   LinkErrorCode['INVALID_AUDIT_COPY_TOKEN'] = 'INVALID_AUDIT_COPY_TOKEN';
   LinkErrorCode['INVALID_ACCOUNT_ID'] = 'INVALID_ACCOUNT_ID';
+  LinkErrorCode['MICRODEPOSITS_ALREADY_VERIFIED'] =
+    'MICRODEPOSITS_ALREADY_VERIFIED';
   // INVALID_RESULT
   LinkErrorCode['PLAID_DIRECT_ITEM_IMPORT_RETURNED_INVALID_MFA'] =
     'PLAID_DIRECT_ITEM_IMPORT_RETURNED_INVALID_MFA';
@@ -571,6 +573,8 @@ export var LinkErrorType;
 })(LinkErrorType || (LinkErrorType = {}));
 export var LinkEventName;
 (function(LinkEventName) {
+  LinkEventName['BANK_INCOME_INSIGHTS_COMPLETED'] =
+    'BANK_INCOME_INSIGHTS_COMPLETED';
   LinkEventName['CLOSE_OAUTH'] = 'CLOSE_OAUTH';
   LinkEventName['ERROR'] = 'ERROR';
   LinkEventName['EXIT'] = 'EXIT';
@@ -584,6 +588,8 @@ export var LinkEventName;
     'IDENTITY_VERIFICATION_FAIL_STEP';
   LinkEventName['IDENTITY_VERIFICATION_PENDING_REVIEW_STEP'] =
     'IDENTITY_VERIFICATION_PENDING_REVIEW_STEP';
+  LinkEventName['IDENTITY_VERIFICATION_PENDING_REVIEW_SESSION'] =
+    'IDENTITY_VERIFICATION_PENDING_REVIEW_SESSION';
   LinkEventName['IDENTITY_VERIFICATION_CREATE_SESSION'] =
     'IDENTITY_VERIFICATION_CREATE_SESSION';
   LinkEventName['IDENTITY_VERIFICATION_RESUME_SESSION'] =
@@ -608,10 +614,23 @@ export var LinkEventName;
   LinkEventName['SEARCH_INSTITUTION'] = 'SEARCH_INSTITUTION';
   LinkEventName['SELECT_DEGRADED_INSTITUTION'] = 'SELECT_DEGRADED_INSTITUTION';
   LinkEventName['SELECT_DOWN_INSTITUTION'] = 'SELECT_DOWN_INSTITUTION';
+  LinkEventName['SELECT_FILTERED_INSTITUTION'] = 'SELECT_FILTERED_INSTITUTION';
   LinkEventName['SELECT_INSTITUTION'] = 'SELECT_INSTITUTION';
+  LinkEventName['SELECT_BRAND'] = 'SELECT_BRAND';
+  LinkEventName['SELECT_AUTH_TYPE'] = 'SELECT_AUTH_TYPE';
+  LinkEventName['SUBMIT_ACCOUNT_NUMBER'] = 'SUBMIT_ACCOUNT_NUMBER';
+  LinkEventName['SUBMIT_DOCUMENTS'] = 'SUBMIT_DOCUMENTS';
+  LinkEventName['SUBMIT_DOCUMENTS_SUCCESS'] = 'SUBMIT_DOCUMENTS_SUCCESS';
+  LinkEventName['SUBMIT_DOCUMENTS_ERROR'] = 'SUBMIT_DOCUMENTS_ERROR';
+  LinkEventName['SUBMIT_ROUTING_NUMBER'] = 'SUBMIT_ROUTING_NUMBER';
+  LinkEventName['VIEW_DATA_TYPES'] = 'VIEW_DATA_TYPES';
+  LinkEventName['SUBMIT_PHONE'] = 'SUBMIT_PHONE';
+  LinkEventName['SKIP_SUBMIT_PHONE'] = 'SKIP_SUBMIT_PHONE';
+  LinkEventName['VERIFY_PHONE'] = 'VERIFY_PHONE';
   LinkEventName['SUBMIT_CREDENTIALS'] = 'SUBMIT_CREDENTIALS';
   LinkEventName['SUBMIT_MFA'] = 'SUBMIT_MFA';
   LinkEventName['TRANSITION_VIEW'] = 'TRANSITION_VIEW';
+  LinkEventName['CONNECT_NEW_INSTITUTION'] = 'CONNECT_NEW_INSTITUTION';
 })(LinkEventName || (LinkEventName = {}));
 export var LinkEventViewName;
 (function(LinkEventViewName) {
@@ -619,6 +638,8 @@ export var LinkEventViewName;
   LinkEventViewName['CONNECTED'] = 'CONNECTED';
   LinkEventViewName['CONSENT'] = 'CONSENT';
   LinkEventViewName['CREDENTIAL'] = 'CREDENTIAL';
+  LinkEventViewName['DATA_TRANSPARENCY'] = 'DATA_TRANSPARENCY';
+  LinkEventViewName['DATA_TRANSPARENCY_CONSENT'] = 'DATA_TRANSPARENCY_CONSENT';
   LinkEventViewName['DOCUMENTARY_VERIFICATION'] = 'DOCUMENTARY_VERIFICATION';
   LinkEventViewName['ERROR'] = 'ERROR';
   LinkEventViewName['EXIT'] = 'EXIT';
@@ -630,11 +651,31 @@ export var LinkEventViewName;
   LinkEventViewName['MATCHED_MFA'] = 'MATCHED_MFA';
   LinkEventViewName['MFA'] = 'MFA';
   LinkEventViewName['NUMBERS'] = 'NUMBERS';
+  LinkEventViewName['NUMBERS_SELECT_INSTITUTION'] =
+    'NUMBERS_SELECT_INSTITUTION';
   LinkEventViewName['OAUTH'] = 'OAUTH';
   LinkEventViewName['RECAPTCHA'] = 'RECAPTCHA';
   LinkEventViewName['RISK_CHECK'] = 'RISK_CHECK';
   LinkEventViewName['SCREENING'] = 'SCREENING';
   LinkEventViewName['SELECT_ACCOUNT'] = 'SELECT_ACCOUNT';
+  LinkEventViewName['SELECT_AUTH_TYPE'] = 'SELECT_AUTH_TYPE';
+  LinkEventViewName['SUBMIT_PHONE'] = 'SUBMIT_PHONE';
+  LinkEventViewName['VERIFY_PHONE'] = 'VERIFY_PHONE';
+  LinkEventViewName['SELECT_SAVED_INSTITUTION'] = 'SELECT_SAVED_INSTITUTION';
+  LinkEventViewName['SELECT_SAVED_ACCOUNT'] = 'SELECT_SAVED_ACCOUNT';
+  LinkEventViewName['SELECT_BRAND'] = 'SELECT_BRAND';
   LinkEventViewName['SELECT_INSTITUTION'] = 'SELECT_INSTITUTION';
+  LinkEventViewName['SUBMIT_DOCUMENTS'] = 'SUBMIT_DOCUMENTS';
+  LinkEventViewName['SUBMIT_DOCUMENTS_SUCCESS'] = 'SUBMIT_DOCUMENTS_SUCCESS';
+  LinkEventViewName['SUBMIT_DOCUMENTS_ERROR'] = 'SUBMIT_DOCUMENTS_ERROR';
+  LinkEventViewName['UPLOAD_DOCUMENTS'] = 'UPLOAD_DOCUMENTS';
   LinkEventViewName['VERIFY_SMS'] = 'VERIFY_SMS';
 })(LinkEventViewName || (LinkEventViewName = {}));
+/// Methods to present Link on iOS.
+/// FULL_SCREEN is the converts to UIModalPresentationOverFullScreen on the native side.
+/// MODAL will use the default presentation style for iOS which is UIModalPresentationAutomatic.
+export var LinkIOSPresentationStyle;
+(function(LinkIOSPresentationStyle) {
+  LinkIOSPresentationStyle['FULL_SCREEN'] = 'FULL_SCREEN';
+  LinkIOSPresentationStyle['MODAL'] = 'MODAL';
+})(LinkIOSPresentationStyle || (LinkIOSPresentationStyle = {}));

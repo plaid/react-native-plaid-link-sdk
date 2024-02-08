@@ -10,17 +10,21 @@ import {
   PlaidLinkComponentProps,
   PlaidLinkProps,
 } from './Types';
-import RNLinksdk from './fabric/NativePlaidLinkModule';
+import RNLinksdkAndroid from './fabric/NativePlaidLinkModuleAndroid';
+import RNLinksdkiOS from './fabric/NativePlaidLinkModuleiOS';
+
+const RNLinksdk = (Platform.OS === 'android' ? RNLinksdkAndroid : RNLinksdkiOS) ?? undefined;
+
 /**
  * A hook that registers a listener on the Plaid emitter for the 'onEvent' type.
  * The listener is cleaned up when this view is unmounted
  *
- * @param LinkEventListener the listener to call
+ * @param linkEventListener the listener to call
  */
-export const usePlaidEmitter = (LinkEventListener: LinkEventListener) => {
+export const usePlaidEmitter = (linkEventListener: LinkEventListener) => {
   useEffect(() => {
     const emitter = new NativeEventEmitter(RNLinksdk);
-    const listener = emitter.addListener('onEvent', LinkEventListener);
+    const listener = emitter.addListener('onEvent', linkEventListener);
     // Clean up after this effect:
     return function cleanup() {
       listener.remove();
@@ -33,10 +37,15 @@ export const openLink = async (props: PlaidLinkProps) => {
   let noLoadingState = config.noLoadingState ?? false;
 
   if (Platform.OS === 'android') {
-    RNLinksdk.startLinkActivityForResult(
+    if (RNLinksdkAndroid === null) {
+      throw new Error('[react-native-plaid-link-sdk] RNLinksdkAndroid is not defined');
+    }
+
+    RNLinksdkAndroid.startLinkActivityForResult(
       config.token,
       noLoadingState,
       config.logLevel ?? LinkLogLevel.ERROR,
+      // @ts-ignore we use Object type in the spec file as it maps to NSDictionary and ReadableMap
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {
           props.onSuccess(result);
@@ -53,13 +62,18 @@ export const openLink = async (props: PlaidLinkProps) => {
       },
     );
   } else {
-    RNLinksdk.create(config.token, noLoadingState);
+    if (RNLinksdkiOS === null) {
+      throw new Error('[react-native-plaid-link-sdk] RNLinksdkiOS is not defined');
+    }
+
+    RNLinksdkiOS.create(config.token, noLoadingState);
 
     let presentFullScreen =
       props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN;
 
-    RNLinksdk.open(
+    RNLinksdkiOS.open(
       presentFullScreen,
+      // @ts-ignore we use Object type in the spec file as it maps to NSDictionary and ReadableMap
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {
           props.onSuccess(result);
@@ -82,7 +96,11 @@ export const openLink = async (props: PlaidLinkProps) => {
 
 export const dismissLink = () => {
   if (Platform.OS === 'ios') {
-    RNLinksdk.dismiss();
+    if (RNLinksdkiOS === null) {
+      throw new Error('[react-native-plaid-link-sdk] RNLinksdkiOS is not defined');
+    }
+
+    RNLinksdkiOS.dismiss();
   }
 };
 

@@ -172,14 +172,6 @@ RCT_EXPORT_METHOD(dismiss) {
     self.linkHandler = nil;
 }
 
-- (void)continueFromRedirectUriString:(NSString *)redirectUriString { 
-    RCTLogError(@"continueFromRedirectUriString is not supported on iOS");
-}
-
-- (void)startLinkActivityForResult:(NSString *)token noLoadingState:(BOOL)noLoadingState logLevel:(NSString *)logLevel onSuccessCallback:(RCTResponseSenderBlock)onSuccessCallback onExitCallback:(RCTResponseSenderBlock)onExitCallback {
-    RCTLogError(@"startLinkActivityForResult is not supported on iOS");
-}
-
 #pragma mark - Bridging
 
 + (PLKEnvironment)environmentFromString:(NSString *)string {
@@ -632,7 +624,7 @@ RCT_EXPORT_METHOD(dismiss) {
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
-  return std::make_shared<facebook::react::NativePlaidLinkModuleSpecJSI>(params);
+  return std::make_shared<facebook::react::NativePlaidLinkModuleiOSSpecJSI>(params);
 }
 #endif
 

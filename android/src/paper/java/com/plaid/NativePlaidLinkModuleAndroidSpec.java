@@ -17,15 +17,13 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReactModuleWithSpec;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import javax.annotation.Nonnull;
 
-public abstract class NativePlaidLinkModuleSpec extends ReactContextBaseJavaModule implements ReactModuleWithSpec, TurboModule {
-  public static final String NAME = "RNLinksdk";
+public abstract class NativePlaidLinkModuleAndroidSpec extends ReactContextBaseJavaModule implements TurboModule {
+  public static final String NAME = "PlaidAndroid";
 
-  public NativePlaidLinkModuleSpec(ReactApplicationContext reactContext) {
+  public NativePlaidLinkModuleAndroidSpec(ReactApplicationContext reactContext) {
     super(reactContext);
   }
 
@@ -36,23 +34,7 @@ public abstract class NativePlaidLinkModuleSpec extends ReactContextBaseJavaModu
 
   @ReactMethod
   @DoNotStrip
-  public abstract void continueFromRedirectUriString(String redirectUriString);
-
-  @ReactMethod
-  @DoNotStrip
-  public abstract void create(ReadableMap configuration);
-
-  @ReactMethod
-  @DoNotStrip
-  public abstract void open(boolean fullScreen, Callback onSuccess, Callback onExit);
-
-  @ReactMethod
-  @DoNotStrip
-  public abstract void dismiss();
-
-  @ReactMethod
-  @DoNotStrip
-  public abstract void startLinkActivityForResult(String data, Callback onSuccessCallback, Callback onExitCallback);
+  public abstract void startLinkActivityForResult(String token, boolean noLoadingState, String logLevel, Callback onSuccessCallback, Callback onExitCallback);
 
   @ReactMethod
   @DoNotStrip

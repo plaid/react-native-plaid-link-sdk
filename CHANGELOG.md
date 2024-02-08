@@ -10,7 +10,7 @@ This SDK now works with any supported version of React Native.
 
 #### Changes
 
-- Resolves bug where `LinkEventMetadata` was undefined on `LinkEvent`. All values inside `LinkEventMetadata` should not be accessable on iOS and Android.
+- Resolves bug where `LinkEventMetadata` was undefined on `LinkEvent`. All values inside `LinkEventMetadata` should now be accessible on iOS and Android.
 
 
 ### Android

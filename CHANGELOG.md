@@ -1,5 +1,40 @@
 # RELEASES
 
+## LinkKit V10.13.1 — 2024-02-08
+
+### React Native
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
+
+#### Changes
+
+- Resolves bug where LinkEventMetadata was undefined on LinkEvents in Android. All values inside LinkEventMetadata should now be accessible on iOS and Android.
+
+### Android
+
+Android SDK [3.14.3](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.3)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+
+### iOS
+
+iOS SDK [4.7.2](https://github.com/plaid/plaid-link-ios/releases/tag/4.7.2)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 14.0 |
+| iOS | >= 11.0 |
+
 ## LinkKit V10.13.0 — 2024-02-01
 
 ### React Native

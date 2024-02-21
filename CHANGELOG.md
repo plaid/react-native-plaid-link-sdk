@@ -1,5 +1,45 @@
 # RELEASES
 
+## LinkKit V11.5.2 — 2024-02-21
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Update iOS SDK
+
+### Android
+
+Android SDK [4.1.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.1.1)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+
+### iOS
+
+iOS SDK [5.2.1](https://github.com/plaid/plaid-link-ios/releases/tag/5.2.1)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
+
+#### Changes
+
+- Improved Embedded Link experience.
+
 ## LinkKit V11.5.1 — 2024-02-08
 
 ### React Native

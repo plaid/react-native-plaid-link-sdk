@@ -3,7 +3,7 @@
 ![version](https://img.shields.io/npm/v/react-native-plaid-link-sdk)
 [![License](https://img.shields.io/github/license/plaid/react-native-plaid-link-sdk)](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/LICENSE)
 
-The Plaid React Native SDK provides the client-side component that your users will interact with in order to link their accounts to Plaid and allow you access to their accounts via the Plaid API. 
+The Plaid React Native SDK provides the client-side component that your users will interact with in order to link their accounts to Plaid and allow you access to their accounts via the Plaid API.
 
 For more information about Plaid Link check out our
 [introduction documentation](https://plaid.com/docs/link/#introduction-to-link).
@@ -35,7 +35,7 @@ npm install --save react-native-plaid-link-sdk
 
 Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The latest version is ![version](https://img.shields.io/cocoapods/v/Plaid).
 
-Autolinking should install the CocoaPods dependencies for iOS project. If it fails you can run 
+Autolinking should install the CocoaPods dependencies for iOS project. If it fails you can run
 
 ```sh
 cd ios && bundle install && bundle exec pod install
@@ -47,8 +47,7 @@ cd ios && bundle install && bundle exec pod install
   - Your `compileSdkVersion` must be `33`.
 - Android gradle plugin `4.x` and above.
 
-AutoLinking should handle all of the Android setup. 
-
+AutoLinking should handle all of the Android setup.
 
 ### React Native Setup
 
@@ -58,7 +57,13 @@ AutoLinking should handle all of the Android setup.
 
 ```javascript
 import { Text } from 'react-native';
-import { PlaidLink, LinkSuccess, LinkExit, LinkLogLevel, LinkIOSPresentationStyle } from 'react-native-plaid-link-sdk';
+import {
+  PlaidLink,
+  LinkSuccess,
+  LinkExit,
+  LinkLogLevel,
+  LinkIOSPresentationStyle,
+} from 'react-native-plaid-link-sdk';
 
 const MyPlaidComponent = () => {
   return (
@@ -77,7 +82,7 @@ const MyPlaidComponent = () => {
         // UI is always presented in full screen on Android.
         iOSPresentationStyle={LinkIOSPresentationStyle.MODAL}
     >
-        <Text>Add Account</Text>
+      <Text>Add Account</Text>
     </PlaidLink>
   );
 };
@@ -92,6 +97,7 @@ const MyPlaidComponent = () => {
 ##### Android OAuth Requirements
 
 ###### Register your app package name
+
 1. Log into your [Plaid Dashboard](https://dashboard.plaid.com/developers/api) and navigate to the API page under the Developers tab.
 2. Next to Allowed Android package names click "Configure" then "Add New Android Package Name".
 3. Enter your package name, for example `com.plaid.example`.
@@ -100,16 +106,15 @@ const MyPlaidComponent = () => {
 ##### iOS OAuth Requirements
 
 For iOS OAuth to work, specific requirements must be met.
+
 1. Redirect URIs must be [registered](https://plaid.com/docs/link/ios/#register-your-redirect-uri), and set up as [universal links](https://developer.apple.com/documentation/xcode/supporting-associated-domains).
 2. Your native iOS application, must be configured with your associated domain. See your iOS [set up universal links](https://plaid.com/docs/link/ios/#set-up-universal-links) for more information.
-
 
 ##### Link Token OAuth Requirements
 
 - On iOS you must configure your `link_token` with a [redirect_uri](https://plaid.com/docs/api/tokens/#link-token-create-request-redirect-uri) to support OAuth. When creating a `link_token` for initializing Link on Android, `android_package_name` must be specified and `redirect_uri` must be left blank.
 
 - On Android you must configure your `link_token` with an [android_package_name](https://plaid.com/docs/api/tokens/#link-token-create-request-android-package-name) to support OAuth. When creating a `link_token` for initializing Link on iOS, `android_package_name` must be left blank and `redirect_uri` should be used instead.
-
 
 #### To receive onEvent callbacks:
 
@@ -139,9 +144,9 @@ class PlaidEventContainer extends React.Component {
 You can also use the `usePlaidEmitter` hook in react functional components:
 
 ```javascript
-  usePlaidEmitter((event: LinkEvent) => {
-    console.log(event)
-  })
+usePlaidEmitter((event: LinkEvent) => {
+  console.log(event);
+});
 ```
 
 ## Upgrading

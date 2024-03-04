@@ -24,9 +24,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
 
-@ReactModule(name = PlaidModule.TAG)
+@ReactModule(name = PlaidModule.NAME)
 class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
-  ReactContextBaseJavaModule(reactContext), ActivityEventListener {
+  NativePlaidLinkModuleAndroidSpec(reactContext), ActivityEventListener {
 
   val mActivityResultManager by lazy { ActivityResultManager() }
 
@@ -38,11 +38,11 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   companion object {
     private const val LINK_TOKEN_PREFIX = "link"
 
-    const val TAG = "PlaidAndroid"
+    const val NAME = "PlaidAndroid"
   }
 
   override fun getName(): String {
-    return PlaidModule.TAG
+    return NAME
   }
 
   override fun initialize() {
@@ -78,7 +78,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   @Suppress("unused")
-  fun startLinkActivityForResult(
+  override fun startLinkActivityForResult(
     token: String,
     noLoadingState: Boolean,
     logLevel: String,
@@ -112,6 +112,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       throw ex
     }
   }
+
+  override fun addListener(eventName: String?) = Unit
+
+  override fun removeListeners(count: Double) = Unit
 
   private fun maybeGetStringField(obj: JSONObject, fieldName: String): String? {
     if (obj.has(fieldName) && !TextUtils.isEmpty(obj.getString(fieldName))) {

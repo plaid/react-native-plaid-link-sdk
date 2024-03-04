@@ -19,9 +19,9 @@ class PLKEmbeddedViewManager : SimpleViewManager<PLKEmbeddedView>() {
   }
 
   override fun getExportedCustomBubblingEventTypeConstants(): Map<String, Any> {
-    return mapOf(
-      EVENT_NAME to mapOf(
-        "phasedRegistrationNames" to mapOf(
+    return mutableMapOf(
+      EVENT_NAME to mutableMapOf(
+        "phasedRegistrationNames" to mutableMapOf(
           "bubbled" to EVENT_NAME
         )
     ))

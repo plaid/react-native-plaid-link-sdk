@@ -1,4 +1,5 @@
-import { openLink, dismissLink, useDeepLinkRedirector, usePlaidEmitter, PlaidLink } from './PlaidLink';
+import { openLink, dismissLink, usePlaidEmitter, PlaidLink } from './PlaidLink';
 export * from './Types';
 export default PlaidLink;
-export { PlaidLink, openLink, dismissLink, useDeepLinkRedirector, usePlaidEmitter, };
+export { PlaidLink, openLink, dismissLink, usePlaidEmitter, };
+export { EmbeddedLinkView } from './EmbeddedLink/EmbeddedLinkView';

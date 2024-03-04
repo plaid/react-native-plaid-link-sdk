@@ -26,7 +26,7 @@ import java.util.ArrayList
 
 @ReactModule(name = PlaidModule.NAME)
 class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
-  NativePlaidLinkModuleSpec(reactContext), ActivityEventListener {
+  NativePlaidLinkModuleAndroidSpec(reactContext), ActivityEventListener {
 
   val mActivityResultManager by lazy { ActivityResultManager() }
 
@@ -111,22 +111,6 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       Log.e("PlaidModule", ex.toString())
       throw ex
     }
-  }
-
-  override fun continueFromRedirectUriString(redirectUriString: String?) {
-    Log.e("PlaidModule", "continueFromRedirectUriString is not available on Android")
-  }
-
-  override fun create(token: String, noLoadingState: Boolean) {
-    Log.e("PlaidModule", "create is not available on Android")
-  }
-
-  override fun open(fullScreen: Boolean, onSuccess: Callback?, onExit: Callback?) {
-    Log.e("PlaidModule", "open is not available on Android")
-  }
-
-  override fun dismiss() {
-    Log.e("PlaidModule", "dismiss is not available on Android")
   }
 
   override fun addListener(eventName: String?) = Unit

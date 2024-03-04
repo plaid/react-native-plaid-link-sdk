@@ -28,7 +28,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"11.2.0"; // SDK_VERSION
+    return @"11.5.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -170,14 +170,6 @@ RCT_EXPORT_METHOD(dismiss) {
                                                       completion:nil];
     self.presentingViewController = nil;
     self.linkHandler = nil;
-}
-
-- (void)continueFromRedirectUriString:(NSString *)redirectUriString { 
-    RCTLogError(@"continueFromRedirectUriString is not supported on iOS");
-}
-
-- (void)startLinkActivityForResult:(NSString *)token noLoadingState:(BOOL)noLoadingState logLevel:(NSString *)logLevel onSuccessCallback:(RCTResponseSenderBlock)onSuccessCallback onExitCallback:(RCTResponseSenderBlock)onExitCallback {
-    RCTLogError(@"startLinkActivityForResult is not supported on iOS");
 }
 
 #pragma mark - Bridging
@@ -632,7 +624,7 @@ RCT_EXPORT_METHOD(dismiss) {
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
-  return std::make_shared<facebook::react::NativePlaidLinkModuleSpecJSI>(params);
+  return std::make_shared<facebook::react::NativePlaidLinkModuleiOSSpecJSI>(params);
 }
 #endif
 

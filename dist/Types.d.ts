@@ -5,28 +5,8 @@ interface CommonPlaidLinkOptions {
 }
 export type LinkTokenConfiguration = (CommonPlaidLinkOptions & {
     token: string;
-    noLoadingState: boolean;
+    noLoadingState?: boolean;
 });
-export type LinkPublicKeyConfiguration = (CommonPlaidLinkOptions & {
-    token?: string;
-    publicKey?: string;
-    clientName: string;
-    environment: PlaidEnvironment;
-    products: Array<PlaidProduct>;
-    language: string;
-    countryCodes: Array<string>;
-    webhook?: string;
-    userLegalName?: string;
-    userEmailAddress?: string;
-    userPhoneNumber?: string;
-    linkCustomizationName?: string;
-    accountSubtypes?: Array<LinkAccountSubtype>;
-    oauthConfiguration?: OAuthConfiguration;
-});
-export interface OAuthConfiguration {
-    nonce?: string;
-    redirectUri?: string;
-}
 export declare enum LinkLogLevel {
     DEBUG = "debug",
     INFO = "info",
@@ -50,12 +30,79 @@ export declare enum PlaidProduct {
     PAYMENT_INITIATION = "payment_initiation",
     TRANSACTIONS = "transactions"
 }
-declare enum LinkAccountType {
+export declare enum LinkAccountType {
     CREDIT = "credit",
     DEPOSITORY = "depository",
     INVESTMENT = "investment",
     LOAN = "loan",
     OTHER = "other"
+}
+export declare enum LinkAccountSubtypes {
+    ALL = "all",
+    CREDIT_CARD = "credit card",
+    PAYPAL = "paypal",
+    AUTO = "auto",
+    BUSINESS = "business",
+    COMMERCIAL = "commercial",
+    CONSTRUCTION = "construction",
+    CONSUMER = "consumer",
+    HOME_EQUITY = "home equity",
+    LINE_OF_CREDIT = "line of credit",
+    LOAN = "loan",
+    MORTGAGE = "mortgage",
+    OVERDRAFT = "overdraft",
+    STUDENT = "student",
+    CASH_MANAGEMENT = "cash management",
+    CD = "cd",
+    CHECKING = "checking",
+    EBT = "ebt",
+    HSA = "hsa",
+    MONEY_MARKET = "money market",
+    PREPAID = "prepaid",
+    SAVINGS = "savings",
+    FOUR_0_1_A = "401a",
+    FOUR_0_1_K = "401k",
+    FOUR_0_3_B = "403B",
+    FOUR_5_7_B = "457b",
+    FIVE_2_9 = "529",
+    BROKERAGE = "brokerage",
+    CASH_ISA = "cash isa",
+    EDUCATION_SAVINGS_ACCOUNT = "education savings account",
+    FIXED_ANNUNITY = "fixed annuity",
+    GIC = "gic",
+    HEALTH_REIMBURSEMENT_ARRANGEMENT = "health reimbursement arrangement",
+    IRA = "ira",
+    ISA = "isa",
+    KEOGH = "keogh",
+    LIF = "lif",
+    LIRA = "lira",
+    LRIF = "lrif",
+    LRSP = "lrsp",
+    MUTUAL_FUND = "mutual fund",
+    NON_TAXABLE_BROKERAGE_ACCOUNT = "non-taxable brokerage account",
+    PENSION = "pension",
+    PLAN = "plan",
+    PRIF = "prif",
+    PROFIT_SHARING_PLAN = "profit sharing plan",
+    RDSP = "rdsp",
+    RESP = "resp",
+    RETIREMENT = "retirement",
+    RLIF = "rlif",
+    ROTH_401K = "roth 401k",
+    ROTH = "roth",
+    RRIF = "rrif",
+    RRSP = "rrsp",
+    SARSEP = "sarsep",
+    SEP_IRA = "sep ira",
+    SIMPLE_IRA = "simple ira",
+    SIPP = "sipp",
+    STOCK_PLAN = "stock plan",
+    TFSA = "tfsa",
+    THRIFT_SAVINGS_PLAN = "thrift savings plan",
+    TRUST = "trust",
+    UGMA = "ugma",
+    UTMA = "utma",
+    VARIABLE_ANNUITY = "variable annuity"
 }
 export interface LinkAccountSubtype {
 }
@@ -284,6 +331,7 @@ export declare enum LinkErrorCode {
     INVALID_PROCESSOR_TOKEN = "INVALID_PROCESSOR_TOKEN",
     INVALID_AUDIT_COPY_TOKEN = "INVALID_AUDIT_COPY_TOKEN",
     INVALID_ACCOUNT_ID = "INVALID_ACCOUNT_ID",
+    MICRODEPOSITS_ALREADY_VERIFIED = "MICRODEPOSITS_ALREADY_VERIFIED",
     PLAID_DIRECT_ITEM_IMPORT_RETURNED_INVALID_MFA = "PLAID_DIRECT_ITEM_IMPORT_RETURNED_INVALID_MFA",
     ACCOUNTS_LIMIT = "ACCOUNTS_LIMIT",
     ADDITION_LIMIT = "ADDITION_LIMIT",
@@ -319,6 +367,7 @@ export interface LinkEvent {
     metadata: LinkEventMetadata;
 }
 export interface LinkEventMetadata {
+    accountNumberMask?: string;
     linkSessionId: string;
     mfaType?: string;
     requestId?: string;
@@ -330,10 +379,13 @@ export interface LinkEventMetadata {
     institutionId?: string;
     institutionName?: string;
     institutionSearchQuery?: string;
+    isUpdateMode?: string;
+    matchReason?: string;
     selection?: null | string;
     timestamp: string;
 }
 export declare enum LinkEventName {
+    BANK_INCOME_INSIGHTS_COMPLETED = "BANK_INCOME_INSIGHTS_COMPLETED",
     CLOSE_OAUTH = "CLOSE_OAUTH",
     ERROR = "ERROR",
     EXIT = "EXIT",
@@ -343,6 +395,7 @@ export declare enum LinkEventName {
     IDENTITY_VERIFICATION_PASS_STEP = "IDENTITY_VERIFICATION_PASS_STEP",
     IDENTITY_VERIFICATION_FAIL_STEP = "IDENTITY_VERIFICATION_FAIL_STEP",
     IDENTITY_VERIFICATION_PENDING_REVIEW_STEP = "IDENTITY_VERIFICATION_PENDING_REVIEW_STEP",
+    IDENTITY_VERIFICATION_PENDING_REVIEW_SESSION = "IDENTITY_VERIFICATION_PENDING_REVIEW_SESSION",
     IDENTITY_VERIFICATION_CREATE_SESSION = "IDENTITY_VERIFICATION_CREATE_SESSION",
     IDENTITY_VERIFICATION_RESUME_SESSION = "IDENTITY_VERIFICATION_RESUME_SESSION",
     IDENTITY_VERIFICATION_PASS_SESSION = "IDENTITY_VERIFICATION_PASS_SESSION",
@@ -359,16 +412,31 @@ export declare enum LinkEventName {
     SEARCH_INSTITUTION = "SEARCH_INSTITUTION",
     SELECT_DEGRADED_INSTITUTION = "SELECT_DEGRADED_INSTITUTION",
     SELECT_DOWN_INSTITUTION = "SELECT_DOWN_INSTITUTION",
+    SELECT_FILTERED_INSTITUTION = "SELECT_FILTERED_INSTITUTION",
     SELECT_INSTITUTION = "SELECT_INSTITUTION",
+    SELECT_BRAND = "SELECT_BRAND",
+    SELECT_AUTH_TYPE = "SELECT_AUTH_TYPE",
+    SUBMIT_ACCOUNT_NUMBER = "SUBMIT_ACCOUNT_NUMBER",
+    SUBMIT_DOCUMENTS = "SUBMIT_DOCUMENTS",
+    SUBMIT_DOCUMENTS_SUCCESS = "SUBMIT_DOCUMENTS_SUCCESS",
+    SUBMIT_DOCUMENTS_ERROR = "SUBMIT_DOCUMENTS_ERROR",
+    SUBMIT_ROUTING_NUMBER = "SUBMIT_ROUTING_NUMBER",
+    VIEW_DATA_TYPES = "VIEW_DATA_TYPES",
+    SUBMIT_PHONE = "SUBMIT_PHONE",
+    SKIP_SUBMIT_PHONE = "SKIP_SUBMIT_PHONE",
+    VERIFY_PHONE = "VERIFY_PHONE",
     SUBMIT_CREDENTIALS = "SUBMIT_CREDENTIALS",
     SUBMIT_MFA = "SUBMIT_MFA",
-    TRANSITION_VIEW = "TRANSITION_VIEW"
+    TRANSITION_VIEW = "TRANSITION_VIEW",
+    CONNECT_NEW_INSTITUTION = "CONNECT_NEW_INSTITUTION"
 }
 export declare enum LinkEventViewName {
     ACCEPT_TOS = "ACCEPT_TOS",
     CONNECTED = "CONNECTED",
     CONSENT = "CONSENT",
     CREDENTIAL = "CREDENTIAL",
+    DATA_TRANSPARENCY = "DATA_TRANSPARENCY",
+    DATA_TRANSPARENCY_CONSENT = "DATA_TRANSPARENCY_CONSENT",
     DOCUMENTARY_VERIFICATION = "DOCUMENTARY_VERIFICATION",
     ERROR = "ERROR",
     EXIT = "EXIT",
@@ -380,22 +448,38 @@ export declare enum LinkEventViewName {
     MATCHED_MFA = "MATCHED_MFA",
     MFA = "MFA",
     NUMBERS = "NUMBERS",
+    NUMBERS_SELECT_INSTITUTION = "NUMBERS_SELECT_INSTITUTION",
     OAUTH = "OAUTH",
     RECAPTCHA = "RECAPTCHA",
     RISK_CHECK = "RISK_CHECK",
     SCREENING = "SCREENING",
     SELECT_ACCOUNT = "SELECT_ACCOUNT",
+    SELECT_AUTH_TYPE = "SELECT_AUTH_TYPE",
+    SUBMIT_PHONE = "SUBMIT_PHONE",
+    VERIFY_PHONE = "VERIFY_PHONE",
+    SELECT_SAVED_INSTITUTION = "SELECT_SAVED_INSTITUTION",
+    SELECT_SAVED_ACCOUNT = "SELECT_SAVED_ACCOUNT",
+    SELECT_BRAND = "SELECT_BRAND",
     SELECT_INSTITUTION = "SELECT_INSTITUTION",
+    SUBMIT_DOCUMENTS = "SUBMIT_DOCUMENTS",
+    SUBMIT_DOCUMENTS_SUCCESS = "SUBMIT_DOCUMENTS_SUCCESS",
+    SUBMIT_DOCUMENTS_ERROR = "SUBMIT_DOCUMENTS_ERROR",
+    UPLOAD_DOCUMENTS = "UPLOAD_DOCUMENTS",
     VERIFY_SMS = "VERIFY_SMS"
+}
+export declare enum LinkIOSPresentationStyle {
+    FULL_SCREEN = "FULL_SCREEN",
+    MODAL = "MODAL"
 }
 export type LinkSuccessListener = (LinkSuccess: LinkSuccess) => void;
 export type LinkExitListener = (LinkExit: LinkExit) => void;
-export type PlaidLinkConfiguration = LinkTokenConfiguration | LinkPublicKeyConfiguration;
+export type LinkOnEventListener = (LinkEvent: LinkEvent) => void;
 export interface PlaidLinkProps {
-    tokenConfig?: LinkTokenConfiguration;
-    publicKeyConfig?: LinkPublicKeyConfiguration;
+    tokenConfig: LinkTokenConfiguration;
     onSuccess: LinkSuccessListener;
     onExit?: LinkExitListener;
+    iOSPresentationStyle?: LinkIOSPresentationStyle;
+    logLevel?: LinkLogLevel;
     onPress?(): any;
 }
 export type PlaidLinkComponentProps = (PlaidLinkProps & {

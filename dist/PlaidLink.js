@@ -31,24 +31,27 @@ var __awaiter =
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   };
+var _a;
 import React, { useEffect } from 'react';
-import {
-  Linking,
-  NativeEventEmitter,
-  Platform,
-  TouchableOpacity,
-} from 'react-native';
-import RNLinksdk from './fabric/NativePlaidLinkModule';
+import { NativeEventEmitter, Platform, TouchableOpacity } from 'react-native';
+import { LinkIOSPresentationStyle, LinkLogLevel } from './Types';
+import RNLinksdkAndroid from './fabric/NativePlaidLinkModuleAndroid';
+import RNLinksdkiOS from './fabric/NativePlaidLinkModuleiOS';
+const RNLinksdk =
+  (_a = Platform.OS === 'android' ? RNLinksdkAndroid : RNLinksdkiOS) !== null &&
+  _a !== void 0
+    ? _a
+    : undefined;
 /**
  * A hook that registers a listener on the Plaid emitter for the 'onEvent' type.
  * The listener is cleaned up when this view is unmounted
  *
- * @param LinkEventListener the listener to call
+ * @param linkEventListener the listener to call
  */
-export const usePlaidEmitter = LinkEventListener => {
+export const usePlaidEmitter = linkEventListener => {
   useEffect(() => {
     const emitter = new NativeEventEmitter(RNLinksdk);
-    const listener = emitter.addListener('onEvent', LinkEventListener);
+    const listener = emitter.addListener('onEvent', linkEventListener);
     // Clean up after this effect:
     return function cleanup() {
       listener.remove();
@@ -57,15 +60,23 @@ export const usePlaidEmitter = LinkEventListener => {
 };
 export const openLink = props =>
   __awaiter(void 0, void 0, void 0, function*() {
-    if (props.tokenConfig == null) {
-      console.log(
-        'The public_key is being deprecated. Learn how to upgrade to link_tokens at https://plaid.com/docs/link-token-migration-guide/',
-      );
-    }
-    let config = props.tokenConfig ? props.tokenConfig : props.publicKeyConfig;
+    var _b, _c;
+    let config = props.tokenConfig;
+    let noLoadingState =
+      (_b = config.noLoadingState) !== null && _b !== void 0 ? _b : false;
     if (Platform.OS === 'android') {
-      RNLinksdk.startLinkActivityForResult(
-        JSON.stringify(config),
+      if (RNLinksdkAndroid === null) {
+        throw new Error(
+          '[react-native-plaid-link-sdk] RNLinksdkAndroid is not defined',
+        );
+      }
+      RNLinksdkAndroid.startLinkActivityForResult(
+        config.token,
+        noLoadingState,
+        (_c = config.logLevel) !== null && _c !== void 0
+          ? _c
+          : LinkLogLevel.ERROR,
+        // @ts-ignore we use Object type in the spec file as it maps to NSDictionary and ReadableMap
         result => {
           if (props.onSuccess != null) {
             props.onSuccess(result);
@@ -82,8 +93,17 @@ export const openLink = props =>
         },
       );
     } else {
-      RNLinksdk.create(config);
-      RNLinksdk.open(
+      if (RNLinksdkiOS === null) {
+        throw new Error(
+          '[react-native-plaid-link-sdk] RNLinksdkiOS is not defined',
+        );
+      }
+      RNLinksdkiOS.create(config.token, noLoadingState);
+      let presentFullScreen =
+        props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN;
+      RNLinksdkiOS.open(
+        presentFullScreen,
+        // @ts-ignore we use Object type in the spec file as it maps to NSDictionary and ReadableMap
         result => {
           if (props.onSuccess != null) {
             props.onSuccess(result);
@@ -105,22 +125,13 @@ export const openLink = props =>
   });
 export const dismissLink = () => {
   if (Platform.OS === 'ios') {
-    RNLinksdk.dismiss();
-  }
-};
-export const useDeepLinkRedirector = () => {
-  const _handleListenerChange = event => {
-    if (event.url !== null && Platform.OS === 'ios') {
-      RNLinksdk.continueFromRedirectUriString(event.url);
+    if (RNLinksdkiOS === null) {
+      throw new Error(
+        '[react-native-plaid-link-sdk] RNLinksdkiOS is not defined',
+      );
     }
-  };
-  useEffect(() => {
-    Linking.addEventListener('url', _handleListenerChange);
-    return function cleanup() {
-      // @ts-ignore method not available for some reason
-      Linking.removeEventListener('url', _handleListenerChange);
-    };
-  }, []);
+    RNLinksdkiOS.dismiss();
+  }
 };
 export const PlaidLink = props => {
   function onPress() {
@@ -128,7 +139,6 @@ export const PlaidLink = props => {
     (_a = props.onPress) === null || _a === void 0 ? void 0 : _a.call(props);
     openLink(props);
   }
-  useDeepLinkRedirector();
   return (
     // @ts-ignore some types directories misconfiguration
     <TouchableOpacity onPress={onPress}>{props.children}</TouchableOpacity>

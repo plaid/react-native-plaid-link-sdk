@@ -1,15 +1,14 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <rnplaidlink/rnplaidlink.h>
-#else
-#import <React/RCTBridge.h>
 #endif
+#import <React/RCTBridge.h>
 #import "RCTEventEmitter.h"
 
 #import <LinkKit/LinkKit.h>
 
 @interface RNLinksdk : RCTEventEmitter
 #ifdef RCT_NEW_ARCH_ENABLED
-                                   <NativePlaidLinkModuleSpec>
+                                   <NativePlaidLinkModuleiOSSpec>
 #else
                                    <RCTBridgeModule>
 #endif

@@ -40,9 +40,7 @@ export const usePlaidEmitter = (LinkEventListener: LinkEventListener) => {
   }, []);
 };
 
-export const create = async (props: LinkTokenConfiguration) => {
-  console.log('create called with props: ${props}');
-
+export const create = (props: LinkTokenConfiguration) => {
   let token = props.token;
   let noLoadingState = props.noLoadingState ?? false;
 
@@ -54,8 +52,6 @@ export const create = async (props: LinkTokenConfiguration) => {
 };
 
 export const open = async (props: LinkOpenProps) => {
-  console.log('open called with props: ${props}');
-
   if (Platform.OS === 'android') {
     console.log('open is not supported on android yet');
   } else {

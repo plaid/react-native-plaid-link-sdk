@@ -12,7 +12,9 @@ import {
   LinkExit,
   LinkIOSPresentationStyle,
   LinkLogLevel,
+  LinkOpenProps,
   LinkSuccess,
+  LinkTokenConfiguration,
   PlaidLinkComponentProps,
   PlaidLinkProps,
 } from './Types';
@@ -38,7 +40,78 @@ export const usePlaidEmitter = (LinkEventListener: LinkEventListener) => {
   }, []);
 };
 
+export const create = async (props: LinkTokenConfiguration) => {
+  console.log('create called with props: ${props}');
 
+  let token = props.token;
+  let noLoadingState = props.noLoadingState ?? false;
+
+  if (Platform.OS === 'android') {
+    console.log('create is not supported on android yet');
+  } else {
+    NativeModules.RNLinksdk.create(token, noLoadingState);
+  }
+};
+
+export const open = async (props: LinkOpenProps) => {
+  console.log('open called with props: ${props}');
+
+  if (Platform.OS === 'android') {
+    console.log('open is not supported on android yet');
+  } else {
+    let presentFullScreen = props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN
+
+    NativeModules.RNLinksdk.open(presentFullScreen,
+      (result: LinkSuccess) => {
+        if (props.onSuccess != null) {
+          props.onSuccess(result);
+        }
+      },
+      (error: LinkError, result: LinkExit) => {
+        if (props.onExit != null) {
+          if (error) {
+            var data = result || {};
+            data.error = error;
+            props.onExit(data);
+          } else {
+            props.onExit(result);
+          }
+        }
+      }
+    );
+  }
+};
+
+export const dismissLink = () => {
+  if (Platform.OS === 'ios') {
+    NativeModules.RNLinksdk.dismiss();
+  }
+};
+
+export const PlaidLink = (props: PlaidLinkComponentProps) => {
+
+  // Create a handler.
+  create(props.tokenConfig);
+  
+  function onPress() {
+    props.onPress?.();
+
+    const openProps: LinkOpenProps = {
+      onSuccess: props.onSuccess,
+      onExit: props.onExit,
+      iOSPresentationStyle: props.iOSPresentationStyle,
+      logLevel: props.logLevel
+    };
+
+    open(openProps);
+  }
+
+  return <TouchableOpacity onPress={onPress}>{props.children}</TouchableOpacity>;
+};
+
+/**
+ * @deprecated This method is deprecated. For faster loading use the create & open methods.
+ */
 export const openLink = async (props: PlaidLinkProps) => {
   let config = props.tokenConfig;
   let noLoadingState = config.noLoadingState ?? false;
@@ -87,19 +160,4 @@ export const openLink = async (props: PlaidLinkProps) => {
       }
     );
   }
-};
-
-export const dismissLink = () => {
-  if (Platform.OS === 'ios') {
-    NativeModules.RNLinksdk.dismiss();
-  }
-};
-
-export const PlaidLink = (props: PlaidLinkComponentProps) => {
-  function onPress() {
-    props.onPress?.()
-    openLink(props)
-  }
-
-  return <TouchableOpacity onPress={onPress}>{props.children}</TouchableOpacity>;
 };

@@ -437,6 +437,7 @@ export interface LinkEventMetadata {
     timestamp: string;
 }
 
+// TODO!!! qwe add event names for layer
 export enum LinkEventName {
     BANK_INCOME_INSIGHTS_COMPLETED = "BANK_INCOME_INSIGHTS_COMPLETED",
     CLOSE_OAUTH = 'CLOSE_OAUTH',
@@ -543,6 +544,13 @@ export interface PlaidLinkProps {
     iOSPresentationStyle?: LinkIOSPresentationStyle
     logLevel?: LinkLogLevel
     onPress?(): any
+}
+
+export interface LinkOpenProps {
+    onSuccess: LinkSuccessListener
+    onExit?: LinkExitListener
+    iOSPresentationStyle?: LinkIOSPresentationStyle
+    logLevel?: LinkLogLevel
 }
 
 export type PlaidLinkComponentProps = (PlaidLinkProps & {

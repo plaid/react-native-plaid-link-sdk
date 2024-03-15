@@ -1,6 +1,6 @@
 import React from 'react';
-import { TextInput, Text, TouchableOpacity } from 'react-native';
-import { styles } from '../Styles';
+import {TextInput, Text, TouchableOpacity} from 'react-native';
+import {styles} from '../Styles';
 
 import {
   LinkExit,
@@ -21,12 +21,11 @@ function makeLinkTokenProps(token: string): PlaidLinkProps {
       token: token,
       logLevel: LinkLogLevel.ERROR,
       // Hides native activity indicator if true.
-      noLoadingState: false, 
+      noLoadingState: false,
     },
     onSuccess: (success: LinkSuccess) => {
       // User was able to successfully link their account.
-      console.log('Success: ', success); 
-      success.metadata.accounts.forEach(it => console.log('accounts', it));
+      console.log('Success: ', success);
     },
     onExit: (linkExit: LinkExit) => {
       // User exited Link session. There may or may not be an error depending on what occured.

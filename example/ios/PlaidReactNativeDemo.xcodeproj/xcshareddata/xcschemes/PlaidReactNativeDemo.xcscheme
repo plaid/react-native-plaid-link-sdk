@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "plaidRNDemo.app"
-               BlueprintName = "plaidRNDemo"
-               ReferencedContainer = "container:plaidRNDemo.xcodeproj">
+               BuildableName = "PlaidReactNativeDemo.app"
+               BlueprintName = "PlaidReactNativeDemo"
+               ReferencedContainer = "container:PlaidReactNativeDemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -26,36 +26,16 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "NO">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7C11D2752A6C6783009A6C96"
-            BuildableName = "plaidRNDemoUITests.xctest"
-            BlueprintName = "plaidRNDemoUITests"
-            ReferencedContainer = "container:plaidRNDemo.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "plaidRNDemoTests.xctest"
-               BlueprintName = "plaidRNDemoTests"
-               ReferencedContainer = "container:plaidRNDemo.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7C11D2752A6C6783009A6C96"
-               BuildableName = "plaidRNDemoUITests.xctest"
-               BlueprintName = "plaidRNDemoUITests"
-               ReferencedContainer = "container:plaidRNDemo.xcodeproj">
+               BuildableName = "PlaidReactNativeDemoTests.xctest"
+               BlueprintName = "PlaidReactNativeDemoTests"
+               ReferencedContainer = "container:PlaidReactNativeDemo.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -75,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "plaidRNDemo.app"
-            BlueprintName = "plaidRNDemo"
-            ReferencedContainer = "container:plaidRNDemo.xcodeproj">
+            BuildableName = "PlaidReactNativeDemo.app"
+            BlueprintName = "PlaidReactNativeDemo"
+            ReferencedContainer = "container:PlaidReactNativeDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -92,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "plaidRNDemo.app"
-            BlueprintName = "plaidRNDemo"
-            ReferencedContainer = "container:plaidRNDemo.xcodeproj">
+            BuildableName = "PlaidReactNativeDemo.app"
+            BlueprintName = "PlaidReactNativeDemo"
+            ReferencedContainer = "container:PlaidReactNativeDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

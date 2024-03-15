@@ -1,6 +1,6 @@
 import React from 'react';
-import { TextInput, Text, TouchableOpacity, View } from 'react-native';
-import { styles } from '../Styles';
+import {TextInput, Text, TouchableOpacity} from 'react-native';
+import {styles} from '../Styles';
 
 import {
   LinkExit,
@@ -14,29 +14,32 @@ import {
   LinkTokenConfiguration,
 } from 'react-native-plaid-link-sdk';
 
-import { create, open } from 'react-native-plaid-link-sdk/dist/PlaidLink';
+import {create, open} from 'react-native-plaid-link-sdk/dist/PlaidLink';
 
 function isValidString(str: string): boolean {
-  if ((str) && (str.trim() != '')) {
-    return true
+  if (str && str.trim() !== '') {
+    return true;
   }
-  return false
+  return false;
 }
 
-function createLinkTokenConfiguration(token: string, noLoadingState: boolean = false): LinkTokenConfiguration {
+function createLinkTokenConfiguration(
+  token: string,
+  noLoadingState: boolean = false,
+): LinkTokenConfiguration {
   console.log(`token: ${token}`);
   return {
     token: token,
     // Hides native activity indicator if true.
-    noLoadingState: noLoadingState
-  }
+    noLoadingState: noLoadingState,
+  };
 }
 
 function createLinkOpenProps(): LinkOpenProps {
   return {
     onSuccess: (success: LinkSuccess) => {
       // User was able to successfully link their account.
-      console.log('Success: ', success); 
+      console.log('Success: ', success);
       success.metadata.accounts.forEach(it => console.log('accounts', it));
     },
     onExit: (linkExit: LinkExit) => {
@@ -47,7 +50,7 @@ function createLinkOpenProps(): LinkOpenProps {
     // MODAL or FULL_SCREEEN presentation on iOS. Defaults to MODAL.
     iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
     logLevel: LinkLogLevel.ERROR,
-  }
+  };
 }
 
 export function PlaidLinkScreen() {

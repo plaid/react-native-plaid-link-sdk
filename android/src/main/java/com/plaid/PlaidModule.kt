@@ -90,7 +90,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       throw LinkException("Unable to open link, please check that your configuration is valid")
     }
 
-    // Set the event listener for Layer use cases.
+    // Set the event listener here instead of in open for Layer use cases.
     try {
       Plaid.setLinkEventListener { linkEvent: LinkEvent ->
         var json = jsonConverter.convert(linkEvent)

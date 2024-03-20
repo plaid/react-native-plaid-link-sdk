@@ -70,7 +70,7 @@ function createLinkTokenConfiguration(
   };
 }
 
-const tokenConfiguration = createLinkTokenConfiguration(text);
+const tokenConfiguration = createLinkTokenConfiguration("#GENERATED_LINK_TOKEN#");
 create(tokenConfiguration);
 ``` 
 
@@ -82,7 +82,6 @@ function createLinkOpenProps(): LinkOpenProps {
     onSuccess: (success: LinkSuccess) => {
       // User was able to successfully link their account.
       console.log('Success: ', success);
-      success.metadata.accounts.forEach(it => console.log('accounts', it));
     },
     onExit: (linkExit: LinkExit) => {
       // User exited Link session. There may or may not be an error depending on what occured.

@@ -12,7 +12,9 @@ import {
   LinkExit,
   LinkIOSPresentationStyle,
   LinkLogLevel,
+  LinkOpenProps,
   LinkSuccess,
+  LinkTokenConfiguration,
   PlaidLinkComponentProps,
   PlaidLinkProps,
 } from './Types';
@@ -38,7 +40,99 @@ export const usePlaidEmitter = (LinkEventListener: LinkEventListener) => {
   }, []);
 };
 
+export const create = (props: LinkTokenConfiguration) => {
+  let token = props.token;
+  let noLoadingState = props.noLoadingState ?? false;
 
+  if (Platform.OS === 'android') {
+    NativeModules.PlaidAndroid.create(
+      token,
+      noLoadingState,
+      props.logLevel ?? LinkLogLevel.ERROR,
+    );
+  } else {
+    NativeModules.RNLinksdk.create(token, noLoadingState);
+  }
+};
+
+export const open = async (props: LinkOpenProps) => {
+  if (Platform.OS === 'android') {
+    NativeModules.PlaidAndroid.open(
+      (result: LinkSuccess) => {
+        if (props.onSuccess != null) {
+          props.onSuccess(result);
+        }
+      },
+      (result: LinkExit) => {
+        if (props.onExit != null) {
+          if (result.error != null && result.error.displayMessage != null) {
+            //TODO(RNSDK-118): Remove errorDisplayMessage field in next major update.
+            result.error.errorDisplayMessage = result.error.displayMessage;
+          }
+          props.onExit(result);
+        }
+      },
+    );
+  } else {
+    let presentFullScreen =
+      props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN;
+
+    NativeModules.RNLinksdk.open(
+      presentFullScreen,
+      (result: LinkSuccess) => {
+        if (props.onSuccess != null) {
+          props.onSuccess(result);
+        }
+      },
+      (error: LinkError, result: LinkExit) => {
+        if (props.onExit != null) {
+          if (error) {
+            var data = result || {};
+            data.error = error;
+            props.onExit(data);
+          } else {
+            props.onExit(result);
+          }
+        }
+      },
+    );
+  }
+};
+
+export const dismissLink = () => {
+  if (Platform.OS === 'ios') {
+    NativeModules.RNLinksdk.dismiss();
+  }
+};
+
+/**
+ * @deprecated This component is deprecated. Create your own component and use the create & open methods.
+ */
+export const PlaidLink = (props: PlaidLinkComponentProps) => {
+  // Create a handler.
+  create(props.tokenConfig);
+
+  function onPress() {
+    props.onPress?.();
+
+    const openProps: LinkOpenProps = {
+      onSuccess: props.onSuccess,
+      onExit: props.onExit,
+      iOSPresentationStyle: props.iOSPresentationStyle,
+      logLevel: props.logLevel,
+    };
+
+    open(openProps);
+  }
+
+  return (
+    <TouchableOpacity onPress={onPress}>{props.children}</TouchableOpacity>
+  );
+};
+
+/**
+ * @deprecated This method is deprecated. For faster loading use the create & open methods.
+ */
 export const openLink = async (props: PlaidLinkProps) => {
   let config = props.tokenConfig;
   let noLoadingState = config.noLoadingState ?? false;
@@ -57,7 +151,7 @@ export const openLink = async (props: PlaidLinkProps) => {
         if (props.onExit != null) {
           if (result.error != null && result.error.displayMessage != null) {
             //TODO(RNSDK-118): Remove errorDisplayMessage field in next major update.
-            result.error.errorDisplayMessage = result.error.displayMessage
+            result.error.errorDisplayMessage = result.error.displayMessage;
           }
           props.onExit(result);
         }
@@ -66,9 +160,11 @@ export const openLink = async (props: PlaidLinkProps) => {
   } else {
     NativeModules.RNLinksdk.create(config.token, noLoadingState);
 
-    let presentFullScreen = props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN
+    let presentFullScreen =
+      props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN;
 
-    NativeModules.RNLinksdk.open(presentFullScreen,
+    NativeModules.RNLinksdk.open(
+      presentFullScreen,
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {
           props.onSuccess(result);
@@ -84,22 +180,7 @@ export const openLink = async (props: PlaidLinkProps) => {
             props.onExit(result);
           }
         }
-      }
+      },
     );
   }
-};
-
-export const dismissLink = () => {
-  if (Platform.OS === 'ios') {
-    NativeModules.RNLinksdk.dismiss();
-  }
-};
-
-export const PlaidLink = (props: PlaidLinkComponentProps) => {
-  function onPress() {
-    props.onPress?.()
-    openLink(props)
-  }
-
-  return <TouchableOpacity onPress={onPress}>{props.children}</TouchableOpacity>;
 };

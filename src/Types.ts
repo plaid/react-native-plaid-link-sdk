@@ -462,6 +462,8 @@ export enum LinkEventName {
     OPEN = 'OPEN',
     OPEN_MY_PLAID = 'OPEN_MY_PLAID',
     OPEN_OAUTH = 'OPEN_OAUTH',
+    PROFILE_ELIGIBILITY_CHECK_READY = 'PROFILE_ELIGIBILITY_CHECK_READY',
+    PROFILE_ELIGIBILITY_CHECK_ERROR = 'PROFILE_ELIGIBILITY_CHECK_ERROR',
     SEARCH_INSTITUTION = 'SEARCH_INSTITUTION',
     SELECT_DEGRADED_INSTITUTION = 'SELECT_DEGRADED_INSTITUTION',
     SELECT_DOWN_INSTITUTION = 'SELECT_DOWN_INSTITUTION',
@@ -543,6 +545,13 @@ export interface PlaidLinkProps {
     iOSPresentationStyle?: LinkIOSPresentationStyle
     logLevel?: LinkLogLevel
     onPress?(): any
+}
+
+export interface LinkOpenProps {
+    onSuccess: LinkSuccessListener
+    onExit?: LinkExitListener
+    iOSPresentationStyle?: LinkIOSPresentationStyle
+    logLevel?: LinkLogLevel
 }
 
 export type PlaidLinkComponentProps = (PlaidLinkProps & {

@@ -14,6 +14,7 @@ import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.plaid.gson.PlaidJsonConverter
 import com.plaid.link.Plaid
+import com.plaid.link.PlaidHandler
 import com.plaid.link.configuration.LinkLogLevel
 import com.plaid.link.configuration.LinkTokenConfiguration
 import com.plaid.link.event.LinkEvent
@@ -34,6 +35,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
   private var onSuccessCallback: Callback? = null
   private var onExitCallback: Callback? = null
+
+  private var plaidHandler: PlaidHandler? = null
 
   companion object {
     private const val LINK_TOKEN_PREFIX = "link"
@@ -74,6 +77,52 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       .noLoadingState(noLoadingState)
 
     return builder.build()
+  }
+
+  @ReactMethod
+  fun create(
+    token: String,
+    noLoadingState: Boolean,
+    logLevel: String,
+  ) {
+    val tokenConfiguration = getLinkTokenConfiguration(token, noLoadingState, getLogLevel(logLevel))
+    if (tokenConfiguration == null) {
+      throw LinkException("Unable to open link, please check that your configuration is valid")
+    }
+
+    // Set the event listener here instead of in open for Layer use cases.
+    try {
+      Plaid.setLinkEventListener { linkEvent: LinkEvent ->
+        var json = jsonConverter.convert(linkEvent)
+        val eventMap = convertJsonToMap(JSONObject(json))
+        reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+          .emit("onEvent", eventMap)
+      }
+    } catch (ex: JSONException) {
+        Log.e("PlaidModule", ex.toString())
+        throw ex
+    }
+
+    // Create Plaid handler.
+    this.plaidHandler = Plaid.create(
+      reactApplicationContext.getApplicationContext() as Application,
+      tokenConfiguration
+    )
+  }
+
+  @ReactMethod
+  fun open(onSuccessCallback: Callback, onExitCallback: Callback) {
+    val activity = currentActivity ?: throw IllegalStateException("Current activity is null")
+
+    plaidHandler?.let { handler ->
+      // Work with nonNullValue here
+      this.onSuccessCallback = onSuccessCallback
+      this.onExitCallback = onExitCallback
+      handler.open(activity)
+    } ?: run {
+      // Handler is nil.
+      throw LinkException("Create must be called before open.")
+    }
   }
 
   @ReactMethod

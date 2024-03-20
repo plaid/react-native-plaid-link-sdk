@@ -415,6 +415,10 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"OPEN_MY_PLAID";
         case PLKEventNameValueOpenOAuth:
             return @"OPEN_OAUTH";
+        case PLKEventNameValueProfileEligibilityCheckReady:
+            return @"PROFILE_ELIGIBILITY_CHECK_READY";
+        case PLKEventNameValueProfileEligibilityCheckError:
+            return @"PROFILE_ELIGIBILITY_CHECK_ERROR";
         case PLKEventNameValueSearchInstitution:
             return @"SEARCH_INSTITUTION";
         case PLKEventNameValueSelectDegradedInstitution:

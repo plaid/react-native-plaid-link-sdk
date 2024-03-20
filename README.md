@@ -54,36 +54,82 @@ AutoLinking should handle all of the Android setup.
 
 - To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/#create-link-token). Check out our [QuickStart guide](https://plaid.com/docs/quickstart/#introduction) for additional API information.
 
-- After creating a `link_token`, you'll need to pass it into your app and use it to launch Link:
+#### Version >= 11.6.0
 
-```javascript
-import { Text } from 'react-native';
-import { PlaidLink, LinkSuccess, LinkExit, LinkLogLevel, LinkIOSPresentationStyle } from 'react-native-plaid-link-sdk';
+Starting from version `11.6.0`, we introduced the ability to preload part of the Link experience. You can initiate the preloading process by invoking the `create` function.
 
-const MyPlaidComponent = () => {
-  return (
-    <PlaidLink
-        tokenConfig={{
-            token: "#GENERATED_LINK_TOKEN#",
-            // OPTIONAL - log level.
-            logLevel: LinkLogLevel.ERROR,
-            // OPTIONAL - A `Bool` indicating that Link should skip displaying a loading animation until the Link UI is fully loaded.
-            // See Types.ts for more information.
-            noLoadingState: false,
-        }}
-        onSuccess={(success: LinkSuccess) => { console.log(success) }}
-        onExit={(exit: LinkExit) => { console.log(exit) }}
-        // OPTIONAL - MODAL or FULL_SCREEEN presentation on iOS. Defaults to MODAL.
-        // UI is always presented in full screen on Android.
-        iOSPresentationStyle={LinkIOSPresentationStyle.MODAL}
-    >
-        <Text>Add Account</Text>
-    </PlaidLink>
-  );
-};
+```typescript
+function createLinkTokenConfiguration(
+  token: string,
+  noLoadingState: boolean = false,
+): LinkTokenConfiguration {
+  return {
+    token: token,
+    // Hides native activity indicator if true.
+    noLoadingState: noLoadingState,
+  };
+}
+
+const tokenConfiguration = createLinkTokenConfiguration("#GENERATED_LINK_TOKEN#");
+create(tokenConfiguration);
+``` 
+
+After calling `create`, you can subsequently invoke the `open` function. Note that maximizing the delay between these two calls will reduce latency for your users by allowing Link more time to load.
+
+```typescript
+function createLinkOpenProps(): LinkOpenProps {
+  return {
+    onSuccess: (success: LinkSuccess) => {
+      // User was able to successfully link their account.
+      console.log('Success: ', success);
+    },
+    onExit: (linkExit: LinkExit) => {
+      // User exited Link session. There may or may not be an error depending on what occured.
+      console.log('Exit: ', linkExit);
+      dismissLink();
+    },
+    // MODAL or FULL_SCREEEN presentation on iOS. Defaults to MODAL.
+    iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
+    logLevel: LinkLogLevel.ERROR,
+  };
+}
+
+const openProps = createLinkOpenProps();
+open(openProps);
 ```
 
-`PlaidLink` wraps the view you provide as a child with a `Pressable` component and intercepts the `onPress` event.
+#### Version < 11.6.0
+
+In versions prior to `11.6.0`, you can open a link by calling the `openLink` function.
+
+```typescript
+// Create PlaidLinkProps from the provided token string.
+function makeLinkTokenProps(token: string): PlaidLinkProps {
+  return {
+    tokenConfig: {
+      token: token,
+      logLevel: LinkLogLevel.ERROR,
+      // Hides native activity indicator if true.
+      noLoadingState: false, 
+    },
+    onSuccess: (success: LinkSuccess) => {
+      // User was able to successfully link their account.
+      console.log('Success: ', success); 
+      success.metadata.accounts.forEach(it => console.log('accounts', it));
+    },
+    onExit: (linkExit: LinkExit) => {
+      // User exited Link session. There may or may not be an error depending on what occured.
+      console.log('Exit: ', linkExit);
+      dismissLink();
+    },
+    // MODAL or FULL_SCREEEN presentation on iOS. Defaults to MODAL.
+    iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
+  };
+}
+
+const linkTokenProps = makeLinkTokenProps(text);
+openLink(linkTokenProps);
+```
 
 #### OAuth requirements
 
@@ -113,30 +159,7 @@ For iOS OAuth to work, specific requirements must be met.
 
 #### To receive onEvent callbacks:
 
-The React Native Plaid module emits `onEvent` events throughout the account linking process — see [details here](https://plaid.com/docs/link/react-native/#onevent). To receive these events in your React Native app, wrap the `PlaidLink` react component with the following in order to listen for those events:
-
-```javascript
-import React from 'react';
-import { Text, NativeEventEmitter, NativeModules, Platform } from 'react-native';
-
-class PlaidEventContainer extends React.Component {
-
-  componentDidMount() {
-    const emitter = new NativeEventEmitter(Platform.OS === 'ios' ? NativeModules.RNLinksdk : NativeModules.PlaidAndroid);
-    this._listener = emitter.addListener('onEvent', (e) => console.log(e));
-  }
-
-  componentWillUnmount() {
-    if (this._listener) {
-      this._listener.remove();
-    }
-  }
-
-  ...
-}
-```
-
-You can also use the `usePlaidEmitter` hook in react functional components:
+The React Native Plaid module emits `onEvent` events throughout the account linking process — see [details here](https://plaid.com/docs/link/react-native/#onevent). To receive these events in your React Native app, use the `usePlaidEmitter` hook in react functional components:
 
 ```javascript
   usePlaidEmitter((event: LinkEvent) => {

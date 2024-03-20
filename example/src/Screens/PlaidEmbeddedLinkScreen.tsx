@@ -18,7 +18,7 @@ var EmbeddedView = ({token}: {token: string}) => {
       <View>
         <EmbeddedLinkView
           token={token}
-          iOSPresentationStyle={LinkIOSPresentationStyle.FULL_SCREEN}
+          iOSPresentationStyle={LinkIOSPresentationStyle.MODAL}
           onEvent={(event: LinkEvent) => {
             console.log('onEvent', event);
           }}

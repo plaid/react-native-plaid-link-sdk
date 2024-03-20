@@ -27,7 +27,7 @@ Android SDK [4.2.0](https://github.com/plaid/plaid-link-android/releases/tag/v4.
 
 ### iOS
 
-iOS SDK [5.3.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.3.0)
+iOS SDK [5.3.1](https://github.com/plaid/plaid-link-ios/releases/tag/5.3.1)
 
 #### Requirements
 

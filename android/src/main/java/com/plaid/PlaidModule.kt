@@ -113,10 +113,16 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun open(onSuccessCallback: Callback, onExitCallback: Callback) {
     val activity = currentActivity ?: throw IllegalStateException("Current activity is null")
-    this.onSuccessCallback = onSuccessCallback
-    this.onExitCallback = onExitCallback
 
-    plaidHandler?.open(activity)
+    plaidHandler?.let { handler ->
+      // Work with nonNullValue here
+      this.onSuccessCallback = onSuccessCallback
+      this.onExitCallback = onExitCallback
+      handler.open(activity)
+    } ?: run {
+      // Handler is nil.
+      throw LinkException("Create must be called before open.")
+    }
   }
 
   @ReactMethod

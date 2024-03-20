@@ -127,7 +127,7 @@ function makeLinkTokenProps(token: string): PlaidLinkProps {
   };
 }
 
-const linkTokenProps = makeLinkTokenProps(text);
+const linkTokenProps = makeLinkTokenProps("#GENERATED_LINK_TOKEN#");
 openLink(linkTokenProps);
 ```
 

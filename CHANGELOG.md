@@ -37,10 +37,6 @@ iOS SDK [5.3.1](https://github.com/plaid/plaid-link-ios/releases/tag/5.3.1)
 | iOS | >= 14.0 |
 
 
-#### Changes
-
-- Improved Remember Me Experience.
-
 ## LinkKit V11.5.2 — 2024-02-21
 
 ### React Native

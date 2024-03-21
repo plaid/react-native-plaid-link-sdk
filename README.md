@@ -179,18 +179,18 @@ While these older versions are expected to continue to work without disruption, 
 
 | Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |
 |-------------------|--------------------------|-------------|---------------------|------------------------|---------|-----------------|-------------------------------|
-| 11.6.0            | *                        | [4.2.0+]    | 21                  | 33                     | >=5.3.1 |  14.0           | Active, supports Xcode 15.0.1 |
-| 11.5.2            | *                        | [4.1.1+]    | 21                  | 33                     | >=5.2.1 |  14.0           | Active, supports Xcode 15.0.1 |
-| 11.5.1            | *                        | [4.1.1+]    | 21                  | 33                     | >=5.2.0 |  14.0           | Active, supports Xcode 15.0.1 |
-| 11.5.0            | *                        | [4.1.1+]    | 21                  | 33                     | >=5.2.0 |  14.0           | Active, supports Xcode 15.0.1 |
-| 11.4.0            | *                        | [4.1.1+]    | 21                  | 33                     | >=5.1.0 |  14.0           | Active, supports Xcode 15.0.1 |
-| 11.3.0            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.1.0 |  14.0           | Active, supports Xcode 15.0.1 |
-| ~11.2.0~          | *                        | [4.1.0+]    | 21                  | 33                     | >=5.1.0 |  14.0           | **Deprecated**                |
-| 11.1.0            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.1.0 |  14.0           | Active, supports Xcode 15.0.1 |
-| 11.0.3            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
-| 11.0.2            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
-| 11.0.1            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
-| 11.0.0            | *                        | [4.0.0+]    | 21                  | 33                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.6.0            | *                        | [4.2.0+]    | 21                  | 34                     | >=5.3.1 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.5.2            | *                        | [4.1.1+]    | 21                  | 34                     | >=5.2.1 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.5.1            | *                        | [4.1.1+]    | 21                  | 34                     | >=5.2.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.5.0            | *                        | [4.1.1+]    | 21                  | 34                     | >=5.2.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.4.0            | *                        | [4.1.1+]    | 21                  | 34                     | >=5.1.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.3.0            | *                        | [4.0.0+]    | 21                  | 34                     | >=5.1.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| ~11.2.0~          | *                        | [4.1.0+]    | 21                  | 34                     | >=5.1.0 |  14.0           | **Deprecated**                |
+| 11.1.0            | *                        | [4.0.0+]    | 21                  | 34                     | >=5.1.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.0.3            | *                        | [4.0.0+]    | 21                  | 34                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.0.2            | *                        | [4.0.0+]    | 21                  | 34                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.0.1            | *                        | [4.0.0+]    | 21                  | 34                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.0.0            | *                        | [4.0.0+]    | 21                  | 34                     | >=5.0.0 |  14.0           | Active, supports Xcode 15.0.1 |
 | 10.13.0           | >= 0.66.0                | [3.14.3+]   | 21                  | 33                     | >=4.7.2 |  11.0           | Active, supports Xcode 14     |
 | 10.12.0           | >= 0.66.0                | [3.14.3+]   | 21                  | 33                     | >=4.7.1 |  11.0           | Active, supports Xcode 14     |
 | 10.11.0           | >= 0.66.0                | [3.14.1+]   | 21                  | 33                     | >=4.7.1 |  11.0           | Active, supports Xcode 14     |

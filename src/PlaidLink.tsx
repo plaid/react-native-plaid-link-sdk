@@ -24,10 +24,10 @@ const RNLinksdk =
  *
  * @param LinkEventListener the listener to call
  */
-export const usePlaidEmitter = (LinkEventListener: LinkEventListener) => {
+export const usePlaidEmitter = (linkEventListener: LinkEventListener) => {
   useEffect(() => {
     const emitter = new NativeEventEmitter(RNLinksdk);
-    const listener = emitter.addListener('onEvent', LinkEventListener);
+    const listener = emitter.addListener('onEvent', linkEventListener);
     // Clean up after this effect:
     return function cleanup() {
       listener.remove();

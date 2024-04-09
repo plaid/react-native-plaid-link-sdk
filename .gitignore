@@ -46,6 +46,7 @@ buck-out/
 *.keystore
 
 # React Native ts
+dist/
 
 .vscode
 example/android/build/

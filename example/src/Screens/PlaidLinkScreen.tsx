@@ -1,31 +1,45 @@
 import React from 'react';
-import { TextInput, Text, TouchableOpacity } from 'react-native';
-import { styles } from '../Styles';
+import {TextInput, Text, TouchableOpacity} from 'react-native';
+import {styles} from '../Styles';
 
 import {
   LinkExit,
   LinkEvent,
   LinkLogLevel,
   LinkSuccess,
-  openLink,
   dismissLink,
-  PlaidLinkProps,
+  LinkOpenProps,
   usePlaidEmitter,
   LinkIOSPresentationStyle,
+  LinkTokenConfiguration,
 } from 'react-native-plaid-link-sdk';
 
-// Create PlaidLinkProps from the provided token string.
-function makeLinkTokenProps(token: string): PlaidLinkProps {
+import {create, open} from 'react-native-plaid-link-sdk/dist/PlaidLink';
+
+function isValidString(str: string): boolean {
+  if (str && str.trim() !== '') {
+    return true;
+  }
+  return false;
+}
+
+function createLinkTokenConfiguration(
+  token: string,
+  noLoadingState: boolean = false,
+): LinkTokenConfiguration {
+  console.log(`token: ${token}`);
   return {
-    tokenConfig: {
-      token: token,
-      logLevel: LinkLogLevel.ERROR,
-      // Hides native activity indicator if true.
-      noLoadingState: false, 
-    },
+    token: token,
+    // Hides native activity indicator if true.
+    noLoadingState: noLoadingState,
+  };
+}
+
+function createLinkOpenProps(): LinkOpenProps {
+  return {
     onSuccess: (success: LinkSuccess) => {
       // User was able to successfully link their account.
-      console.log('Success: ', success); 
+      console.log('Success: ', success);
       success.metadata.accounts.forEach(it => console.log('accounts', it));
     },
     onExit: (linkExit: LinkExit) => {
@@ -35,6 +49,7 @@ function makeLinkTokenProps(token: string): PlaidLinkProps {
     },
     // MODAL or FULL_SCREEEN presentation on iOS. Defaults to MODAL.
     iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
+    logLevel: LinkLogLevel.ERROR,
   };
 }
 
@@ -50,6 +65,7 @@ export function PlaidLinkScreen() {
   });
 
   const [text, onChangeText] = React.useState('');
+  const [disabled, setDisabled] = React.useState(true);
 
   return (
     <>
@@ -63,8 +79,21 @@ export function PlaidLinkScreen() {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          const linkTokenProps = makeLinkTokenProps(text);
-          openLink(linkTokenProps);
+          if (isValidString(text)) {
+            const tokenConfiguration = createLinkTokenConfiguration(text);
+            create(tokenConfiguration);
+            setDisabled(false);
+          }
+        }}>
+        <Text style={styles.button}>Create Link</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        disabled={disabled}
+        style={disabled ? styles.disabledButton : styles.button}
+        onPress={() => {
+          const openProps = createLinkOpenProps();
+          open(openProps);
+          setDisabled(true);
         }}>
         <Text style={styles.button}>Open Link</Text>
       </TouchableOpacity>

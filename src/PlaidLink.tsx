@@ -6,14 +6,17 @@ import {
   LinkExit,
   LinkIOSPresentationStyle,
   LinkLogLevel,
+  LinkOpenProps,
   LinkSuccess,
+  LinkTokenConfiguration,
   PlaidLinkComponentProps,
   PlaidLinkProps,
 } from './Types';
 import RNLinksdkAndroid from './fabric/NativePlaidLinkModuleAndroid';
 import RNLinksdkiOS from './fabric/NativePlaidLinkModuleiOS';
 
-const RNLinksdk = (Platform.OS === 'android' ? RNLinksdkAndroid : RNLinksdkiOS) ?? undefined;
+const RNLinksdk =
+  (Platform.OS === 'android' ? RNLinksdkAndroid : RNLinksdkiOS) ?? undefined;
 
 /**
  * A hook that registers a listener on the Plaid emitter for the 'onEvent' type.
@@ -32,13 +35,108 @@ export const usePlaidEmitter = (linkEventListener: LinkEventListener) => {
   }, []);
 };
 
+export const create = (props: LinkTokenConfiguration) => {
+  let token = props.token;
+  let noLoadingState = props.noLoadingState ?? false;
+
+  if (Platform.OS === 'android') {
+    RNLinksdkAndroid?.create(
+      token,
+      noLoadingState,
+      props.logLevel ?? LinkLogLevel.ERROR,
+    );
+  } else {
+    RNLinksdkiOS?.create(token, noLoadingState);
+  }
+};
+
+export const open = async (props: LinkOpenProps) => {
+  if (Platform.OS === 'android') {
+    RNLinksdkAndroid?.open(
+      (result: LinkSuccess) => {
+        if (props.onSuccess != null) {
+          props.onSuccess(result);
+        }
+      },
+      (result: LinkExit) => {
+        if (props.onExit != null) {
+          if (result.error != null && result.error.displayMessage != null) {
+            //TODO(RNSDK-118): Remove errorDisplayMessage field in next major update.
+            result.error.errorDisplayMessage = result.error.displayMessage;
+          }
+          props.onExit(result);
+        }
+      },
+    );
+  } else {
+    let presentFullScreen =
+      props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN;
+
+    RNLinksdkiOS?.open(
+      presentFullScreen,
+      (result: LinkSuccess) => {
+        if (props.onSuccess != null) {
+          props.onSuccess(result);
+        }
+      },
+      (error: LinkError, result: LinkExit) => {
+        if (props.onExit != null) {
+          if (error) {
+            var data = result || {};
+            data.error = error;
+            props.onExit(data);
+          } else {
+            props.onExit(result);
+          }
+        }
+      },
+    );
+  }
+};
+
+export const dismissLink = () => {
+  if (Platform.OS === 'ios') {
+    RNLinksdkiOS?.dismiss();
+  }
+};
+
+/**
+ * @deprecated This component is deprecated. Create your own component and use the create & open methods.
+ */
+export const PlaidLink = (props: PlaidLinkComponentProps) => {
+  // Create a handler.
+  create(props.tokenConfig);
+
+  function onPress() {
+    props.onPress?.();
+
+    const openProps: LinkOpenProps = {
+      onSuccess: props.onSuccess,
+      onExit: props.onExit,
+      iOSPresentationStyle: props.iOSPresentationStyle,
+      logLevel: props.logLevel,
+    };
+
+    open(openProps);
+  }
+
+  return (
+    <TouchableOpacity onPress={onPress}>{props.children}</TouchableOpacity>
+  );
+};
+
+/**
+ * @deprecated This method is deprecated. For faster loading use the create & open methods.
+ */
 export const openLink = async (props: PlaidLinkProps) => {
   let config = props.tokenConfig;
   let noLoadingState = config.noLoadingState ?? false;
 
   if (Platform.OS === 'android') {
     if (RNLinksdkAndroid === null) {
-      throw new Error('[react-native-plaid-link-sdk] RNLinksdkAndroid is not defined');
+      throw new Error(
+        '[react-native-plaid-link-sdk] RNLinksdkAndroid is not defined',
+      );
     }
 
     RNLinksdkAndroid.startLinkActivityForResult(
@@ -63,17 +161,16 @@ export const openLink = async (props: PlaidLinkProps) => {
     );
   } else {
     if (RNLinksdkiOS === null) {
-      throw new Error('[react-native-plaid-link-sdk] RNLinksdkiOS is not defined');
+      throw new Error(
+        '[react-native-plaid-link-sdk] RNLinksdkiOS is not defined',
+      );
     }
-
-    RNLinksdkiOS.create(config.token, noLoadingState);
 
     let presentFullScreen =
       props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN;
 
-    RNLinksdkiOS.open(
+    RNLinksdkiOS?.open(
       presentFullScreen,
-      // @ts-ignore we use Object type in the spec file as it maps to NSDictionary and ReadableMap
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {
           props.onSuccess(result);
@@ -92,26 +189,4 @@ export const openLink = async (props: PlaidLinkProps) => {
       },
     );
   }
-};
-
-export const dismissLink = () => {
-  if (Platform.OS === 'ios') {
-    if (RNLinksdkiOS === null) {
-      throw new Error('[react-native-plaid-link-sdk] RNLinksdkiOS is not defined');
-    }
-
-    RNLinksdkiOS.dismiss();
-  }
-};
-
-export const PlaidLink = (props: PlaidLinkComponentProps) => {
-  function onPress() {
-    props.onPress?.();
-    openLink(props);
-  }
-
-  return (
-    // @ts-ignore some types directories misconfiguration
-    <TouchableOpacity onPress={onPress}>{props.children}</TouchableOpacity>
-  );
 };

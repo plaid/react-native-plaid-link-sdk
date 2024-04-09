@@ -14,7 +14,6 @@ import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.module.annotations.ReactModuleList;
 import com.facebook.react.module.model.ReactModuleInfo;
 import com.facebook.react.module.model.ReactModuleInfoProvider;
-import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import com.facebook.react.uimanager.ViewManager;
 
 import javax.annotation.Nonnull;
@@ -92,7 +91,7 @@ public class PlaidPackage extends TurboReactPackage implements ViewManagerOnDema
                             reactModule.needsEagerInit(),
                             reactModule.hasConstants(),
                             reactModule.isCxxModule(),
-                            TurboModule.class.isAssignableFrom(moduleClass)));
+                            BuildConfig.IS_NEW_ARCHITECTURE_ENABLED));
           }
 
           return reactModuleInfoMap;

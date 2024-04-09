@@ -4,6 +4,11 @@ import {TurboModuleRegistry, TurboModule} from 'react-native';
 import { Int32, UnsafeObject } from 'react-native/Libraries/Types/CodegenTypes';
 
 export interface Spec extends TurboModule {
+    create(token: string, noLoadingState: boolean, logLevel: string): void;
+    open(
+        onSuccess: (result: UnsafeObject) => void,
+        onExit: (error: UnsafeObject, result: UnsafeObject) => void,
+      ): void;
     startLinkActivityForResult(
         token: string,
         noLoadingState: boolean,
@@ -11,7 +16,6 @@ export interface Spec extends TurboModule {
         onSuccessCallback: (result: UnsafeObject) => void,
         onExitCallback: (result: UnsafeObject) => void
     ): void;
-
     // those two are here for event emitter methods
     addListener(eventName: string): void;
     removeListeners(count: Int32): void;

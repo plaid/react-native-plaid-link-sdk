@@ -53,8 +53,8 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     reactApplicationContext.addActivityEventListener(this)
   }
 
-  override fun onCatalystInstanceDestroy() {
-    super.onCatalystInstanceDestroy()
+  override fun invalidate() {
+    super.invalidate()
     reactApplicationContext.removeActivityEventListener(this)
   }
 
@@ -80,7 +80,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun create(
+  override fun create(
     token: String,
     noLoadingState: Boolean,
     logLevel: String,
@@ -111,7 +111,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun open(onSuccessCallback: Callback, onExitCallback: Callback) {
+  override fun open(onSuccessCallback: Callback, onExitCallback: Callback) {
     val activity = currentActivity ?: throw IllegalStateException("Current activity is null")
 
     plaidHandler?.let { handler ->
@@ -164,7 +164,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
   override fun addListener(eventName: String?) = Unit
 
-  override fun removeListeners(count: Double) = Unit
+  override fun removeListeners(count: Int) = Unit
 
   private fun maybeGetStringField(obj: JSONObject, fieldName: String): String? {
     if (obj.has(fieldName) && !TextUtils.isEmpty(obj.getString(fieldName))) {

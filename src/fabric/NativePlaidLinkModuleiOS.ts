@@ -7,7 +7,7 @@ export interface Spec extends TurboModule {
     create(token: string, noLoadingState: boolean): void;
     open(
         fullScreen: boolean,
-        onSuccess: (success: UnsafeObject) => void,
+        onSuccess: (result: UnsafeObject) => void,
         onExit: (error: UnsafeObject, result: UnsafeObject) => void,
       ): void;
     dismiss(): void;

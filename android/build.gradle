@@ -67,6 +67,7 @@ android {
         targetSdkVersion 31
         versionCode 1
         versionName "0.0.1"
+        buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
     }
     lintOptions {
         abortOnError false

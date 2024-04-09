@@ -34,6 +34,14 @@ public abstract class NativePlaidLinkModuleAndroidSpec extends ReactContextBaseJ
 
   @ReactMethod
   @DoNotStrip
+  public abstract void create(String token, boolean noLoadingState, String logLevel);
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void open(Callback onSuccess, Callback onExit);
+
+  @ReactMethod
+  @DoNotStrip
   public abstract void startLinkActivityForResult(String token, boolean noLoadingState, String logLevel, Callback onSuccessCallback, Callback onExitCallback);
 
   @ReactMethod
@@ -42,5 +50,5 @@ public abstract class NativePlaidLinkModuleAndroidSpec extends ReactContextBaseJ
 
   @ReactMethod
   @DoNotStrip
-  public abstract void removeListeners(double count);
+  public abstract void removeListeners(int count);
 }

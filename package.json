@@ -67,7 +67,7 @@
   },
   "codegenConfig": {
     "name": "rnplaidlink",
-    "type": "modules",
+    "type": "all",
     "jsSrcsDir": "./src/fabric",
     "android": {
       "javaPackageName": "com.plaid"

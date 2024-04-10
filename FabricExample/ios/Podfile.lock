@@ -1537,7 +1537,7 @@ SPEC CHECKSUMS:
   React-jsitracing: 39abf32718d8ea6e634f01c7604be086185b78bd
   React-logger: a790d16be67220e42ba1de47fd5f3bf694961307
   React-Mapbuffer: 30f85b69520bd0d33e0da391b756cc213a554352
-  react-native-plaid-link-sdk: 41c57993bc36296d0dc2e29a6524bd48d1a6c1c3
+  react-native-plaid-link-sdk: 703985c98dc91afaf638f32f0fe4f2904defc94e
   react-native-safe-area-context: fc0424ee0e1ae0c321c7aeb19c215e75da465676
   React-nativeconfig: c9e21ec2c4fdd9965ed627c896f8b62ce75a482a
   React-NativeModulesApple: f92d16846e045bc4cec6843994e64e497f49173d

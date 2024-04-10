@@ -8,7 +8,6 @@ import android.util.Log
 import com.facebook.react.bridge.ActivityEventListener
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
@@ -19,11 +18,9 @@ import com.plaid.link.configuration.LinkLogLevel
 import com.plaid.link.configuration.LinkTokenConfiguration
 import com.plaid.link.event.LinkEvent
 import com.plaid.link.exception.LinkException
-import com.plaid.link.result.LinkAccountSubtype
 import com.plaid.link.result.LinkResultHandler
 import org.json.JSONException
 import org.json.JSONObject
-import java.util.ArrayList
 
 @ReactModule(name = PlaidModule.NAME)
 class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
@@ -164,7 +161,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
   override fun addListener(eventName: String?) = Unit
 
-  override fun removeListeners(count: Int) = Unit
+  override fun removeListeners(count: Double) = Unit
 
   private fun maybeGetStringField(obj: JSONObject, fieldName: String): String? {
     if (obj.has(fieldName) && !TextUtils.isEmpty(obj.getString(fieldName))) {

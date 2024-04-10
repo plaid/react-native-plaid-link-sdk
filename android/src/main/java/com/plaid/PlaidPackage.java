@@ -1,6 +1,6 @@
 package com.plaid;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +10,7 @@ import com.facebook.react.ViewManagerOnDemandReactPackage;
 import com.facebook.react.bridge.ModuleSpec;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.module.annotations.ReactModuleList;
 import com.facebook.react.module.model.ReactModuleInfo;
@@ -18,31 +19,47 @@ import com.facebook.react.uimanager.ViewManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Provider;
 
 @ReactModuleList(nativeModules = {PlaidModule.class})
 public class PlaidPackage extends TurboReactPackage implements ViewManagerOnDemandReactPackage {
 
-  /**
-   * {@inheritDoc}
-   */
+  private @Nullable Map<String, ModuleSpec> mViewManagers;
+
+  private Map<String, ModuleSpec> getViewManagersMap(final ReactApplicationContext reactContext) {
+    if (mViewManagers == null) {
+      Map<String, ModuleSpec> specs = MapBuilder.newHashMap();
+      specs.put(
+              PLKEmbeddedViewManager.REACT_CLASS,
+              ModuleSpec.viewManagerSpec(
+                      new Provider<NativeModule>() {
+                        @Override
+                        public NativeModule get() {
+                          return new PLKEmbeddedViewManager();
+                        }
+                      }));
+      mViewManagers = specs;
+    }
+    return mViewManagers;
+  }
+
+  /** {@inheritDoc} */
   @Override
   public List<String> getViewManagerNames(ReactApplicationContext reactContext) {
-    return null;
+    return new ArrayList<>(getViewManagersMap(reactContext).keySet());
   }
 
   @Override
   protected List<ModuleSpec> getViewManagers(ReactApplicationContext reactContext) {
-    return null;
+    return new ArrayList<>(getViewManagersMap(reactContext).values());
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
-  public @Nullable
-  ViewManager createViewManager(
+  public @Nullable ViewManager createViewManager(
           ReactApplicationContext reactContext, String viewManagerName) {
-    return null;
+    ModuleSpec spec = getViewManagersMap(reactContext).get(viewManagerName);
+    return spec != null ? (ViewManager) spec.getProvider().get() : null;
   }
 
   @Override
@@ -53,11 +70,6 @@ public class PlaidPackage extends TurboReactPackage implements ViewManagerOnDema
       default:
         return null;
     }
-  }
-
-  @Override
-  public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-    return Arrays.<ViewManager>asList( new PLKEmbeddedViewManager() );
   }
 
   @Override

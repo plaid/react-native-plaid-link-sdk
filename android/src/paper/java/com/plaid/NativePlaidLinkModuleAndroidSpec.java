@@ -50,5 +50,5 @@ public abstract class NativePlaidLinkModuleAndroidSpec extends ReactContextBaseJ
 
   @ReactMethod
   @DoNotStrip
-  public abstract void removeListeners(int count);
+  public abstract void removeListeners(double count);
 }

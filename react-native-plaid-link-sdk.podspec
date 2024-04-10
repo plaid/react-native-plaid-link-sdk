@@ -16,6 +16,10 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/plaid/react-native-plaid-link-sdk.git", :tag => "v#{s.version}" }
   s.source_files  = "ios/**/*.{h,m,mm,swift}"
+  # we need this since Swift generates import for `react_native_plaid_link_sdk/react_native_plaid_link_sdk.h` and we have to fake it
+  s.header_dir = "react_native_plaid_link_sdk"
+  # we don't want this to be seen by Swift
+  s.private_header_files = 'ios/PLKFabricHelpers.h'
 
   if fabric_enabled
     install_modules_dependencies(s)

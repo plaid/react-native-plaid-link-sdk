@@ -11,6 +11,7 @@ This SDK now works with any supported version of React Native.
 #### Changes
 
 - Update iOS SDK and Android SDKs.
+- Fix issue with Plaid component not working on second press.
 
 ### Android
 

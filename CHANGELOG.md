@@ -1,6 +1,6 @@
 # RELEASES
 
-## LinkKit V11.7.0 — 2024-04-12
+## LinkKit V11.7.1 — 2024-04-12
 
 ### React Native
 
@@ -33,7 +33,7 @@ Android SDK [4.3.0](https://github.com/plaid/plaid-link-android/releases/tag/v4.
 
 ### iOS
 
-iOS SDK [5.4.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.4.0)
+iOS SDK [5.4.1](https://github.com/plaid/plaid-link-ios/releases/tag/5.4.1)
 
 #### Changes
 

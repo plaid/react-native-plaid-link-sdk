@@ -97,7 +97,7 @@ RCT_EXPORT_METHOD(create:(NSString*)token :(BOOL)noLoadingState) {
         __typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf.hasObservers) {
             NSDictionary *eventDictionary = [RNLinksdk dictionaryFromEvent:event];
-            [strongSelf sendEventWithName:kRNLinkKitOnEventEvent 
+            [strongSelf sendEventWithName:kRNLinkKitOnEventEvent
                                      body:eventDictionary];
 
             // If this is the HANDOFF event.

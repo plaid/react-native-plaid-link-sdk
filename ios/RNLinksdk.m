@@ -27,7 +27,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"11.8.0"; // SDK_VERSION
+    return @"11.8.1"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -98,7 +98,7 @@ RCT_EXPORT_METHOD(create:(NSString*)token :(BOOL)noLoadingState) {
         if (strongSelf.hasObservers) {
             NSDictionary *eventDictionary = [RNLinksdk dictionaryFromEvent:event];
             [strongSelf sendEventWithName:kRNLinkKitOnEventEvent 
-                                    body:eventDictionary];
+                                     body:eventDictionary];
 
             // If this is the HANDOFF event.
             if (event.eventName.value == PLKEventNameValueHandoff) {
@@ -175,7 +175,7 @@ RCT_EXPORT_METHOD(open: (BOOL)fullScreen :(RCTResponseSenderBlock)onSuccess :(RC
 
 RCT_EXPORT_METHOD(dismiss) {
     [self.presentingViewController dismissViewControllerAnimated:YES
-                                                        completion:nil];
+                                                      completion:nil];
     self.presentingViewController = nil;
 }
 

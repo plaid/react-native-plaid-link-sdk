@@ -1,5 +1,46 @@
 # RELEASES
 
+## LinkKit V11.8.2 — 2024-04-22
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Resolve issue where handler wasn't deallocated onExit for iOS sessions.
+
+### Android
+
+Android SDK [4.3.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.3.1)
+
+#### Changes
+- Change WebView background to a transparent gradient.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.4.2](https://github.com/plaid/plaid-link-ios/releases/tag/5.4.2)
+
+#### Changes
+
+- Make Link background a transparent gradient.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
 ## LinkKit V11.8.1 — 2024-04-22
 
 ### React Native

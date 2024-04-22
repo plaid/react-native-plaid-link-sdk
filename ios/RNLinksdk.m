@@ -97,8 +97,17 @@ RCT_EXPORT_METHOD(create:(NSString*)token :(BOOL)noLoadingState) {
         __typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf.hasObservers) {
             NSDictionary *eventDictionary = [RNLinksdk dictionaryFromEvent:event];
-            [strongSelf sendEventWithName:kRNLinkKitOnEventEvent
-                                     body:eventDictionary];
+            [strongSelf sendEventWithName:kRNLinkKitOnEventEvent 
+                                    body:eventDictionary];
+
+            // If this is the HANDOFF event.
+            if (event.eventName.value == PLKEventNameValueHandoff) {
+                // If we have dismissed Link.
+                if (strongSelf.presentingViewController == nil) {
+                    // Deallocate the handler it's no longer needed.
+                    self.linkHandler = nil;
+                }
+            }
         }
     };
 
@@ -166,9 +175,8 @@ RCT_EXPORT_METHOD(open: (BOOL)fullScreen :(RCTResponseSenderBlock)onSuccess :(RC
 
 RCT_EXPORT_METHOD(dismiss) {
     [self.presentingViewController dismissViewControllerAnimated:YES
-                                                      completion:nil];
+                                                        completion:nil];
     self.presentingViewController = nil;
-    self.linkHandler = nil;
 }
 
 #pragma mark - Bridging
@@ -461,6 +469,8 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"VERIFY_PHONE";
         case PLKEventNameValueConnectNewInstitution:
             return @"CONNECT_NEW_INSTITUTION";
+        case PLKEventNameValueSubmitOTP:
+            return @"SUBMIT_OTP";
     }
      return @"unknown";
 }
@@ -501,6 +511,8 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"institution_not_found";
         case PLKExitStatusValueRequiresAccountSelection:
             return @"requires_account_selection";
+        case PLKExitStatusValueContinueToThridParty:
+            return @"continue_to_third_party";
     }
     return @"unknown";
 }

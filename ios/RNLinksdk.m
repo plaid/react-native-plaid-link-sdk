@@ -27,7 +27,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"11.8.1"; // SDK_VERSION
+    return @"11.8.2"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -90,6 +90,7 @@ RCT_EXPORT_METHOD(create:(NSString*)token :(BOOL)noLoadingState) {
                 strongSelf.exitCallback(@[[NSNull null], exitMetadata]);
             }
             strongSelf.exitCallback = nil;
+            strongSelf.linkHandler = nil;
         }
     };
 
@@ -105,7 +106,7 @@ RCT_EXPORT_METHOD(create:(NSString*)token :(BOOL)noLoadingState) {
                 // If we have dismissed Link.
                 if (strongSelf.presentingViewController == nil) {
                     // Deallocate the handler it's no longer needed.
-                    self.linkHandler = nil;
+                    strongSelf.linkHandler = nil;
                 }
             }
         }

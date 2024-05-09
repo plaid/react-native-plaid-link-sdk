@@ -1,15 +1,17 @@
-
-#if __has_include(<React/RCTBridgeModule.h>)
-#import <React/RCTBridgeModule.h>
-#import <React/RCTEventEmitter.h>
-#else
-#import "RCTBridgeModule.h"
-#import "RCTEventEmitter.h"
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <rnplaidlink/rnplaidlink.h>
 #endif
+#import <React/RCTBridge.h>
+#import "RCTEventEmitter.h"
 
 #import <LinkKit/LinkKit.h>
 
-@interface RNLinksdk : RCTEventEmitter <RCTBridgeModule>
+@interface RNLinksdk : RCTEventEmitter
+#ifdef RCT_NEW_ARCH_ENABLED
+                                   <NativePlaidLinkModuleiOSSpec>
+#else
+                                   <RCTBridgeModule>
+#endif
 
 + (NSDictionary *)dictionaryFromSuccess:(PLKLinkSuccess *)success;
 + (NSDictionary *)dictionaryFromEvent:(PLKLinkEvent *)event;

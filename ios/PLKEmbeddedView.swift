@@ -1,23 +1,23 @@
 import LinkKit
 import UIKit
 
-internal final class PLKEmbeddedView: UIView {
+@objc public final class PLKEmbeddedView: UIView {
 
     // Properties exposed to React Native.
 
-    @objc var iOSPresentationStyle: String = "" {
+    @objc public var iOSPresentationStyle: String = "" {
         didSet {
             createNativeEmbeddedView()
         }
     }
 
-    @objc var token: String = "" {
+    @objc public var token: String = "" {
         didSet {
             createNativeEmbeddedView()
         }
     }
 
-    @objc var onEmbeddedEvent: RCTDirectEventBlock?
+    @objc public var onEmbeddedEvent: RCTDirectEventBlock?
 
     // MARK: Private
 

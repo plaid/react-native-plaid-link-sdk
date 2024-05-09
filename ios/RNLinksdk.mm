@@ -1,4 +1,5 @@
 #import "RNLinksdk.h"
+#import "RNPlaidHelper.h"
 
 #import <Foundation/Foundation.h>
 #import <LinkKit/LinkKit.h>
@@ -66,11 +67,11 @@ RCT_EXPORT_MODULE();
     self.hasObservers = NO;
 }
 
-RCT_EXPORT_METHOD(create:(NSString*)token :(BOOL)noLoadingState) {
-    __weak typeof(self) weakSelf = self;
+RCT_EXPORT_METHOD(create:(NSString*)token noLoadingState:(BOOL)noLoadingState) {
+    __weak RNLinksdk *weakSelf = self;
 
     void (^onSuccess)(PLKLinkSuccess *) = ^(PLKLinkSuccess *success) {
-        __typeof(weakSelf) strongSelf = weakSelf;
+        RNLinksdk *strongSelf = weakSelf;
 
         if (strongSelf.successCallback) {
             NSDictionary<NSString*, id> *jsMetadata = [RNLinksdk dictionaryFromSuccess:success];
@@ -80,7 +81,7 @@ RCT_EXPORT_METHOD(create:(NSString*)token :(BOOL)noLoadingState) {
     };
 
     void (^onExit)(PLKLinkExit *) = ^(PLKLinkExit *exit) {
-        __typeof(weakSelf) strongSelf = weakSelf;
+        RNLinksdk *strongSelf = weakSelf;
 
         if (strongSelf.exitCallback) {
             NSDictionary *exitMetadata = [RNLinksdk dictionaryFromExit:exit];
@@ -95,7 +96,7 @@ RCT_EXPORT_METHOD(create:(NSString*)token :(BOOL)noLoadingState) {
     };
 
     void (^onEvent)(PLKLinkEvent *) = ^(PLKLinkEvent *event) {
-        __typeof(weakSelf) strongSelf = weakSelf;
+        RNLinksdk *strongSelf = weakSelf;
         if (strongSelf.hasObservers) {
             NSDictionary *eventDictionary = [RNLinksdk dictionaryFromEvent:event];
             [strongSelf sendEventWithName:kRNLinkKitOnEventEvent
@@ -118,11 +119,11 @@ RCT_EXPORT_METHOD(create:(NSString*)token :(BOOL)noLoadingState) {
     config.noLoadingState = noLoadingState;
 
     NSError *creationError = nil;
-    self.linkHandler = [PLKPlaid createWithLinkTokenConfiguration:config error:&creationError];
+    self.linkHandler = [RNPlaidHelper createWithLinkTokenConfiguration:config error:&creationError];
     self.creationError = creationError;
 }
 
-RCT_EXPORT_METHOD(open: (BOOL)fullScreen :(RCTResponseSenderBlock)onSuccess :(RCTResponseSenderBlock)onExit) {
+RCT_EXPORT_METHOD(open:(BOOL)fullScreen onSuccess:(RCTResponseSenderBlock)onSuccess onExit:(RCTResponseSenderBlock)onExit) {
     if (self.linkHandler) {
         self.successCallback = onSuccess;
         self.exitCallback = onExit;
@@ -132,7 +133,7 @@ RCT_EXPORT_METHOD(open: (BOOL)fullScreen :(RCTResponseSenderBlock)onSuccess :(RC
         // unnecessarily invoked.
         __block bool didPresent = NO;
 
-        __weak typeof(self) weakSelf = self;
+        __weak RNLinksdk *weakSelf = self;
         void(^presentationHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
 
             if (fullScreen) {
@@ -635,5 +636,13 @@ RCT_EXPORT_METHOD(dismiss) {
         },
     };
 }
+
+#if RCT_NEW_ARCH_ENABLED
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+    (const facebook::react::ObjCTurboModule::InitParams &)params
+{
+  return std::make_shared<facebook::react::NativePlaidLinkModuleiOSSpecJSI>(params);
+}
+#endif
 
 @end

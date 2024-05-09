@@ -1,11 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  Linking,
-  NativeEventEmitter,
-  NativeModules,
-  Platform,
-  TouchableOpacity,
-} from 'react-native';
+import { NativeEventEmitter, Platform, TouchableOpacity } from 'react-native';
 import {
   LinkError,
   LinkEventListener,
@@ -18,6 +12,11 @@ import {
   PlaidLinkComponentProps,
   PlaidLinkProps,
 } from './Types';
+import RNLinksdkAndroid from './fabric/NativePlaidLinkModuleAndroid';
+import RNLinksdkiOS from './fabric/NativePlaidLinkModuleiOS';
+
+const RNLinksdk =
+  (Platform.OS === 'android' ? RNLinksdkAndroid : RNLinksdkiOS) ?? undefined;
 
 /**
  * A hook that registers a listener on the Plaid emitter for the 'onEvent' type.
@@ -25,14 +24,10 @@ import {
  *
  * @param LinkEventListener the listener to call
  */
-export const usePlaidEmitter = (LinkEventListener: LinkEventListener) => {
+export const usePlaidEmitter = (linkEventListener: LinkEventListener) => {
   useEffect(() => {
-    const emitter = new NativeEventEmitter(
-      Platform.OS === 'ios'
-        ? NativeModules.RNLinksdk
-        : NativeModules.PlaidAndroid,
-    );
-    const listener = emitter.addListener('onEvent', LinkEventListener);
+    const emitter = new NativeEventEmitter(RNLinksdk);
+    const listener = emitter.addListener('onEvent', linkEventListener);
     // Clean up after this effect:
     return function cleanup() {
       listener.remove();
@@ -45,19 +40,19 @@ export const create = (props: LinkTokenConfiguration) => {
   let noLoadingState = props.noLoadingState ?? false;
 
   if (Platform.OS === 'android') {
-    NativeModules.PlaidAndroid.create(
+    RNLinksdkAndroid?.create(
       token,
       noLoadingState,
       props.logLevel ?? LinkLogLevel.ERROR,
     );
   } else {
-    NativeModules.RNLinksdk.create(token, noLoadingState);
+    RNLinksdkiOS?.create(token, noLoadingState);
   }
 };
 
 export const open = async (props: LinkOpenProps) => {
   if (Platform.OS === 'android') {
-    NativeModules.PlaidAndroid.open(
+    RNLinksdkAndroid?.open(
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {
           props.onSuccess(result);
@@ -77,7 +72,7 @@ export const open = async (props: LinkOpenProps) => {
     let presentFullScreen =
       props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN;
 
-    NativeModules.RNLinksdk.open(
+    RNLinksdkiOS?.open(
       presentFullScreen,
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {
@@ -101,7 +96,7 @@ export const open = async (props: LinkOpenProps) => {
 
 export const dismissLink = () => {
   if (Platform.OS === 'ios') {
-    NativeModules.RNLinksdk.dismiss();
+    RNLinksdkiOS?.dismiss();
   }
 };
 
@@ -138,7 +133,7 @@ export const openLink = async (props: PlaidLinkProps) => {
   let noLoadingState = config.noLoadingState ?? false;
 
   if (Platform.OS === 'android') {
-    NativeModules.PlaidAndroid.startLinkActivityForResult(
+    RNLinksdkAndroid?.startLinkActivityForResult(
       config.token,
       noLoadingState,
       config.logLevel ?? LinkLogLevel.ERROR,
@@ -158,12 +153,12 @@ export const openLink = async (props: PlaidLinkProps) => {
       },
     );
   } else {
-    NativeModules.RNLinksdk.create(config.token, noLoadingState);
+    RNLinksdkiOS?.create(config.token, noLoadingState);
 
     let presentFullScreen =
       props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN;
 
-    NativeModules.RNLinksdk.open(
+    RNLinksdkiOS?.open(
       presentFullScreen,
       (result: LinkSuccess) => {
         if (props.onSuccess != null) {

@@ -17,7 +17,7 @@ import {
 } from '../Types';
 
 type EmbeddedLinkProps = {
-    token: String,
+    token: string,
     iOSPresentationStyle: LinkIOSPresentationStyle,
     onEvent: LinkOnEventListener | undefined,
     onSuccess: LinkSuccessListener,

@@ -104,10 +104,10 @@ export const dismissLink = () => {
  * @deprecated This component is deprecated. Create your own component and use the create & open methods.
  */
 export const PlaidLink = (props: PlaidLinkComponentProps) => {
-  // Create a handler.
-  create(props.tokenConfig);
-
   function onPress() {
+    // Create a handler.
+    create(props.tokenConfig);
+    
     props.onPress?.();
 
     const openProps: LinkOpenProps = {

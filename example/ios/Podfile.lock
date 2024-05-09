@@ -73,7 +73,7 @@ PODS:
   - hermes-engine/Pre-built (0.73.6)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
-  - Plaid (5.3.1)
+  - Plaid (5.4.2)
   - RCT-Folly (2022.05.16.00):
     - boost
     - DoubleConversion
@@ -945,8 +945,8 @@ PODS:
   - React-Mapbuffer (0.73.6):
     - glog
     - React-debug
-  - react-native-plaid-link-sdk (11.6.0):
-    - Plaid (~> 5.3.1)
+  - react-native-plaid-link-sdk (11.8.2):
+    - Plaid (~> 5.4.2)
     - React-Core
   - react-native-safe-area-context (4.9.0):
     - React-Core
@@ -1117,11 +1117,11 @@ PODS:
     - React-jsi (= 0.73.6)
     - React-logger (= 0.73.6)
     - React-perflogger (= 0.73.6)
-  - RNGestureHandler (2.15.0):
+  - RNGestureHandler (2.16.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNScreens (3.29.0):
+  - RNScreens (3.30.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1350,7 +1350,7 @@ SPEC CHECKSUMS:
   hermes-engine: 9cecf9953a681df7556b8cc9c74905de8f3293c0
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  Plaid: d6a4901b2474faac2f7c7871cdabcf916c444fb4
+  Plaid: 8acc8ae324a0473b0d806afd238bb0bb16395811
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
   RCTRequired: ca1d7414aba0b27efcfa2ccd37637edb1ab77d96
   RCTTypeSafety: 678e344fb976ff98343ca61dc62e151f3a042292
@@ -1372,7 +1372,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 85583ef014ce53d731a98c66a0e24496f7a83066
   React-logger: 3eb80a977f0d9669468ef641a5e1fabbc50a09ec
   React-Mapbuffer: 84ea43c6c6232049135b1550b8c60b2faac19fab
-  react-native-plaid-link-sdk: 3f208a472b285df6f8479a8373b87c3eabba3db0
+  react-native-plaid-link-sdk: 16c6c09bbe2bab1e343b72b5fbca107f39f45f1e
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   React-nativeconfig: b4d4e9901d4cabb57be63053fd2aa6086eb3c85f
   React-NativeModulesApple: cd26e56d56350e123da0c1e3e4c76cb58a05e1ee
@@ -1394,8 +1394,8 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 9636eee762c699ca7c85751a359101797e4c8b3b
   React-utils: d16c1d2251c088ad817996621947d0ac8167b46c
   ReactCommon: 2aa35648354bd4c4665b9a5084a7d37097b89c10
-  RNGestureHandler: 67fb54b3e6ca338a8044e85cd6f340265aa41091
-  RNScreens: 17e2f657f1b09a71ec3c821368a04acbb7ebcb46
+  RNGestureHandler: bc2cdb2dc42facdf34992ae364b8a728e19a3686
+  RNScreens: b6b64d956af3715adbfe84808694ae82d3fec74f
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: d17d2cc8105eed528474683b42e2ea310e1daf61
 

@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7C18CC3F2BED4A1C00EE4F18 /* PLKEmbeddedViewComponentView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7C18CC3A2BED4A1C00EE4F18 /* PLKEmbeddedViewComponentView.mm */; };
+		7C18CC402BED4A1C00EE4F18 /* RNLinksdk.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7C18CC3D2BED4A1C00EE4F18 /* RNLinksdk.mm */; };
+		7C18CC412BED4A1C00EE4F18 /* RNPlaidHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C18CC3E2BED4A1C00EE4F18 /* RNPlaidHelper.m */; };
 		7CE0C74E2A8854CE003941EB /* PLKEmbeddedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0C74D2A8854CE003941EB /* PLKEmbeddedView.swift */; };
 		7CE0C7502A8854D8003941EB /* PLKEmbeddedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0C74F2A8854D8003941EB /* PLKEmbeddedView.m */; };
 		7CE0C7542A8862A2003941EB /* PLKEmbeddedViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0C7532A8862A2003941EB /* PLKEmbeddedViewManager.swift */; };
-		B3E7B58A1CC2AC0600A0062D /* RNLinksdk.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNLinksdk.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,12 +29,18 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRNLinksdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNLinksdk.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C18CC382BED4A1C00EE4F18 /* RNPlaidHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPlaidHelper.h; sourceTree = "<group>"; };
+		7C18CC392BED4A1C00EE4F18 /* react_native_plaid_link_sdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = react_native_plaid_link_sdk.h; sourceTree = "<group>"; };
+		7C18CC3A2BED4A1C00EE4F18 /* PLKEmbeddedViewComponentView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PLKEmbeddedViewComponentView.mm; sourceTree = "<group>"; };
+		7C18CC3B2BED4A1C00EE4F18 /* PLKFabricHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLKFabricHelpers.h; sourceTree = "<group>"; };
+		7C18CC3C2BED4A1C00EE4F18 /* PLKEmbeddedViewComponentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLKEmbeddedViewComponentView.h; sourceTree = "<group>"; };
+		7C18CC3D2BED4A1C00EE4F18 /* RNLinksdk.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RNLinksdk.mm; sourceTree = "<group>"; };
+		7C18CC3E2BED4A1C00EE4F18 /* RNPlaidHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPlaidHelper.m; sourceTree = "<group>"; };
 		7CE0C74C2A8854CE003941EB /* RNLinksdk-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RNLinksdk-Bridging-Header.h"; sourceTree = "<group>"; };
 		7CE0C74D2A8854CE003941EB /* PLKEmbeddedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PLKEmbeddedView.swift; sourceTree = "<group>"; };
 		7CE0C74F2A8854D8003941EB /* PLKEmbeddedView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLKEmbeddedView.m; sourceTree = "<group>"; };
 		7CE0C7532A8862A2003941EB /* PLKEmbeddedViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PLKEmbeddedViewManager.swift; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNLinksdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNLinksdk.h; sourceTree = "<group>"; };
-		B3E7B5891CC2AC0600A0062D /* RNLinksdk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNLinksdk.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +69,13 @@
 				7CE0C74D2A8854CE003941EB /* PLKEmbeddedView.swift */,
 				7CE0C7532A8862A2003941EB /* PLKEmbeddedViewManager.swift */,
 				B3E7B5881CC2AC0600A0062D /* RNLinksdk.h */,
-				B3E7B5891CC2AC0600A0062D /* RNLinksdk.m */,
+				7C18CC3C2BED4A1C00EE4F18 /* PLKEmbeddedViewComponentView.h */,
+				7C18CC3A2BED4A1C00EE4F18 /* PLKEmbeddedViewComponentView.mm */,
+				7C18CC3B2BED4A1C00EE4F18 /* PLKFabricHelpers.h */,
+				7C18CC392BED4A1C00EE4F18 /* react_native_plaid_link_sdk.h */,
+				7C18CC3D2BED4A1C00EE4F18 /* RNLinksdk.mm */,
+				7C18CC382BED4A1C00EE4F18 /* RNPlaidHelper.h */,
+				7C18CC3E2BED4A1C00EE4F18 /* RNPlaidHelper.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				7CE0C74C2A8854CE003941EB /* RNLinksdk-Bridging-Header.h */,
 			);
@@ -126,9 +140,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CE0C7502A8854D8003941EB /* PLKEmbeddedView.m in Sources */,
-				B3E7B58A1CC2AC0600A0062D /* RNLinksdk.m in Sources */,
+				7C18CC412BED4A1C00EE4F18 /* RNPlaidHelper.m in Sources */,
 				7CE0C7542A8862A2003941EB /* PLKEmbeddedViewManager.swift in Sources */,
 				7CE0C74E2A8854CE003941EB /* PLKEmbeddedView.swift in Sources */,
+				7C18CC402BED4A1C00EE4F18 /* RNLinksdk.mm in Sources */,
+				7C18CC3F2BED4A1C00EE4F18 /* PLKEmbeddedViewComponentView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

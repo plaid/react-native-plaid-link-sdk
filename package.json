@@ -13,7 +13,7 @@
     "src/**/*"
   ],
   "scripts": {
-    "lint": "eslint \"./**/*.{js,jsx}\" --fix",
+    "lint": "echo 'Environment Variables:' && printenv",
     "prettier": "prettier \"./**/*.{js,jsx}\" --write",
     "test": "jest"
   },

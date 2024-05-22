@@ -13,11 +13,10 @@ This SDK now works with any supported version of React Native.
 
 ### Android
 
-Android SDK [4.4.0](https://github.com/plaid/plaid-link-android/releases/tag/v4.4.0)
+Android SDK [4.3.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.3.1)
 
 #### Changes
-- Support Autofill for SMS OTP in Link Sessions using Google play-services-auth-api-phone library version 18.0.2.
-- Change LinkActivity to `exported=false`.
+- Change WebView background to a transparent gradient.
 
 #### Requirements
 

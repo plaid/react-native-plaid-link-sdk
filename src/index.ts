@@ -1,5 +1,7 @@
 import {
     openLink,
+    create,
+    open,
     dismissLink,
     usePlaidEmitter,
     PlaidLink,
@@ -12,6 +14,8 @@ export default PlaidLink;
 export {
     PlaidLink,
     openLink,
+    create,
+    open,
     dismissLink,
     usePlaidEmitter,
 };

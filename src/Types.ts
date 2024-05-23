@@ -557,3 +557,43 @@ export interface LinkOpenProps {
 export type PlaidLinkComponentProps = (PlaidLinkProps & {
     children: React.ReactNode
 });
+
+export enum FinanceKitErrorType {
+    InvalidToken = "INVALID_TOKEN",
+    PermissionError = "PERMISSION_ERROR",
+    LinkApiError = "LINK_API_ERROR",
+    PermissionAccessError = "PERMISSION_ACCESS_ERROR",
+    Unknown = "UNKNOWN"
+}
+
+interface InvalidTokenError {
+    type: FinanceKitErrorType.InvalidToken;
+    message: string;
+}
+  
+interface PermissionError {
+    type: FinanceKitErrorType.PermissionError;
+    message: string;
+}
+  
+interface LinkApiError {
+    type: FinanceKitErrorType.LinkApiError;
+    message: string;
+}
+  
+interface PermissionAccessError {
+    type: FinanceKitErrorType.PermissionAccessError;
+    message: string;
+}
+  
+interface UnknownError {
+    type: FinanceKitErrorType.Unknown;
+    message: string;
+}
+
+export type FinanceKitError =
+  | InvalidTokenError
+  | PermissionError
+  | LinkApiError
+  | PermissionAccessError
+  | UnknownError;

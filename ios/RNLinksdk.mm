@@ -181,6 +181,10 @@ RCT_EXPORT_METHOD(dismiss) {
     self.presentingViewController = nil;
 }
 
+RCT_EXPORT_METHOD(syncFinanceKit: (NSString *)token onSuccess:(RCTResponseSenderBlock)onSuccess onError:(RCTResponseSenderBlock)onError) {
+    // qwe
+}
+
 #pragma mark - Bridging
 
 + (PLKEnvironment)environmentFromString:(NSString *)string {
@@ -618,6 +622,8 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"SELECT_SAVED_INSTITUTION";
         case PLKViewNameValueSelectSavedAccount:
             return @"SELECT_SAVED_ACCOUNT";
+        case PLKViewNameValueProfileDataReview:
+            return @"PROFILE_DATA_REVIEW";
     }
 
     return @"unknown";

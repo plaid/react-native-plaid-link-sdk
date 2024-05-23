@@ -8,9 +8,6 @@
 
 This SDK now works with any supported version of React Native.
 
-#### Changes
-- [Exports added](https://github.com/plaid/react-native-plaid-link-sdk/pull/666) for `create` and `open` functions.
-
 ### Android
 
 Android SDK [4.4.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.4.1)

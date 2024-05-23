@@ -12,6 +12,8 @@ import {
   usePlaidEmitter,
   LinkIOSPresentationStyle,
   LinkTokenConfiguration,
+  syncFinanceKit,
+  FinanceKitError,
 } from 'react-native-plaid-link-sdk';
 
 import {create, open} from 'react-native-plaid-link-sdk/dist/PlaidLink';
@@ -96,6 +98,20 @@ export function PlaidLinkScreen() {
           setDisabled(true);
         }}>
         <Text style={styles.button}>Open Link</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        disabled={disabled}
+        style={disabled ? styles.disabledButton : styles.button}
+        onPress={() => {
+          syncFinanceKit(text, false, (error?: FinanceKitError) => {
+            if (error) {
+              console.log('FinanceKit Error: ', error);
+            } else {
+              console.log('FinanceKit Sync Successful!');
+            }
+          });
+        }}>
+        <Text style={styles.button}>Sync FinanceKit</Text>
       </TouchableOpacity>
     </>
   );

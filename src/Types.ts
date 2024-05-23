@@ -559,11 +559,11 @@ export type PlaidLinkComponentProps = (PlaidLinkProps & {
 });
 
 export enum FinanceKitErrorType {
-    InvalidToken = "INVALID_TOKEN",
-    PermissionError = "PERMISSION_ERROR",
-    LinkApiError = "LINK_API_ERROR",
-    PermissionAccessError = "PERMISSION_ACCESS_ERROR",
-    Unknown = "UNKNOWN"
+    InvalidToken = 0,
+    PermissionError = 1,
+    LinkApiError = 2,
+    PermissionAccessError = 3,
+    Unknown = 4
 }
 
 interface InvalidTokenError {

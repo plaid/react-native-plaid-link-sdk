@@ -181,8 +181,26 @@ RCT_EXPORT_METHOD(dismiss) {
     self.presentingViewController = nil;
 }
 
-RCT_EXPORT_METHOD(syncFinanceKit: (NSString *)token onSuccess:(RCTResponseSenderBlock)onSuccess onError:(RCTResponseSenderBlock)onError) {
-    // qwe
+RCT_EXPORT_METHOD(syncFinanceKit:(NSString *)token
+                  requestAuthorizationIfNeeded:(BOOL)requestAuthorizationIfNeeded
+                  onSuccess:(RCTResponseSenderBlock)onSuccess
+                  onError:(RCTResponseSenderBlock)onError) {
+
+    [RNPlaidHelper syncFinanceKit:token
+         requestAuthorizationIfNeeded:requestAuthorizationIfNeeded
+         onSuccess:^{
+            onSuccess(@[]);
+        }
+        onError:^(NSError *error) {
+            
+            NSDictionary *financeKitError = @{
+                @"type": [NSNumber numberWithInteger: error.code],
+                @"message": error.localizedDescription
+            };
+            
+            onError(@[financeKitError]);
+        }
+    ];
 }
 
 #pragma mark - Bridging

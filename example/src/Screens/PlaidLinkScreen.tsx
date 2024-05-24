@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextInput, Text, TouchableOpacity} from 'react-native';
+import {Platform, TextInput, Text, TouchableOpacity} from 'react-native';
 import {styles} from '../Styles';
 
 import {
@@ -12,11 +12,11 @@ import {
   usePlaidEmitter,
   LinkIOSPresentationStyle,
   LinkTokenConfiguration,
-  syncFinanceKit,
   FinanceKitError,
+  create,
+  open,
+  syncFinanceKit,
 } from 'react-native-plaid-link-sdk';
-
-import {create, open} from 'react-native-plaid-link-sdk/dist/PlaidLink';
 
 function isValidString(str: string): boolean {
   if (str && str.trim() !== '') {
@@ -69,6 +69,29 @@ export function PlaidLinkScreen() {
   const [text, onChangeText] = React.useState('');
   const [disabled, setDisabled] = React.useState(true);
 
+  const iOSVersionParts = String(Platform.Version).split('.');
+  const [majorVersion, minorVersion, patchVersion] =
+    iOSVersionParts.length === 3 ? iOSVersionParts : [null, null, null];
+
+  const financeKitText = () => {
+    if (majorVersion && minorVersion) {
+      const majorInt = parseInt(majorVersion, 10);
+      const minorInt = parseInt(minorVersion, 10);
+
+      if (majorInt > 17) {
+        return <Text style={styles.button}>Sync FinanceKit</Text>;
+      } else if (majorInt === 17 && minorInt >= 4) {
+        return <Text style={styles.button}>Sync FinanceKit</Text>;
+      } else {
+        return (
+          <Text style={styles.button}>
+            FinanceKit not supported on this version of iOS
+          </Text>
+        );
+      }
+    }
+  };
+
   return (
     <>
       <TextInput
@@ -100,18 +123,19 @@ export function PlaidLinkScreen() {
         <Text style={styles.button}>Open Link</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        disabled={disabled}
-        style={disabled ? styles.disabledButton : styles.button}
+        style={styles.button}
         onPress={() => {
-          syncFinanceKit(text, false, (error?: FinanceKitError) => {
+          const completionHandler = (error?: FinanceKitError) => {
             if (error) {
-              console.log('FinanceKit Error: ', error);
+              console.error('Error:', error);
             } else {
-              console.log('FinanceKit Sync Successful!');
+              console.log('Sync completed successfully');
             }
-          });
+          };
+          const requestAuthorizationIfNeeded = true;
+          syncFinanceKit(text, requestAuthorizationIfNeeded, completionHandler);
         }}>
-        <Text style={styles.button}>Sync FinanceKit</Text>
+        {financeKitText()}
       </TouchableOpacity>
     </>
   );

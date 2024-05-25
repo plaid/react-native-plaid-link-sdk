@@ -1,10 +1,11 @@
 import {
     openLink,
+    PlaidLink,
     create,
     open,
     dismissLink,
     usePlaidEmitter,
-    PlaidLink,
+    syncFinanceKit,
 } from './PlaidLink';
 
 export * from './Types';
@@ -18,6 +19,7 @@ export {
     open,
     dismissLink,
     usePlaidEmitter,
+    syncFinanceKit
 };
 
 // Components

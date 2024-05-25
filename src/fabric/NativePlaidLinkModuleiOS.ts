@@ -3,7 +3,7 @@
 import {TurboModuleRegistry, TurboModule} from 'react-native';
 import {Int32} from 'react-native/Libraries/Types/CodegenTypes';
 import {UnsafeObject} from './fabricUtils';
-import {LinkSuccess, LinkExit, LinkError} from '../Types';
+import {LinkSuccess, LinkExit, LinkError, FinanceKitError} from '../Types';
 
 export interface Spec extends TurboModule {
     create(token: string, noLoadingState: boolean): void;
@@ -16,6 +16,12 @@ export interface Spec extends TurboModule {
     // those two are here for event emitter methods
     addListener(eventName: string): void;
     removeListeners(count: Int32): void;
+    syncFinanceKit(
+      token: string,
+      requestAuthorizationIfNeeded: boolean,
+      onSuccess: (success: void) => void,
+      onError: (error: FinanceKitError) => void
+    ): void
 }
 
 export default TurboModuleRegistry.get<Spec>('RNLinksdk');

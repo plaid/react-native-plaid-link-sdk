@@ -11,6 +11,8 @@ import {
   LinkTokenConfiguration,
   PlaidLinkComponentProps,
   PlaidLinkProps,
+  FinanceKitErrorType,
+  FinanceKitError,
 } from './Types';
 import RNLinksdkAndroid from './fabric/NativePlaidLinkModuleAndroid';
 import RNLinksdkiOS from './fabric/NativePlaidLinkModuleiOS';
@@ -98,6 +100,47 @@ export const dismissLink = () => {
   if (Platform.OS === 'ios') {
     RNLinksdkiOS?.dismiss();
   }
+};
+
+/**
+ * Function to sync the user's transactions from their Apple card.
+ *
+ * @param {string} token - The `LinkToken` your server retrieved from the /link/token/create endpoint from the Plaid API.
+ *                         This token must be associated with an accessToken.
+ * @param {boolean} requestAuthorizationIfNeeded - Indicates if the user should be prompted to authorize the sync if
+ *                                                 they have not already done so.
+ * @param {function} completion - A callback function that is called when the sync has completed.
+ *
+ * @warning This method only works on iOS >= 17.4.
+ * @warning This method is not supported on Android or MacCatalyst.
+ * @warning This method can only be used once the user has granted access to their Apple card via a standard Link Session.
+ * @warning This method requires that your app has been granted FinanceKit access from Apple.
+ */
+export const syncFinanceKit = (
+  token: string,
+  requestAuthorizationIfNeeded: boolean,
+  completion: (error?: FinanceKitError) => void
+): void => {
+    if (Platform.OS === 'android') {
+      completion({
+        type: FinanceKitErrorType.Unknown,
+        message: "FinanceKit is unavailable on Android!",
+      })
+    } else {
+      RNLinksdkiOS?.syncFinanceKit(
+        token, 
+        requestAuthorizationIfNeeded, 
+        () => {
+          completion()
+        },
+        (error: FinanceKitError) => {
+          completion({
+            type: error.type,
+            message: error.message,
+          })
+        }
+      )
+    }
 };
 
 /**

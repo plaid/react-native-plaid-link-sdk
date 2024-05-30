@@ -1,5 +1,44 @@
 # RELEASES
 
+## LinkKit V11.10.2 — 2024-05-30
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Android
+
+Android SDK [4.4.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.4.1)
+
+#### Changes
+- Support Autofill for SMS OTP in Link Sessions using Google play-services-auth-api-phone library version 18.0.2.
+- Change LinkActivity to `exported=false`.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.5.1](https://github.com/plaid/plaid-link-ios/releases/tag/5.5.1)
+
+#### Changes
+
+- Fix headless OAuth bug.
+- Improved Remember Me experience.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
 ## LinkKit V11.10.1 — 2024-05-23
 
 ### React Native

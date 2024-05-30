@@ -1,5 +1,45 @@
 # RELEASES
 
+## LinkKit V10.13.2 — 2024-05-30
+
+### React Native
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| React Native | >= [66.0](https://reactnative.dev/blog/2021/10/01/version-066) |
+
+#### Changes
+
+- Update iOS SDK
+
+### Android
+
+Android SDK [3.14.3](https://github.com/plaid/plaid-link-android/releases/tag/v3.14.3)
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+
+### iOS
+
+iOS SDK [4.7.8](https://github.com/plaid/plaid-link-ios/releases/tag/4.7.8)
+
+#### Changes
+
+- Fix headless OAuth bug.
+- Improved Remember Me experience.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 14.0 |
+| iOS | >= 11.0 |
+
 ## LinkKit V10.13.1 — 2024-02-08
 
 ### React Native

@@ -7,7 +7,7 @@ import { PlaidLinkScreen } from './Screens/PlaidLinkScreen';
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+export default function App(): React.JSX.Element{
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={{

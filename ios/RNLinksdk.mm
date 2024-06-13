@@ -181,6 +181,12 @@ RCT_EXPORT_METHOD(dismiss) {
     self.presentingViewController = nil;
 }
 
+RCT_EXPORT_METHOD(submit(id<SubmissionData> data)) {
+    if (self.linkHandler) {
+        [self.linkHandler submit: id];
+    }
+}
+
 #pragma mark - Bridging
 
 + (PLKEnvironment)environmentFromString:(NSString *)string {

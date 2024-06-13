@@ -11,6 +11,7 @@ import {
   LinkTokenConfiguration,
   PlaidLinkComponentProps,
   PlaidLinkProps,
+  SubmissionData,
 } from './Types';
 import RNLinksdkAndroid from './fabric/NativePlaidLinkModuleAndroid';
 import RNLinksdkiOS from './fabric/NativePlaidLinkModuleiOS';
@@ -97,6 +98,14 @@ export const open = async (props: LinkOpenProps) => {
 export const dismissLink = () => {
   if (Platform.OS === 'ios') {
     RNLinksdkiOS?.dismiss();
+  }
+};
+
+export const submit = (data: SubmissionData): void => {
+  if (Platform.OS === 'android') {
+    RNLinksdkAndroid?.submit(data);
+  } else {
+    RNLinksdkiOS?.submit(data);
   }
 };
 

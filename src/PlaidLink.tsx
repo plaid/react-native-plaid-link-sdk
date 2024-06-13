@@ -105,7 +105,7 @@ export const submit = (data: SubmissionData): void => {
   if (Platform.OS === 'android') {
     RNLinksdkAndroid?.submit(data);
   } else {
-    RNLinksdkiOS?.submit(data);
+    RNLinksdkiOS?.submit(data.phoneNumber);
   }
 };
 

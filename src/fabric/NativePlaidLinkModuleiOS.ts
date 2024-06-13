@@ -3,7 +3,7 @@
 import {TurboModuleRegistry, TurboModule} from 'react-native';
 import {Int32} from 'react-native/Libraries/Types/CodegenTypes';
 import {UnsafeObject} from './fabricUtils';
-import {LinkSuccess, LinkExit, LinkError, SubmissionData} from '../Types';
+import {LinkSuccess, LinkExit, LinkError } from '../Types';
 
 export interface Spec extends TurboModule {
     create(token: string, noLoadingState: boolean): void;
@@ -13,7 +13,7 @@ export interface Spec extends TurboModule {
         onExit: (error: UnsafeObject<LinkError>, result: UnsafeObject<LinkExit>) => void,
       ): void;
     dismiss(): void;
-    submit(data: SubmissionData): void;
+    submit(phoneNumber: string | undefined): void;
     // those two are here for event emitter methods
     addListener(eventName: string): void;
     removeListeners(count: Int32): void;

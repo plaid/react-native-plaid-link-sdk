@@ -181,9 +181,11 @@ RCT_EXPORT_METHOD(dismiss) {
     self.presentingViewController = nil;
 }
 
-RCT_EXPORT_METHOD(submit(id<SubmissionData> data)) {
+RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
     if (self.linkHandler) {
-        [self.linkHandler submit: id];
+        PLKSubmissionData *submissionData = [[PLKSubmissionData alloc] init];
+        submissionData.phoneNumber = phoneNumber;
+        [self.linkHandler submit: submissionData];
     }
 }
 
@@ -479,6 +481,10 @@ RCT_EXPORT_METHOD(submit(id<SubmissionData> data)) {
             return @"CONNECT_NEW_INSTITUTION";
         case PLKEventNameValueSubmitOTP:
             return @"SUBMIT_OTP";
+        case PLKEventNameValueLayerReady:
+            return @"LAYER_READY";
+        case PLKEventNameValueLayerNotAvailable:
+            return @"LAYER_NOT_AVAILABLE";
     }
      return @"unknown";
 }
@@ -624,6 +630,8 @@ RCT_EXPORT_METHOD(submit(id<SubmissionData> data)) {
             return @"SELECT_SAVED_INSTITUTION";
         case PLKViewNameValueSelectSavedAccount:
             return @"SELECT_SAVED_ACCOUNT";
+        case PLKViewNameValueProfileDataReview:
+            return @"PROFILE_DATA_REVIEW";
     }
 
     return @"unknown";

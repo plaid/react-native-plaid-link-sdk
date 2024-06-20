@@ -63,7 +63,7 @@ android {
     compileSdkVersion 31
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion rootProject.ext.safeExtGet("minSdkVersion", 21)
         targetSdkVersion 31
         versionCode 1
         versionName "0.0.1"

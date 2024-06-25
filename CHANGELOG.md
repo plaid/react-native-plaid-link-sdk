@@ -1,5 +1,51 @@
 # RELEASES
 
+## LinkKit V11.11.0 — 2024-06-26
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Update Android SDK to 4.5.0.
+- Update iOS SDK to 5.6.0.
+- Add submit API.
+
+### Android
+
+Android SDK [4.5.0](https://github.com/plaid/plaid-link-android/releases/tag/v4.5.0)
+
+#### Changes
+- Add PROFILE_DATA_REVIEW event view name.
+- Add LAYER_READY and LAYER_NOT_AVAILABLE event names.
+- Add submit API to the LinkHandler.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.6.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.6.0)
+
+#### Changes
+
+- Add submit API for Layer.
+- Improved Remember Me Experience
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
 ## LinkKit V11.10.3 — 2024-06-04
 
 ### React Native

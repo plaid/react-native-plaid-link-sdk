@@ -103,7 +103,7 @@ export const dismissLink = () => {
 
 export const submit = (data: SubmissionData): void => {
   if (Platform.OS === 'android') {
-    RNLinksdkAndroid?.submit(data);
+    RNLinksdkAndroid?.submit(data.phoneNumber);
   } else {
     RNLinksdkiOS?.submit(data.phoneNumber);
   }

@@ -15,7 +15,7 @@ import {
   SubmissionData,
 } from 'react-native-plaid-link-sdk';
 
-import {create, open, submit} from 'react-native-plaid-link-sdk/dist/PlaidLink';
+import {create, open, submit} from 'react-native-plaid-link-sdk';
 
 function isValidString(str: string): boolean {
   if (str && str.trim() !== '') {

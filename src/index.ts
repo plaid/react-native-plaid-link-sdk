@@ -5,6 +5,7 @@ import {
     dismissLink,
     usePlaidEmitter,
     PlaidLink,
+    submit,
 } from './PlaidLink';
 
 export * from './Types';
@@ -18,6 +19,7 @@ export {
     open,
     dismissLink,
     usePlaidEmitter,
+    submit,
 };
 
 // Components

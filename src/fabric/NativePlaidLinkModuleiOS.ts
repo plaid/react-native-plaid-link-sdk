@@ -3,7 +3,7 @@
 import {TurboModuleRegistry, TurboModule} from 'react-native';
 import {Int32} from 'react-native/Libraries/Types/CodegenTypes';
 import {UnsafeObject} from './fabricUtils';
-import {LinkSuccess, LinkExit, LinkError } from '../Types';
+import {LinkSuccess, LinkExit, LinkError} from '../Types';
 
 export interface Spec extends TurboModule {
     create(token: string, noLoadingState: boolean): void;

@@ -46,6 +46,10 @@ public abstract class NativePlaidLinkModuleAndroidSpec extends ReactContextBaseJ
 
   @ReactMethod
   @DoNotStrip
+  public abstract void submit(String phoneNumber);
+  
+  @ReactMethod
+  @DoNotStrip
   public abstract void addListener(String eventName);
 
   @ReactMethod

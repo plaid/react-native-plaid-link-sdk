@@ -28,7 +28,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"11.10.3"; // SDK_VERSION
+    return @"11.11.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -179,6 +179,14 @@ RCT_EXPORT_METHOD(dismiss) {
     [self.presentingViewController dismissViewControllerAnimated:YES
                                                       completion:nil];
     self.presentingViewController = nil;
+}
+
+RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
+    if (self.linkHandler) {
+        PLKSubmissionData *submissionData = [[PLKSubmissionData alloc] init];
+        submissionData.phoneNumber = phoneNumber;
+        [self.linkHandler submit: submissionData];
+    }
 }
 
 #pragma mark - Bridging
@@ -473,6 +481,10 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"CONNECT_NEW_INSTITUTION";
         case PLKEventNameValueSubmitOTP:
             return @"SUBMIT_OTP";
+        case PLKEventNameValueLayerReady:
+            return @"LAYER_READY";
+        case PLKEventNameValueLayerNotAvailable:
+            return @"LAYER_NOT_AVAILABLE";
     }
      return @"unknown";
 }
@@ -618,6 +630,8 @@ RCT_EXPORT_METHOD(dismiss) {
             return @"SELECT_SAVED_INSTITUTION";
         case PLKViewNameValueSelectSavedAccount:
             return @"SELECT_SAVED_ACCOUNT";
+        case PLKViewNameValueProfileDataReview:
+            return @"PROFILE_DATA_REVIEW";
     }
 
     return @"unknown";

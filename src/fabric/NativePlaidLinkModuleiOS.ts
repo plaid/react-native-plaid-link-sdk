@@ -13,6 +13,7 @@ export interface Spec extends TurboModule {
         onExit: (error: UnsafeObject<LinkError>, result: UnsafeObject<LinkExit>) => void,
       ): void;
     dismiss(): void;
+    submit(phoneNumber: string | undefined): void;
     // those two are here for event emitter methods
     addListener(eventName: string): void;
     removeListeners(count: Int32): void;

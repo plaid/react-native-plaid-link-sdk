@@ -557,3 +557,7 @@ export interface LinkOpenProps {
 export type PlaidLinkComponentProps = (PlaidLinkProps & {
     children: React.ReactNode
 });
+
+export interface SubmissionData {
+    phoneNumber?: string;
+};

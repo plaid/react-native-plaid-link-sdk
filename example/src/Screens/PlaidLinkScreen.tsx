@@ -12,10 +12,9 @@ import {
   usePlaidEmitter,
   LinkIOSPresentationStyle,
   LinkTokenConfiguration,
-  SubmissionData,
 } from 'react-native-plaid-link-sdk';
 
-import {create, open, submit} from 'react-native-plaid-link-sdk';
+import {create, open} from 'react-native-plaid-link-sdk';
 
 function isValidString(str: string): boolean {
   if (str && str.trim() !== '') {
@@ -68,8 +67,6 @@ export function PlaidLinkScreen() {
   const [text, onChangeText] = React.useState('');
   const [disabled, setDisabled] = React.useState(true);
 
-  let phoneNumber: string | undefined = '14155550015';
-
   return (
     <>
       <TextInput
@@ -99,18 +96,6 @@ export function PlaidLinkScreen() {
           setDisabled(true);
         }}>
         <Text style={styles.button}>Open Link</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        disabled={disabled}
-        style={disabled ? styles.disabledButton : styles.button}
-        onPress={() => {
-          if (phoneNumber) {
-            const data: SubmissionData = {phoneNumber: phoneNumber};
-            console.log('Submitting phone number: ' + phoneNumber);
-            submit(data);
-          }
-        }}>
-        <Text style={styles.button}>Submit Phone Number</Text>
       </TouchableOpacity>
     </>
   );

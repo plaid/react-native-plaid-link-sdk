@@ -1,6 +1,6 @@
 # RELEASES
 
-## LinkKit V11.11.0 — 2024-06-26
+## LinkKit V11.11.0 — 2024-06-25
 
 ### React Native
 

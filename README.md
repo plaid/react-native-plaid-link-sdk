@@ -52,7 +52,7 @@ AutoLinking should handle all of the Android setup.
 
 ### React Native Setup
 
-- To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/#create-link-token). Check out our [QuickStart guide](https://plaid.com/docs/quickstart/#introduction) for additional API information.
+- To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/api/link/#linktokencreate). Check out our [QuickStart guide](https://plaid.com/docs/quickstart/#introduction) for additional API information.
 
 #### Version >= 11.6.0
 

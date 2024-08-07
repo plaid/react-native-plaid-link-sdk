@@ -12,6 +12,8 @@ import {
   usePlaidEmitter,
   LinkIOSPresentationStyle,
   LinkTokenConfiguration,
+  submit,
+  SubmissionData,
 } from 'react-native-plaid-link-sdk';
 
 import {create, open} from 'react-native-plaid-link-sdk';
@@ -32,6 +34,12 @@ function createLinkTokenConfiguration(
     token: token,
     // Hides native activity indicator if true.
     noLoadingState: noLoadingState,
+  };
+}
+
+function createSubmissionData(phoneNumber: string): SubmissionData {
+  return {
+    phoneNumber: phoneNumber,
   };
 }
 
@@ -86,6 +94,15 @@ export function PlaidLinkScreen() {
           }
         }}>
         <Text style={styles.button}>Create Link</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        disabled={disabled}
+        style={disabled ? styles.disabledButton : styles.button}
+        onPress={() => {
+          const submissionData = createSubmissionData('415-555-0015');
+          submit(submissionData);
+        }}>
+        <Text style={styles.button}>Submit Layer Phone Number</Text>
       </TouchableOpacity>
       <TouchableOpacity
         disabled={disabled}

@@ -35,6 +35,10 @@ npm install --save react-native-plaid-link-sdk
 
 Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The latest version is ![version](https://img.shields.io/cocoapods/v/Plaid).
 
+```bash switcher=false
+pod 'Plaid', '~> <insert latest version>'
+```
+
 Autolinking should install the CocoaPods dependencies for iOS project. If it fails you can run 
 
 ```sh
@@ -49,6 +53,7 @@ cd ios && bundle install && bundle exec pod install
 
 AutoLinking should handle all of the Android setup. 
 
+Remember to register your Android package name in the [Dashboard](https://dashboard.plaid.com/developers/api). This is required in order to connect to OAuth institutions (which includes most major banks).
 
 ### React Native Setup
 

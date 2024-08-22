@@ -5,7 +5,11 @@
 #if __has_include(<rnplaidlink/react_native_plaid_link_sdk-Swift.h>)
 #import <rnplaidlink/react_native_plaid_link_sdk-Swift.h>
 #else
+#ifdef USE_FRAMEWORKS
+#import <react_native_plaid_link_sdk/react_native_plaid_link_sdk-Swift.h>
+#else
 #import <react_native_plaid_link_sdk-Swift.h>
+#endif
 #endif
 
 // copied from RCTFollyConvert

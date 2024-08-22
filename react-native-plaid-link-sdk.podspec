@@ -21,6 +21,13 @@ Pod::Spec.new do |s|
   # we don't want this to be seen by Swift
   s.private_header_files = 'ios/PLKFabricHelpers.h'
 
+  if ENV['USE_FRAMEWORKS'] == '1'
+    s.pod_target_xcconfig = {
+      "OTHER_CFLAGS" => "$(inherited) -DUSE_FRAMEWORKS",
+      "OTHER_CPLUSPLUSFLAGS" => "$(inherited) -DUSE_FRAMEWORKS",
+    }
+  end
+
   if fabric_enabled
     install_modules_dependencies(s)
   else

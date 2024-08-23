@@ -1,5 +1,50 @@
 # RELEASES
 
+## LinkKit V11.12.1 — 2024-08-23
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Updates for new architecture
+    - https://github.com/plaid/react-native-plaid-link-sdk/pull/701
+    - https://github.com/plaid/react-native-plaid-link-sdk/pull/702
+
+### Android
+
+Android SDK [4.6.0](https://github.com/plaid/plaid-link-android/releases/tag/v4.6.0)
+
+#### Changes
+- Source and target compatibility set to JavaVersion.VERSION_11 down from VERSION_17 to improve compatibility.
+- Upgrade androidx.work:work-runtime-ktx library from 2.7.1 to 2.9.0.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.6.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.6.0)
+
+#### Changes
+
+- Add submit API for Layer.
+- Improved Remember Me Experience
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
 ## LinkKit V11.12.0 — 2024-08-09
 
 ### React Native

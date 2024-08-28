@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {TextInput, Text, View} from 'react-native';
-import {styles} from '../Styles';
+import { TextInput, Text, View, Modal, Platform } from 'react-native';
+import { styles } from '../Styles';
 import {
   EmbeddedLinkView,
   LinkIOSPresentationStyle,
@@ -9,40 +9,60 @@ import {
   LinkSuccess,
 } from 'react-native-plaid-link-sdk';
 
-// Simple conditional view to display Embedded Link once a token has been entered.
-var EmbeddedView = ({token}: {token: string}) => {
+// Component to display Embedded Link or Windows-compatible modal view
+const EmbeddedView = ({ token }: { token: string }) => {
   let content;
 
+  // For Windows, use a different modal implementation
   if (token) {
-    content = (
-      <View>
-        <EmbeddedLinkView
-          token={token}
-          iOSPresentationStyle={LinkIOSPresentationStyle.MODAL}
-          onEvent={(event: LinkEvent) => {
-            console.log('onEvent', event);
-          }}
-          onSuccess={(success: LinkSuccess) => {
-            console.log('onSuccess', success);
-          }}
-          onExit={(exit: LinkExit) => {
-            console.log('onExit', exit);
-          }}
-          style={styles.embedded}
-        />
-      </View>
-    );
+    if (Platform.OS === 'windows') {
+      // Use a modal or a suitable Windows-specific component
+      content = (
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={!!token}
+          onRequestClose={() => {
+            console.log('Windows modal closed');
+          }}>
+          <View style={{ padding: 24 }}>
+            <Text style={{ fontSize: 20, color: '#2196F3', textAlign: 'center' }}>
+              Plaid Link for Windows
+            </Text>
+            {/* Add your Windows-specific integration or logic here */}
+          </View>
+        </Modal>
+      );
+    } else {
+      // For other platforms (iOS, Android)
+      content = (
+        <View>
+          <EmbeddedLinkView
+            token={token}
+            iOSPresentationStyle={LinkIOSPresentationStyle.MODAL}
+            onEvent={(event: LinkEvent) => {
+              console.log('onEvent', event);
+            }}
+            onSuccess={(success: LinkSuccess) => {
+              console.log('onSuccess', success);
+            }}
+            onExit={(exit: LinkExit) => {
+              console.log('onExit', exit);
+            }}
+            style={styles.embedded}
+          />
+        </View>
+      );
+    }
   } else {
     content = (
-      // eslint-disable-next-line react-native/no-inline-styles
-      <Text style={{fontSize: 24, color: '#2196F3', textAlign: 'center'}}>
+      <Text style={{ fontSize: 24, color: '#2196F3', textAlign: 'center' }}>
         Enter Link Token
       </Text>
     );
   }
 
-  // eslint-disable-next-line react-native/no-inline-styles
-  return <View style={{padding: 24}}>{content}</View>;
+  return <View style={{ padding: 24 }}>{content}</View>;
 };
 
 export function PlaidEmbeddedLinkScreen() {

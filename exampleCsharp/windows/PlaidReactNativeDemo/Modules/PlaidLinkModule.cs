@@ -48,6 +48,7 @@ namespace PlaidLinkModuleWindows
                     dynamic jsonData = JsonConvert.DeserializeObject(data);
                     string linkToken = jsonData.link_token;
                     _publicToken = linkToken;
+                    _ = ExchangePublicTokenAsync(_publicToken);
                     return linkToken;
                 }
             }
@@ -77,6 +78,7 @@ namespace PlaidLinkModuleWindows
 
                     dynamic jsonData = JsonConvert.DeserializeObject(responseData);
                     string accessToken = jsonData.access_token;
+                    
                     _accessToken = accessToken;
 
                     return _accessToken;

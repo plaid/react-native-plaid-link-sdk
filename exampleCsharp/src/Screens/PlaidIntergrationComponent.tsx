@@ -13,13 +13,14 @@ interface RNLinkWindowsSdkType {
   submit: (phoneNumber: string) => void;
   addListener: (eventType: string) => void; // Required for NativeEventEmitter
   removeListeners: (count: number) => void; // Required for NativeEventEmitter
+  exchangePublicToken: (publicToken: string) => Promise<string>; // Added for token exchange
 }
 
 // Define props type for the component
 interface PlaidIntegrationComponentProps {
   token: string;
 }
-
+const { PlaidClassModule } = NativeModules;
 // Get the native module and cast it with the correct type
 const { RNLinkSdkWindows } = NativeModules as {
   RNLinkSdkWindows: RNLinkWindowsSdkType;
@@ -28,9 +29,10 @@ const { RNLinkSdkWindows } = NativeModules as {
 // Create an event emitter for the native module
 const plaidEventEmitter = new NativeEventEmitter(RNLinkSdkWindows);
 
-// Passing in the token from App
 const PlaidIntegrationComponent: React.FC<PlaidIntegrationComponentProps> = ({ token }) => {
   const [statusMessage, setStatusMessage] = useState<string>('');
+  const [publicToken, setPublicToken] = useState<string>(''); // Store the public token
+  const [accessToken, setAccessToken] = useState<string>(''); // Store the access token
 
   useEffect(() => {
     // Handler function for events from the native module
@@ -38,44 +40,82 @@ const PlaidIntegrationComponent: React.FC<PlaidIntegrationComponentProps> = ({ t
       console.log('Received Plaid event:', event);
       setStatusMessage(`${event.status}: ${event.message}`);
     };
-    // Subscribe to the Plaid event
+
+    // Subscribe to the Plaid event using the event emitter
     const subscription: EmitterSubscription = plaidEventEmitter.addListener('PlaidLinkEvent', handlePlaidEvent);
-    // Clean up the listener on component unmount
+
+    // Clean up the listener on component unmount to prevent memory leaks
     return () => {
       subscription.remove();
     };
   }, []);
- // Send the message to C# File
-  const sendMessageToNative = (action: string, data: { [key: string]: any }) => {
-    switch (action) {
-      case 'create':
-        RNLinkSdkWindows.create(data.token, data.noLoadingState);
-        break;
-      case 'open':
-        RNLinkSdkWindows.open(
-          data.fullScreen,
-          (result) => console.log('Success:', result),
-          (error, exit) => console.log('Exit:', error, exit)
-        );
-        break;
-      case 'dismiss':
-        RNLinkSdkWindows.dismiss();
-        break;
-      case 'submit':
-        RNLinkSdkWindows.submit(data.phoneNumber);
-        break;
-      default:
-        console.warn('Unknown action:', action);
-        break;
+
+  // Function to exchange public token for access token
+  const exchangePublicToken = async (publicToken: string) => {
+    try {
+      const accessToken = await PlaidClassModule.exchangePublicToken(publicToken); // Call the native method
+      console.log('Received access token:', accessToken);
+      setAccessToken(accessToken); // Set the access token in state
+      console.log(PlaidClassModule)
+    } catch (error) {
+      console.error('Error exchanging public token:', error);
     }
+  };
+
+  // Function to send messages to the native C# module
+  const sendMessageToNative = async (action: string, data: { [key: string]: any }) => {
+    try {
+      switch (action) {
+        case 'create':
+          RNLinkSdkWindows.create(data.token, data.noLoadingState);
+          console.log('TOKEN IS CREATED.', data.token);
+          // Set the public token for exchange after creation
+          setPublicToken(data.token);
+          break;
+         case 'exchange':
+           await exchangePublicToken(publicToken); 
+       
+          break;
+        case 'open':
+          RNLinkSdkWindows.open(
+            data.fullScreen,
+            (result) => console.log('Success:', result),
+            (error, exit) => console.log('Exit:', error, exit)
+          );
+          break;
+        case 'dismiss':
+          RNLinkSdkWindows.dismiss();
+          break;
+        case 'submit':
+          RNLinkSdkWindows.submit(data.phoneNumber);
+          break;
+        default:
+          console.warn('Unknown action:', action);
+          break;
+      }
+    } catch (error) {
+      console.error('Error sending message to native module:', error);
+    }
+  };
+
+  console.log(PlaidClassModule)
+  // Function to handle creation and exchange flow
+  const handleCreateAndExchange = async () => {
+    // Call the create method first
+    await sendMessageToNative('create', { token: token, noLoadingState: false });
+
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Status Message: {statusMessage}</Text>
       <Button
-        title="Create Plaid Link"
-        onPress={() => sendMessageToNative('create', { token: token, noLoadingState: false })}
+        title="Create and Exchange Token"
+        onPress={handleCreateAndExchange}
+      />
+        <Button
+        title="Exchange Token"
+        onPress={()=> sendMessageToNative('exchange', { publicToken })}
       />
       <Button
         title="Open Plaid Link"
@@ -89,6 +129,8 @@ const PlaidIntegrationComponent: React.FC<PlaidIntegrationComponentProps> = ({ t
         title="Submit Phone Number"
         onPress={() => sendMessageToNative('submit', { phoneNumber: '123-456-7890' })}
       />
+      <Text style={styles.text}>Access Token: {accessToken}</Text>
+   
     </View>
   );
 };
@@ -102,7 +144,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    backgroundColor:'purple',
+    backgroundColor: 'purple',
     color: 'white',
     marginBottom: 20,
   },

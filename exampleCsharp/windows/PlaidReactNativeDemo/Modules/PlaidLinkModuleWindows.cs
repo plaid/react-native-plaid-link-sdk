@@ -119,9 +119,12 @@ namespace PlaidLinkModuleWindows
         [ReactMethod("removeListeners")]
         public void RemoveListeners(int count) { }
 
-        private void EmitEvent(string eventName, JSValueObject eventData)
+        [ReactMethod]
+        public void EmitEvent(string eventName, JSValueObject eventData)
         {
-            _reactContext.EmitJSEvent("RNLinkSdkWindows", eventName, eventData);
+            // Use a unique module name or event channel if needed
+            _reactContext.CallJSFunction("RCTDeviceEventEmitter", "emit", $"RNLinkSdkWindows.{eventName}", eventData);
         }
+
     }
 }

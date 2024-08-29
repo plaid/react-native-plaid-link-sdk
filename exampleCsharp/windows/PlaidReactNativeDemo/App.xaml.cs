@@ -26,20 +26,18 @@ namespace PlaidReactNativeDemo
             InstanceSettings.UseDeveloperSupport = false;
 #endif
 
-            Microsoft.ReactNative.Managed.AutolinkedNativeModules.RegisterAutolinkedNativeModulePackages(PackageProviders); // Includes any autolinked modules
+            // Register any autolinked modules
+            Microsoft.ReactNative.Managed.AutolinkedNativeModules.RegisterAutolinkedNativeModulePackages(PackageProviders);
 
+            // Register package providers
             PackageProviders.Add(new ReactPackageProvider());
-            //Adding Plaid Module Package Provider
             PackageProviders.Add(new PlaidLinkModuleWindows.PlaidReactPackageProvider());
+
+             // Making sure this is correct
 
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Invoked when the application is launched normally by the end user.  Other entry points
-        /// will be used such as when the application is launched to open a specific file.
-        /// </summary>
-        /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             base.OnLaunched(e);
@@ -47,16 +45,12 @@ namespace PlaidReactNativeDemo
             frame.Navigate(typeof(MainPage), e.Arguments);
         }
 
-        /// <summary>
-        /// Invoked when the application is activated by some means other than normal launching.
-        /// </summary>
-        protected override void OnActivated(Windows.ApplicationModel.Activation.IActivatedEventArgs e)
+        protected override void OnActivated(IActivatedEventArgs e)
         {
             var preActivationContent = Window.Current.Content;
             base.OnActivated(e);
             if (preActivationContent == null && Window.Current != null)
             {
-                // Display the initial content
                 var frame = (Frame)Window.Current.Content;
                 frame.Navigate(typeof(MainPage), null);
             }

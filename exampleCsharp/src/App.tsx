@@ -28,7 +28,7 @@ export default function App() {
 
   return (
     <>
-
+    <Text>{token}</Text>
       <PlaidIntegrationComponent token = {token} />
       <NavigationContainer>
         <Tab.Navigator screenOptions={{

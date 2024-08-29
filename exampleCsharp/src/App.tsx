@@ -6,36 +6,30 @@ import { TextInput, Text, TouchableOpacity } from 'react-native';
 import { PlaidEmbeddedLinkScreen } from './Screens/PlaidEmbeddedLinkScreen';
 import { PlaidLinkScreen } from './Screens/PlaidLinkScreen';
 import { styles } from './Styles';
+import PlaidIntegrationComponent from './Screens/PlaidIntergrationComponent';
 const Tab = createBottomTabNavigator();
 const { PlaidClassModule, PlaidLinkModuleWindows } = NativeModules;
 
 
-console.log(PlaidLinkModuleWindows)
+// console.log(PlaidLinkModuleWindows)
 export default function App() {
-  // const [token, setToken] = React.useState('');
+  const [token, setToken] = React.useState('');
 
-  // const getLinkToken = async () => {
-  //   PlaidClassModule.PLAID_PUBLIC_TOKEN = await PlaidClassModule.getLinkToken();
-  //   setToken(PlaidClassModule.PLAID_PUBLIC_TOKEN);
-  // };
+  const getLinkToken = async () => {
+    PlaidClassModule.PLAID_PUBLIC_TOKEN = await PlaidClassModule.getLinkToken();
+    setToken(PlaidClassModule.PLAID_PUBLIC_TOKEN);
+  };
 
-  // React.useEffect(() => {
-  //   getLinkToken();
-  //   console.log(token);
-  // }, []);
+  React.useEffect(() => {
+    getLinkToken();
+    console.log(token);
+  }, []);
 
 
   return (
     <>
-      {/* <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          PlaidLinkModuleWindows.create({ token });
 
-        }
-        }>
-        <Text style={styles.button}>Create Link</Text>
-      </TouchableOpacity> */}
+      <PlaidIntegrationComponent token = {token} />
       <NavigationContainer>
         <Tab.Navigator screenOptions={{
           tabBarLabelPosition: 'beside-icon',

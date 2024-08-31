@@ -2,15 +2,20 @@
 using System;
 using System.Diagnostics;
 
-namespace PlaidReactNativeDemo.Modules
+namespace PlaidLinkModuleWindows
 {
     public sealed partial class CustomWebViewPage : Page
     {
         public CustomWebViewPage()
         {
-            InitializeComponent();
+            //InitializeComponent();
             webView.NavigationFailed += WebView_NavigationFailed; // Attach the navigation failed event
         }
+
+        //private void InitializeComponent()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         // Method to navigate using a token or URL
         public void Navigate(string token)

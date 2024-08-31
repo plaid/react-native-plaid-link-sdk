@@ -5,13 +5,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { PlaidEmbeddedLinkScreen } from './Screens/PlaidEmbeddedLinkScreen';
 import { PlaidLinkScreen } from './Screens/PlaidLinkScreen';
-import PlaidIntergrationComponent from './Screens/PlaidIntergrationComponent'; // Ensure the correct path and spelling
+// import PlaidIntergrationComponent from './Screens/PlaidIntergrationComponent'; // Ensure the correct path and spelling
 import { styles } from './Styles'; // Styles used throughout the app
 const { NavigationModule,  PlaidClassModule } = NativeModules;
 
-const navigateToCustomWebViewPage = () => {
+
+// Export the functions to use in your app
+export const navigateToCustomWebViewPage = () => {
   NavigationModule.navigateToCustomWebViewPage();
 };
+
+export const navigateBackToApp = () => {
+  NavigationModule.navigateBackToApp();
+};
+
 // Define the tab navigator
 const Tab = createBottomTabNavigator();
 
@@ -47,10 +54,14 @@ export default function App() {
       ) : (
         <>
           <Text style={styles.tokenText}>{token ? `Token: ${token}` : 'No token available'}</Text>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={styles.container}>
       <Button
-        title="Open WebView Page"
-        onPress={navigateToCustomWebViewPage} // This triggers navigation to CustomWebViewPage
+        title="Go to Custom Web View"
+        onPress={navigateToCustomWebViewPage}
+      />
+      <Button
+        title="Back to App"
+        onPress={navigateBackToApp}
       />
     </View>
           {/* Integration Component with the Plaid Link */}

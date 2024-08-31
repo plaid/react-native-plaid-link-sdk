@@ -2,7 +2,8 @@ using Microsoft.ReactNative;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-
+using PlaidLinkModuleWindows;
+ 
 namespace PlaidReactNativeDemo
 {
     sealed partial class App : ReactApplication
@@ -34,7 +35,7 @@ namespace PlaidReactNativeDemo
             PackageProviders.Add(new PlaidLinkModuleWindows.PlaidReactPackageProvider());
 
             // Uncomment and ensure the correct namespace if additional package providers are needed
-            PackageProviders.Add(new PlaidLinkModuleWindows.Modules.ReactPackageProvider());
+            //PackageProviders.Add(new PlaidLinkModuleWindows.Modules.ReactPackageProvider());
 
             InitializeComponent(); // Ensure this initializes your App.xaml components correctly
 

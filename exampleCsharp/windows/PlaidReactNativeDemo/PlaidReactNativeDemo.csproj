@@ -108,10 +108,6 @@
     <Compile Include="Modules\CustomWebViewPage.xaml.cs">
       <DependentUpon>CustomWebViewPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\CustomControlWebViewManager.cs" />
-    <Compile Include="Modules\CustomWebViewControl.xaml.cs">
-      <DependentUpon>CustomWebViewControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AutolinkedNativeModules.g.cs" />
     <Compile Include="ReactPackageProvider.cs" />
@@ -145,10 +141,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Modules\CustomWebViewPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Modules\CustomWebViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

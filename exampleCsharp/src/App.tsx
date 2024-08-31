@@ -9,13 +9,16 @@ import { PlaidLinkScreen } from './Screens/PlaidLinkScreen';
 import { styles } from './Styles'; // Styles used throughout the app
 const { NavigationModule,  PlaidClassModule } = NativeModules;
 
-
+console.log(NavigationModule)
 // Export the functions to use in your app
 export const navigateToCustomWebViewPage = () => {
+  console.log('WebView')
+
   NavigationModule.navigateToCustomWebViewPage();
 };
 
 export const navigateBackToApp = () => {
+  console.log('App')
   NavigationModule.navigateBackToApp();
 };
 

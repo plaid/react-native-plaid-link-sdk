@@ -14,10 +14,10 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   // State for managing the link token
   const [linkToken, setLinkToken] = React.useState('');
-
   const [publicToken, setPublicToken] = React.useState('');
+  const [accessToken, setAccessToken] = React.useState('');
   const [loading, setLoading] = React.useState(true); // State to manage loading status
-
+  const [transactions, setTransactions] = React.useState(null);
   // Function to retrieve the link token from the native module
   const getLinkToken = async () => {
     try {
@@ -31,7 +31,17 @@ export default function App() {
         if(publicToken){
           const accessToken = await PlaidClassModule.exchangePublicToken();
           PlaidClassModule.PLAID_ACCESS_TOKEN = accessToken; 
+          setAccessToken(accessToken);
+          //All other requests needed for application from server url to middle native
+          const auth = await PlaidClassModule.getAuth();
+          const info = await PlaidClassModule.getInfo();
+          const accounts = await PlaidClassModule.getAccounts()
+          const item = await PlaidClassModule.getItem();
+          const transaction = await PlaidClassModule.getTransactions();
+          console.log("Test: ", JSON.parse(transaction));
+          setTransactions(JSON.parse(transaction));
         }
+        console.log(PlaidClassModule);
         // Set the token in the native module
       }// Update the state with the fetched token
       setLoading(false); // Stop the loading indicator

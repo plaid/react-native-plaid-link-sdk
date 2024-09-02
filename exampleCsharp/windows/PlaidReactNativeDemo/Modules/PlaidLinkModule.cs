@@ -128,5 +128,218 @@ namespace PlaidLinkModuleWindows
                 return ex.Message;
             }
         }
+        //Not allowed in development mode
+        [ReactMethod("getAuth")]
+        public async Task<string> GetAuth()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    // Send GET request to the specified URL
+                    HttpResponseMessage response = await client.GetAsync($"{backendApiUrl}/plaid/api/auth");
+
+                    // Ensure the response is successful
+                    response.EnsureSuccessStatusCode();
+
+                    // Read the response content as a string
+                    string data = await response.Content.ReadAsStringAsync();
+
+
+                    // Deserialize the JSON response
+                    dynamic jsonData = JsonConvert.DeserializeObject(data);
+
+                    Newtonsoft.Json.Linq.JObject jsonObject = jsonData;
+                    string jsonString = jsonObject.ToString();
+
+                    // Return the extracted data
+                    return jsonString;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handle HTTP request exceptions
+                return $"HTTP Request Error: {ex.Message}";
+            }
+            catch (JsonException ex)
+            {
+                // Handle JSON parsing exceptions
+                return $"JSON Parsing Error: {ex.Message}";
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                return $"Error: {ex.Message}";
+            }
+        }
+        [ReactMethod("getInfo")]
+        public async Task<string> GetInfo()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    // Send GET request to the specified URL
+                    HttpResponseMessage response = await client.GetAsync($"{backendApiUrl}/plaid/api/info");
+
+                    // Ensure the response is successful
+                    response.EnsureSuccessStatusCode();
+
+                    // Read the response content as a string
+                    string data = await response.Content.ReadAsStringAsync();
+
+                    // Deserialize the JSON response
+                    dynamic jsonData = JsonConvert.DeserializeObject(data);
+
+                    Newtonsoft.Json.Linq.JObject jsonObject = jsonData;
+                    string jsonString = jsonObject.ToString();
+
+                    // Return the extracted data
+                    return jsonString;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handle HTTP request exceptions
+                return $"HTTP Request Error: {ex.Message}";
+            }
+            catch (JsonException ex)
+            {
+                // Handle JSON parsing exceptions
+                return $"JSON Parsing Error: {ex.Message}";
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                return $"Error: {ex.Message}";
+            }
+        }
+        [ReactMethod("getItem")]
+        public async Task<string> GetItem()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    // Send GET request to the specified URL
+                    HttpResponseMessage response = await client.GetAsync($"{backendApiUrl}/plaid/api/item");
+
+                    // Ensure the response is successful
+                    response.EnsureSuccessStatusCode();
+
+                    // Read the response content as a string
+                    string data = await response.Content.ReadAsStringAsync();
+
+                    // Deserialize the JSON response
+                    dynamic jsonData = JsonConvert.DeserializeObject(data);
+
+                    Newtonsoft.Json.Linq.JObject jsonObject = jsonData;
+                    string jsonString = jsonObject.ToString();
+
+                    // Return the extracted data
+                    return jsonString;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handle HTTP request exceptions
+                return $"HTTP Request Error: {ex.Message}";
+            }
+            catch (JsonException ex)
+            {
+                // Handle JSON parsing exceptions
+                return $"JSON Parsing Error: {ex.Message}";
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                return $"Error: {ex.Message}";
+            }
+        }
+        [ReactMethod("getAccounts")]
+        public async Task<string> GetAccounts()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    // Send GET request to the specified URL
+                    HttpResponseMessage response = await client.GetAsync($"{backendApiUrl}/plaid/api/accounts");
+
+                    // Ensure the response is successful
+                    response.EnsureSuccessStatusCode();
+
+                    // Read the response content as a string
+                    string data = await response.Content.ReadAsStringAsync();
+
+                    // Deserialize the JSON response
+                    dynamic jsonData = JsonConvert.DeserializeObject(data);
+
+                    Newtonsoft.Json.Linq.JObject jsonObject = jsonData;
+                    string jsonString = jsonObject.ToString();
+
+                    // Return the extracted data
+                    return jsonString;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handle HTTP request exceptions
+                return $"HTTP Request Error: {ex.Message}";
+            }
+            catch (JsonException ex)
+            {
+                // Handle JSON parsing exceptions
+                return $"JSON Parsing Error: {ex.Message}";
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                return $"Error: {ex.Message}";
+            }
+        }
+        [ReactMethod("getTransactions")]
+        public async Task<string> GetTransactions()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    // Send GET request to the specified URL
+                    HttpResponseMessage response = await client.GetAsync($"{backendApiUrl}/plaid/api/transactions");
+
+                    // Ensure the response is successful
+                    response.EnsureSuccessStatusCode();
+
+                    // Read the response content as a string
+                    string data = await response.Content.ReadAsStringAsync();
+
+                    // Deserialize the JSON response
+                    dynamic jsonData = JsonConvert.DeserializeObject(data);
+
+                    Newtonsoft.Json.Linq.JObject jsonObject = jsonData;
+                    string jsonString = jsonObject.ToString();
+
+                    // Return the extracted data
+                    return jsonString;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handle HTTP request exceptions
+                return $"HTTP Request Error: {ex.Message}";
+            }
+            catch (JsonException ex)
+            {
+                // Handle JSON parsing exceptions
+                return $"JSON Parsing Error: {ex.Message}";
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                return $"Error: {ex.Message}";
+            }
+        }
+
     }
 }

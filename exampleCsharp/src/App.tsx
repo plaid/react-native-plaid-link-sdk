@@ -74,7 +74,7 @@ export default function App() {
   return (
     <><Text>{linkToken}</Text>
     <Text>{publicToken}</Text>
-
+    <Text>{accessToken}</Text>
     <NavigationContainer>
       <Tab.Navigator screenOptions={{
           tabBarLabelPosition: 'beside-icon',

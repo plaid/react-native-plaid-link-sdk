@@ -1,7 +1,7 @@
 Here is the modified `README.md` for the `exampleCsharp` app, tailored to include support for React Native Windows and clarify the setup instructions:
 
 ---
-
+![simple example of csharp](Example_Csharp.png)
 ### `README.md` for `exampleCsharp` App
 
 # exampleCsharp App

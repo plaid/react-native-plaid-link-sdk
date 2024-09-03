@@ -7,11 +7,11 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="0889f3fc-b6b2-4e44-beea-9106b146bf84"
+    Name="bd201cc4-ea4d-4142-9e80-5ee9e2c64b30"
     Publisher="CN=aimee"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="0889f3fc-b6b2-4e44-beea-9106b146bf84" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="bd201cc4-ea4d-4142-9e80-5ee9e2c64b30" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>PlaidReactNativeDemo</DisplayName>

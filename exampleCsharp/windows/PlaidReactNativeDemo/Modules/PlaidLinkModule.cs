@@ -15,11 +15,10 @@ namespace PlaidLinkModuleWindows
     [ReactModule("PlaidClassModule")]
     public sealed class PlaidClassModule
     {
-        public WebView PlaidWebView => PlaidWebView;
-        public ReactRootView ReactRootView => reactRootView;
+        //public WebView PlaidWebView => PlaidWebView;
+        // ReactRootView ReactRootView => reactRootView;
 
-        private ReactRootView reactRootView;
-        private CoreDispatcher dispatcher = Windows.UI.Xaml.Window.Current.Dispatcher;
+        //private ReactRootView reactRootView;
 
         // Constants exposed to JavaScript
         [ReactConstant("PLAID_LINK_TOKEN")]
@@ -31,7 +30,6 @@ namespace PlaidLinkModuleWindows
         [ReactConstant("PLAID_ACCESS_TOKEN")]
         public string _accessToken = "access-";
 
-        [ReactConstant("PLAID_BACKEND_URL")]
         public string backendApiUrl = "https://greenfieldxplatform-00f7d0070a43.herokuapp.com";
 
         // Methods exposed to JavaScript
@@ -49,7 +47,7 @@ namespace PlaidLinkModuleWindows
 
         [ReactMethod("getLinkToken")]
         public async Task<string> GetLinkTokenAsync()
-        {
+       {
             try
             {
                 using (HttpClient client = new HttpClient())
@@ -82,7 +80,7 @@ namespace PlaidLinkModuleWindows
                     var json = JsonConvert.SerializeObject(requestBody);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PostAsync($"{backendApiUrl}/plaid/api/exchange_public_token", content);
+                    HttpResponseMessage response = await client.PostAsync($"{backendApiUrl}/plaid/api/set_access_token", content);
                     response.EnsureSuccessStatusCode();
 
                     string responseData = await response.Content.ReadAsStringAsync();
@@ -102,22 +100,22 @@ namespace PlaidLinkModuleWindows
         ///
         // Method to get a public token by making a request to Plaid
         [ReactMethod("getPublicToken")]
-        public async Task<string> GetPublicTokenAsync(string token)
+        public async Task<string> GetPublicTokenAsync()
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    var requestBody = new { public_token = publicToken };
-                    var json = JsonConvert.SerializeObject(requestBody);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PostAsync($"{backendApiUrl}/plaid/api/create_public_token", content);
+                    // Append the token as a query parameter to the URL
+                    string urlWithParameters = $"{backendApiUrl}/plaid/api/public-token";
+
+                    HttpResponseMessage response = await client.GetAsync(urlWithParameters);
                     response.EnsureSuccessStatusCode();
 
                     string responseData = await response.Content.ReadAsStringAsync();
                     dynamic jsonData = JsonConvert.DeserializeObject(responseData);
-                    string publicToken = jsonData.access_token;
+                    string publicToken = jsonData.public_token;
 
                     _publicToken = publicToken;
                     return _publicToken;

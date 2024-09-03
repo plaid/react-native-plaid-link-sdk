@@ -4,11 +4,16 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import { NativeModules} from 'react-native';
+import { NativeModules, Text} from 'react-native';
 import {PlaidEmbeddedLinkScreen} from './Screens/PlaidEmbeddedLinkScreen';
 import {PlaidLinkScreen} from './Screens/PlaidLinkScreen';
 
+if(NativeModules){
+  console.log(NativeModules);
+}
+
 const { PlaidClassModule } = NativeModules;
+
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -21,26 +26,32 @@ export default function App() {
   // Function to retrieve the link token from the native module
   const getLinkToken = async () => {
     try {
-      const linkToken = await PlaidClassModule.getLinkToken();
-      PlaidClassModule.PLAID_LINK_TOKEN = linkToken; // Set the token in the native module
-      setLinkToken(linkToken); 
-      if(linkToken){
+      const linkTokenData = await PlaidClassModule.getLinkToken();
+      let results = JSON.parse(linkTokenData);
+      console.log(results);
+      PlaidClassModule.PLAID_LINK_TOKEN = results.linkToken; // Set the token in the native module
+      setLinkToken(PlaidClassModule.PLAID_LINK_TOKEN); 
+      if(results.linkToken){
         const publicToken = await PlaidClassModule.getPublicToken();
         PlaidClassModule.PLAID_PUBLIC_TOKEN = publicToken; 
         setPublicToken(publicToken);
+        console.log("Public token:",publicToken);
         if(publicToken){
           const accessToken = await PlaidClassModule.exchangePublicToken();
           PlaidClassModule.PLAID_ACCESS_TOKEN = accessToken; 
           setAccessToken(accessToken);
-          //All other requests needed for application from server url to middle native
-          const auth = await PlaidClassModule.getAuth();
-          const info = await PlaidClassModule.getInfo();
-          const accounts = await PlaidClassModule.getAccounts()
-          const item = await PlaidClassModule.getItem();
-          const transaction = await PlaidClassModule.getTransactions();
-          console.log("Test: ", JSON.parse(transaction));
-          setTransactions(JSON.parse(transaction));
         }
+          //All other requests needed for application from server url to middle native; enjoy! 
+          
+          // const auth = await PlaidClassModule.getAuth();
+          // console.log(auth);
+          // const info = await PlaidClassModule.getInfo();
+          // const accounts = await PlaidClassModule.getAccounts()
+          // const item = await PlaidClassModule.getItem();
+          // const transaction = await PlaidClassModule.getTransactions();
+          // console.log("Test: ", JSON.parse(transaction));
+          // setTransactions(JSON.parse(transaction));
+      
         console.log(PlaidClassModule);
         // Set the token in the native module
       }// Update the state with the fetched token
@@ -53,10 +64,17 @@ export default function App() {
 
   // Fetch the link token when the component mounts
   React.useEffect(() => {
-    getLinkToken();
-  }, []);
+    if(!linkToken){
+      getLinkToken();
+      
+    }
+   
+  }, [linkToken]);
 
   return (
+    <><Text>{linkToken}</Text>
+    <Text>{publicToken}</Text>
+
     <NavigationContainer>
       <Tab.Navigator screenOptions={{
           tabBarLabelPosition: 'beside-icon',
@@ -69,6 +87,6 @@ export default function App() {
         <Tab.Screen name="Standard Link" component={PlaidLinkScreen} />
         <Tab.Screen name="Embedded Link" component={PlaidEmbeddedLinkScreen} />
       </Tab.Navigator>
-    </NavigationContainer>
+    </NavigationContainer></>
   );
 }

@@ -1,7 +1,7 @@
 Here is the modified `README.md` for the `exampleCsharp` app, tailored to include support for React Native Windows and clarify the setup instructions:
 
 ---
-![simple example of csharp](Example_Csharp.png)
+![simple example of csharp](./images/Example_Csharp.png)
 ### `README.md` for `exampleCsharp` App
 
 # exampleCsharp App
@@ -79,6 +79,11 @@ Before running the example app, ensure you have:
      ```sh
      npx react-native run-windows
      ```
+     Build release:
+
+     ```sh
+     npx react-native run-windows --release
+     ```
 
 ### Running on Different Simulators
 
@@ -99,7 +104,7 @@ Before running the example app, ensure you have:
 
 | Android                                             | iOS                                             | Windows                                             |
 | --------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------- |
-| <img src=./images/android_screenshot.png width=300> | <img src=./images/ios_screenshot.png width=300> | <img src=./images/windows_screenshot.png width=300> |
+| <img src=./images/android_screenshot.png width=300> | <img src=./images/ios_screenshot.png width=300> | <img src=./images/Example_Csharp.png width=300> |
 
 ---
 
@@ -109,4 +114,3 @@ Before running the example app, ensure you have:
 - **Clarified Setup Instructions:** Added details on how to set up for iOS, Android, and Windows platforms.
 - **Updated Screenshots Section:** Prepared a placeholder for a screenshot from the Windows platform to show the cross-platform support.
 
-Would you like further modifications or additional details?

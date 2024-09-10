@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { NativeEventEmitter, Platform, TouchableOpacity } from 'react-native';
+import { NativeModules, NativeEventEmitter, Platform, TouchableOpacity } from 'react-native';
 import {
   LinkError,
   LinkEventListener,
@@ -16,8 +16,18 @@ import {
 import RNLinksdkAndroid from './fabric/NativePlaidLinkModuleAndroid';
 import RNLinksdkiOS from './fabric/NativePlaidLinkModuleiOS';
 
+// Import the Windows native module C#
+const { PlaidLinkModuleWindows } = NativeModules;
+
+// Determine the platform-specific SDK module to use
 const RNLinksdk =
-  (Platform.OS === 'android' ? RNLinksdkAndroid : RNLinksdkiOS) ?? undefined;
+  Platform.OS === 'android'
+    ? RNLinksdkAndroid
+    : Platform.OS === 'ios'
+    ? RNLinksdkiOS
+    : Platform.OS === 'windows'
+    ? PlaidLinkModuleWindows
+    : undefined;
 
 /**
  * A hook that registers a listener on the Plaid emitter for the 'onEvent' type.
@@ -46,8 +56,10 @@ export const create = (props: LinkTokenConfiguration) => {
       noLoadingState,
       props.logLevel ?? LinkLogLevel.ERROR,
     );
-  } else {
+  } else if (Platform.OS === 'ios') {
     RNLinksdkiOS?.create(token, noLoadingState);
+  } else if (Platform.OS === 'windows') {
+    PlaidLinkModuleWindows?.create(token, noLoadingState);
   }
 };
 
@@ -69,7 +81,7 @@ export const open = async (props: LinkOpenProps) => {
         }
       },
     );
-  } else {
+  } else if (Platform.OS === 'ios') {
     let presentFullScreen =
       props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN;
 
@@ -92,20 +104,40 @@ export const open = async (props: LinkOpenProps) => {
         }
       },
     );
+  } else if (Platform.OS === 'windows') {
+    PlaidLinkModuleWindows?.open(
+      (result: LinkSuccess) => {
+        if (props.onSuccess != null) {
+          props.onSuccess(result);
+        }
+      },
+      (result: LinkExit) => {
+        if (props.onExit != null) {
+          if (result.error != null) {
+            result.error.errorDisplayMessage = result.error.displayMessage;
+          }
+          props.onExit(result);
+        }
+      },
+    );
   }
 };
 
 export const dismissLink = () => {
   if (Platform.OS === 'ios') {
     RNLinksdkiOS?.dismiss();
+  } else if (Platform.OS === 'windows') {
+    PlaidLinkModuleWindows?.dismiss();
   }
 };
 
 export const submit = (data: SubmissionData): void => {
   if (Platform.OS === 'android') {
     RNLinksdkAndroid?.submit(data.phoneNumber);
-  } else {
+  } else if (Platform.OS === 'ios') {
     RNLinksdkiOS?.submit(data.phoneNumber);
+  } else if (Platform.OS === 'windows') {
+    PlaidLinkModuleWindows?.submit(data.phoneNumber);
   }
 };
 
@@ -161,7 +193,7 @@ export const openLink = async (props: PlaidLinkProps) => {
         }
       },
     );
-  } else {
+  } else if (Platform.OS === 'ios') {
     RNLinksdkiOS?.create(config.token, noLoadingState);
 
     let presentFullScreen =
@@ -185,6 +217,19 @@ export const openLink = async (props: PlaidLinkProps) => {
           }
         }
       },
+    );
+  } else if (Platform.OS === 'windows') {
+    PlaidLinkModuleWindows?.open(
+      (result: LinkSuccess) => {
+        if (props.onSuccess != null) {
+          props.onSuccess(result);
+        }
+      },
+      (result: LinkExit) => {
+        if (props.onExit != null) {
+          props.onExit(result);
+        }
+      }
     );
   }
 };

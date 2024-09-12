@@ -485,6 +485,24 @@ RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
             return @"LAYER_READY";
         case PLKEventNameValueLayerNotAvailable:
             return @"LAYER_NOT_AVAILABLE";
+        case PLKEventNameValueSubmitEmail:
+            return @"SUBMIT_EMAIL";
+        case PLKEventNameValueSkipSubmitEmail:
+            return @"SKIP_SUBMIT_EMAIL";
+        case PLKEventNameValueRememberMeEnabled:
+            return @"REMEMBER_ME_ENABLED";
+        case PLKEventNameValueRememberMeDisabled:
+            return @"REMEMBER_ME_DISABLED";
+        case PLKEventNameValueRememberMeHoldout:
+            return @"REMEMBER_ME_HOLDOUT";
+        case PLKEventNameValueSelectSavedInstitution:
+            return @"SELECT_SAVED_INSTITUTION";
+        case PLKEventNameValueSelectSavedAccount:
+            return @"SELECT_SAVED_ACCOUNT";
+        case PLKEventNameValueAutoSelectSavedInstitution:
+            return @"AUTO_SELECT_SAVED_INSTITUTION";
+        case PLKEventNameValuePlaidCheckPane:
+            return @"PLAID_CHECK_PANE";
     }
      return @"unknown";
 }
@@ -632,6 +650,10 @@ RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
             return @"SELECT_SAVED_ACCOUNT";
         case PLKViewNameValueProfileDataReview:
             return @"PROFILE_DATA_REVIEW";
+        case PLKViewNameValueSubmitEmail:
+            return @"SUBMIT_EMAIL";
+        case PLKViewNameValueVerifyEmail:
+            return @"VERIFY_EMAIL";
     }
 
     return @"unknown";

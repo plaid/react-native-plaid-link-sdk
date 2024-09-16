@@ -1,5 +1,49 @@
 # RELEASES
 
+## LinkKit V11.13.0 — 2024-09-13
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Update Android and iOS SDKs.
+
+### Android
+
+Android SDK [4.6.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.6.1)
+
+#### Changes
+- 
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.6.1](https://github.com/plaid/plaid-link-ios/releases/tag/5.6.1)
+
+#### Changes
+
+- Add missing event names submitEmail, skipSubmitEmail, rememberMeEnabled, rememberMeDisabled, rememberMeHoldout, selectSavedInstitution, selectSavedAccount, autoSelectSavedInstitution, plaidCheckPane.
+- Add missing view names submitEmail and verifyEmail.
+- Add haptics support.
+- Fix Embedded search view dynamic resizing.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
 ## LinkKit V11.12.1 — 2024-08-23
 
 ### React Native

@@ -8,11 +8,12 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, 14.0
 prepare_react_native_project!
 
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
+# linkage = ENV['USE_FRAMEWORKS']
+# if linkage != nil
+  # Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  # use_frameworks! :linkage => linkage.to_sym
+# end
+
 ENV['RCT_NEW_ARCH_ENABLED'] = '1'
 
 target 'FabricExample' do

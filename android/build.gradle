@@ -24,7 +24,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.2'
+        classpath 'com.android.tools.build:gradle:8.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10'
     }
@@ -60,11 +60,11 @@ android {
     if (agpVersion >= 7) {
       namespace 'com.plaid'
     }
-    compileSdkVersion 31
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion rootProject.ext.has("minSdkVersion") ? rootProject.ext.minSdkVersion :  21
-        targetSdkVersion 31
+        targetSdkVersion 34
         versionCode 1
         versionName "0.0.1"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
@@ -75,8 +75,8 @@ android {
 
     if (agpVersion < 8) { 
       compileOptions {
-          sourceCompatibility JavaVersion.VERSION_1_8
-          targetCompatibility JavaVersion.VERSION_1_8
+          sourceCompatibility JavaVersion.VERSION_17
+          targetCompatibility JavaVersion.VERSION_17
       }
     }
 

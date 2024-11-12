@@ -10,7 +10,7 @@ This SDK now works with any supported version of React Native.
 
 #### Changes
 
-- Update Android Compile Version to 34.
+- Update Android Compile Version from 31 to 34.
 
 ### Android
 

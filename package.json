@@ -43,7 +43,7 @@
   "license": "MIT",
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": ">=0.68.0"
   },
   "devDependencies": {
     "@react-native-community/eslint-plugin": "^1.1.0",

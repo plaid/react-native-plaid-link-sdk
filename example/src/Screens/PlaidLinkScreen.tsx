@@ -70,8 +70,8 @@ export function PlaidLinkScreen() {
   const [disabled, setDisabled] = React.useState(true);
 
   const iOSVersionParts = String(Platform.Version).split('.');
-  const [majorVersion, minorVersion, patchVersion] =
-    iOSVersionParts.length === 3 ? iOSVersionParts : [null, null, null];
+  const [majorVersion, minorVersion] =
+    iOSVersionParts.length >= 2 ? iOSVersionParts : [null, null];
 
   const financeKitText = () => {
     if (majorVersion && minorVersion) {
@@ -89,6 +89,9 @@ export function PlaidLinkScreen() {
           </Text>
         );
       }
+    } else {
+      // Fallback return if majorVersion or minorVersion are not provided.
+      return <Text style={styles.button}>Invalid iOS version</Text>;
     }
   };
 

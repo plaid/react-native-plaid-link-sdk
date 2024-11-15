@@ -19,6 +19,7 @@ import com.plaid.link.configuration.LinkTokenConfiguration
 import com.plaid.link.event.LinkEvent
 import com.plaid.link.exception.LinkException
 import com.plaid.link.result.LinkResultHandler
+import com.plaid.link.SubmissionData
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -74,6 +75,14 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       .noLoadingState(noLoadingState)
 
     return builder.build()
+  }
+
+  @ReactMethod
+  override fun submit(phoneNumber: String?) {
+    if (plaidHandler != null) {
+      val submissionData = SubmissionData(phoneNumber = phoneNumber)
+      plaidHandler?.submit(submissionData)
+    }
   }
 
   @ReactMethod

@@ -1,25 +1,21 @@
+// qwe clean this up...
 import {
-    openLink,
-    PlaidLink,
     create,
     open,
     dismissLink,
     usePlaidEmitter,
     syncFinanceKit,
+    submit,
 } from './PlaidLink';
 
 export * from './Types';
-
-export default PlaidLink;
-
 export {
-    PlaidLink,
-    openLink,
     create,
     open,
     dismissLink,
     usePlaidEmitter,
-    syncFinanceKit
+    syncFinanceKit,
+    submit,
 };
 
 // Components

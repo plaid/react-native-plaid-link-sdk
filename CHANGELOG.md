@@ -1,5 +1,229 @@
 # RELEASES
 
+## LinkKit V11.13.2 — 2024-11-12
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Update Android Compile Version from 31 to 34.
+
+### Android
+
+Android SDK [4.6.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.6.1)
+
+#### Changes
+- Add BANK_INCOME_INSIGHTS_COMPLETED, SUBMIT_EMAIL, SKIP_SUBMIT_EMAIL, SUBMIT_OTP, REMEMBER_ME_ENABLED, REMEMBER_ME_DISABLED, REMEMBER_ME_DISABLED, REMEMBER_ME_HOLDOUT, PLAID_CHECK_PANE, AUTO_SELECT_SAVED_INSTITUTION event names.
+- Add SUBMIT_DOCUMENTS, SUBMIT_DOCUMENTS_SUCCESS, SUBMIT_DOCUMENTS_ERROR, SUBMIT_EMAIL, and VERIFY_EMAIL event view names.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.6.1](https://github.com/plaid/plaid-link-ios/releases/tag/5.6.1)
+
+#### Changes
+
+- Add missing event names submitEmail, skipSubmitEmail, rememberMeEnabled, rememberMeDisabled, rememberMeHoldout, selectSavedInstitution, selectSavedAccount, autoSelectSavedInstitution, plaidCheckPane.
+- Add missing view names submitEmail and verifyEmail.
+- Add haptics support.
+- Fix Embedded search view dynamic resizing.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
+## LinkKit V11.13.1 — 2024-11-11
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Resolves [Issue 713](https://github.com/plaid/react-native-plaid-link-sdk/issues/713).
+
+### Android
+
+Android SDK [4.6.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.6.1)
+
+#### Changes
+- Add BANK_INCOME_INSIGHTS_COMPLETED, SUBMIT_EMAIL, SKIP_SUBMIT_EMAIL, SUBMIT_OTP, REMEMBER_ME_ENABLED, REMEMBER_ME_DISABLED, REMEMBER_ME_DISABLED, REMEMBER_ME_HOLDOUT, PLAID_CHECK_PANE, AUTO_SELECT_SAVED_INSTITUTION event names.
+- Add SUBMIT_DOCUMENTS, SUBMIT_DOCUMENTS_SUCCESS, SUBMIT_DOCUMENTS_ERROR, SUBMIT_EMAIL, and VERIFY_EMAIL event view names.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.6.1](https://github.com/plaid/plaid-link-ios/releases/tag/5.6.1)
+
+#### Changes
+
+- Add missing event names submitEmail, skipSubmitEmail, rememberMeEnabled, rememberMeDisabled, rememberMeHoldout, selectSavedInstitution, selectSavedAccount, autoSelectSavedInstitution, plaidCheckPane.
+- Add missing view names submitEmail and verifyEmail.
+- Add haptics support.
+- Fix Embedded search view dynamic resizing.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
+## LinkKit V11.13.0 — 2024-09-16
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Update Android and iOS SDKs.
+
+### Android
+
+Android SDK [4.6.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.6.1)
+
+#### Changes
+- Add BANK_INCOME_INSIGHTS_COMPLETED, SUBMIT_EMAIL, SKIP_SUBMIT_EMAIL, SUBMIT_OTP, REMEMBER_ME_ENABLED, REMEMBER_ME_DISABLED, REMEMBER_ME_DISABLED, REMEMBER_ME_HOLDOUT, PLAID_CHECK_PANE, AUTO_SELECT_SAVED_INSTITUTION event names.
+- Add SUBMIT_DOCUMENTS, SUBMIT_DOCUMENTS_SUCCESS, SUBMIT_DOCUMENTS_ERROR, SUBMIT_EMAIL, and VERIFY_EMAIL event view names.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.6.1](https://github.com/plaid/plaid-link-ios/releases/tag/5.6.1)
+
+#### Changes
+
+- Add missing event names submitEmail, skipSubmitEmail, rememberMeEnabled, rememberMeDisabled, rememberMeHoldout, selectSavedInstitution, selectSavedAccount, autoSelectSavedInstitution, plaidCheckPane.
+- Add missing view names submitEmail and verifyEmail.
+- Add haptics support.
+- Fix Embedded search view dynamic resizing.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
+## LinkKit V11.12.1 — 2024-08-23
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Updates for new architecture
+    - https://github.com/plaid/react-native-plaid-link-sdk/pull/701
+    - https://github.com/plaid/react-native-plaid-link-sdk/pull/702
+
+### Android
+
+Android SDK [4.6.0](https://github.com/plaid/plaid-link-android/releases/tag/v4.6.0)
+
+#### Changes
+- Source and target compatibility set to JavaVersion.VERSION_11 down from VERSION_17 to improve compatibility.
+- Upgrade androidx.work:work-runtime-ktx library from 2.7.1 to 2.9.0.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.6.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.6.0)
+
+#### Changes
+
+- Add submit API for Layer.
+- Improved Remember Me Experience
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
+## LinkKit V11.12.0 — 2024-08-09
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Resolve issue [693](https://github.com/plaid/react-native-plaid-link-sdk/issues/693) missing Layer events.
+- Add `LAYER_READY` and `LAYER_NOT_AVAILABLE` events to `LinkEventName`.
+
+### Android
+
+Android SDK [4.6.0](https://github.com/plaid/plaid-link-android/releases/tag/v4.6.0)
+
+#### Changes
+- Source and target compatibility set to JavaVersion.VERSION_11 down from VERSION_17 to improve compatibility.
+- Upgrade androidx.work:work-runtime-ktx library from 2.7.1 to 2.9.0.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.6.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.6.0)
+
+#### Changes
+
+- Add submit API for Layer.
+- Improved Remember Me Experience
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
 ## LinkKit V12.0.0-beta.3 — 2024-08-06
 
 ### React Native
@@ -39,6 +263,216 @@ iOS SDK [6.0.0-beta5](https://github.com/plaid/plaid-link-ios/releases/tag/6.0.0
 | Xcode | >= 15.3.0 |
 | iOS | >= 14.0 |
 
+## LinkKit V11.11.2 — 2024-08-06
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Resolve issue [693](https://github.com/plaid/react-native-plaid-link-sdk/issues/693) missing Layer events.
+- Add `LAYER_READY` and `LAYER_NOT_AVAILABLE` events to `LinkEventName`.
+
+### Android
+
+Android SDK [4.5.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.5.1)
+
+#### Changes
+- Fix headless link race condition
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.6.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.6.0)
+
+#### Changes
+
+- Add submit API for Layer.
+- Improved Remember Me Experience
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
+## LinkKit V11.11.1 — 2024-07-17
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Update Android SDK to 4.5.1.
+- Update iOS SDK to 5.6.0.
+- Add submit API.
+
+### Android
+
+Android SDK [4.5.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.5.1)
+
+#### Changes
+- Fix headless link race condition
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.6.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.6.0)
+
+#### Changes
+
+- Add submit API for Layer.
+- Improved Remember Me Experience
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
+## LinkKit V11.11.0 — 2024-06-25
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Update Android SDK to 4.5.0.
+- Update iOS SDK to 5.6.0.
+- Add submit API.
+
+### Android
+
+Android SDK [4.5.0](https://github.com/plaid/plaid-link-android/releases/tag/v4.5.0)
+
+#### Changes
+- Add PROFILE_DATA_REVIEW event view name.
+- Add LAYER_READY and LAYER_NOT_AVAILABLE event names.
+- Add submit API to the LinkHandler.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.6.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.6.0)
+
+#### Changes
+
+- Add submit API for Layer.
+- Improved Remember Me Experience
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
+## LinkKit V11.10.3 — 2024-06-04
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Android
+
+Android SDK [4.4.2](https://github.com/plaid/plaid-link-android/releases/tag/v4.4.2)
+
+#### Changes
+- Support Autofill for SMS OTP in Link Sessions using Google play-services-auth-api-phone library version 18.0.2.
+- Change LinkActivity to `exported=false`.
+- Fix race condition that can occur when multiple tokens are initialized.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.5.1](https://github.com/plaid/plaid-link-ios/releases/tag/5.5.1)
+
+#### Changes
+
+- Fix headless OAuth bug.
+- Improved Remember Me experience.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
+## LinkKit V11.10.2 — 2024-05-30
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Android
+
+Android SDK [4.3.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.3.1)
+
+#### Changes
+- Change WebView background to a transparent gradient.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.5.1](https://github.com/plaid/plaid-link-ios/releases/tag/5.5.1)
+
+#### Changes
+
+- Fix headless OAuth bug.
+- Improved Remember Me experience.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
 
 ## LinkKit V12.0.0-beta.2 — 2024-05-24
 
@@ -79,6 +513,44 @@ iOS SDK [6.0.0-beta2](https://github.com/plaid/plaid-link-ios/releases/tag/6.0.0
 | Xcode | >= 15.3.0 |
 | iOS | >= 14.0 |
 
+## LinkKit V11.10.1 — 2024-05-23
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Android
+
+Android SDK [4.3.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.3.1)
+
+#### Changes
+- Change WebView background to a transparent gradient.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.5.0](https://github.com/plaid/plaid-link-ios/releases/tag/5.5.0)
+
+#### Changes
+
+- Add PROFILE_DATA_REVIEW view name.
+- Add NSPrivacyCollectedDataTypePurposes for NSPrivacyCollectedDataTypeUserID.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
 ## LinkKit V12.0.0-beta.1 — 2024-05-22
 
 ### React Native
@@ -117,7 +589,6 @@ iOS SDK [6.0.0-beta1](https://github.com/plaid/plaid-link-ios/releases/tag/6.0.0
 | Xcode | >= 15.3.0 |
 | iOS | >= 14.0 |
 
-
 ## LinkKit V11.10.0 — 2024-05-22
 
 ### React Native
@@ -131,11 +602,10 @@ This SDK now works with any supported version of React Native.
 
 ### Android
 
-Android SDK [4.4.0](https://github.com/plaid/plaid-link-android/releases/tag/v4.4.0)
+Android SDK [4.3.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.3.1)
 
 #### Changes
-- Support Autofill for SMS OTP in Link Sessions using Google play-services-auth-api-phone library version 18.0.2.
-- Change LinkActivity to `exported=false`.
+- Change WebView background to a transparent gradient.
 
 #### Requirements
 

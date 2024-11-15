@@ -35,6 +35,10 @@ npm install --save react-native-plaid-link-sdk
 
 Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The latest version is ![version](https://img.shields.io/cocoapods/v/Plaid).
 
+```bash switcher=false
+pod 'Plaid', '~> <insert latest version>'
+```
+
 Autolinking should install the CocoaPods dependencies for iOS project. If it fails you can run 
 
 ```sh
@@ -49,10 +53,11 @@ cd ios && bundle install && bundle exec pod install
 
 AutoLinking should handle all of the Android setup. 
 
+Remember to register your Android package name in the [Dashboard](https://dashboard.plaid.com/developers/api). This is required in order to connect to OAuth institutions (which includes most major banks).
 
 ### React Native Setup
 
-- To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/#create-link-token). Check out our [QuickStart guide](https://plaid.com/docs/quickstart/#introduction) for additional API information.
+- To initialize `PlaidLink`, you will need to first create a `link_token` at [/link/token/create](https://plaid.com/docs/api/link/#linktokencreate). Check out our [QuickStart guide](https://plaid.com/docs/quickstart/#introduction) for additional API information.
 
 #### Version >= 11.6.0
 
@@ -179,10 +184,22 @@ While these older versions are expected to continue to work without disruption, 
 
 | Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |
 |-------------------|--------------------------|-------------|---------------------|------------------------|---------|-----------------|-------------------------------|
+| 12.0.0            | *                        | [5.0.0+]    | 21                  | 34                     | >=6.0.0 |  14.0           | Active, supports Xcode 16.1.0 |
 | 12.0.0-beta.3     | *                        | [4.4.0+]    | 21                  | 34                     | >=6.0.0 |  14.0           | Active, supports Xcode 15.3.0 |
 | 12.0.0-beta.2     | *                        | [4.4.0+]    | 21                  | 34                     | >=6.0.0 |  14.0           | Active, supports Xcode 15.3.0 |
 | 12.0.0-beta.1     | *                        | [4.4.0+]    | 21                  | 34                     | >=6.0.0 |  14.0           | **Deprecated**                |
-| 11.10.0           | *                        | [4.4.0+]    | 21                  | 34                     | >=5.5.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.13.2           | *                        | [4.6.1+]    | 21                  | 34                     | >=5.6.1 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.13.1           | *                        | [4.6.1+]    | 21                  | 34                     | >=5.6.1 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.13.0           | *                        | [4.6.1+]    | 21                  | 34                     | >=5.6.1 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.12.1           | *                        | [4.6.0+]    | 21                  | 34                     | >=5.6.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.12.0           | *                        | [4.6.0+]    | 21                  | 34                     | >=5.6.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.11.2           | *                        | [4.5.1+]    | 21                  | 34                     | >=5.6.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.11.1           | *                        | [4.5.1+]    | 21                  | 34                     | >=5.6.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.11.0           | *                        | [4.5.0+]    | 21                  | 34                     | >=5.6.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.10.3           | *                        | [4.4.2+]    | 21                  | 34                     | >=5.5.1 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.10.2           | *                        | [4.3.1+]    | 21                  | 34                     | >=5.5.1 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.10.1           | *                        | [4.3.1+]    | 21                  | 34                     | >=5.5.0 |  14.0           | Active, supports Xcode 15.0.1 |
+| 11.10.0           | *                        | [4.3.1+]    | 21                  | 34                     | >=5.5.0 |  14.0           | Active, supports Xcode 15.0.1 |
 | 11.9.0            | *                        | [4.3.1+]    | 21                  | 34                     | >=5.5.0 |  14.0           | Active, supports Xcode 15.0.1 |
 | 11.8.2            | *                        | [4.3.1+]    | 21                  | 34                     | >=5.4.2 |  14.0           | Active, supports Xcode 15.0.1 |
 | 11.8.1            | *                        | [4.3.1+]    | 21                  | 34                     | >=5.4.2 |  14.0           | Active, supports Xcode 15.0.1 |

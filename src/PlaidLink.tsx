@@ -134,18 +134,19 @@ export const syncFinanceKit = (
         message: "FinanceKit is unavailable on Android!",
       })
     } else {
-      RNLinksdkiOS?.syncFinanceKit(
-        token, 
-        requestAuthorizationIfNeeded, 
-        () => {
-          completion()
-        },
-        (error: FinanceKitError) => {
-          completion({
-            type: error.type,
-            message: error.message,
-          })
-        }
-      )
+      // qwe
+      // RNLinksdkiOS?.syncFinanceKit(
+      //   token, 
+      //   requestAuthorizationIfNeeded, 
+      //   () => {
+      //     completion()
+      //   },
+      //   (error: FinanceKitError) => {
+      //     completion({
+      //       type: error.type,
+      //       message: error.message,
+      //     })
+      //   }
+      // )
     }
 };

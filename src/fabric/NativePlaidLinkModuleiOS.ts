@@ -17,12 +17,14 @@ export interface Spec extends TurboModule {
     // those two are here for event emitter methods
     addListener(eventName: string): void;
     removeListeners(count: Int32): void;
-    syncFinanceKit(
-      token: string,
-      requestAuthorizationIfNeeded: boolean,
-      onSuccess: (success: void) => void,
-      onError: (error: FinanceKitError) => void
-    ): void
+
+    // qwe fix this
+    // syncFinanceKit(
+    //   token: string,
+    //   requestAuthorizationIfNeeded: boolean,
+    //   onSuccess: () => void,
+    //   onError: (error: FinanceKitError) => void
+    // ): void
 }
 
 export default TurboModuleRegistry.get<Spec>('RNLinksdk');

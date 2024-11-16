@@ -53,6 +53,6 @@ example/android/build/
 example/.yalc
 example/yalc.lock
 
-Fabricexample/android/build/
-Fabricexample/.yalc
-Fabricexample/yalc.lock
+FabricExample/android/build/
+FabricExample/.yalc
+FabricExample/yalc.lock

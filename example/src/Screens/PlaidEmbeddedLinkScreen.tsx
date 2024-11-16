@@ -2,7 +2,7 @@ import * as React from 'react';
 import {TextInput, Text, View} from 'react-native';
 import {styles} from '../Styles';
 import {
-  EmbeddedLinkView,
+  // EmbeddedLinkView,
   LinkIOSPresentationStyle,
   LinkEvent,
   LinkExit,
@@ -57,7 +57,7 @@ export function PlaidEmbeddedLinkScreen() {
         placeholder="link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
         placeholderTextColor={'#D3D3D3'}
       />
-      <EmbeddedView token={text} />
+      {/* <EmbeddedView token={text} /> */}
     </>
   );
 }

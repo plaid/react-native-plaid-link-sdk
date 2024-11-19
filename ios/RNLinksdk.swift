@@ -173,12 +173,15 @@ class RNLinksdk: RCTEventEmitter {
     @objc(syncFinanceKit:requestAuthorizationIfNeeded:onSuccess:onError:)
     @available(iOS 17.4, *)
     func syncFinanceKit(
-        token: String, requestAuthorizationIfNeeded: Bool, onSuccess: @escaping RCTResponseSenderBlock,
+        token: String,
+        requestAuthorizationIfNeeded: Bool,
+        onSuccess: @escaping RCTResponseSenderBlock,
         onError: @escaping RCTResponseSenderBlock
     ) {
 
         Plaid.syncFinanceKit(
-            token: token, requestAuthorizationIfNeeded: requestAuthorizationIfNeeded,
+            token: token,
+            requestAuthorizationIfNeeded: requestAuthorizationIfNeeded,
             completion: { result in
                 switch result {
                 case .success:
@@ -191,7 +194,8 @@ class RNLinksdk: RCTEventEmitter {
 
                     onError([financeKitError])
                 }
-            })
+            }
+        )
     }
 
     // MARK: Private

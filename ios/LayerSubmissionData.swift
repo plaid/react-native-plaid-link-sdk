@@ -2,5 +2,5 @@ import Foundation
 import LinkKit
 
 struct LayerSubmissionData: SubmissionData {
-  let phoneNumber: String?
+    let phoneNumber: String?
 }

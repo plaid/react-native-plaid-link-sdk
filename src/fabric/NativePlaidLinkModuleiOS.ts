@@ -2,7 +2,7 @@
 import {TurboModuleRegistry, TurboModule} from 'react-native'; // TurboModule system for native modules
 import {Int32} from 'react-native/Libraries/Types/CodegenTypes'; // Codegen-friendly integer type
 import {UnsafeObject} from './fabricUtils'; // Utility for handling dynamic or loosely-typed objects
-import {LinkSuccess, LinkExit, LinkError} from '../Types'; // Type definitions for Link SDK operations
+import {LinkSuccess, LinkExit, LinkError, FinanceKitError} from '../Types'; // Type definitions for Link SDK operations
 
 // Define the Spec interface, which represents the methods exposed by the native RNLinksdk module
 export interface Spec extends TurboModule {
@@ -51,21 +51,29 @@ export interface Spec extends TurboModule {
      */
     removeListeners(count: Int32): void;
 
-    /**
+      /**
      * Synchronizes the user's transactions and data using FinanceKit.
-     * @param token - The authentication token used to access FinanceKit.
-     * @param requestAuthorizationIfNeeded - If true, prompts the user for necessary permissions.
-     * @param onSuccess - Callback invoked when synchronization completes successfully.
-     * @param onError - Callback invoked when an error occurs during synchronization.
-     *                  The error object includes:
-     *                  - `type`: A numeric code identifying the error type.
-     *                  - `message`: A descriptive message about the error.
+     *
+     * @param token - The authentication token required to access FinanceKit services.
+     *                 This token must be linked to an access token from the Plaid API.
+     * @param requestAuthorizationIfNeeded - If true, prompts the user to authorize the sync 
+     *                                        if permissions have not been previously granted.
+     * @param onSuccess - Callback function invoked when the synchronization completes successfully.
+     *                    This function is called with no arguments.
+     * @param onError - Callback function invoked when an error occurs during synchronization.
+     *                  The error object includes the following properties:
+     *                  - `type`: A string representing the specific FinanceKit error type.
+     *                  - `message`: A human-readable description of the error.
+     *
+     * @warning This method is supported only on iOS devices running version 17.4 or higher.
+     * @warning Ensure that your app has been granted FinanceKit access from Apple.
+     * @warning This method cannot be used on Android or Mac Catalyst platforms.
      */
     syncFinanceKit(
         token: string,
         requestAuthorizationIfNeeded: boolean,
         onSuccess: () => void,
-        onError: (error: { type: number; message: string }) => void
+        onError: (error: UnsafeObject<FinanceKitError>) => void
     ): void;
 }
 

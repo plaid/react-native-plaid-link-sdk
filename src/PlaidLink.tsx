@@ -16,91 +16,121 @@ import {
 import RNLinksdkAndroid from './fabric/NativePlaidLinkModuleAndroid';
 import RNLinksdkiOS from './fabric/NativePlaidLinkModuleiOS';
 
+// Choose the correct native module based on the platform.
+// Use the Android or iOS implementation if available; otherwise, fallback to `undefined`.
 const RNLinksdk =
   (Platform.OS === 'android' ? RNLinksdkAndroid : RNLinksdkiOS) ?? undefined;
 
 /**
  * A hook that registers a listener on the Plaid emitter for the 'onEvent' type.
- * The listener is cleaned up when this view is unmounted
+ * The listener is cleaned up when this component is unmounted.
  *
- * @param LinkEventListener the listener to call
+ * @param {LinkEventListener} linkEventListener - The event listener to be called on 'onEvent'.
  */
 export const usePlaidEmitter = (linkEventListener: LinkEventListener) => {
   useEffect(() => {
+    // Create a new event emitter for the Plaid native module
     const emitter = new NativeEventEmitter(RNLinksdk);
     const listener = emitter.addListener('onEvent', linkEventListener);
-    // Clean up after this effect:
+
+    // Clean up the event listener when the component unmounts
     return function cleanup() {
       listener.remove();
     };
   }, []);
 };
 
+/**
+ * Initializes the Plaid Link SDK with the provided token configuration.
+ *
+ * @param {LinkTokenConfiguration} props - Configuration object containing the token and options.
+ */
 export const create = (props: LinkTokenConfiguration) => {
-  let token = props.token;
-  let noLoadingState = props.noLoadingState ?? false;
+  let token = props.token; // The Link token to be used for initialization.
+  let noLoadingState = props.noLoadingState ?? false; // Default to `false` if `noLoadingState` is undefined.
 
   if (Platform.OS === 'android') {
+    // Android-specific initialization with log level
     RNLinksdkAndroid?.create(
       token,
       noLoadingState,
-      props.logLevel ?? LinkLogLevel.ERROR,
+      props.logLevel ?? LinkLogLevel.ERROR // Default log level is ERROR.
     );
   } else {
+    // iOS-specific initialization
     RNLinksdkiOS?.create(token, noLoadingState);
   }
 };
 
+/**
+ * Opens the Plaid Link interface.
+ *
+ * @param {LinkOpenProps} props - Properties required to open the Plaid Link.
+ */
 export const open = async (props: LinkOpenProps) => {
   if (Platform.OS === 'android') {
+    // Android-specific open implementation
     RNLinksdkAndroid?.open(
       (result: LinkSuccess) => {
+        // Handle successful session
         if (props.onSuccess != null) {
           props.onSuccess(result);
         }
       },
       (result: LinkExit) => {
+        // Handle session exit with possible error
         if (props.onExit != null) {
           if (result.error != null && result.error.displayMessage != null) {
-            //TODO(RNSDK-118): Remove errorDisplayMessage field in next major update.
+            // Legacy field for error display message (to be removed in the next major update)
             result.error.errorDisplayMessage = result.error.displayMessage;
           }
           props.onExit(result);
         }
-      },
+      }
     );
   } else {
+    // Determine iOS presentation style
     let presentFullScreen =
       props.iOSPresentationStyle == LinkIOSPresentationStyle.FULL_SCREEN;
 
     RNLinksdkiOS?.open(
       presentFullScreen,
       (result: LinkSuccess) => {
+        // Handle successful session
         if (props.onSuccess != null) {
           props.onSuccess(result);
         }
       },
       (error: LinkError, result: LinkExit) => {
+        // Handle session exit with possible error
         if (props.onExit != null) {
           if (error) {
             var data = result || {};
-            data.error = error;
+            data.error = error; // Attach error details to the result.
             props.onExit(data);
           } else {
             props.onExit(result);
           }
         }
-      },
+      }
     );
   }
 };
 
+/**
+ * Dismisses the Plaid Link interface on iOS.
+ */
 export const dismissLink = () => {
   if (Platform.OS === 'ios') {
     RNLinksdkiOS?.dismiss();
   }
 };
 
+/**
+ * Submits additional data, such as a phone number, to the Plaid Link interface.
+ *
+ * @param {SubmissionData} data - Data to be submitted.
+ */
 export const submit = (data: SubmissionData): void => {
   if (Platform.OS === 'android') {
     RNLinksdkAndroid?.submit(data.phoneNumber);
@@ -110,18 +140,16 @@ export const submit = (data: SubmissionData): void => {
 };
 
 /**
- * Function to sync the user's transactions from their Apple card.
+ * Syncs the user's transactions from their Apple Card.
  *
- * @param {string} token - The `LinkToken` your server retrieved from the /link/token/create endpoint from the Plaid API.
- *                         This token must be associated with an accessToken.
- * @param {boolean} requestAuthorizationIfNeeded - Indicates if the user should be prompted to authorize the sync if
- *                                                 they have not already done so.
- * @param {function} completion - A callback function that is called when the sync has completed.
+ * @param {string} token - The LinkToken retrieved from Plaid's /link/token/create endpoint.
+ *                         Must be associated with an accessToken.
+ * @param {boolean} requestAuthorizationIfNeeded - Whether to prompt the user for authorization if required.
+ * @param {function} completion - A callback function invoked upon completion with an error (if any).
  *
  * @warning This method only works on iOS >= 17.4.
- * @warning This method is not supported on Android or MacCatalyst.
- * @warning This method can only be used once the user has granted access to their Apple card via a standard Link Session.
- * @warning This method requires that your app has been granted FinanceKit access from Apple.
+ * @warning Not supported on Android or MacCatalyst.
+ * @warning Requires prior authorization via a standard Link session and FinanceKit access.
  */
 export const syncFinanceKit = (
   token: string,
@@ -137,6 +165,7 @@ export const syncFinanceKit = (
     return;
   }
 
+  // Ensure the iOS native module is available
   if (!RNLinksdkiOS) {
     completion({
       type: FinanceKitErrorType.Unknown,
@@ -145,16 +174,16 @@ export const syncFinanceKit = (
     return;
   }
 
-  // Call the native method via the TurboModule interface
+  // Call the iOS native method
   RNLinksdkiOS.syncFinanceKit(
     token,
     requestAuthorizationIfNeeded,
     () => {
-      // Success callback - call the completion function with no error
+      // Success callback
       completion();
     },
     (error: FinanceKitError) => {
-      // Error callback - forward the error details to the completion function
+      // Error callback
       completion(error);
     }
   );

@@ -29,7 +29,7 @@ function isValidString(str: string): boolean {
 
 function createLinkTokenConfiguration(
   token: string,
-  noLoadingState: boolean = false,
+  noLoadingState = false,
 ): LinkTokenConfiguration {
   console.log(`token: ${token}`);
   return {
@@ -63,6 +63,7 @@ function createLinkOpenProps(): LinkOpenProps {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function PlaidLinkScreen() {
   // Render using the link_token integration. Refer to the docs
   // https://plaid.com/docs/#create-link-token on how to create

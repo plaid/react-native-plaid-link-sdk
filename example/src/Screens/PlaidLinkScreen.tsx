@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextInput, Text, TouchableOpacity} from 'react-native';
+import {Platform, TextInput, Text, TouchableOpacity} from 'react-native';
 import {styles} from '../Styles';
 
 import {
@@ -12,11 +12,13 @@ import {
   usePlaidEmitter,
   LinkIOSPresentationStyle,
   LinkTokenConfiguration,
+  FinanceKitError,
+  create,
+  open,
+  syncFinanceKit,
   submit,
   SubmissionData,
 } from 'react-native-plaid-link-sdk';
-
-import {create, open} from 'react-native-plaid-link-sdk';
 
 function isValidString(str: string): boolean {
   if (str && str.trim() !== '') {
@@ -75,6 +77,32 @@ export function PlaidLinkScreen() {
   const [text, onChangeText] = React.useState('');
   const [disabled, setDisabled] = React.useState(true);
 
+  const iOSVersionParts = String(Platform.Version).split('.');
+  const [majorVersion, minorVersion] =
+    iOSVersionParts.length >= 2 ? iOSVersionParts : [null, null];
+
+  const financeKitText = () => {
+    if (majorVersion && minorVersion) {
+      const majorInt = parseInt(majorVersion, 10);
+      const minorInt = parseInt(minorVersion, 10);
+
+      if (majorInt > 17) {
+        return <Text style={styles.button}>Sync FinanceKit</Text>;
+      } else if (majorInt === 17 && minorInt >= 4) {
+        return <Text style={styles.button}>Sync FinanceKit</Text>;
+      } else {
+        return (
+          <Text style={styles.button}>
+            FinanceKit not supported on this version of iOS
+          </Text>
+        );
+      }
+    } else {
+      // Fallback return if majorVersion or minorVersion are not provided.
+      return <Text style={styles.button}>Invalid iOS version</Text>;
+    }
+  };
+
   return (
     <>
       <TextInput
@@ -113,6 +141,21 @@ export function PlaidLinkScreen() {
           setDisabled(true);
         }}>
         <Text style={styles.button}>Open Link</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          const completionHandler = (error?: FinanceKitError) => {
+            if (error) {
+              console.error('Error:', error);
+            } else {
+              console.log('Sync completed successfully');
+            }
+          };
+          const requestAuthorizationIfNeeded = true;
+          syncFinanceKit(text, requestAuthorizationIfNeeded, completionHandler);
+        }}>
+        {financeKitText()}
       </TouchableOpacity>
     </>
   );

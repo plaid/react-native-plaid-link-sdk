@@ -571,6 +571,47 @@ export type PlaidLinkComponentProps = (PlaidLinkProps & {
     children: React.ReactNode
 });
 
+export enum FinanceKitErrorType {
+    InvalidToken = 0,
+    PermissionError = 1,
+    LinkApiError = 2,
+    PermissionAccessError = 3,
+    Unknown = 4
+}
+
+interface InvalidTokenError {
+    type: FinanceKitErrorType.InvalidToken;
+    message: string;
+}
+  
+interface PermissionError {
+    type: FinanceKitErrorType.PermissionError;
+    message: string;
+}
+  
+interface LinkApiError {
+    type: FinanceKitErrorType.LinkApiError;
+    message: string;
+}
+  
+interface PermissionAccessError {
+    type: FinanceKitErrorType.PermissionAccessError;
+    message: string;
+}
+  
+interface UnknownError {
+    type: FinanceKitErrorType.Unknown;
+    message: string;
+}
+
+export type FinanceKitError =
+  | InvalidTokenError
+  | PermissionError
+  | LinkApiError
+  | PermissionAccessError
+  | UnknownError;
+
 export interface SubmissionData {
     phoneNumber?: string;
 };
+

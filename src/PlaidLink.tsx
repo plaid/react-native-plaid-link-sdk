@@ -128,25 +128,34 @@ export const syncFinanceKit = (
   requestAuthorizationIfNeeded: boolean,
   completion: (error?: FinanceKitError) => void
 ): void => {
-    if (Platform.OS === 'android') {
-      completion({
-        type: FinanceKitErrorType.Unknown,
-        message: "FinanceKit is unavailable on Android!",
-      })
-    } else {
-      // qwe
-      // RNLinksdkiOS?.syncFinanceKit(
-      //   token, 
-      //   requestAuthorizationIfNeeded, 
-      //   () => {
-      //     completion()
-      //   },
-      //   (error: FinanceKitError) => {
-      //     completion({
-      //       type: error.type,
-      //       message: error.message,
-      //     })
-      //   }
-      // )
+  // Check platform compatibility
+  if (Platform.OS === 'android') {
+    completion({
+      type: FinanceKitErrorType.Unknown,
+      message: 'FinanceKit is unavailable on Android!',
+    });
+    return;
+  }
+
+  if (!RNLinksdkiOS) {
+    completion({
+      type: FinanceKitErrorType.Unknown,
+      message: 'FinanceKit module is not available on this platform!',
+    });
+    return;
+  }
+
+  // Call the native method via the TurboModule interface
+  RNLinksdkiOS.syncFinanceKit(
+    token,
+    requestAuthorizationIfNeeded,
+    () => {
+      // Success callback - call the completion function with no error
+      completion();
+    },
+    (error: FinanceKitError) => {
+      // Error callback - forward the error details to the completion function
+      completion(error);
     }
+  );
 };

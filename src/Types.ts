@@ -579,37 +579,10 @@ export enum FinanceKitErrorType {
     Unknown = 4
 }
 
-interface InvalidTokenError {
-    type: FinanceKitErrorType.InvalidToken;
-    message: string;
+export interface FinanceKitError {
+    type: FinanceKitErrorType; // Matches the error codes defined in the FinanceKitErrorType enum
+    message: string;           // The error message provided by native
 }
-  
-interface PermissionError {
-    type: FinanceKitErrorType.PermissionError;
-    message: string;
-}
-  
-interface LinkApiError {
-    type: FinanceKitErrorType.LinkApiError;
-    message: string;
-}
-  
-interface PermissionAccessError {
-    type: FinanceKitErrorType.PermissionAccessError;
-    message: string;
-}
-  
-interface UnknownError {
-    type: FinanceKitErrorType.Unknown;
-    message: string;
-}
-
-export type FinanceKitError =
-  | InvalidTokenError
-  | PermissionError
-  | LinkApiError
-  | PermissionAccessError
-  | UnknownError;
 
 export interface SubmissionData {
     phoneNumber?: string;

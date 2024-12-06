@@ -1,5 +1,52 @@
 # RELEASES
 
+## LinkKit V11.13.3 — 2024-12-06
+
+### React Native
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+#### Changes
+
+- Updates to clarify and resolve the following issues: 
+    - [Issue 713](https://github.com/plaid/react-native-plaid-link-sdk/issues/713)
+    - [Issue 732](https://github.com/plaid/react-native-plaid-link-sdk/issues/732)
+
+### Android
+
+Android SDK [4.6.1](https://github.com/plaid/plaid-link-android/releases/tag/v4.6.1)
+
+#### Changes
+- Add BANK_INCOME_INSIGHTS_COMPLETED, SUBMIT_EMAIL, SKIP_SUBMIT_EMAIL, SUBMIT_OTP, REMEMBER_ME_ENABLED, REMEMBER_ME_DISABLED, REMEMBER_ME_DISABLED, REMEMBER_ME_HOLDOUT, PLAID_CHECK_PANE, AUTO_SELECT_SAVED_INSTITUTION event names.
+- Add SUBMIT_DOCUMENTS, SUBMIT_DOCUMENTS_SUCCESS, SUBMIT_DOCUMENTS_ERROR, SUBMIT_EMAIL, and VERIFY_EMAIL event view names.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [5.6.1](https://github.com/plaid/plaid-link-ios/releases/tag/5.6.1)
+
+#### Changes
+
+- Add missing event names submitEmail, skipSubmitEmail, rememberMeEnabled, rememberMeDisabled, rememberMeHoldout, selectSavedInstitution, selectSavedAccount, autoSelectSavedInstitution, plaidCheckPane.
+- Add missing view names submitEmail and verifyEmail.
+- Add haptics support.
+- Fix Embedded search view dynamic resizing.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 15.0.1 |
+| iOS | >= 14.0 |
+
 ## LinkKit V11.13.2 — 2024-11-12
 
 ### React Native

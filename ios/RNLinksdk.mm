@@ -28,7 +28,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"11.13.3"; // SDK_VERSION
+    return @"12.0.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -180,6 +180,29 @@ RCT_EXPORT_METHOD(dismiss) {
                                                       completion:nil];
     self.presentingViewController = nil;
 }
+
+RCT_EXPORT_METHOD(syncFinanceKit:(NSString *)token
+                  requestAuthorizationIfNeeded:(BOOL)requestAuthorizationIfNeeded
+                  onSuccess:(RCTResponseSenderBlock)onSuccess
+                  onError:(RCTResponseSenderBlock)onError) {
+
+    [RNPlaidHelper syncFinanceKit:token
+         requestAuthorizationIfNeeded:requestAuthorizationIfNeeded
+         onSuccess:^{
+            onSuccess(@[]);
+        }
+        onError:^(NSError *error) {
+            
+            NSDictionary *financeKitError = @{
+                @"type": [NSNumber numberWithInteger: error.code],
+                @"message": error.localizedDescription
+            };
+            
+            onError(@[financeKitError]);
+        }
+    ];
+}
+                  
 
 RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
     if (self.linkHandler) {

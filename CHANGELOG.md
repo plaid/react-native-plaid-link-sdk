@@ -55,7 +55,7 @@ iOS SDK [6.0.0](https://github.com/plaid/plaid-link-ios/releases/tag/6.0.0)
 
 | Name | Version |
 |------|---------|
-| Xcode | >= 15.3.0 |
+| Xcode | >= 16.1.0 |
 | iOS | >= 14.0 |
 
 

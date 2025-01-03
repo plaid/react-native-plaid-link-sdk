@@ -138,7 +138,7 @@ openLink(linkTokenProps);
 
 #### OAuth requirements
 
-:warning: All integrations must migrate to version 9.0.0 or later of the React Native SDK (requires version 4.1.0 or later of the iOS LinkKit SDK) by January 1, 2024, to maintain support for Chase OAuth on iOS. 
+:warning: All integrations must use version 9.0.0 or later of the React Native SDK (requires version 4.1.0 or later of the iOS LinkKit SDK) to maintain support for Chase OAuth on iOS. 
 
 ##### Android OAuth Requirements
 
@@ -188,6 +188,7 @@ While these older versions are expected to continue to work without disruption, 
 | 12.0.0-beta.3     | *                        | [4.4.0+]    | 21                  | 34                     | >=6.0.0 |  14.0           | Active, supports Xcode 15.3.0 |
 | 12.0.0-beta.2     | *                        | [4.4.0+]    | 21                  | 34                     | >=6.0.0 |  14.0           | Active, supports Xcode 15.3.0 |
 | 12.0.0-beta.1     | *                        | [4.4.0+]    | 21                  | 34                     | >=6.0.0 |  14.0           | **Deprecated**                |
+| 11.13.3           | *                        | [4.6.1+]    | 21                  | 34                     | >=5.6.1 |  14.0           | Active, supports Xcode 15.0.1 |
 | 11.13.2           | *                        | [4.6.1+]    | 21                  | 34                     | >=5.6.1 |  14.0           | Active, supports Xcode 15.0.1 |
 | 11.13.1           | *                        | [4.6.1+]    | 21                  | 34                     | >=5.6.1 |  14.0           | Active, supports Xcode 15.0.1 |
 | 11.13.0           | *                        | [4.6.1+]    | 21                  | 34                     | >=5.6.1 |  14.0           | Active, supports Xcode 15.0.1 |

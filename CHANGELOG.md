@@ -4,6 +4,9 @@
 
 ### React Native
 
+- Remove deprecated PlaidLink component.
+- Remove deprecated openLink function.
+
 #### Requirements
 
 This SDK now works with any supported version of React Native.

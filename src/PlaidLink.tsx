@@ -58,6 +58,8 @@ export const open = async (props: LinkOpenProps) => {
         if (props.onSuccess != null) {
           props.onSuccess(result);
         }
+
+        return null;
       },
       (result: LinkExit) => {
         if (props.onExit != null) {
@@ -67,6 +69,8 @@ export const open = async (props: LinkOpenProps) => {
           }
           props.onExit(result);
         }
+
+        return null;
       },
     );
   } else {
@@ -79,6 +83,8 @@ export const open = async (props: LinkOpenProps) => {
         if (props.onSuccess != null) {
           props.onSuccess(result);
         }
+
+        return null;
       },
       (error: LinkError, result: LinkExit) => {
         if (props.onExit != null) {
@@ -90,6 +96,7 @@ export const open = async (props: LinkOpenProps) => {
             props.onExit(result);
           }
         }
+        return null;
       },
     );
   }
@@ -139,12 +146,14 @@ export const syncFinanceKit = (
         requestAuthorizationIfNeeded, 
         () => {
           completion()
+          return null;
         },
         (error: FinanceKitError) => {
           completion({
             type: error.type,
             message: error.message,
           })
+          return null;
         }
       )
     }

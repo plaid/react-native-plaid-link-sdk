@@ -9,8 +9,8 @@ export interface Spec extends TurboModule {
     create(token: string, noLoadingState: boolean): void;
     open(
         fullScreen: boolean,
-        onSuccess: (result: UnsafeObject<LinkSuccess>) => void,
-        onExit: (error: UnsafeObject<LinkError>, result: UnsafeObject<LinkExit>) => void,
+        onSuccess: (result: UnsafeObject<LinkSuccess>) => null,
+        onExit: (error: UnsafeObject<LinkError>, result: UnsafeObject<LinkExit>) => null,
       ): void;
     dismiss(): void;
     submit(phoneNumber: string | undefined): void;
@@ -20,8 +20,8 @@ export interface Spec extends TurboModule {
     syncFinanceKit(
       token: string,
       requestAuthorizationIfNeeded: boolean,
-      onSuccess: (success: void) => void,
-      onError: (error: FinanceKitError) => void
+      onSuccess: (success: void) => null,
+      onError: (error: FinanceKitError) => null
     ): void
 }
 

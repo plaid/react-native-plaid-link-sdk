@@ -6,23 +6,23 @@ import {UnsafeObject} from './fabricUtils';
 import {LinkSuccess, LinkExit, LinkError, FinanceKitError} from '../Types';
 
 export interface Spec extends TurboModule {
-    create(token: string, noLoadingState: boolean): void;
+    create(token: string, noLoadingState: boolean): null;
     open(
         fullScreen: boolean,
         onSuccess: (result: UnsafeObject<LinkSuccess>) => null,
         onExit: (error: UnsafeObject<LinkError>, result: UnsafeObject<LinkExit>) => null,
       ): void;
-    dismiss(): void;
-    submit(phoneNumber: string | undefined): void;
+    dismiss(): null;
+    submit(phoneNumber: string | undefined): null;
     // those two are here for event emitter methods
-    addListener(eventName: string): void;
-    removeListeners(count: Int32): void;
+    addListener(eventName: string): null;
+    removeListeners(count: Int32): null;
     syncFinanceKit(
       token: string,
       requestAuthorizationIfNeeded: boolean,
       onSuccess: (success: void) => null,
       onError: (error: FinanceKitError) => null
-    ): void
+    ): null
 }
 
 export default TurboModuleRegistry.get<Spec>('RNLinksdk');

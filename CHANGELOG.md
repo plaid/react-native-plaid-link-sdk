@@ -1,5 +1,62 @@
 # RELEASES
 
+## LinkKit V12.0.1 — 2025-01-15
+
+### React Native
+
+- Resolve issue [742](https://github.com/plaid/react-native-plaid-link-sdk/issues/742) where the SDK did not work on React Native v0.76.x
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Android
+
+Android SDK [5.0.0](https://github.com/plaid/plaid-link-android/releases/tag/v5.0.0)
+
+### Additions
+
+- Add AUTO_SUBMIT event name.
+- Add INVALID_UPDATE_USERNAME item error.
+
+### Changes
+
+- Upgrade Kotlin to 1.9.25.
+- Upgrade to target and compile SDK version 35.
+- Upgrade androidx.databinding:viewbinding library from 8.1.2 to 8.6.1.
+- Upgrade androidx.activity:activity library from 1.6.0 to 1.8.2.
+- Upgrade androidx.core:core-ktx library from 1.9.0 to 1.13.0.
+- Upgrade androidx.fragment:fragment-ktx library from 1.9.0 to 1.13.0.
+- Upgrade androidx.room:room-ktx library from 2.6.0 to 2.6.1.
+- Upgrade androidx.lifecycle:lifecycle-runtime-ktx library from 2.5.1 to 2.6.1.
+- Upgrade org.jetbrains.kotlinx:kotlinx-coroutines-core library from 1.7.1 to 1.7.3.
+
+### Removals
+
+- Remove PROFILE_ELIGIBILITY_CHECK_ERROR event name.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.8+ |
+
+### iOS
+
+iOS SDK [6.0.0](https://github.com/plaid/plaid-link-ios/releases/tag/6.0.0)
+
+#### Changes
+
+- Add support for FinanceKit and Apple card.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 16.1.0 |
+| iOS | >= 14.0 |
+
 ## LinkKit V12.0.0 — 2025-01-03
 
 ### React Native

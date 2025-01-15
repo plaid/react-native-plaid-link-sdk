@@ -59,7 +59,7 @@ export const open = async (props: LinkOpenProps) => {
           props.onSuccess(result);
         }
 
-        return null;
+        return true;
       },
       (result: LinkExit) => {
         if (props.onExit != null) {
@@ -70,7 +70,7 @@ export const open = async (props: LinkOpenProps) => {
           props.onExit(result);
         }
 
-        return null;
+        return true;
       },
     );
   } else {
@@ -84,7 +84,7 @@ export const open = async (props: LinkOpenProps) => {
           props.onSuccess(result);
         }
 
-        return null;
+        return true;
       },
       (error: LinkError, result: LinkExit) => {
         if (props.onExit != null) {
@@ -96,7 +96,7 @@ export const open = async (props: LinkOpenProps) => {
             props.onExit(result);
           }
         }
-        return null;
+        return true;
       },
     );
   }
@@ -146,14 +146,14 @@ export const syncFinanceKit = (
         requestAuthorizationIfNeeded, 
         () => {
           completion()
-          return null;
+          return true;
         },
         (error: FinanceKitError) => {
           completion({
             type: error.type,
             message: error.message,
           })
-          return null;
+          return true;
         }
       )
     }

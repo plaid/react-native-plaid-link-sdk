@@ -6,22 +6,22 @@ import {UnsafeObject} from './fabricUtils';
 import {LinkSuccess, LinkExit} from '../Types';
 
 export interface Spec extends TurboModule {
-    create(token: string, noLoadingState: boolean, logLevel: string): null;
+    create(token: string, noLoadingState: boolean, logLevel: string): void;
     open(
-        onSuccess: (result: UnsafeObject<LinkSuccess>) => null,
-        onExit: (result: UnsafeObject<LinkExit>) => null,
-      ): null;
+        onSuccess: (result: UnsafeObject<LinkSuccess>) => void,
+        onExit: (result: UnsafeObject<LinkExit>) => void,
+      ): void;
     startLinkActivityForResult(
         token: string,
         noLoadingState: boolean,
         logLevel: string,
-        onSuccessCallback: (result: UnsafeObject<LinkSuccess>) => null,
-        onExitCallback: (result: UnsafeObject<LinkExit>) => null
+        onSuccessCallback: (result: UnsafeObject<LinkSuccess>) => void,
+        onExitCallback: (result: UnsafeObject<LinkExit>) => void
     ): void;
-    submit(phoneNumber: string | undefined): null;
+    submit(phoneNumber: string | undefined): void;
     // those two are here for event emitter methods
-    addListener(eventName: string): null;
-    removeListeners(count: Double): null;
+    addListener(eventName: string): void;
+    removeListeners(count: Double): void;
 }
 
 export default TurboModuleRegistry.get<Spec>('PlaidAndroid');

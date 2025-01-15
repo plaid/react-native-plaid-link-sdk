@@ -184,6 +184,7 @@ While these older versions are expected to continue to work without disruption, 
 
 | Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |
 |-------------------|--------------------------|-------------|---------------------|------------------------|---------|-----------------|-------------------------------|
+| 12.0.1            | *                        | [5.0.0+]    | 21                  | 34                     | >=6.0.0 |  14.0           | Active, supports Xcode 16.1.0 |
 | 12.0.0            | *                        | [5.0.0+]    | 21                  | 34                     | >=6.0.0 |  14.0           | Active, supports Xcode 16.1.0 |
 | 12.0.0-beta.3     | *                        | [4.4.0+]    | 21                  | 34                     | >=6.0.0 |  14.0           | Active, supports Xcode 15.3.0 |
 | 12.0.0-beta.2     | *                        | [4.4.0+]    | 21                  | 34                     | >=6.0.0 |  14.0           | Active, supports Xcode 15.3.0 |

@@ -1,118 +1,191 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
+import { Platform, TextInput, Text, TouchableOpacity, View } from 'react-native';
+import { styles } from './Styles'; // Adjust import if needed for the actual path
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+  LinkExit,
+  LinkEvent,
+  LinkLogLevel,
+  LinkSuccess,
+  dismissLink,
+  LinkOpenProps,
+  usePlaidEmitter,
+  LinkIOSPresentationStyle,
+  LinkTokenConfiguration,
+  FinanceKitError,
+  create,
+  open,
+  syncFinanceKit,
+  submit,
+  SubmissionData,
+  EmbeddedLinkView, // Make sure this is imported
+} from 'react-native-plaid-link-sdk';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+// EmbeddedLinkView for displaying once a token is entered
+const EmbeddedView = ({ token }: { token: string }) => {
+  let content;
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
+  if (token) {
+    content = (
+      <View>
+        <EmbeddedLinkView
+          token={token}
+          iOSPresentationStyle={LinkIOSPresentationStyle.MODAL}
+          onEvent={(event: LinkEvent) => {
+            console.log('onEvent', event);
+          }}
+          onSuccess={(success: LinkSuccess) => {
+            console.log('onSuccess', success);
+          }}
+          onExit={(exit: LinkExit) => {
+            console.log('onExit', exit);
+          }}
+          style={styles.embedded}
+        />
+      </View>
+    );
+  } else {
+    content = (
+      <Text style={{ fontSize: 24, color: '#2196F3', textAlign: 'center' }}>
+        Enter Link Token
       </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
+    );
+  }
+
+  return <View style={{ padding: 24 }}>{content}</View>;
+};
+
+function isValidString(str: string): boolean {
+  return str && str.trim() !== '';
 }
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+function createLinkTokenConfiguration(
+  token: string,
+  noLoadingState: boolean = false
+): LinkTokenConfiguration {
+  console.log(`token: ${token}`);
+  return {
+    token: token,
+    noLoadingState: noLoadingState,
+  };
+}
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+function createSubmissionData(phoneNumber: string): SubmissionData {
+  return {
+    phoneNumber: phoneNumber,
+  };
+}
+
+function createLinkOpenProps(): LinkOpenProps {
+  return {
+    onSuccess: (success: LinkSuccess) => {
+      console.log('Success: ', success);
+      success.metadata.accounts.forEach(it => console.log('accounts', it));
+    },
+    onExit: (linkExit: LinkExit) => {
+      console.log('Exit: ', linkExit);
+      dismissLink();
+    },
+    iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
+    logLevel: LinkLogLevel.ERROR,
+  };
+}
+
+const PlaidLinkScreen = () => {
+  // Use event emitter to get real-time events during a Link Session.
+  usePlaidEmitter((event: LinkEvent) => {
+    console.log(event);
+  });
+
+  const [text, onChangeText] = React.useState('');
+  const [disabled, setDisabled] = React.useState(true);
+
+  const iOSVersionParts = String(Platform.Version).split('.');
+  const [majorVersion, minorVersion] = iOSVersionParts.length >= 2 ? iOSVersionParts : [null, null];
+
+  const financeKitText = () => {
+    if (majorVersion && minorVersion) {
+      const majorInt = parseInt(majorVersion, 10);
+      const minorInt = parseInt(minorVersion, 10);
+
+      if (majorInt > 17) {
+        return <Text style={styles.button}>Sync FinanceKit</Text>;
+      } else if (majorInt === 17 && minorInt >= 4) {
+        return <Text style={styles.button}>Sync FinanceKit</Text>;
+      } else {
+        return (
+          <Text style={styles.button}>
+            FinanceKit not supported on this version of iOS
+          </Text>
+        );
+      }
+    } else {
+      return <Text style={styles.button}>Invalid iOS version</Text>;
+    }
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+    <View style={{ padding: 24 }}>
+      <TextInput
+        style={styles.input}
+        onChangeText={onChangeText}
+        value={text}
+        placeholder="link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        placeholderTextColor={'#D3D3D3'}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          if (isValidString(text)) {
+            const tokenConfiguration = createLinkTokenConfiguration(text);
+            create(tokenConfiguration);
+            setDisabled(false);
+          }
+        }}
+      >
+        <Text style={styles.button}>Create Link</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        disabled={disabled}
+        style={disabled ? styles.disabledButton : styles.button}
+        onPress={() => {
+          const submissionData = createSubmissionData('415-555-0015');
+          submit(submissionData);
+        }}
+      >
+        <Text style={styles.button}>Submit Layer Phone Number</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        disabled={disabled}
+        style={disabled ? styles.disabledButton : styles.button}
+        onPress={() => {
+          const openProps = createLinkOpenProps();
+          open(openProps);
+          setDisabled(true);
+        }}
+      >
+        <Text style={styles.button}>Open Link</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          const completionHandler = (error?: FinanceKitError) => {
+            if (error) {
+              console.error('Error:', error);
+            } else {
+              console.log('Sync completed successfully');
+            }
+          };
+          const requestAuthorizationIfNeeded = true;
+          syncFinanceKit(text, requestAuthorizationIfNeeded, completionHandler);
+        }}
+      >
+        {financeKitText()}
+      </TouchableOpacity>
+
+      {/* Embedded Link View below the buttons */}
+      <EmbeddedView token={text} />
+    </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+export default PlaidLinkScreen;

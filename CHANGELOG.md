@@ -4,6 +4,7 @@
 
 ### React Native
 
+- Resolves issues with react native >= 0.76.0.
 - Remove deprecated PlaidLink component.
 - Remove deprecated openLink function.
 

@@ -21,7 +21,7 @@ export interface Spec extends TurboModule {
       token: string,
       requestAuthorizationIfNeeded: boolean,
       onSuccess: (success: boolean) => void,
-      onError: (error: FinanceKitError) => void
+      onError: (error: UnsafeObject<FinanceKitError>) => void
     ): void
 }
 

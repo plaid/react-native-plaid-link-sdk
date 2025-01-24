@@ -1,79 +1,34 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Example App
 
-# Getting Started
+Our example app provides a minimal React Native app that implements Plaid Link. This app allows you to link a sample bank account.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+In order to test Plaid Link using this example app you'll need the following:
 
-## Step 1: Start the Metro Server
+- A [Plaid Account](https://dashboard.plaid.com/signup) to get API keys.
+- A [Link Token](https://plaid.com/docs/api/tokens/#linktokencreate) - you can quickly fetch one using your API keys and our [Postman collection](https://github.com/plaid/plaid-postman).
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+## Running the example app
 
-To start Metro, run the following command from the _root_ of your React Native project:
+> Note: This setup assumes you've already setup your React Native [development environment](https://reactnative.dev/docs/environment-setup). 
 
-```bash
-# using npm
-npm start
+From the root directory of our SDK. 
 
-# OR using Yarn
-yarn start
-```
+1. `cd exampleReactNative76`
+2. `npm install`
+3. `cd ios`
+4. `pod install`
+5. `cd ..`
+6. `npm run ios`
 
-## Step 2: Start your Application
+## Testing Plaid Link
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+1. Fetch a [Link Token](https://plaid.com/docs/api/tokens/#linktokencreate).
+2. Paste your token into the `TextField` in the example app.
+3. Press "Create Link" then "OPEN LINK" (see embedded Link once it loads)
+4. If you testing in our Sandbox you can use our provided [test credentials](https://plaid.com/docs/sandbox/test-credentials/) for any financial institution.
 
-### For Android
+	> username: user_good
+	
+	> password: pass_good
 
-```bash
-# using npm
-npm run android
 
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.

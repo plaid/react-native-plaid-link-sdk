@@ -52,3 +52,7 @@ dist/
 example/android/build/
 example/.yalc
 example/yalc.lock
+
+exampleReactNative76/android/build/
+exampleReactNative76/.yalc
+exampleReactNative76/yalc.lock

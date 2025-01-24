@@ -7,7 +7,7 @@ PODS:
   - hermes-engine (0.76.6):
     - hermes-engine/Pre-built (= 0.76.6)
   - hermes-engine/Pre-built (0.76.6)
-  - Plaid (6.0.1)
+  - Plaid (6.0.2)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1243,11 +1243,11 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-plaid-link-sdk (12.0.0):
+  - react-native-plaid-link-sdk (12.0.1):
     - DoubleConversion
     - glog
     - hermes-engine
-    - Plaid (~> 6.0.0)
+    - Plaid (~> 6.0.2)
     - RCT-Folly (= 2024.01.01.00)
     - RCTRequired
     - RCTTypeSafety
@@ -1746,7 +1746,7 @@ SPEC CHECKSUMS:
   fmt: 10c6e61f4be25dc963c36bd73fc7b1705fe975be
   glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
   hermes-engine: 1949ca944b195a8bde7cbf6316b9068e19cf53c6
-  Plaid: 403e492432a1d0af6ebe8556a1ad1909a18857aa
+  Plaid: ba4e8d09660c9eddb1fd76518b2e5ec1b84adfe2
   RCT-Folly: 84578c8756030547307e4572ab1947de1685c599
   RCTDeprecation: 063fc281b30b7dc944c98fe53a7e266dab1a8706
   RCTRequired: 8eda2a5a745f6081157a4f34baac40b65fe02b31
@@ -1776,7 +1776,7 @@ SPEC CHECKSUMS:
   React-logger: d42a53754a7252cc7a851315f0da2e46b450ea92
   React-Mapbuffer: 89885d1518433a462fe64b68bf5e097997380090
   React-microtasksnativemodule: 36341e09dcd1df535503e6ed2ddf88f10da56d52
-  react-native-plaid-link-sdk: ce4ab622ed6eb5c2b34cb0e21c791d4bbd801055
+  react-native-plaid-link-sdk: 113104bb2873af4fb82c64db547dc8c6ab0e08bb
   React-nativeconfig: 539ff4de6ce3b694e8e751080568c281c84903ce
   React-NativeModulesApple: 702246817c286d057e23fe4b1302019796e62521
   React-perflogger: f260e2de95f9dbd002035251559c13bf1f0643d4

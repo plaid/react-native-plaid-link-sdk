@@ -19,8 +19,9 @@
 #import <react_native_plaid_link_sdk/react_native_plaid_link_sdk-Swift.h>
 
 #else
-#ifdef USE_FRAMEWORKS
+#if __has_include(<react_native_plaid_link_sdk/react_native_plaid_link_sdk-Swift.h>)
 // Include the header for projects using frameworks (`use_frameworks!` in the Podfile).
+// Frameworks are being used (static or dynamic).
 #import <react_native_plaid_link_sdk/react_native_plaid_link_sdk-Swift.h>
 
 #else
@@ -45,6 +46,7 @@
  3. Refer to these GitHub issues for more details:
     - https://github.com/plaid/react-native-plaid-link-sdk/issues/713
     - https://github.com/plaid/react-native-plaid-link-sdk/issues/732
+    - https://github.com/plaid/react-native-plaid-link-sdk/issues/747
 
  ### Troubleshooting:
  - If `USE_FRAMEWORKS` is not working, ensure it is correctly passed as a preprocessor macro in your Xcode build settings.

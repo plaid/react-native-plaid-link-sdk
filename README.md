@@ -33,12 +33,6 @@ npm install --save react-native-plaid-link-sdk
 
 ### iOS Setup
 
-Add `Plaid` to your project’s Podfile as follows (likely located at `ios/Podfile`). The latest version is ![version](https://img.shields.io/cocoapods/v/Plaid).
-
-```bash switcher=false
-pod 'Plaid', '~> <insert latest version>'
-```
-
 Autolinking should install the CocoaPods dependencies for iOS project. If it fails you can run 
 
 ```sh

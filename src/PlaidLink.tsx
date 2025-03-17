@@ -51,7 +51,7 @@ export const create = (props: LinkTokenConfiguration) => {
   }
 };
 
-export const open = async (props: LinkOpenProps) => {
+export const open = (props: LinkOpenProps) => {
   if (Platform.OS === 'android') {
     RNLinksdkAndroid?.open(
       (result: LinkSuccess) => {

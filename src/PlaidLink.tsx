@@ -95,6 +95,12 @@ export const open = async (props: LinkOpenProps) => {
   }
 };
 
+/**
+ * Clears any previously created Plaid session and associated resources
+ * that were captured during a prior call to create(). This method should
+ * be invoked before starting a new layer session with create() to ensure
+ * proper cleanup and avoid conflicts from lingering state or resources.
+ */
 export const destroy = async () => {
   if (Platform.OS === 'android') {
     await RNLinksdkAndroid?.destroy();

@@ -180,13 +180,12 @@ submit(phoneNumber) // <-- might not submit correctly
 
 #### Solution:
 ```ts
-create(token1)
+create(tokenConfiguration1)
 async () => {
   try {
     await destroy(); // Clear previous session state
     create(tokenConfiguration2);
-    const submissionData = createSubmissionData(phoneNumber);
-    submit(submissionData);
+    submit(phoneNumber);
   } catch (e) {
     console.error('Error during flow:', e);
   }

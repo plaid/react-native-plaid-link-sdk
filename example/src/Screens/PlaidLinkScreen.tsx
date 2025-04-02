@@ -14,6 +14,7 @@ import {
   LinkTokenConfiguration,
   FinanceKitError,
   create,
+  destroy,
   open,
   syncFinanceKit,
   submit,
@@ -24,7 +25,7 @@ function isValidString(str: string): boolean {
   if (str && str.trim() !== '') {
     return true;
   }
-  return false;
+  return true;
 }
 
 function createLinkTokenConfiguration(
@@ -116,7 +117,7 @@ export function PlaidLinkScreen() {
         style={styles.button}
         onPress={() => {
           if (isValidString(text)) {
-            const tokenConfiguration = createLinkTokenConfiguration(text);
+            const tokenConfiguration = createLinkTokenConfiguration(<INSERT_SANDBOX_TOKEN_1>);
             create(tokenConfiguration);
             setDisabled(false);
           }
@@ -126,10 +127,17 @@ export function PlaidLinkScreen() {
       <TouchableOpacity
         disabled={disabled}
         style={disabled ? styles.disabledButton : styles.button}
-        onPress={() => {
-          const submissionData = createSubmissionData('415-555-0015');
-          submit(submissionData);
-        }}>
+        onPress={async () => {
+  try {
+    await destroy(); // Wait for destroy to complete
+    const tokenConfiguration = createLinkTokenConfiguration(<INSERT_SANDBOX_TOKEN_2>);
+    create(tokenConfiguration);
+    const submissionData = createSubmissionData('415-555-0015');
+    submit(submissionData);
+  } catch (e) {
+    console.error('Error during flow:', e);
+  }
+}}>
         <Text style={styles.button}>Submit Layer Phone Number</Text>
       </TouchableOpacity>
       <TouchableOpacity

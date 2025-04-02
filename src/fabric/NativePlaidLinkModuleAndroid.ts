@@ -11,6 +11,7 @@ export interface Spec extends TurboModule {
         onSuccess: (result: UnsafeObject<LinkSuccess>) => void,
         onExit: (result: UnsafeObject<LinkExit>) => void,
       ): void;
+    destroy(): Promise<void>;
     startLinkActivityForResult(
         token: string,
         noLoadingState: boolean,

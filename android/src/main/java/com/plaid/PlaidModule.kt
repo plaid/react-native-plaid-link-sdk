@@ -3,10 +3,13 @@ package com.plaid
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.util.Log
 import com.facebook.react.bridge.ActivityEventListener
 import com.facebook.react.bridge.Callback
+import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.module.annotations.ReactModule
@@ -22,6 +25,8 @@ import com.plaid.link.result.LinkResultHandler
 import com.plaid.link.SubmissionData
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 @ReactModule(name = PlaidModule.NAME)
 class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
@@ -130,6 +135,34 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       throw LinkException("Create must be called before open.")
     }
   }
+
+  @ReactMethod
+  override fun destroy(promise: Promise) {
+    val latch = CountDownLatch(1)
+
+    Handler(Looper.getMainLooper()).post {
+      try {
+        Plaid.destroy()
+      } catch (e: Exception) {
+        promise.reject("DESTROY_FAILED", "Failed to destroy Plaid", e)
+        latch.countDown()
+        return@post
+      }
+      latch.countDown()
+    }
+
+    try {
+      // Wait for main-thread work to finish (max 5 seconds)
+      if (!latch.await(5, TimeUnit.SECONDS)) {
+        promise.reject("TIMEOUT", "Timed out waiting for destroy() to complete.")
+      } else {
+        promise.resolve(null)
+      }
+    } catch (e: InterruptedException) {
+      promise.reject("INTERRUPTED", "Thread was interrupted", e)
+    }
+  }
+
 
   @ReactMethod
   @Suppress("unused")

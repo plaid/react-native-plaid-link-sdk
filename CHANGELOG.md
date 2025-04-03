@@ -5,6 +5,7 @@
 ### React Native
 
 - Adds `destroy()` method for Android.
+- Remove `async` from open method.
 
 #### Requirements
 

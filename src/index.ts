@@ -2,6 +2,7 @@
 import {
     create,
     open,
+    destroy,
     dismissLink,
     usePlaidEmitter,
     syncFinanceKit,
@@ -12,6 +13,7 @@ export * from './Types';
 export {
     create,
     open,
+    destroy,
     dismissLink,
     usePlaidEmitter,
     syncFinanceKit,

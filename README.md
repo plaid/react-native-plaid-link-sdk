@@ -166,6 +166,34 @@ The React Native Plaid module emits `onEvent` events throughout the account link
   })
 ```
 
+#### Clearing Previous Session State with `destroy()`
+
+The `destroy()` method clears state and resources from a previously opened session.  
+It's especially useful if you're seeing unexpected behavior when calling `create()` multiple times — for example, if the phone number isn't submitting properly after multiple `create()` calls.
+
+#### Problem scenario:
+```ts
+create(tokenConfiguration1)
+create(tokenConfiguration2)
+submit(phoneNumber) // <-- might not submit correctly
+```
+
+#### Solution:
+```ts
+create(tokenConfiguration1)
+async () => {
+  try {
+    await destroy(); // Clear previous session state
+    create(tokenConfiguration2);
+    submit(phoneNumber);
+  } catch (e) {
+    console.error('Error during flow:', e);
+  }
+}
+```
+
+By calling destroy() before the second create(), you ensure a clean state, preventing issues like failed phone number submissions.
+
 ## Upgrading
 
 Plaid releases updates to the SDK approximately every few months. For the best user experience, we recommend using the latest version of the SDK.

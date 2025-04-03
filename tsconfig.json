@@ -22,5 +22,6 @@
     "jest.config.js",
     "example",
     "FabricExample",
+    "exampleReactNative76",
   ]
 }

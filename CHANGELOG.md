@@ -1,5 +1,53 @@
 # RELEASES
 
+## LinkKit V12.2.0 — 2025-06-13
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Android
+
+Android SDK [5.1.1](https://github.com/plaid/plaid-link-android/releases/tag/v5.1.1)
+
+### Additions
+
+- Add AUTO_SUBMIT event name.
+- Add INVALID_UPDATE_USERNAME item error.
+
+### Changes
+
+- Add Flutter SDK version tracking.
+- Fixed edge to edge layout overlap issue in Android 15+.
+
+### Removals
+
+- Reduced SDK size by 20%, from 6.2 MB down to 5.0 MB.
+- Removed org.bouncycastle:bcpkix-jdk15to18 dependency.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.9.25+ (Kotlin integrations only) |
+
+### iOS
+
+iOS SDK [6.2.1](https://github.com/plaid/plaid-link-ios/releases/tag/6.2.1)
+
+#### Changes
+
+- Add Flutter SDK version tracking.
+- Reduced SDK size from 13.2MB to 8.9MB
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 16.1.0 |
+| iOS | >= 14.0 |
+
 ## LinkKit V12.1.1 — 2025-04-03
 
 ### React Native

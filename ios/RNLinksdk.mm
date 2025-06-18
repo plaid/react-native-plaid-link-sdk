@@ -223,13 +223,9 @@ RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
         return PLKEnvironmentSandbox;
     }
 
-    if ([string isEqualToString:@"development"]) {
-        return PLKEnvironmentDevelopment;
-    }
-
-    // Default to Development
-    NSLog(@"Unexpected environment string value: %@. Expected one of: production, sandbox, or development.", string);
-    return PLKEnvironmentDevelopment;
+    // Default to Sandbox
+    NSLog(@"Unexpected environment string value: %@. Expected one of: production, sandbox.", string);
+    return PLKEnvironmentSandbox;
 }
 
 + (NSDictionary *)dictionaryFromSuccess:(PLKLinkSuccess *)success {

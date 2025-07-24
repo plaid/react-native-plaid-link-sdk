@@ -28,7 +28,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"12.2.1"; // SDK_VERSION
+    return @"12.3.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {

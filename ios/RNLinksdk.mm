@@ -522,6 +522,16 @@ RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
             return @"AUTO_SELECT_SAVED_INSTITUTION";
         case PLKEventNameValuePlaidCheckPane:
             return @"PLAID_CHECK_PANE";
+        case PLKEventNameValueAutoSubmitPhone:
+            return @"AUTO_SUBMIT_PHONE";
+        case PLKEventNameValueIdentityMatchPassed:
+            return @"IDENTITY_MATCH_PASSED";
+        case PLKEventNameValueIdentityMatchFailed:
+            return @"IDENTITY_MATCH_FAILED";
+        case PLKEventNameValueIssueFollowed:
+            return @"ISSUE_FOLLOWED";
+        case PLKEventNameValueSelectAccount:
+            return @"SELECT_ACCOUNT";
     }
      return @"unknown";
 }

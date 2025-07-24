@@ -350,6 +350,7 @@ RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
             @"linkSessionId": metadata.linkSessionID ?: @"",
             @"mfaType": [self stringForMfaType:metadata.mfaType] ?: @"",
             @"requestId": metadata.requestID ?: @"",
+            @"issueId": metadata.issueID ?: @"",
             @"timestamp": [self iso8601StringFromDate:metadata.timestamp] ?: @"",
             @"viewName": [self stringForViewName:metadata.viewName] ?: @"",
             @"metadata_json": metadata.metadataJSON ?: @"",

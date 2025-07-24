@@ -36,6 +36,7 @@ class RNEventMetadataAdapter : JsonSerializer<LinkEventMetadata> {
       addProperty("linkSessionId", src.linkSessionId)
       addProperty("mfaType", src.mfaType)
       addProperty("requestId", src.requestId)
+      addProperty("issueId", src.issueId)
       addProperty("timestamp", src.timestamp)
       addProperty("viewName", src.viewName?.jsonValue ?: "")
       addProperty("metadata_json", src.metadataJson)

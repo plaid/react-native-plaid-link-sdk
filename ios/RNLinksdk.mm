@@ -28,7 +28,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"12.2.1"; // SDK_VERSION
+    return @"12.3.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -350,6 +350,7 @@ RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
             @"linkSessionId": metadata.linkSessionID ?: @"",
             @"mfaType": [self stringForMfaType:metadata.mfaType] ?: @"",
             @"requestId": metadata.requestID ?: @"",
+            @"issueId": metadata.issueID ?: @"",
             @"timestamp": [self iso8601StringFromDate:metadata.timestamp] ?: @"",
             @"viewName": [self stringForViewName:metadata.viewName] ?: @"",
             @"metadata_json": metadata.metadataJSON ?: @"",
@@ -522,6 +523,16 @@ RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
             return @"AUTO_SELECT_SAVED_INSTITUTION";
         case PLKEventNameValuePlaidCheckPane:
             return @"PLAID_CHECK_PANE";
+        case PLKEventNameValueAutoSubmitPhone:
+            return @"AUTO_SUBMIT_PHONE";
+        case PLKEventNameValueIdentityMatchPassed:
+            return @"IDENTITY_MATCH_PASSED";
+        case PLKEventNameValueIdentityMatchFailed:
+            return @"IDENTITY_MATCH_FAILED";
+        case PLKEventNameValueIssueFollowed:
+            return @"ISSUE_FOLLOWED";
+        case PLKEventNameValueSelectAccount:
+            return @"SELECT_ACCOUNT";
     }
      return @"unknown";
 }

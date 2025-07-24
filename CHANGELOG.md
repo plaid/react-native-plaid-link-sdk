@@ -1,5 +1,65 @@
 # RELEASES
 
+## LinkKit V12.3.0 — 2025-07-24
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Android
+
+Android SDK [5.2.0](https://github.com/plaid/plaid-link-android/releases/tag/v5.2.0)
+
+### Additions
+
+- Add ISSUE_FOLLOWED, IDENTITY_MATCH_PASSED, and IDENTITY_MATCH_FAILED event names and issue_id event metadata field.
+
+### Changes
+
+- Improve destroy() API behavior in edge cases.
+
+### Removals
+
+- Reduce SDK size by 11.5% down from 5.0MB to 4.5MB. 
+- Remove the androidx.recyclerview:recyclerview, androidx.constraintlayout:constraintlayout, and io.coil-kt:coil dependencies.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.9.25+ (Kotlin integrations only) |
+
+### iOS
+
+iOS SDK [6.3.0](https://github.com/plaid/plaid-link-ios/releases/tag/6.3.0)
+
+### SwiftUI API Enhancements
+
+- Added `makePlaidLinkSheet()` to `Handler`: a convenience method that returns a `View` to present LinkKit using `.fullScreenCover` in SwiftUI applications.
+- Added `plaidLink(isPresented:handler:)`: a SwiftUI view modifier to attach LinkKit to any `View`, such as a `Button`, using a pre-configured handler.
+- Added `plaidLink(isPresented:token:onSuccess:onExit:onEvent:onLoad:errorView:)`: a flexible SwiftUI modifier for creating LinkKit sessions with just a link token and callbacks—no `Handler` required.
+
+### Testing
+
+- Improved FinanceKit testing capabilities in Sandbox.
+
+### Event Tracking Improvements
+
+- Added event names:
+  - `IDENTITY_MATCH_PASSED`
+  - `IDENTITY_MATCH_FAILED`
+  - `ISSUE_FOLLOWED`
+  - `SELECT_ACCOUNT`
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 16.1.0 |
+| iOS | >= 14.0 |
+
+
 ## LinkKit V12.2.1 — 2025-06-21
 
 #### Requirements

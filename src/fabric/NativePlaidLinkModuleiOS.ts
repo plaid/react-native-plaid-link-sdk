@@ -20,6 +20,7 @@ export interface Spec extends TurboModule {
     syncFinanceKit(
       token: string,
       requestAuthorizationIfNeeded: boolean,
+      simulatedBehavior: boolean,
       onSuccess: (success: boolean) => void,
       onError: (error: UnsafeObject<FinanceKitError>) => void
     ): void

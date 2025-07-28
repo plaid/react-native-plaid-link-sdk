@@ -138,6 +138,7 @@ export const submit = (data: SubmissionData): void => {
 export const syncFinanceKit = (
   token: string,
   requestAuthorizationIfNeeded: boolean,
+  simulatedBehavior: boolean,
   completion: (error?: FinanceKitError) => void
 ): void => {
     if (Platform.OS === 'android') {
@@ -148,7 +149,8 @@ export const syncFinanceKit = (
     } else {
       RNLinksdkiOS?.syncFinanceKit(
         token, 
-        requestAuthorizationIfNeeded, 
+        requestAuthorizationIfNeeded,
+        simulatedBehavior,
         () => {
           completion()
         },

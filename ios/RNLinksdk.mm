@@ -183,11 +183,13 @@ RCT_EXPORT_METHOD(dismiss) {
 
 RCT_EXPORT_METHOD(syncFinanceKit:(NSString *)token
                   requestAuthorizationIfNeeded:(BOOL)requestAuthorizationIfNeeded
+                  simulatedBehavior:(BOOL)simulatedBehavior
                   onSuccess:(RCTResponseSenderBlock)onSuccess
                   onError:(RCTResponseSenderBlock)onError) {
 
     [RNPlaidHelper syncFinanceKit:token
          requestAuthorizationIfNeeded:requestAuthorizationIfNeeded
+         simulatedBehavior: simulatedBehavior
          onSuccess:^{
             onSuccess(@[]);
         }
@@ -202,7 +204,6 @@ RCT_EXPORT_METHOD(syncFinanceKit:(NSString *)token
         }
     ];
 }
-                  
 
 RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
     if (self.linkHandler) {

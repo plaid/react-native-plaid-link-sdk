@@ -153,7 +153,13 @@ export function PlaidLinkScreen() {
             }
           };
           const requestAuthorizationIfNeeded = true;
-          syncFinanceKit(text, requestAuthorizationIfNeeded, completionHandler);
+          const simulateBehavior = true; // Simulate FinanceKit access (this can only be used in sandbox).
+          syncFinanceKit(
+            text,
+            requestAuthorizationIfNeeded,
+            simulateBehavior,
+            completionHandler,
+          );
         }}>
         {financeKitText()}
       </TouchableOpacity>

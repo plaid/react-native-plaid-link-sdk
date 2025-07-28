@@ -28,7 +28,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"12.3.0"; // SDK_VERSION
+    return @"12.3.1"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -183,11 +183,13 @@ RCT_EXPORT_METHOD(dismiss) {
 
 RCT_EXPORT_METHOD(syncFinanceKit:(NSString *)token
                   requestAuthorizationIfNeeded:(BOOL)requestAuthorizationIfNeeded
+                  simulatedBehavior:(BOOL)simulatedBehavior
                   onSuccess:(RCTResponseSenderBlock)onSuccess
                   onError:(RCTResponseSenderBlock)onError) {
 
     [RNPlaidHelper syncFinanceKit:token
          requestAuthorizationIfNeeded:requestAuthorizationIfNeeded
+         simulatedBehavior: simulatedBehavior
          onSuccess:^{
             onSuccess(@[]);
         }
@@ -202,7 +204,6 @@ RCT_EXPORT_METHOD(syncFinanceKit:(NSString *)token
         }
     ];
 }
-                  
 
 RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
     if (self.linkHandler) {

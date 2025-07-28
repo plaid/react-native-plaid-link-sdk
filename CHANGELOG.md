@@ -1,5 +1,53 @@
 # RELEASES
 
+## LinkKit V12.3.1 — 2025-07-28
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Android
+
+Android SDK [5.2.0](https://github.com/plaid/plaid-link-android/releases/tag/v5.2.0)
+
+### Additions
+
+- Add ISSUE_FOLLOWED, IDENTITY_MATCH_PASSED, and IDENTITY_MATCH_FAILED event names and issue_id event metadata field.
+
+### Changes
+
+- Improve destroy() API behavior in edge cases.
+
+### Removals
+
+- Reduce SDK size by 11.5% down from 5.0MB to 4.5MB. 
+- Remove the androidx.recyclerview:recyclerview, androidx.constraintlayout:constraintlayout, and io.coil-kt:coil dependencies.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.9.25+ (Kotlin integrations only) |
+
+### iOS
+
+iOS SDK [6.3.1](https://github.com/plaid/plaid-link-ios/releases/tag/6.3.1)
+
+### Changes
+
+- Expose Finance Kit sync simulated behavior to Objective-C (React Native).
+- Updated Layer submit API
+- Added Layer event LAYER_AUTOFILL_NOT_AVAILABLE
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 16.1.0 |
+| iOS | >= 14.0 |
+
+
 ## LinkKit V12.3.0 — 2025-07-24
 
 #### Requirements

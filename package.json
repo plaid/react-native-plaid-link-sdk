@@ -73,7 +73,7 @@
       "javaPackageName": "com.plaid"
     },
     "ios": {
-      "componentProvider": "RNPlaidLinkComponentProvider"
+      "componentProvider": "PLKEmbeddedViewCls"
     }
   }
 }

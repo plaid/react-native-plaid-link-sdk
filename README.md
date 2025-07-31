@@ -202,6 +202,13 @@ Major SDK versions are released annually. SDK versions are supported for two yea
 
 While these older versions are expected to continue to work without disruption, Plaid will not provide assistance with unsupported SDK versions. 
 
+## Migration guides
+
+11.x->12.x: Removed the `PlaidLink` component and `openLink` function, which were deprecated in version 11.6.0. If you are using this method of opening Link, replace it with the new process that uses `create` and then `open`. For sample code, see [Version 11.6](https://github.com/plaid/react-native-plaid-link-sdk?tab=readme-ov-file#version--1160) or the [Plaid React Native Link docs](https://plaid.com/docs/link/react-native).
+9.x/10.x-> 11.x: See [React Native SDK 11 Migration Guide](https://github.com/plaid/react-native-plaid-link-sdk/blob/master/v11-migration-guide.md)
+
+If migrating from older versions, see the [docs](https://plaid.com/docs/link/react-native/#migration-guides) for more information.
+
 ## Version compatibility
 
 | Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |

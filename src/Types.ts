@@ -432,9 +432,13 @@ export interface LinkEventMetadata {
     institutionSearchQuery?: string;
     isUpdateMode?: string;
     matchReason?: string;
+    issueId?: string;
+    issueDescription?: string;
+    issueDetectedAt?: string;
   // see possible values for selection at https://plaid.com/docs/link/web/#link-web-onevent-selection
     selection?: null | string;
     timestamp: string;
+    metadata_json: string;
 }
 
 export enum LinkEventName {

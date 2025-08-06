@@ -12,6 +12,7 @@ This SDK now works with any supported version of React Native.
 - metadata_json, issueId, issueDescription, issueDetectedAt to LinkEventMetadata.
 - Add dateOfBirth to SubmissionData.
 - Update submit APIs to allow for date of birth.
+- Add LAYER_AUTOFILL_NOT_AVAILABLE to LinkEventName.
 
 ### Android
 

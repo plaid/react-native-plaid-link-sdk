@@ -10,6 +10,7 @@ This SDK now works with any supported version of React Native.
 
 - Updates Android and iOS SDKs to the latest versions.
 - metadata_json, issueId, issueDescription, issueDetectedAt to LinkEventMetadata.
+- Add dateOfBirth to SubmissionData.
 - Update submit APIs to allow for date of birth.
 
 ### Android

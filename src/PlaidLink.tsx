@@ -115,9 +115,9 @@ export const dismissLink = () => {
 
 export const submit = (data: SubmissionData): void => {
   if (Platform.OS === 'android') {
-    RNLinksdkAndroid?.submit(data.phoneNumber);
+    RNLinksdkAndroid?.submit(data.phoneNumber, data.dateOfBirth);
   } else {
-    RNLinksdkiOS?.submit(data.phoneNumber);
+    RNLinksdkiOS?.submit(data.phoneNumber, data.dateOfBirth);
   }
 };
 

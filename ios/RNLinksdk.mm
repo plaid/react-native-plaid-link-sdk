@@ -28,7 +28,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"12.3.2"; // SDK_VERSION
+    return @"12.4.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -205,11 +205,12 @@ RCT_EXPORT_METHOD(syncFinanceKit:(NSString *)token
     ];
 }
 
-RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
+RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber dateOfBirth:(NSString * _Nullable)dateOfBirth) {
     if (self.linkHandler) {
         PLKSubmissionData *submissionData = [[PLKSubmissionData alloc] init];
         submissionData.phoneNumber = phoneNumber;
-        [self.linkHandler submit: submissionData];
+        submissionData.dateOfBirth = dateOfBirth;
+        [self.linkHandler submit:submissionData];
     }
 }
 

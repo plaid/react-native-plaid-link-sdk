@@ -51,7 +51,7 @@ public abstract class NativePlaidLinkModuleAndroidSpec extends ReactContextBaseJ
 
   @ReactMethod
   @DoNotStrip
-  public abstract void submit(String phoneNumber);
+  public abstract void submit(String phoneNumber, String dateOfBirth);
   
   @ReactMethod
   @DoNotStrip

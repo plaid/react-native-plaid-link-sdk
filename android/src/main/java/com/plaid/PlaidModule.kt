@@ -83,9 +83,12 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  override fun submit(phoneNumber: String?) {
+  override fun submit(phoneNumber: String?, dateOfBirth: String?) {
     if (plaidHandler != null) {
-      val submissionData = SubmissionData(phoneNumber = phoneNumber)
+      val submissionData = SubmissionData(
+        phoneNumber = phoneNumber,
+        dateOfBirth = dateOfBirth
+      )
       plaidHandler?.submit(submissionData)
     }
   }

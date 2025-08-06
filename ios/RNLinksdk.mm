@@ -205,11 +205,12 @@ RCT_EXPORT_METHOD(syncFinanceKit:(NSString *)token
     ];
 }
 
-RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber) {
+RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber dateOfBirth:(NSString * _Nullable)dateOfBirth) {
     if (self.linkHandler) {
         PLKSubmissionData *submissionData = [[PLKSubmissionData alloc] init];
         submissionData.phoneNumber = phoneNumber;
-        [self.linkHandler submit: submissionData];
+        submissionData.dateOfBirth = dateOfBirth;
+        [self.linkHandler submit:submissionData];
     }
 }
 

@@ -4,6 +4,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {PlaidEmbeddedLinkScreen} from './Screens/PlaidEmbeddedLinkScreen';
 import {PlaidLinkScreen} from './Screens/PlaidLinkScreen';
+import {PlaidLayerScreen} from './Screens/PlaidLayerScreen';
+import {FinanceKitScreen} from './Screens/FinanceKitScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,8 +20,10 @@ export default function App() {
           },
           tabBarIconStyle: {display: 'none'},
         }}>
-        <Tab.Screen name="Standard Link" component={PlaidLinkScreen} />
-        <Tab.Screen name="Embedded Link" component={PlaidEmbeddedLinkScreen} />
+        <Tab.Screen name="Link" component={PlaidLinkScreen} />
+        <Tab.Screen name="Embedded" component={PlaidEmbeddedLinkScreen} />
+        <Tab.Screen name="Layer" component={PlaidLayerScreen} />
+        <Tab.Screen name="FinanceKitScreen" component={FinanceKitScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

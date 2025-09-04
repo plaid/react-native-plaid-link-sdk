@@ -1,5 +1,55 @@
 # RELEASES
 
+## LinkKit V12.5.1 — 2025-09-04
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Changes
+
+- Resolve issue [803](https://github.com/plaid/react-native-plaid-link-sdk/issues/803) Support for react native 0.81+
+
+
+### Android
+
+Android SDK [5.3.2](https://github.com/plaid/plaid-link-android/releases/tag/v5.3.2)
+
+### Additions
+
+- Upgrade com.google.protobuf:protobuf-kotlin-lite to 3.25.5
+- Ensure SDK screens resize for keyboard insets on Android 15+
+
+### Changes
+
+- None
+
+### Removals
+
+- None
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.9.25+ (Kotlin integrations only) |
+
+### iOS
+
+iOS SDK [6.4.0](https://github.com/plaid/plaid-link-ios/releases/tag/6.4.0)
+
+### Changes
+
+- Add issueDescription and issueDetectedAt to EventMetadata.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 16.1.0 |
+| iOS | >= 14.0 |
+
 ## LinkKit V12.5.0 — 2025-09-04
 
 #### Requirements

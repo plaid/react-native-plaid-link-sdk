@@ -28,7 +28,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"12.5.0"; // SDK_VERSION
+    return @"12.5.1"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -67,7 +67,7 @@ RCT_EXPORT_MODULE();
     self.hasObservers = NO;
 }
 
-RCT_EXPORT_METHOD(create:(NSString*)token noLoadingState:(BOOL)noLoadingState) {
+RCT_EXPORT_METHOD(createPlaidLink:(NSString*)token noLoadingState:(BOOL)noLoadingState) {
     __weak RNLinksdk *weakSelf = self;
 
     void (^onSuccess)(PLKLinkSuccess *) = ^(PLKLinkSuccess *success) {

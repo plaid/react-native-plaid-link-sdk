@@ -34,7 +34,7 @@ public abstract class NativePlaidLinkModuleiOSSpec extends ReactContextBaseJavaM
 
   @ReactMethod
   @DoNotStrip
-  public abstract void create(String token, boolean noLoadingState);
+  public abstract void createPlaidLink(String token, boolean noLoadingState);
 
   @ReactMethod
   @DoNotStrip

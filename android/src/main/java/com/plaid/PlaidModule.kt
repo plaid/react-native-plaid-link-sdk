@@ -94,7 +94,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  override fun create(
+  override fun createPlaidLink(
     token: String,
     noLoadingState: Boolean,
     logLevel: String,

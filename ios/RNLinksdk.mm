@@ -67,7 +67,7 @@ RCT_EXPORT_MODULE();
     self.hasObservers = NO;
 }
 
-RCT_EXPORT_METHOD(create:(NSString*)token noLoadingState:(BOOL)noLoadingState) {
+RCT_EXPORT_METHOD(createPlaidLink:(NSString*)token noLoadingState:(BOOL)noLoadingState) {
     __weak RNLinksdk *weakSelf = self;
 
     void (^onSuccess)(PLKLinkSuccess *) = ^(PLKLinkSuccess *success) {

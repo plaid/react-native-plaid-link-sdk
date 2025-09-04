@@ -6,7 +6,7 @@ import {UnsafeObject} from './fabricUtils';
 import {LinkSuccess, LinkExit, LinkError, FinanceKitError} from '../Types';
 
 export interface Spec extends TurboModule {
-    create(token: string, noLoadingState: boolean): void;
+    createPlaidLink(token: string, noLoadingState: boolean): void;
     open(
         fullScreen: boolean,
         onSuccess: (result: UnsafeObject<LinkSuccess>) => void,

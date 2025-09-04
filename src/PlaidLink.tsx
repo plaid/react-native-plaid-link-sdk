@@ -41,13 +41,13 @@ export const create = (props: LinkTokenConfiguration) => {
   let noLoadingState = props.noLoadingState ?? false;
 
   if (Platform.OS === 'android') {
-    RNLinksdkAndroid?.create(
+    RNLinksdkAndroid?.createPlaidLink(
       token,
       noLoadingState,
       props.logLevel ?? LinkLogLevel.ERROR,
     );
   } else {
-    RNLinksdkiOS?.create(token, noLoadingState);
+    RNLinksdkiOS?.createPlaidLink(token, noLoadingState);
   }
 };
 

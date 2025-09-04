@@ -1,0 +1,60 @@
+{
+  "name": "react-native-plaid-link-sdk",
+  "version": "12.5.0",
+  "description": "React Native Plaid Link SDK",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "react-native": "src/index.ts",
+  "files": [
+    "dist/**/*",
+    "android/**/*",
+    "ios/**/*",
+    "react-native-plaid-link-sdk.podspec",
+    "src/**/*"
+  ],
+  "scripts": {
+    "lint": "eslint \"./**/*.{js,jsx}\" --fix",
+    "prettier": "prettier \"./**/*.{js,jsx}\" --write",
+    "test": "jest"
+  },
+  "keywords": [
+    "react-native",
+    "Plaid"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/example/"
+    ]
+  },
+  "author": "Plaid",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "codegenConfig": {
+    "name": "rnplaidlink",
+    "type": "all",
+    "jsSrcsDir": "./src/fabric",
+    "android": {
+      "javaPackageName": "com.plaid"
+    },
+    "ios": {
+      "componentProvider": "PLKEmbeddedViewCls"
+    }
+  },
+  "yalcSig": "983b05ce94ac32b2c50766efb9b552c6"
+}

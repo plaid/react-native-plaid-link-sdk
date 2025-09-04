@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "react-native-plaid-link-sdk": {
+      "signature": "983b05ce94ac32b2c50766efb9b552c6",
+      "file": true
+    }
+  }
+}

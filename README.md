@@ -215,6 +215,8 @@ If migrating from older versions, see the [docs](https://plaid.com/docs/link/rea
 
 | Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |
 |-------------------|--------------------------|-------------|---------------------|------------------------|---------|-----------------|-------------------------------|
+| 12.5.1            | *                        | [5.3.2+]    | 21                  | 34                     | >=6.4.0 |  14.0           | Active, supports Xcode 16.1.0 |
+| 12.5.0            | *                        | [5.3.2+]    | 21                  | 34                     | >=6.4.0 |  14.0           | Active, supports Xcode 16.1.0 |
 | 12.4.0            | *                        | [5.3.0+]    | 21                  | 34                     | >=6.4.0 |  14.0           | Active, supports Xcode 16.1.0 |
 | 12.3.2            | *                        | [5.2.0+]    | 21                  | 34                     | >=6.3.2 |  14.0           | Active, supports Xcode 16.1.0 |
 | 12.3.1            | *                        | [5.2.0+]    | 21                  | 34                     | >=6.3.1 |  14.0           | **Deprecated** |

@@ -355,7 +355,8 @@ RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber dateOfBirth:(NSString
             @"issueId": metadata.issueID ?: @"",
             @"timestamp": [self iso8601StringFromDate:metadata.timestamp] ?: @"",
             @"viewName": [self stringForViewName:metadata.viewName] ?: @"",
-            @"metadata_json": metadata.metadataJSON ?: @"",
+            @"metadata_json": metadata.metadataJSON ?: @"", // deprecated
+            @"metadataJson": metadata.metadataJSON ?: @"",
         },
     };
 }

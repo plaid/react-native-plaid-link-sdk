@@ -74,9 +74,6 @@
     "jsSrcsDir": "./src/fabric",
     "android": {
       "javaPackageName": "com.plaid"
-    },
-    "ios": {
-      "componentProvider": "PLKEmbeddedViewCls"
     }
   }
 }

@@ -22,6 +22,8 @@ import {
   LinkLogLevel,
 } from 'react-native-plaid-link-sdk';
 
+import EmbeddedScreen from './EmbeddedScreen';
+
 function isValidString(str: string): boolean {
   return str?.trim() !== '';
 }
@@ -56,6 +58,7 @@ function createLinkOpenProps(): LinkOpenProps {
 function App(): React.JSX.Element {
   const [linkToken, setLinkToken] = useState('');
   const [disabled, setDisabled] = useState(true);
+  const [currentScreen, setCurrentScreen] = useState('main');
 
   const handleCreateLink = () => {
     try {
@@ -81,6 +84,18 @@ function App(): React.JSX.Element {
       Alert.alert('Error', `Failed to open Link: ${error}`);
     }
   };
+
+  const showEmbeddedScreen = () => {
+    setCurrentScreen('embedded');
+  };
+
+  const goBackToMain = () => {
+    setCurrentScreen('main');
+  };
+
+  if (currentScreen === 'embedded') {
+    return <EmbeddedScreen onGoBack={goBackToMain} linkToken={linkToken} />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -130,6 +145,16 @@ function App(): React.JSX.Element {
               <Text style={styles.buttonText}>Open Link</Text>
               <Text style={styles.buttonSubtext}>
                 Opens Plaid Link flow
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.button, styles.embeddedButton]} 
+              onPress={showEmbeddedScreen}
+            >
+              <Text style={styles.buttonText}>Test Embedded Link</Text>
+              <Text style={styles.buttonSubtext}>
+                Navigate to embedded Link component test screen
               </Text>
             </TouchableOpacity>
           </View>
@@ -189,6 +214,9 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     alignItems: 'center',
   },
+  embeddedButton: {
+    backgroundColor: '#28a745',
+  },
   buttonText: {
     color: '#ffffff',
     fontSize: 18,
@@ -199,16 +227,6 @@ const styles = StyleSheet.create({
     color: '#ccddff',
     fontSize: 14,
     textAlign: 'center',
-  },
-  footer: {
-    marginTop: 40,
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#008800',
-    textAlign: 'center',
-    padding: 20,
-    backgroundColor: '#f0fff0',
-    borderRadius: 8,
   },
 });
 

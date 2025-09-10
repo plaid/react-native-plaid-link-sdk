@@ -20,6 +20,7 @@ Pod::Spec.new do |s|
   s.header_dir = "react_native_plaid_link_sdk"
   # we don't want this to be seen by Swift
   s.private_header_files = 'ios/PLKFabricHelpers.h'
+  s.module_name = "react_native_plaid_link_sdk"
 
   if ENV['USE_FRAMEWORKS'] == '1'
     s.pod_target_xcconfig = {

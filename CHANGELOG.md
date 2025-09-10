@@ -1,5 +1,58 @@
 # RELEASES
 
+## LinkKit V12.5.2 — 2025-09-10
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Changes
+
+- Resolve issue [810](https://github.com/plaid/react-native-plaid-link-sdk/issues/810) Support for react native 0.81+
+- Adds `metadataJson` key to event data to allow for all keys to be camelCase.
+- Updates Android SDK
+
+
+### Android
+
+Android SDK [5.3.3](https://github.com/plaid/plaid-link-android/releases/tag/v5.3.3)
+
+### Additions
+
+- None
+
+### Changes
+
+- Upgrade com.google.code.gson:gson to 2.9.1.
+- Upgrade com.squareup.okhttp3:logging-interceptor to 4.9.2.
+
+### Removals
+
+- None
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.9.25+ (Kotlin integrations only) |
+
+### iOS
+
+iOS SDK [6.4.0](https://github.com/plaid/plaid-link-ios/releases/tag/6.4.0)
+
+### Changes
+
+- Add issueDescription and issueDetectedAt to EventMetadata.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 16.1.0 |
+| iOS | >= 14.0 |
+
+
 ## LinkKit V12.5.1 — 2025-09-04
 
 #### Requirements

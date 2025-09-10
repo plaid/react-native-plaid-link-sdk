@@ -1749,7 +1749,7 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
     - SocketRocket
-  - react-native-plaid-link-sdk (12.5.0):
+  - react-native-plaid-link-sdk (12.5.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -2556,7 +2556,7 @@ SPEC CHECKSUMS:
   React-logger: 7aef4d74123e5e3d267e5af1fbf5135b5a0d8381
   React-Mapbuffer: 91e0eab42a6ae7f3e34091a126d70fc53bd3823e
   React-microtasksnativemodule: 1ead4fe154df3b1ba34b5a9e35ef3c4bdfa72ccb
-  react-native-plaid-link-sdk: dd794870f12dc41d5a56f8b3a785353c850c0e14
+  react-native-plaid-link-sdk: 9208dc1da34ff5293fe712d1d338a4a9d5622d2b
   React-NativeModulesApple: eff2eba56030eb0d107b1642b8f853bc36a833ac
   React-oscompat: b12c633e9c00f1f99467b1e0e0b8038895dae436
   React-perflogger: 58d12c4e5df1403030c97b9c621375c312cca454

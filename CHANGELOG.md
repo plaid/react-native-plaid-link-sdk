@@ -1,5 +1,54 @@
 # RELEASES
 
+## LinkKit V12.5.3 — 2025-09-16
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Changes
+
+- Resolve issue [816](https://github.com/plaid/react-native-plaid-link-sdk/issues/816) with Android SDK upgrade to v5.3.4.
+
+### Android
+
+Android SDK [5.3.4](https://github.com/plaid/plaid-link-android/releases/tag/v5.3.4)
+
+### Additions
+
+- None
+
+### Changes
+
+- Fix retrofit reinitialization bug in edge cases.
+
+### Removals
+
+- None
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.9.25+ (Kotlin integrations only) |
+
+### iOS
+
+iOS SDK [6.4.0](https://github.com/plaid/plaid-link-ios/releases/tag/6.4.0)
+
+### Changes
+
+- Add issueDescription and issueDetectedAt to EventMetadata.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 16.1.0 |
+| iOS | >= 14.0 |
+
+
 ## LinkKit V12.5.2 — 2025-09-10
 
 #### Requirements

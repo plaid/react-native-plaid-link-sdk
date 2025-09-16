@@ -106,6 +106,6 @@ repositories {
 
 dependencies {
     implementation "com.facebook.react:react-native:+"
-    implementation "com.plaid.link:sdk-core:5.3.3"
+    implementation "com.plaid.link:sdk-core:5.3.4"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }

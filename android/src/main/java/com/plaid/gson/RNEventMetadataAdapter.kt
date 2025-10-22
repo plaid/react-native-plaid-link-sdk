@@ -37,6 +37,8 @@ class RNEventMetadataAdapter : JsonSerializer<LinkEventMetadata> {
       addProperty("mfaType", src.mfaType)
       addProperty("requestId", src.requestId)
       addProperty("issueId", src.issueId)
+      addProperty("issueDescription", src.issueDescription)
+      addProperty("issueDetectedAt", src.issueDetectedAt)
       addProperty("timestamp", src.timestamp)
       addProperty("viewName", src.viewName?.jsonValue ?: "")
       addProperty("metadata_json", src.metadataJson) // deprecated

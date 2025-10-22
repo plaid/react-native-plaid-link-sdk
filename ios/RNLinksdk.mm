@@ -353,6 +353,8 @@ RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber dateOfBirth:(NSString
             @"mfaType": [self stringForMfaType:metadata.mfaType] ?: @"",
             @"requestId": metadata.requestID ?: @"",
             @"issueId": metadata.issueID ?: @"",
+            @"issueDescription": metadata.issueDescription ?: @"",
+            @"issueDetectedAt": [self iso8601StringFromDate:metadata.issueDetectedAt] ?: @"",
             @"timestamp": [self iso8601StringFromDate:metadata.timestamp] ?: @"",
             @"viewName": [self stringForViewName:metadata.viewName] ?: @"",
             @"metadata_json": metadata.metadataJSON ?: @"", // deprecated

@@ -36,6 +36,9 @@ function createLinkTokenConfiguration(
   return {
     token,
     noLoadingState,
+    onLoad: () => {
+      console.log('Link onLoad: finished loading');
+    },
   };
 }
 

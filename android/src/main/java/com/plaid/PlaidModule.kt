@@ -17,6 +17,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.plaid.gson.PlaidJsonConverter
 import com.plaid.link.Plaid
 import com.plaid.link.PlaidHandler
+import com.plaid.link.OnLoadCallback
 import com.plaid.link.configuration.LinkLogLevel
 import com.plaid.link.configuration.LinkTokenConfiguration
 import com.plaid.link.event.LinkEvent
@@ -98,6 +99,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     token: String,
     noLoadingState: Boolean,
     logLevel: String,
+    onLoad: Callback,
   ) {
     val tokenConfiguration = getLinkTokenConfiguration(token, noLoadingState, getLogLevel(logLevel))
     if (tokenConfiguration == null) {
@@ -120,7 +122,14 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     // Create Plaid handler.
     this.plaidHandler = Plaid.create(
       reactApplicationContext.getApplicationContext() as Application,
-      tokenConfiguration
+      tokenConfiguration,
+      onLoad = OnLoadCallback {
+        try {
+          onLoad.invoke()
+        } catch (e: Exception) {
+          Log.e("PlaidModule", "onLoad callback failed", e)
+        }
+      }
     )
   }
 

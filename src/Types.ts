@@ -12,6 +12,8 @@ export type LinkTokenConfiguration = (CommonPlaidLinkOptions & {
     // Note: This should be set to `true` when setting the `eu_config.headless` field in /link/token/create requests to `true`.
     // For reference, see https://plaid.com/docs/api/tokens/#link-token-create-request-eu-config-headless
     noLoadingState?: boolean;
+    // Optional callback invoked when Link finishes loading and is ready.
+    onLoad?: () => void;
 });
 
 export enum LinkLogLevel {

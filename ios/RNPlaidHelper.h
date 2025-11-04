@@ -3,6 +3,7 @@
 @interface RNPlaidHelper : NSObject
 
 + (id<PLKHandler> _Nullable)createWithLinkTokenConfiguration:(PLKLinkTokenConfiguration * _Nonnull)linkTokenConfiguration
+                                                       onLoad:(void (^_Nullable)(void))onLoad
                                                        error:(NSError * _Nullable * _Nullable)error;
 
 + (void)syncFinanceKit:(NSString * _Nonnull)token

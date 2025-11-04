@@ -3,9 +3,11 @@
 @implementation RNPlaidHelper
 
 + (id<PLKHandler> _Nullable)createWithLinkTokenConfiguration:(PLKLinkTokenConfiguration * _Nonnull)linkTokenConfiguration
+                                                       onLoad:(void (^_Nullable)(void))onLoad
                                                        error:(NSError * _Nullable * _Nullable)error
 {
-    return [PLKPlaid createWithLinkTokenConfiguration:linkTokenConfiguration error:error];
+    // Newer LinkKit Objective-C bridge supports an onLoad callback.
+    return [PLKPlaid createWithLinkTokenConfiguration:linkTokenConfiguration onLoad:onLoad error:error];
 }
 
 + (void)syncFinanceKit:(NSString * _Nonnull)token

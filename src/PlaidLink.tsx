@@ -45,9 +45,11 @@ export const create = (props: LinkTokenConfiguration) => {
       token,
       noLoadingState,
       props.logLevel ?? LinkLogLevel.ERROR,
+      props.onLoad ?? (() => {}),
     );
   } else {
-    RNLinksdkiOS?.createPlaidLink(token, noLoadingState);
+    const onLoad = props.onLoad ?? (() => {});
+    RNLinksdkiOS?.createPlaidLink(token, noLoadingState, onLoad);
   }
 };
 

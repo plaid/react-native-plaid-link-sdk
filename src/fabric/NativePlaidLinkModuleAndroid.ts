@@ -6,7 +6,7 @@ import {UnsafeObject} from './fabricUtils';
 import {LinkSuccess, LinkExit} from '../Types';
 
 export interface Spec extends TurboModule {
-    createPlaidLink(token: string, noLoadingState: boolean, logLevel: string): void;
+    createPlaidLink(token: string, noLoadingState: boolean, logLevel: string, onLoad: () => void): void;
     open(
         onSuccess: (result: UnsafeObject<LinkSuccess>) => void,
         onExit: (result: UnsafeObject<LinkExit>) => void,

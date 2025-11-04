@@ -67,7 +67,7 @@ RCT_EXPORT_MODULE();
     self.hasObservers = NO;
 }
 
-RCT_EXPORT_METHOD(createPlaidLink:(NSString*)token noLoadingState:(BOOL)noLoadingState) {
+RCT_EXPORT_METHOD(createPlaidLink:(NSString*)token noLoadingState:(BOOL)noLoadingState onLoad:(RCTResponseSenderBlock)onLoad) {
     __weak RNLinksdk *weakSelf = self;
 
     void (^onSuccess)(PLKLinkSuccess *) = ^(PLKLinkSuccess *success) {
@@ -119,7 +119,17 @@ RCT_EXPORT_METHOD(createPlaidLink:(NSString*)token noLoadingState:(BOOL)noLoadin
     config.noLoadingState = noLoadingState;
 
     NSError *creationError = nil;
-    self.linkHandler = [RNPlaidHelper createWithLinkTokenConfiguration:config error:&creationError];
+
+    void (^onLoadBlock)(void) = ^{
+        RNLinksdk *strongSelf = weakSelf;
+        if (onLoad) {
+            onLoad(@[]);
+        }
+        // strongSelf intentionally unused; kept for symmetry and potential future use
+        (void)strongSelf;
+    };
+
+    self.linkHandler = [RNPlaidHelper createWithLinkTokenConfiguration:config onLoad:onLoadBlock error:&creationError];
     self.creationError = creationError;
 }
 

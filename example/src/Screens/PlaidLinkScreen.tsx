@@ -32,10 +32,14 @@ function createLinkTokenConfiguration(
   noLoadingState: boolean = false,
 ): LinkTokenConfiguration {
   console.log(`token: ${token}`);
-  return {
+  const config: LinkTokenConfiguration = {
     token,
     noLoadingState,
+    onLoad: () => {
+      console.log('Link onLoad: finished loading');
+    },
   };
+  return config;
 }
 
 function createLinkOpenProps(): LinkOpenProps {

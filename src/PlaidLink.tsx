@@ -45,6 +45,7 @@ export const create = (props: LinkTokenConfiguration) => {
       token,
       noLoadingState,
       props.logLevel ?? LinkLogLevel.ERROR,
+      props.onLoad ?? (() => {}),
     );
   } else {
     const onLoad = props.onLoad ?? (() => {});

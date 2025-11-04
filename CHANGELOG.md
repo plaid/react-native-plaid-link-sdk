@@ -1,5 +1,56 @@
 # RELEASES
 
+## LinkKit V12.7.0 — 2025-11-04
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Changes
+
+- Add `onLoad` to `LinkTokenConfiguration`, fired once when Link is fully loaded and ready to present. Use it to manage your own loading UI or defer presentation until ready.
+
+### Android
+
+Android SDK [5.5.0](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.0)
+
+### Additions
+
+- None
+
+### Changes
+
+- Made LinkErrorCode.errorType public.
+- Fixed bug where layer "auto" customization for light/dark mode was always dark, regardless of system setting.
+- Added onLoad callback to Plaid.create for detecting when Link is ready to present.
+
+### Removals
+
+- None
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.9.25+ (Kotlin integrations only) |
+
+### iOS
+
+iOS SDK [6.4.2](https://github.com/plaid/plaid-link-ios/releases/tag/6.4.2)
+
+### Changes
+
+- Resolved `syncFinanceKit` crash when running on iPad on compatibility mode.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 16.1.0 |
+| iOS | >= 14.0 |
+
+
 ## LinkKit V12.6.1 — 2025-10-22
 
 #### Requirements

@@ -34,11 +34,13 @@ function isValidString(str: string): boolean {
 function createLinkTokenConfiguration(
   token: string,
   noLoadingState: boolean = false,
+  onLoad?: () => void,
 ): LinkTokenConfiguration {
   console.log(`token: ${token}`);
   return {
     token: token,
     noLoadingState: noLoadingState,
+    onLoad,
   };
 }
 
@@ -132,7 +134,8 @@ export default function App() {
         style={styles.input}
         onChangeText={newText => {
           setText(newText);
-          setDisabled(!isValidString(newText));
+          // Re-disable actions until Link finishes loading again
+          setDisabled(true);
         }}
         value={text}
         placeholder="link-sandbox-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -147,9 +150,15 @@ export default function App() {
         style={styles.button}
         onPress={() => {
           if (isValidString(text)) {
-            const tokenConfiguration = createLinkTokenConfiguration(text);
+            const tokenConfiguration = createLinkTokenConfiguration(
+              text,
+              false,
+              () => {
+                // Enable actions once Link has fully loaded
+                setDisabled(false);
+              },
+            );
             create(tokenConfiguration);
-            setDisabled(false);
           }
         }}>
         <Text style={styles.button}>Create Link</Text>

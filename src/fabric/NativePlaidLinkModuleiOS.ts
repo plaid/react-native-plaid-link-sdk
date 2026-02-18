@@ -15,7 +15,8 @@ export interface Spec extends TurboModule {
     dismiss(): void;
     submit(
       phoneNumber: string | undefined,
-      dateOfBirth: string | undefined
+      dateOfBirth: string | undefined,
+      params: UnsafeObject<Record<string, string>> | undefined
     ): void;
     // those two are here for event emitter methods
     addListener(eventName: string): void;

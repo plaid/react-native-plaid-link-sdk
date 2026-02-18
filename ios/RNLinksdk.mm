@@ -548,6 +548,8 @@ RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber dateOfBirth:(NSString
             return @"ISSUE_FOLLOWED";
         case PLKEventNameValueSelectAccount:
             return @"SELECT_ACCOUNT";
+        case PLKEventNameValueLayerAutoFillNotAvailable:
+            return @"LAYER_AUTOFILL_NOT_AVAILABLE";
     }
      return @"unknown";
 }

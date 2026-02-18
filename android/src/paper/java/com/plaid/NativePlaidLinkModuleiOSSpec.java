@@ -17,6 +17,7 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import javax.annotation.Nonnull;
 
@@ -46,7 +47,7 @@ public abstract class NativePlaidLinkModuleiOSSpec extends ReactContextBaseJavaM
 
   @ReactMethod
   @DoNotStrip
-  public abstract void submit(String phoneNumber);
+  public abstract void submit(String phoneNumber, String dateOfBirth, ReadableMap params);
 
   @ReactMethod
   @DoNotStrip

@@ -1,5 +1,55 @@
 # RELEASES
 
+## LinkKit V12.8.0 — 2026-02-18
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Changes
+
+- Adds missing LAYER_AUTOFILL_NOT_AVAILABLE on iOS
+- Adds support to submit layer params on iOS & Android
+
+### Android
+
+Android SDK [5.5.1](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.1)
+
+### Additions
+
+- None
+
+### Changes
+
+- Layer update.
+- Add missing proguard consumer rule.
+
+### Removals
+
+- None
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Android Studio | 4.0+ |
+| Kotlin | 1.9.25+ (Kotlin integrations only) |
+
+### iOS
+
+iOS SDK [6.4.3](https://github.com/plaid/plaid-link-ios/releases/tag/6.4.3)
+
+### Changes
+
+- Layer updates.
+
+#### Requirements
+
+| Name | Version |
+|------|---------|
+| Xcode | >= 16.1.0 |
+| iOS | >= 14.0 |
+
 ## LinkKit V12.7.0 — 2025-11-04
 
 #### Requirements

@@ -8,7 +8,7 @@ This SDK now works with any supported version of React Native.
 
 ### Changes
 
-- Adds missing LAYER_AUTOFILL_NOT_AVAILABLE on iOS
+- Adds missing LAYER_AUTOFILL_NOT_AVAILABLE event name on iOS
 - Adds support to submit layer params on iOS & Android
 
 ### Android

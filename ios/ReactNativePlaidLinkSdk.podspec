@@ -18,11 +18,9 @@ Pod::Spec.new do |s|
   s.dependency 'ExpoModulesCore'
   s.vendored_frameworks = 'Frameworks/LinkKit.xcframework'
 
-  # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
-    'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_TARGET_SRCROOT}/Frameworks"',
-    'OTHER_LDFLAGS' => '$(inherited) -framework "LinkKit"'
+    'SWIFT_INCLUDE_PATHS' => '$(inherited) "${PODS_TARGET_SRCROOT}/Frameworks/LinkKit.xcframework"',
   }
 
   # Add this to ensure the folder isn't stripped during the build

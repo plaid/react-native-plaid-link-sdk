@@ -23,9 +23,8 @@ Pod::Spec.new do |s|
   # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
-    'OTHER_LDFLAGS' => '$(inherited) -framework "LinkKit"',
-    # Helps Swift find the Objective-C parts of the vendored framework
-    'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_TARGET_SRCROOT}/Frameworks"'
+    'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_TARGET_SRCROOT}/Frameworks"',
+    'OTHER_LDFLAGS' => '$(inherited) -framework "LinkKit"'
   }
 
   install_modules_dependencies(s)

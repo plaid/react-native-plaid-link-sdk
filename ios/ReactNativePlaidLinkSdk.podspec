@@ -4,6 +4,7 @@ package = JSON.parse(File.read(File.join(__dir__, '..', 'package.json')))
 
 Pod::Spec.new do |s|
   s.name           = 'ReactNativePlaidLinkSdk'
+  s.module_name    = 'ReactNativePlaidLinkSdk'
   s.version        = package['version']
   s.summary        = package['description']
   s.description    = package['description']
@@ -13,13 +14,18 @@ Pod::Spec.new do |s|
   s.platforms      = { :ios => '15.1' }
   s.swift_version  = '5.9'
   s.source         = { git: 'https://github.com/plaid/react-native-plaid-link-sdk' }
-  s.source_files   = "src/**/*.{h,m,mm,swift}"
+  s.source_files   = "**/*.{h,m,mm,swift}"
+  s.exclude_files   = "Frameworks/**/*"
   s.static_framework = true
   s.dependency 'ExpoModulesCore'
   s.vendored_frameworks = 'Frameworks/LinkKit.framework'
+
   # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
+    'OTHER_LDFLAGS' => '$(inherited) -framework "LinkKit"',
+    # Helps Swift find the Objective-C parts of the vendored framework
+    'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_TARGET_SRCROOT}/Frameworks"'
   }
 
   install_modules_dependencies(s)

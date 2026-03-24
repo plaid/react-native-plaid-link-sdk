@@ -627,5 +627,6 @@ export type FinanceKitError =
 export interface SubmissionData {
     phoneNumber?: string;
     dateOfBirth?: string;
+    params?: Record<string, string>;
 };
 

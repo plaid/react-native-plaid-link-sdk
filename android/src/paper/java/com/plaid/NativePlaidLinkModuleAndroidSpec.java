@@ -18,6 +18,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import javax.annotation.Nonnull;
 
@@ -51,7 +52,7 @@ public abstract class NativePlaidLinkModuleAndroidSpec extends ReactContextBaseJ
 
   @ReactMethod
   @DoNotStrip
-  public abstract void submit(String phoneNumber, String dateOfBirth);
+  public abstract void submit(String phoneNumber, String dateOfBirth, ReadableMap params);
   
   @ReactMethod
   @DoNotStrip

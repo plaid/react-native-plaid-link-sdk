@@ -73,7 +73,7 @@ PODS:
   - hermes-engine/Pre-built (0.73.6)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
-  - Plaid (6.4.2)
+  - Plaid (6.4.3)
   - RCT-Folly (2022.05.16.00):
     - boost
     - DoubleConversion
@@ -946,7 +946,7 @@ PODS:
     - glog
     - React-debug
   - react-native-plaid-link-sdk (12.7.0):
-    - Plaid (~> 6.4.2)
+    - Plaid (~> 6.4.3)
     - React-Core
   - react-native-safe-area-context (4.14.1):
     - React-Core
@@ -1351,7 +1351,7 @@ SPEC CHECKSUMS:
   hermes-engine: 9cecf9953a681df7556b8cc9c74905de8f3293c0
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  Plaid: 8a212ed955d480364e0deb7fed93625b29811e9d
+  Plaid: defe81f56261e503209b5d28ed538834fd377a3c
   RCT-Folly: cd21f1661364f975ae76b3308167ad66b09f53f5
   RCTRequired: ca1d7414aba0b27efcfa2ccd37637edb1ab77d96
   RCTTypeSafety: 678e344fb976ff98343ca61dc62e151f3a042292
@@ -1373,7 +1373,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 85583ef014ce53d731a98c66a0e24496f7a83066
   React-logger: 55764cd993880c6f887505854581c9faf68feff2
   React-Mapbuffer: 15dfcfeb4428d8799cce75e7fe85b18b706029e0
-  react-native-plaid-link-sdk: 093a6faf1649a85df7f6fecfb41cb8f7bbcf148a
+  react-native-plaid-link-sdk: 171ffb18699e1bb92d33e2d056ff58a415016d19
   react-native-safe-area-context: 758e894ca5a9bd1868d2a9cfbca7326a2b6bf9dc
   React-nativeconfig: b4d4e9901d4cabb57be63053fd2aa6086eb3c85f
   React-NativeModulesApple: 541d64309a3037060cc416db5c8a63ee5884048e

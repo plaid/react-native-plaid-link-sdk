@@ -28,7 +28,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"12.7.0"; // SDK_VERSION
+    return @"12.8.0"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -215,11 +215,12 @@ RCT_EXPORT_METHOD(syncFinanceKit:(NSString *)token
     ];
 }
 
-RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber dateOfBirth:(NSString * _Nullable)dateOfBirth) {
+RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber dateOfBirth:(NSString * _Nullable)dateOfBirth params:(NSDictionary * _Nullable)params) {
     if (self.linkHandler) {
         PLKSubmissionData *submissionData = [[PLKSubmissionData alloc] init];
         submissionData.phoneNumber = phoneNumber;
         submissionData.dateOfBirth = dateOfBirth;
+        submissionData.params = params;
         [self.linkHandler submit:submissionData];
     }
 }
@@ -548,6 +549,8 @@ RCT_EXPORT_METHOD(submit:(NSString * _Nullable)phoneNumber dateOfBirth:(NSString
             return @"ISSUE_FOLLOWED";
         case PLKEventNameValueSelectAccount:
             return @"SELECT_ACCOUNT";
+        case PLKEventNameValueLayerAutoFillNotAvailable:
+            return @"LAYER_AUTOFILL_NOT_AVAILABLE";
     }
      return @"unknown";
 }

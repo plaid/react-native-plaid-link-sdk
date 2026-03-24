@@ -12,6 +12,7 @@ import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.plaid.gson.PlaidJsonConverter
@@ -84,11 +85,18 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  override fun submit(phoneNumber: String?, dateOfBirth: String?) {
+  override fun submit(phoneNumber: String?, dateOfBirth: String?, params: ReadableMap?) {
     if (plaidHandler != null) {
+      val paramsMap: Map<String, String>? = params?.let { map ->
+        map.toHashMap().mapNotNull { (key, value) ->
+          if (value is String) key to value else null
+        }.toMap()
+      }
+      
       val submissionData = SubmissionData(
         phoneNumber = phoneNumber,
-        dateOfBirth = dateOfBirth
+        dateOfBirth = dateOfBirth,
+        params = paramsMap
       )
       plaidHandler?.submit(submissionData)
     }

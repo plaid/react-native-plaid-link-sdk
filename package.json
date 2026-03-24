@@ -1,7 +1,7 @@
 {
   "name": "react-native-plaid-link-sdk",
-  "version": "0.1.0",
-  "description": "React Native Plaid Link SDK",
+  "version": "13.0.0",
+  "description": "React Native Plaid Link SDK (New Architecture & Expo)",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -25,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/plaid/react-native-plaid-link-sdk/issues"
   },
-  "author": "dtroupe <dtroupe@plaid.com> (https://github.com/dtroupe-plaid)",
+  "author": "Plaid",
   "license": "MIT",
   "homepage": "https://github.com/plaid/react-native-plaid-link-sdk#readme",
   "dependencies": {},
@@ -36,8 +36,8 @@
     "react-native": "0.82.1"
   },
   "peerDependencies": {
-    "expo": "*",
-    "react": "*",
-    "react-native": "*"
+    "expo": ">=52.0.0",
+    "react": ">=18.0.0",
+    "react-native": ">=0.76.0"
   }
 }

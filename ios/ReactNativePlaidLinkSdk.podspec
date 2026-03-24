@@ -15,6 +15,7 @@ Pod::Spec.new do |s|
   s.swift_version  = '5.9'
   s.source         = { git: 'https://github.com/plaid/react-native-plaid-link-sdk' }
   s.source_files   = "**/*.{h,m,mm,swift}"
+  s.dependency 'ExpoModulesCore'
   s.vendored_frameworks = 'Frameworks/LinkKit.xcframework'
 
   # Swift/Objective-C compatibility

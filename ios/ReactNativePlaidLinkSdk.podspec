@@ -15,10 +15,7 @@ Pod::Spec.new do |s|
   s.swift_version  = '5.9'
   s.source         = { git: 'https://github.com/plaid/react-native-plaid-link-sdk' }
   s.source_files   = "**/*.{h,m,mm,swift}"
-  s.exclude_files   = "Frameworks/**/*"
-  s.static_framework = true
-  s.dependency 'ExpoModulesCore'
-  s.vendored_frameworks = 'Frameworks/LinkKit.framework'
+  s.vendored_frameworks = 'Frameworks/LinkKit.xcframework'
 
   # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
@@ -26,6 +23,9 @@ Pod::Spec.new do |s|
     'FRAMEWORK_SEARCH_PATHS' => '$(inherited) "${PODS_TARGET_SRCROOT}/Frameworks"',
     'OTHER_LDFLAGS' => '$(inherited) -framework "LinkKit"'
   }
+
+  # Add this to ensure the folder isn't stripped during the build
+  s.preserve_paths = 'Frameworks/LinkKit.xcframework'
 
   install_modules_dependencies(s)
 end

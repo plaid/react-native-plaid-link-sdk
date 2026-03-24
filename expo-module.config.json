@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["ReactNativePlaidLinkSdkModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.plaidlinksdk.ReactNativePlaidLinkSdkModule"]
+  }
+}

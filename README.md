@@ -2,6 +2,7 @@
 
 React Native Plaid Link SDK (New Architecture & Expo)
 
+
 # API documentation
 
 - [Documentation for the latest stable release](https://docs.expo.dev/versions/latest/sdk/react-native-plaid-link-sdk/)

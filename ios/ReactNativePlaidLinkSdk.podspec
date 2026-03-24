@@ -14,13 +14,14 @@ Pod::Spec.new do |s|
   s.platforms      = { :ios => '15.1' }
   s.swift_version  = '5.9'
   s.source         = { git: 'https://github.com/plaid/react-native-plaid-link-sdk' }
-  s.source_files   = "**/*.{h,m,mm,swift}"
+  s.source_files = 'src/**/*.{h,m,mm,swift,hpp,cpp}'
   s.dependency 'ExpoModulesCore'
   s.vendored_frameworks = 'Frameworks/LinkKit.xcframework'
+  s.preserve_paths      = 'Frameworks/LinkKit.xcframework'
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
-    'SWIFT_INCLUDE_PATHS' => '$(inherited) "${PODS_TARGET_SRCROOT}/Frameworks/LinkKit.xcframework"',
+    'SWIFT_INCLUDE_PATHS' => '$(inherited) "${PODS_TARGET_SRCROOT}/Frameworks/LinkKit.xcframework/ios-arm64/LinkKit.framework/Headers"'
   }
 
   # Add this to ensure the folder isn't stripped during the build

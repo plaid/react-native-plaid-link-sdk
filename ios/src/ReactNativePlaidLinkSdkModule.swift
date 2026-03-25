@@ -139,7 +139,7 @@ fileprivate extension Institution {
     var asDictionary: [String: Any] {
         return [
             "name": name ?? "",
-            "id": ID ?? "",
+            "id": id ?? "",
         ]
     }
 }
@@ -167,6 +167,7 @@ fileprivate extension AccountSubtype {
         case .depository:   return "depository"
         case .investment:   return "investment"
         case .unknown(let type, _): return type
+        @unknown default: return "UNKNOWN"
         }
     }
 }
@@ -177,7 +178,7 @@ fileprivate extension LinkSuccess {
             "publicToken": publicToken,
             "metadata": [
                 "linkSessionId": metadata.linkSessionID,
-                "institution": metadata.institution.asDictionary ?? "",
+                "institution": metadata.institution.asDictionary,
                 "accounts": metadata.accounts.map { $0.asDictionary },
                 "metadataJson": metadata.metadataJSON ?? "",
             ]
@@ -212,8 +213,8 @@ fileprivate extension LinkEvent {
 fileprivate extension EventMetadata {
     var asDictionary: [String: Any] {
         [
-            "errorType": errorCode?.errorType ?? "",
-            "errorCode": errorCode?.description ?? "",
+            "errorType": errorCode?.description ?? "",
+            "errorCode": errorCode?.errorCodeString ?? "",
             "errorMessage": errorMessage ?? "",
             "exitStatus": exitStatus?.description ?? "",
             "institutionId": institutionID ?? "",
@@ -269,7 +270,8 @@ fileprivate extension ExitErrorCode {
         case .invalidInput(let code): return code.description
         case .invalidRequest(let code): return code.description
         case .rateLimitExceeded(let code): return code.description
-        case .unknown(let type, let code): return code
+        case .unknown(_, let code): return code
+        @unknown default: return "UNKNOWN"
         }
     }
 }

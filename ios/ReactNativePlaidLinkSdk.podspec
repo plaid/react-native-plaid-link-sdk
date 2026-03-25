@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
-    'SWIFT_INCLUDE_PATHS' => '$(inherited) "${PODS_TARGET_SRCROOT}/Frameworks/LinkKit.xcframework/ios-arm64/LinkKit.framework/Headers"'
+    'SWIFT_COMPILATION_MODE' => 'wholemodule'
   }
 
   # Add this to ensure the folder isn't stripped during the build

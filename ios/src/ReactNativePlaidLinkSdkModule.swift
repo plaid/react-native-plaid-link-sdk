@@ -36,7 +36,9 @@ public class ReactNativePlaidLinkSdkModule: Module {
             }
 
             let onLoad: OnLoadHandler = {
-                onLoadPromise.resolve()
+                DispatchQueue.main.async {
+                    onLoadPromise.resolve()
+                }
             }
 
             let config = LinkTokenConfiguration(
@@ -52,7 +54,9 @@ public class ReactNativePlaidLinkSdkModule: Module {
                 self.linkSession = session
             } catch {
                 self.sessionCreationError = error
-                onLoadPromise.reject("LINK_SESSION_CREATE_ERROR", error.localizedDescription)
+                DispatchQueue.main.async {
+                    onLoadPromise.reject("LINK_SESSION_CREATE_ERROR", error.localizedDescription)
+                }
             }
         }
 
@@ -75,30 +79,36 @@ public class ReactNativePlaidLinkSdkModule: Module {
                         "metadataJson": NSNull(),
                     ]
                 ])
-                promise.resolve() // not a failure to open, just a miscall
+                
+                DispatchQueue.main.async {
+                    promise.resolve() // not a failure to open, just a miscall
+                }
+                
                 return
             }
 
-            guard let vc = self.appContext?.utilities?.currentViewController() else {
-                promise.reject("PLAID_NO_VC", "Could not find current view controller.")
-                return
-            }
-
-            if fullScreen {
-                let presentationHandler: PresentationHandler = { linkVC in
-                    linkVC.modalPresentationStyle = .overFullScreen
-                    linkVC.modalTransitionStyle = .coverVertical
-                    vc.present(linkVC, animated: true)
+            DispatchQueue.main.async {
+                guard let vc = self.appContext?.utilities?.currentViewController() else {
+                    promise.reject("PLAID_NO_VC", "Could not find current view controller.")
+                    return
                 }
-                let dismissalHandler: DismissalHandler = { linkVC in
-                    linkVC.presentingViewController?.dismiss(animated: true)
-                }
-                session.open(using: .custom(presentationHandler, dismissalHandler))
-            } else {
-                session.open(using: .viewController(vc))
-            }
 
-            promise.resolve()
+                if fullScreen {
+                    let presentationHandler: PresentationHandler = { linkVC in
+                        linkVC.modalPresentationStyle = .overFullScreen
+                        linkVC.modalTransitionStyle = .coverVertical
+                        vc.present(linkVC, animated: true)
+                    }
+                    let dismissalHandler: DismissalHandler = { linkVC in
+                        linkVC.presentingViewController?.dismiss(animated: true)
+                    }
+                    session.open(using: .custom(presentationHandler, dismissalHandler))
+                } else {
+                    session.open(using: .viewController(vc))
+                }
+
+                promise.resolve()
+            }
         }
     }
 

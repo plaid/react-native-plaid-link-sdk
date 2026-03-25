@@ -14,8 +14,12 @@ public class ReactNativePlaidLinkSdkModule: Module {
         Name("ReactNativePlaidLinkSdk")
 
         // --- Version API ---
-        let sdkVersion = Constant("sdkVersion", get: { Plaid.version })
+        Constant("sdkVersion") { Plaid.version }
 
+        // Defines event names that the module can send to JavaScript.
+        Events(ModuleEventName.allCases.map { $0.rawValue })
+
+        // MARK: Functions
 
         AsyncFunction(ModuleFunctionName.createPlaidLinkSession.rawValue) { (token: String, onLoadPromise: Promise) in
             let onSuccess: OnSuccessHandler = { [weak self] success in
@@ -24,7 +28,7 @@ public class ReactNativePlaidLinkSdkModule: Module {
 
             let onExit: OnExitHandler = { [weak self] exit in
                 self?.sendEvent(ModuleEventName.onExit.rawValue, ["onExit": "fixme"])
-                self.linkSession = nil
+                self?.linkSession = nil
             }
 
             let onEvent: OnEventHandler = { [weak self] event in
@@ -35,7 +39,14 @@ public class ReactNativePlaidLinkSdkModule: Module {
                 onLoadPromise.resolve()
             }
 
-            let config = LinkTokenConfiguration(token: token, onSuccess: onSuccess, onExit: onExit, onLoad: onLoad)
+            let config = LinkTokenConfiguration(
+                token: token,
+                onSuccess: onSuccess,
+                onExit: onExit,
+                onEvent: onEvent,
+                onLoad: onLoad
+            )
+
             do {
                 let session = try Plaid.createPlaidLinkSession(configuration: config)
                 self.linkSession = session
@@ -44,91 +55,18 @@ public class ReactNativePlaidLinkSdkModule: Module {
                 onLoadPromise.reject("LINK_SESSION_CREATE_ERROR", error.localizedDescription)
             }
         }
-//
-//        // --- Create Link Session API ---
-//        // This receives a dictionary from JS and maps it to your Swift Configuration
-//        AsyncFunction("createPlaidLinkSession") { (options: [String: Any], promise: Promise) in
-//          guard let token = options["token"] as? String else {
-//            promise.reject("ERR_PLAID_INVALID_TOKEN", "A link token must be provided.")
-//            return
-//          }
-//
-//          // 1. Create the configuration object your SDK expects
-//          // Note: You'll need to map other JS options (onSuccess, onExit) here
-//          let configuration = LinkTokenConfiguration(token: token) { success in
-//              // Map LinkSuccess to JS Dictionary
-//              promise.resolve([
-//                "publicToken": success.publicToken,
-//                "metadata": success.metadata.metadataJSON // Assuming this exists or map manually
-//              ])
-//          } onExit: { exit in
-//              // Map LinkExit to JS Error/Dictionary
-//              promise.reject("ERR_PLAID_EXIT", exit.errorJSON)
-//          }
-//
-//          // 2. Call your Framework's public API
-//          do {
-//            self.currentSession = try Plaid.createPlaidLinkSession(configuration: configuration)
-//
-//            // 3. Present the UI
-//            // Expo Modules provide access to the current utilities to find the ViewController
-//            guard let currentVc = self.appContext?.utilities?.currentViewController() else {
-//              promise.reject("ERR_PLAID_NO_VC", "Could not find current view controller")
-//              return
-//            }
-//
-//            // Assuming PlaidLinkSession has a present method
-//            self.currentSession?.present(from: currentVc)
-//
-//          } catch {
-//            promise.reject("ERR_PLAID_CONFIG", error.localizedDescription)
-//          }
-//        }
-
-        // MARK: Default stuff
-
-        // Defines event names that the module can send to JavaScript.
-        Events(ModuleEventName.allCases.map { $0.rawValue })
-
-
-
-        // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-        Function("hello") {
-            return "Hello world! 👋"
-        }
-
-        // Defines a JavaScript function that always returns a Promise and whose native code
-        // is by default dispatched on the different thread than the JavaScript runtime runs on.
-        AsyncFunction("setValueAsync") { (value: String) in
-            // Send an event to JavaScript.
-            self.sendEvent(
-                "onChange",
-                [
-                    "value": value
-                ]
-            )
-        }
-
-        // Enables the module to be used as a native view. Definition components that are accepted as part of the
-        // view definition: Prop, Events.
-        View(ReactNativePlaidLinkSdkView.self) {
-            // Defines a setter for the `url` prop.
-            Prop("url") { (view: ReactNativePlaidLinkSdkView, url: URL) in
-                if view.webView.url != url {
-                    view.webView.load(URLRequest(url: url))
-                }
-            }
-
-            Events("onLoad")
-        }
     }
 
+    // MARK: Enums
+
+    /// Event names that the module can send to JavaScript.
     enum ModuleEventName: String, CaseIterable {
         case onSuccess
         case onExit
         case onEvent
     }
 
+    /// Function names that the module can call from JavaScript.
     enum ModuleFunctionName: String, CaseIterable {
         case createPlaidLinkSession
     }
@@ -137,9 +75,4 @@ public class ReactNativePlaidLinkSdkModule: Module {
 
     private var linkSession: PlaidLinkSession?
     private var sessionCreationError: Error?
-
-//    private class Storage {
-//        // We need a reference to the current session to keep it alive.
-//        fileprivate static var linkSession: PlaidLinkSession?
-//    }
 }

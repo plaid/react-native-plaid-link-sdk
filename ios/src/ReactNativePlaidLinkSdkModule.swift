@@ -55,6 +55,51 @@ public class ReactNativePlaidLinkSdkModule: Module {
                 onLoadPromise.reject("LINK_SESSION_CREATE_ERROR", error.localizedDescription)
             }
         }
+
+        AsyncFunction(ModuleFunctionName.openLinkSession.rawValue) { (fullScreen: Bool, promise: Promise) in
+            guard let session = self.linkSession else {
+                let errorMessage = self.sessionCreationError?.localizedDescription ?? "createPlaidLinkSession was not called."
+                let errorCode = self.sessionCreationError.map { String($0._code) } ?? "-1"
+                self.sendEvent(ModuleEventName.onExit.rawValue, [
+                    "displayMessage": errorMessage,
+                    "errorCode": errorCode,
+                    "errorType": "creation error",
+                    "errorMessage": errorMessage,
+                    "errorDisplayMessage": errorMessage,
+                    "errorJson": NSNull(),
+                    "metadata": [
+                        "linkSessionId": NSNull(),
+                        "institution": NSNull(),
+                        "status": NSNull(),
+                        "requestId": NSNull(),
+                        "metadataJson": NSNull(),
+                    ]
+                ])
+                promise.resolve() // not a failure to open, just a miscall
+                return
+            }
+
+            guard let vc = self.appContext?.utilities?.currentViewController() else {
+                promise.reject("PLAID_NO_VC", "Could not find current view controller.")
+                return
+            }
+
+            if fullScreen {
+                let presentationHandler: PresentationHandler = { linkVC in
+                    linkVC.modalPresentationStyle = .overFullScreen
+                    linkVC.modalTransitionStyle = .coverVertical
+                    vc.present(linkVC, animated: true)
+                }
+                let dismissalHandler: DismissalHandler = { linkVC in
+                    linkVC.presentingViewController?.dismiss(animated: true)
+                }
+                session.open(using: .custom(presentationHandler, dismissalHandler))
+            } else {
+                session.open(using: .viewController(vc))
+            }
+
+            promise.resolve()
+        }
     }
 
     // MARK: Enums
@@ -69,6 +114,7 @@ public class ReactNativePlaidLinkSdkModule: Module {
     /// Function names that the module can call from JavaScript.
     enum ModuleFunctionName: String, CaseIterable {
         case createPlaidLinkSession
+        case openLinkSession
     }
 
     // MARK: Private

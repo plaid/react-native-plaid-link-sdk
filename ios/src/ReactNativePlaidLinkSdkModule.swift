@@ -24,6 +24,7 @@ public class ReactNativePlaidLinkSdkModule: Module {
         AsyncFunction(ModuleFunctionName.createPlaidLinkSession.rawValue) { (token: String, onLoadPromise: Promise) in
             let onSuccess: OnSuccessHandler = { [weak self] success in
                 self?.sendEvent(ModuleEventName.onSuccess.rawValue, success.asDictionary)
+                self?.linkSession = nil // qwe check for handoff event.... ugh
             }
 
             let onExit: OnExitHandler = { [weak self] exit in
@@ -63,11 +64,12 @@ public class ReactNativePlaidLinkSdkModule: Module {
         AsyncFunction(ModuleFunctionName.createPlaidLayerSession.rawValue) { (token: String, promise: Promise) in
             let onSuccess: OnSuccessHandler = { [weak self] success in
                 self?.sendEvent(ModuleEventName.onSuccess.rawValue, success.asDictionary)
+                self?.layerSession = nil
             }
 
             let onExit: OnExitHandler = { [weak self] exit in
                 self?.sendEvent(ModuleEventName.onExit.rawValue, exit.asDictionary)
-                self?.linkSession = nil
+                self?.layerSession = nil
             }
 
             let onEvent: OnEventHandler = { [weak self] event in
@@ -83,7 +85,7 @@ public class ReactNativePlaidLinkSdkModule: Module {
 
             do {
                 let session = try Plaid.createPlaidLayerSession(configuration: config)
-                self.linkSession = session
+                self.layerSession = session
                 DispatchQueue.main.async {
                     promise.resolve()
                 }
@@ -147,7 +149,7 @@ public class ReactNativePlaidLinkSdkModule: Module {
         }
 
         AsyncFunction(ModuleFunctionName.submitLayerData.rawValue) { (phoneNumber: String?, dateOfBirth: String?, params: [String: String]?, promise: Promise) in
-            guard let layerSession = self.linkSession as? PlaidLayerSession else {
+            guard let layerSession = self.layerSession else {
                 promise.reject("PLAID_NO_LAYER_SESSION", "Layer session not found. Call createPlaidLayerSession first.")
                 return
             }
@@ -185,6 +187,7 @@ public class ReactNativePlaidLinkSdkModule: Module {
     // MARK: Private
 
     private var linkSession: PlaidLinkSession?
+    private var layerSession: PlaidLayerSession?
     private var sessionCreationError: Error?
 }
 

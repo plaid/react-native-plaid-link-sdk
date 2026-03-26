@@ -7,7 +7,11 @@ declare class ReactNativePlaidLinkSdkModule extends NativeModule<ReactNativePlai
   createPlaidLinkSession(token: string): Promise<void>;
   createPlaidLayerSession(token: string): Promise<void>;
   openLinkSession(fullScreen: boolean): Promise<void>;
-  submitLayerData(phoneNumber?: string, dateOfBirth?: string, params?: Record<string, string>): Promise<void>;
+  submitLayerData(
+    phoneNumber?: string,
+    dateOfBirth?: string,
+    params?: Record<string, string>
+  ): Promise<void>;
 }
 
 // This call loads the native module object from the JSI.

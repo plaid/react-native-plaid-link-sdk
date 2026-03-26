@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
 import {
   createPlaidLinkSession,
@@ -13,33 +13,42 @@ import {
   ConnectButton,
   ErrorView,
   SdkVersionView,
+  TokenInputView,
 } from "../components/components";
 import { styles } from "../styles/common";
 import { SessionState } from "../types/types";
+import { isValidToken } from "../utils/validation";
 import { LinkExitScreen } from "./LinkExitScreen";
 import { LinkSuccessScreen } from "./LinkSuccessScreen";
 
 type Props = { onBack: () => void };
 
 export function PlaidLinkSessionScreen({ onBack }: Props) {
-  const [state, setState] = useState<SessionState>("loading");
+  const [token, setToken] = useState("");
+  const [state, setState] = useState<SessionState>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [linkExit, setLinkExit] = useState<LinkExit | null>(null);
   const [linkSuccess, setLinkSuccess] = useState<LinkSuccess | null>(null);
   const sessionRef = useRef<PlaidLinkSession | null>(null);
   const events = useRef<LinkEvent[]>([]);
 
-  useEffect(() => {
-    createSession();
-  }, []);
-
   const createSession = async () => {
+    if (!token.trim()) {
+      setErrorMessage("Please enter a link token");
+      return;
+    }
+
+    if (!isValidToken(token)) {
+      setErrorMessage("Invalid token format");
+      return;
+    }
+
     setState("loading");
     setErrorMessage(null);
     events.current = [];
     try {
       sessionRef.current = await createPlaidLinkSession({
-        token: "link-sandbox-f1c386bb-1548-4808-b2d2-1acd6c9444f5",
+        token: token.trim(),
         onSuccess: (success) => {
           console.log(
             "[PlaidLink] onSuccess:",
@@ -91,6 +100,8 @@ export function PlaidLinkSessionScreen({ onBack }: Props) {
           <Text style={styles.title}>Plaid Link Session Example</Text>
           <SdkVersionView version={ReactNativePlaidLinkSdk.sdkVersion} />
 
+          <TokenInputView token={token} onTokenChange={setToken} />
+
           {state === "error" && errorMessage && (
             <ErrorView message={errorMessage} />
           )}
@@ -99,6 +110,7 @@ export function PlaidLinkSessionScreen({ onBack }: Props) {
             state={state}
             onRetry={createSession}
             onOpen={handleOpen}
+            hasValidToken={isValidToken(token)}
           />
         </View>
       </ScrollView>

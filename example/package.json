@@ -6,7 +6,8 @@
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
-    "ios": "expo run:ios"
+    "ios": "expo run:ios",
+    "format": "prettier --write \"**/*.{ts,tsx}\""
   },
   "dependencies": {
     "expo": "~55.0.8",

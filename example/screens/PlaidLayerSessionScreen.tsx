@@ -1,5 +1,5 @@
-import { SafeAreaView, Text, Button } from 'react-native';
-import { styles } from '../styles/common';
+import { SafeAreaView, Text, Button } from "react-native";
+import { styles } from "../styles/common";
 
 export function PlaidLayerSessionScreen({ onBack }: { onBack: () => void }) {
   return (

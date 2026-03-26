@@ -138,8 +138,8 @@ public class ReactNativePlaidLinkSdkModule: Module {
 fileprivate extension Institution {
     var asDictionary: [String: Any] {
         return [
-            "name": name ?? "",
-            "id": id ?? "",
+            "name": name,
+            "id": id,
         ]
     }
 }

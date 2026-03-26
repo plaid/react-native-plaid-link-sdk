@@ -1,6 +1,13 @@
-import { useEvent } from "expo";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
+import {
+  create,
+  LinkExit,
+  LinkEvent,
+  LinkSuccess,
+  PlaidLinkSession,
+  LinkEventName,
+} from "react-native-plaid-link-sdk";
 import ReactNativePlaidLinkSdk from "react-native-plaid-link-sdk";
 import {
   ConnectButton,
@@ -9,16 +16,18 @@ import {
 } from "../components/components";
 import { styles } from "../styles/common";
 import { SessionState } from "../types/types";
+import { LinkExitScreen } from "./LinkExitScreen";
+import { LinkSuccessScreen } from "./LinkSuccessScreen";
 
 type Props = { onBack: () => void };
 
 export function PlaidLinkSessionScreen({ onBack }: Props) {
   const [state, setState] = useState<SessionState>("loading");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const onSuccess = useEvent(ReactNativePlaidLinkSdk, "onSuccess");
-  const onExit = useEvent(ReactNativePlaidLinkSdk, "onExit");
-  const onEvent = useEvent(ReactNativePlaidLinkSdk, "onEvent");
+  const [linkExit, setLinkExit] = useState<LinkExit | null>(null);
+  const [linkSuccess, setLinkSuccess] = useState<LinkSuccess | null>(null);
+  const sessionRef = useRef<PlaidLinkSession | null>(null);
+  const events = useRef<LinkEvent[]>([]);
 
   useEffect(() => {
     createSession();
@@ -27,10 +36,31 @@ export function PlaidLinkSessionScreen({ onBack }: Props) {
   const createSession = async () => {
     setState("loading");
     setErrorMessage(null);
+    events.current = [];
     try {
-      await ReactNativePlaidLinkSdk.createPlaidLinkSession(
-        "link-sandbox-522ffba3-fce4-421c-99d0-db4586eaf876"
-      );
+      sessionRef.current = await create({
+        token: "link-sandbox-f1c386bb-1548-4808-b2d2-1acd6c9444f5",
+        onSuccess: (success) => {
+          console.log(
+            "[PlaidLink] onSuccess:",
+            JSON.stringify(success, null, 2)
+          );
+          setLinkSuccess(success);
+        },
+        onExit: (exit) => {
+          console.log("[PlaidLink] onExit:", JSON.stringify(exit, null, 2));
+          setLinkExit(exit);
+        },
+        onEvent: (event) => {
+          console.log("[PlaidLink] onEvent:", JSON.stringify(event, null, 2));
+          events.current = [...events.current, event];
+
+          if (event.eventName === LinkEventName.ERROR) {
+            setState('error');
+            setErrorMessage(event.metadata.errorMessage ?? 'Failed to create session.');
+          }
+        },
+      });
       setState("ready");
     } catch (e: any) {
       setState("error");
@@ -39,11 +69,12 @@ export function PlaidLinkSessionScreen({ onBack }: Props) {
   };
 
   const handleOpen = async () => {
+    console.log('[PlaidLink] handleOpen - session:', sessionRef.current);
     try {
-      await ReactNativePlaidLinkSdk.openLinkSession(false);
+        await sessionRef.current?.open(false);
     } catch (e: any) {
-      setState("error");
-      setErrorMessage(e.message ?? "Failed to open session.");
+        setState('error');
+        setErrorMessage(e.message ?? 'Failed to open session.');
     }
   };
 
@@ -69,6 +100,28 @@ export function PlaidLinkSessionScreen({ onBack }: Props) {
           />
         </View>
       </ScrollView>
+
+      {linkSuccess && (
+        <LinkSuccessScreen
+          linkSuccess={linkSuccess}
+          events={events.current}
+          onClose={() => {
+            setLinkSuccess(null);
+            createSession();
+          }}
+        />
+      )}
+
+      {linkExit && (
+        <LinkExitScreen
+          linkExit={linkExit}
+          events={events.current}
+          onClose={() => {
+            setLinkExit(null);
+            createSession();
+          }}
+        />
+      )}
     </SafeAreaView>
   );
 }

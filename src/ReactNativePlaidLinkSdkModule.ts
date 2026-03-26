@@ -1,6 +1,6 @@
-import { NativeModule, requireNativeModule } from 'expo';
+import { NativeModule, requireNativeModule } from "expo";
 
-import { ReactNativePlaidLinkSdkModuleEvents } from './ReactNativePlaidLinkSdk.types';
+import { ReactNativePlaidLinkSdkModuleEvents } from "./ReactNativePlaidLinkSdk.types";
 
 declare class ReactNativePlaidLinkSdkModule extends NativeModule<ReactNativePlaidLinkSdkModuleEvents> {
   sdkVersion: string;
@@ -9,4 +9,6 @@ declare class ReactNativePlaidLinkSdkModule extends NativeModule<ReactNativePlai
 }
 
 // This call loads the native module object from the JSI.
-export default requireNativeModule<ReactNativePlaidLinkSdkModule>('ReactNativePlaidLinkSdk');
+export default requireNativeModule<ReactNativePlaidLinkSdkModule>(
+  "ReactNativePlaidLinkSdk"
+);

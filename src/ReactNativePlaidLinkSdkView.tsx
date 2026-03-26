@@ -1,11 +1,13 @@
-import { requireNativeView } from 'expo';
-import * as React from 'react';
+import { requireNativeView } from "expo";
+import * as React from "react";
 
-import { ReactNativePlaidLinkSdkViewProps } from './ReactNativePlaidLinkSdk.types';
+import { ReactNativePlaidLinkSdkViewProps } from "./ReactNativePlaidLinkSdk.types";
 
 const NativeView: React.ComponentType<ReactNativePlaidLinkSdkViewProps> =
-  requireNativeView('ReactNativePlaidLinkSdk');
+  requireNativeView("ReactNativePlaidLinkSdk");
 
-export default function ReactNativePlaidLinkSdkView(props: ReactNativePlaidLinkSdkViewProps) {
+export default function ReactNativePlaidLinkSdkView(
+  props: ReactNativePlaidLinkSdkViewProps
+) {
   return <NativeView {...props} />;
 }

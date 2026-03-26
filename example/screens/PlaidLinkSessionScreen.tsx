@@ -56,8 +56,10 @@ export function PlaidLinkSessionScreen({ onBack }: Props) {
           events.current = [...events.current, event];
 
           if (event.eventName === LinkEventName.ERROR) {
-            setState('error');
-            setErrorMessage(event.metadata.errorMessage ?? 'Failed to create session.');
+            setState("error");
+            setErrorMessage(
+              event.metadata.errorMessage ?? "Failed to create session."
+            );
           }
         },
       });
@@ -69,12 +71,12 @@ export function PlaidLinkSessionScreen({ onBack }: Props) {
   };
 
   const handleOpen = async () => {
-    console.log('[PlaidLink] handleOpen - session:', sessionRef.current);
+    console.log("[PlaidLink] handleOpen - session:", sessionRef.current);
     try {
-        await sessionRef.current?.open(false);
+      await sessionRef.current?.open(false);
     } catch (e: any) {
-        setState('error');
-        setErrorMessage(e.message ?? 'Failed to open session.');
+      setState("error");
+      setErrorMessage(e.message ?? "Failed to open session.");
     }
   };
 

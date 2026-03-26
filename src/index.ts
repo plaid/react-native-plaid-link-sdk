@@ -111,9 +111,6 @@ export async function createPlaidLayerSession(
   }
 }
 
-// Backwards compatibility alias
-export const create = createPlaidLinkSession;
-
 export { default } from "./ReactNativePlaidLinkSdkModule";
 export { default as ReactNativePlaidLinkSdkView } from "./ReactNativePlaidLinkSdkView";
 export * from "./ReactNativePlaidLinkSdk.types";

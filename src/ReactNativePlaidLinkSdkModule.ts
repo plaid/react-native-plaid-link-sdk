@@ -5,7 +5,9 @@ import { ReactNativePlaidLinkSdkModuleEvents } from "./ReactNativePlaidLinkSdk.t
 declare class ReactNativePlaidLinkSdkModule extends NativeModule<ReactNativePlaidLinkSdkModuleEvents> {
   sdkVersion: string;
   createPlaidLinkSession(token: string): Promise<void>;
+  createPlaidLayerSession(token: string): Promise<void>;
   openLinkSession(fullScreen: boolean): Promise<void>;
+  submitLayerData(phoneNumber?: string, dateOfBirth?: string, params?: Record<string, string>): Promise<void>;
 }
 
 // This call loads the native module object from the JSI.

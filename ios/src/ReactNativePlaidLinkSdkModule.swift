@@ -60,6 +60,41 @@ public class ReactNativePlaidLinkSdkModule: Module {
             }
         }
 
+        AsyncFunction(ModuleFunctionName.createPlaidLayerSession.rawValue) { (token: String, promise: Promise) in
+            let onSuccess: OnSuccessHandler = { [weak self] success in
+                self?.sendEvent(ModuleEventName.onSuccess.rawValue, success.asDictionary)
+            }
+
+            let onExit: OnExitHandler = { [weak self] exit in
+                self?.sendEvent(ModuleEventName.onExit.rawValue, exit.asDictionary)
+                self?.linkSession = nil
+            }
+
+            let onEvent: OnEventHandler = { [weak self] event in
+                self?.sendEvent(ModuleEventName.onEvent.rawValue, event.asDictionary)
+            }
+
+            let config = LayerTokenConfiguration(
+                token: token,
+                onSuccess: onSuccess,
+                onExit: onExit,
+                onEvent: onEvent
+            )
+
+            do {
+                let session = try Plaid.createPlaidLayerSession(configuration: config)
+                self.linkSession = session
+                DispatchQueue.main.async {
+                    promise.resolve()
+                }
+            } catch {
+                self.sessionCreationError = error
+                DispatchQueue.main.async {
+                    promise.reject("LAYER_SESSION_CREATE_ERROR", error.localizedDescription)
+                }
+            }
+        }
+
         AsyncFunction(ModuleFunctionName.openLinkSession.rawValue) { (fullScreen: Bool, promise: Promise) in
             guard let session = self.linkSession else {
                 let errorMessage = self.sessionCreationError?.localizedDescription ?? "createPlaidLinkSession was not called."
@@ -110,6 +145,24 @@ public class ReactNativePlaidLinkSdkModule: Module {
                 promise.resolve()
             }
         }
+
+        AsyncFunction(ModuleFunctionName.submitLayerData.rawValue) { (phoneNumber: String?, dateOfBirth: String?, params: [String: String]?, promise: Promise) in
+            guard let layerSession = self.linkSession as? PlaidLayerSession else {
+                promise.reject("PLAID_NO_LAYER_SESSION", "Layer session not found. Call createPlaidLayerSession first.")
+                return
+            }
+
+            let submissionData = LayerSubmissionData(
+                phoneNumber: phoneNumber,
+                dateOfBirth: dateOfBirth,
+                params: params
+            )
+
+            DispatchQueue.main.async {
+                layerSession.submit(data: submissionData)
+                promise.resolve()
+            }
+        }
     }
 
     // MARK: Enums
@@ -124,7 +177,9 @@ public class ReactNativePlaidLinkSdkModule: Module {
     /// Function names that the module can call from JavaScript.
     enum ModuleFunctionName: String, CaseIterable {
         case createPlaidLinkSession
+        case createPlaidLayerSession
         case openLinkSession
+        case submitLayerData
     }
 
     // MARK: Private
@@ -280,4 +335,10 @@ private func iso8601String(from date: Date) -> String {
     let formatter = ISO8601DateFormatter()
     formatter.formatOptions = [.withInternetDateTime]
     return formatter.string(from: date)
+}
+
+struct LayerSubmissionData: SubmissionData {
+    let phoneNumber: String?
+    let dateOfBirth: String?
+    let params: [String: String]?
 }

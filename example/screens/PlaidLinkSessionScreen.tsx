@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
 import {
-  create,
+  createPlaidLinkSession,
   LinkExit,
   LinkEvent,
   LinkSuccess,
@@ -38,7 +38,7 @@ export function PlaidLinkSessionScreen({ onBack }: Props) {
     setErrorMessage(null);
     events.current = [];
     try {
-      sessionRef.current = await create({
+      sessionRef.current = await createPlaidLinkSession({
         token: "link-sandbox-f1c386bb-1548-4808-b2d2-1acd6c9444f5",
         onSuccess: (success) => {
           console.log(

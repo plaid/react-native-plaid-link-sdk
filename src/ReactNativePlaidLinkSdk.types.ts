@@ -796,6 +796,31 @@ export interface LinkTokenConfiguration {
   onLoad?: () => void;
 }
 
+export interface LayerTokenConfiguration {
+  /** The link-token your server retrieved from the /link/token/create endpoint. */
+  token: string;
+
+  /** Called when a user has successfully onboarded an Item. */
+  onSuccess: LinkSuccessListener;
+
+  /** Called when a user has specifically exited the Layer flow. */
+  onExit?: LinkExitListener;
+
+  /** Called when the user has reached certain points in the Layer flow. */
+  onEvent?: LinkOnEventListener;
+}
+
 export interface PlaidLinkSession {
   open: (fullScreen?: boolean) => Promise<void>;
+}
+
+export interface SubmissionData {
+  phoneNumber?: string;
+  dateOfBirth?: string;
+  params?: Record<string, string>;
+}
+
+export interface PlaidLayerSession {
+  open: () => Promise<void>;
+  submit: (data: SubmissionData) => Promise<void>;
 }

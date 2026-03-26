@@ -70,23 +70,33 @@ export async function createPlaidLayerSession(
   try {
     cleanupListeners();
 
+    console.log("[PlaidLink] createPlaidLayerSession - setting up listeners");
+    console.log(
+      "[PlaidLink] onEvent callback provided:",
+      typeof config.onEvent
+    );
+
     successSub = NativePlaidModule.addListener(
       "onSuccess",
       (success: LinkSuccess) => {
+        console.log("[PlaidLink] JS received onSuccess event");
         config.onSuccess(success);
         cleanupListeners();
       }
     );
 
     exitSub = NativePlaidModule.addListener("onExit", (exit: LinkExit) => {
+      console.log("[PlaidLink] JS received onExit event");
       config.onExit?.(exit);
       cleanupListeners();
     });
 
     eventSub = NativePlaidModule.addListener("onEvent", (event: LinkEvent) => {
+      console.log("[PlaidLink] JS received onEvent:", event.eventName);
       config.onEvent?.(event);
     });
 
+    console.log("[PlaidLink] Listeners registered, creating native session");
     await NativePlaidModule.createPlaidLayerSession(config.token);
 
     console.log("[PlaidLink] createPlaidLayerSession - returning session");
@@ -94,7 +104,7 @@ export async function createPlaidLayerSession(
     return {
       open: () => {
         console.log("[PlaidLink] layer open called");
-        return NativePlaidModule.openLinkSession(false);
+        return NativePlaidModule.openLayerSession();
       },
       submit: (data: SubmissionData) => {
         console.log("[PlaidLink] layer submit called", data);

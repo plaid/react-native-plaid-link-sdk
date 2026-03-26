@@ -148,6 +148,45 @@ public class ReactNativePlaidLinkSdkModule: Module {
             }
         }
 
+        AsyncFunction(ModuleFunctionName.openLayerSession.rawValue) { (promise: Promise) in
+            guard let layerSession = self.layerSession else {
+                let errorMessage = self.sessionCreationError?.localizedDescription ?? "createPlaidLayerSession was not called."
+                let errorCode = self.sessionCreationError.map { String($0._code) } ?? "-1"
+                self.sendEvent(ModuleEventName.onExit.rawValue, [
+                    "displayMessage": errorMessage,
+                    "errorCode": errorCode,
+                    "errorType": "creation error",
+                    "errorMessage": errorMessage,
+                    "errorDisplayMessage": errorMessage,
+                    "errorJson": NSNull(),
+                    "metadata": [
+                        "linkSessionId": NSNull(),
+                        "institution": NSNull(),
+                        "status": NSNull(),
+                        "requestId": NSNull(),
+                        "metadataJson": NSNull(),
+                    ]
+                ])
+                
+                DispatchQueue.main.async {
+                    promise.resolve()
+                }
+
+                return
+            }
+
+            DispatchQueue.main.async {
+                guard let vc = self.appContext?.utilities?.currentViewController() else {
+                    promise.reject("PLAID_NO_VC", "Could not find current view controller.")
+                    return
+                }
+
+                print("[Swift] Opening Layer session")
+                layerSession.open(using: .viewController(vc))
+                promise.resolve()
+            }
+        }
+
         AsyncFunction(ModuleFunctionName.submitLayerData.rawValue) { (phoneNumber: String?, dateOfBirth: String?, params: [String: String]?, promise: Promise) in
             guard let layerSession = self.layerSession else {
                 promise.reject("PLAID_NO_LAYER_SESSION", "Layer session not found. Call createPlaidLayerSession first.")
@@ -181,6 +220,7 @@ public class ReactNativePlaidLinkSdkModule: Module {
         case createPlaidLinkSession
         case createPlaidLayerSession
         case openLinkSession
+        case openLayerSession
         case submitLayerData
     }
 

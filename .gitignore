@@ -55,3 +55,4 @@ yarn-error.log
 
 # Expo
 .expo/*
+dist/

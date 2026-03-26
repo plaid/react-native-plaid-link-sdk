@@ -2,43 +2,43 @@ import { Button, View, Text, ActivityIndicator } from "react-native";
 import { styles } from "../styles/common";
 import { SessionState } from "../types/types";
 
-export function LinkButton({
+export function SdkVersionView({ version }: { version: string }) {
+  return <Text style={styles.sdkVersion}>LinkKit {version}</Text>;
+}
+
+export function ErrorView({ message }: { message: string }) {
+  return (
+    <View style={styles.errorBox}>
+      <Text style={styles.errorIcon}>⚠️</Text>
+      <Text style={styles.errorMessage}>{message}</Text>
+    </View>
+  );
+}
+
+export function ConnectButton({
   state,
-  onCreate,
+  onRetry,
   onOpen,
 }: {
   state: SessionState;
-  onCreate: () => void;
+  onRetry: () => void;
   onOpen: () => void;
 }) {
-  switch (state) {
-    case "idle":
-      return <Button title="Create Session" onPress={onCreate} />;
-    case "loading":
-      return (
-        <View style={styles.loadingRow}>
-          <ActivityIndicator />
-          <Text style={styles.loadingText}>Initializing Link...</Text>
-        </View>
-      );
-    case "ready":
-      return <Button title="Connect Bank Account" onPress={onOpen} />;
-    case "error":
-      return <Button title="Retry" onPress={onCreate} />;
-  }
-}
+  const isLoading = state === "loading";
+  const isReady = state === "ready";
 
-export function Group({
-  name,
-  children,
-}: {
-  name: string;
-  children: React.ReactNode;
-}) {
   return (
-    <View style={styles.group}>
-      <Text style={styles.groupHeader}>{name}</Text>
-      {children}
+    <View
+      style={[styles.button, !isReady && styles.buttonDisabled]}
+      pointerEvents={isReady ? "auto" : "none"}
+    >
+      <Button
+        title={isLoading ? "Initializing..." : "Connect Bank Account"}
+        onPress={isReady ? onOpen : onRetry}
+        disabled={isLoading}
+        color="#fff"
+      />
+      {isLoading && <ActivityIndicator color="#fff" style={styles.spinner} />}
     </View>
   );
 }

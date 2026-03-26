@@ -18,5 +18,41 @@ export const styles = StyleSheet.create({
   groupHeader: { fontSize: 20, marginBottom: 20 },
   loadingRow: { flexDirection: "row", alignItems: "center", gap: 10 },
   loadingText: { color: "#888" },
-  error: { marginTop: 10, color: "red" },
+  content: {
+    alignItems: "center",
+    gap: 16,
+    padding: 20,
+  },
+  button: {
+    width: "100%",
+    backgroundColor: "#007AFF",
+    borderRadius: 10,
+    padding: 4,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonDisabled: {
+    backgroundColor: "#aaa",
+  },
+  spinner: {
+    marginLeft: 8,
+  },
+  errorBox: {
+    alignItems: "center",
+    gap: 8,
+    padding: 16,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    width: "100%",
+  },
+  errorIcon: {
+    fontSize: 28,
+  },
+  errorMessage: {
+    fontSize: 12,
+    color: "#888",
+    textAlign: "center",
+  },
+  backButton: { alignItems: "flex-start", padding: 8 },
 });

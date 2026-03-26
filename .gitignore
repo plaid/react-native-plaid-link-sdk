@@ -1,13 +1,10 @@
-
 # OSX
 #
 .DS_Store
 
-# node.js
-#
-node_modules/
-npm-debug.log
-yarn-error.log
+# VSCode
+.vscode/
+jsconfig.json
 
 # Xcode
 #
@@ -28,31 +25,33 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-      
 
-# Android/IntelliJ
+# Android/IJ
 #
-build/
-.idea
+.classpath
+.cxx
 .gradle
+.idea
+.project
+.settings
 local.properties
-*.iml
-*.hprof
-android/build/
+android.iml
+android/app/libs
+android/keystores/debug.keystore
 
-# BUCK
-buck-out/
-\.buckd/
-*.keystore
+# Cocoapods
+#
+example/ios/Pods
 
-# React Native ts
-dist/
+# Ruby
+example/vendor/
 
-.vscode
-example/android/build/
-example/.yalc
-example/yalc.lock
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
 
-exampleReactNative76/android/build/
-exampleReactNative76/.yalc
-exampleReactNative76/yalc.lock
+# Expo
+.expo/*

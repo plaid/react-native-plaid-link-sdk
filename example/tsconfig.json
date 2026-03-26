@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "react-native-plaid-link-sdk": ["../src/index"],
+      "react-native-plaid-link-sdk/*": ["../src/*"]
+    }
+  }
+}

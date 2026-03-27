@@ -24,7 +24,6 @@ public class ReactNativePlaidLinkSdkModule: Module {
         AsyncFunction(ModuleFunctionName.createPlaidLinkSession.rawValue) { (token: String, onLoadPromise: Promise) in
             let onSuccess: OnSuccessHandler = { [weak self] success in
                 self?.sendEvent(ModuleEventName.onSuccess.rawValue, success.asDictionary)
-                self?.linkSession = nil // qwe check for handoff event.... ugh
             }
 
             let onExit: OnExitHandler = { [weak self] exit in
@@ -334,14 +333,6 @@ fileprivate extension EventMetadata {
             "metadataJson": metadataJSON ?? "",
         ]
     }
-}
-
-fileprivate extension ExitStatus {
-    var stringValue: String { self.description } // qwe use this directly!
-}
-
-fileprivate extension MFAType {
-    var stringValue: String { self.description } // qwe use this directly!
 }
 
 fileprivate extension ExitError {

@@ -27,10 +27,7 @@ export const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#007AFF",
     borderRadius: 10,
-    padding: 4,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: "hidden",
   },
   buttonDisabled: {
     backgroundColor: "#aaa",
@@ -55,4 +52,35 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
   backButton: { alignItems: "flex-start", padding: 8 },
+  userDataSection: {
+    width: "100%",
+    maxWidth: 400,
+    marginTop: 20,
+    padding: 16,
+    backgroundColor: "#f5f5f5",
+    borderRadius: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 16,
+    color: "#333",
+  },
+  inputGroup: {
+    marginBottom: 16,
+  },
+  inputLabel: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginBottom: 6,
+    color: "#333",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+    fontSize: 14,
+    backgroundColor: "#fff",
+  },
 });

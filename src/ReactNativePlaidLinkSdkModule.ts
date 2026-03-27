@@ -1,12 +1,21 @@
-import { NativeModule, requireNativeModule } from 'expo';
+import { NativeModule, requireNativeModule } from "expo";
 
-import { ReactNativePlaidLinkSdkModuleEvents } from './ReactNativePlaidLinkSdk.types';
+import { ReactNativePlaidLinkSdkModuleEvents } from "./ReactNativePlaidLinkSdk.types";
 
 declare class ReactNativePlaidLinkSdkModule extends NativeModule<ReactNativePlaidLinkSdkModuleEvents> {
   sdkVersion: string;
   createPlaidLinkSession(token: string): Promise<void>;
+  createPlaidLayerSession(token: string): Promise<void>;
   openLinkSession(fullScreen: boolean): Promise<void>;
+  openLayerSession(): Promise<void>;
+  submitLayerData(
+    phoneNumber?: string,
+    dateOfBirth?: string,
+    params?: Record<string, string>
+  ): Promise<void>;
 }
 
 // This call loads the native module object from the JSI.
-export default requireNativeModule<ReactNativePlaidLinkSdkModule>('ReactNativePlaidLinkSdk');
+export default requireNativeModule<ReactNativePlaidLinkSdkModule>(
+  "ReactNativePlaidLinkSdk"
+);

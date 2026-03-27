@@ -53,6 +53,10 @@ npm-debug.log
 yarn-debug.log
 yarn-error.log
 
+# Testing
+#
+coverage/
+
 # Expo
 .expo/*
 dist/

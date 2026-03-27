@@ -15,12 +15,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Use Node.js 20
-        uses: actions/setup-node@v3
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "npm"
 
       - name: Install Node modules
@@ -64,3 +64,63 @@ jobs:
           lcov-file: ./coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
           delete-old-comments: true
+
+  build-ios-example:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install root dependencies
+        run: npm install
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Install example dependencies
+        working-directory: example
+        run: npm install
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/CocoaPods
+            example/ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('example/ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Generate iOS project with Expo
+        working-directory: example
+        run: npx expo prebuild --platform ios --clean
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Build iOS app for Simulator
+        working-directory: example
+        run: |
+          xcodebuild -workspace ios/reactnativeplaidlinksdkexample.xcworkspace \
+            -scheme reactnativeplaidlinksdkexample \
+            -sdk iphonesimulator \
+            -configuration Release \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            clean build \
+            CODE_SIGNING_ALLOWED=NO \
+            | tee xcodebuild.log
+
+      - name: Upload build logs
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: ios-build-logs
+          path: example/xcodebuild.log
+          retention-days: 7

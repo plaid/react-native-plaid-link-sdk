@@ -1,7 +1,6 @@
-name: Pull Request into Develop
+name: Test and Coverage Check
 
 on:
-  # Triggers the workflow on a pull request pointed at develop.
   pull_request:
     branches:
       - "master"
@@ -18,14 +17,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Use Node.js 19
+      - name: Use Node.js 20
         uses: actions/setup-node@v3
         with:
-          node-version: 19
+          node-version: 20
           cache: "npm"
 
       - name: Install Node modules
         run: npm ci
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
 
       - name: Linting
         run: npm run lint

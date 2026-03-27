@@ -828,3 +828,7 @@ export interface PlaidLayerSession {
   open: () => Promise<void>;
   submit: (data: SubmissionData) => Promise<void>;
 }
+
+export interface PlaidHeadlessSession {
+  start: () => Promise<void>;
+}

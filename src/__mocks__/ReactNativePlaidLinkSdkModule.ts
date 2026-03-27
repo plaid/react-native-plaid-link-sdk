@@ -11,9 +11,13 @@ const mockNativeModule = {
 
   createPlaidLayerSession: jest.fn(() => Promise.resolve()),
 
+  createPlaidHeadlessSession: jest.fn(() => Promise.resolve()),
+
   openLinkSession: jest.fn((fullScreen: boolean) => Promise.resolve()),
 
   openLayerSession: jest.fn(() => Promise.resolve()),
+
+  startHeadlessSession: jest.fn(() => Promise.resolve()),
 
   submitLayerData: jest.fn(
     (phone?: string, dob?: string, params?: Record<string, string>) =>

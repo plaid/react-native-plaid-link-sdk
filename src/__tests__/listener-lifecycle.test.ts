@@ -300,11 +300,13 @@ describe("Listener Lifecycle", () => {
   it("layer session listeners clean up after success", async () => {
     const onSuccess = jest.fn();
     const onExit = jest.fn();
+    const onEvent = jest.fn();
 
     const config = {
       token: "layer-token",
       onSuccess,
       onExit,
+      onEvent,
     };
 
     await createPlaidLayerSession(config);
@@ -341,6 +343,8 @@ describe("Listener Lifecycle", () => {
     const layerConfig = {
       token: "layer-token",
       onSuccess: layerSuccess,
+      onExit: jest.fn(),
+      onEvent: jest.fn(),
     };
 
     await createPlaidLayerSession(layerConfig);

@@ -335,7 +335,7 @@ describe("Type Definitions", () => {
       expect(typeof config.onLoad).toBe("function");
     });
 
-    it("LayerTokenConfiguration has required fields", () => {
+    it("LayerTokenConfiguration has all required fields", () => {
       const config = {
         token: "layer-token",
         onSuccess: jest.fn(),
@@ -345,18 +345,8 @@ describe("Type Definitions", () => {
 
       expect(config.token).toBeDefined();
       expect(typeof config.onSuccess).toBe("function");
-    });
-
-    it("LayerTokenConfiguration onExit and onEvent are optional", () => {
-      const minimalConfig = {
-        token: "layer-token",
-        onSuccess: jest.fn(),
-      };
-
-      expect(minimalConfig.token).toBeDefined();
-      expect(typeof minimalConfig.onSuccess).toBe("function");
-      expect(minimalConfig.onExit).toBeUndefined();
-      expect(minimalConfig.onEvent).toBeUndefined();
+      expect(typeof config.onExit).toBe("function");
+      expect(typeof config.onEvent).toBe("function");
     });
 
     it("PlaidLinkSession has open method", () => {

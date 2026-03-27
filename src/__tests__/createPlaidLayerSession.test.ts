@@ -35,23 +35,16 @@ describe("createPlaidLayerSession", () => {
     expect(NativePlaidModule.addListener).toHaveBeenCalledTimes(3);
   });
 
-  it("handles optional onExit callback", async () => {
-    const configWithoutExit = {
-      token: "layer-token",
-      onSuccess: jest.fn(),
-    };
-
-    const session1 = await createPlaidLayerSession(configWithoutExit);
-    expect(session1).toBeDefined();
-
+  it("onExit callback is invoked correctly", async () => {
     const onExitMock = jest.fn();
-    const configWithExit = {
+    const config = {
       token: "layer-token",
       onSuccess: jest.fn(),
       onExit: onExitMock,
+      onEvent: jest.fn(),
     };
 
-    await createPlaidLayerSession(configWithExit);
+    await createPlaidLayerSession(config);
 
     const mockExit: LinkExit = {
       metadata: {
@@ -64,23 +57,16 @@ describe("createPlaidLayerSession", () => {
     expect(onExitMock).toHaveBeenCalledWith(mockExit);
   });
 
-  it("handles optional onEvent callback", async () => {
-    const configWithoutEvent = {
-      token: "layer-token",
-      onSuccess: jest.fn(),
-    };
-
-    const session1 = await createPlaidLayerSession(configWithoutEvent);
-    expect(session1).toBeDefined();
-
+  it("onEvent callback is invoked correctly", async () => {
     const onEventMock = jest.fn();
-    const configWithEvent = {
+    const config = {
       token: "layer-token",
       onSuccess: jest.fn(),
+      onExit: jest.fn(),
       onEvent: onEventMock,
     };
 
-    await createPlaidLayerSession(configWithEvent);
+    await createPlaidLayerSession(config);
 
     const mockEvent: LinkEvent = {
       eventName: LinkEventName.LAYER_READY,
@@ -100,6 +86,8 @@ describe("createPlaidLayerSession", () => {
     const config = {
       token: "layer-token",
       onSuccess: jest.fn(),
+      onExit: jest.fn(),
+      onEvent: jest.fn(),
     };
 
     const session = await createPlaidLayerSession(config);
@@ -169,6 +157,8 @@ describe("createPlaidLayerSession", () => {
     const config = {
       token: "layer-token",
       onSuccess: jest.fn(),
+      onExit: jest.fn(),
+      onEvent: jest.fn(),
     };
 
     const session = await createPlaidLayerSession(config);
@@ -187,6 +177,8 @@ describe("createPlaidLayerSession", () => {
     const config = {
       token: "layer-token",
       onSuccess: jest.fn(),
+      onExit: jest.fn(),
+      onEvent: jest.fn(),
     };
 
     await expect(createPlaidLayerSession(config)).rejects.toThrow(

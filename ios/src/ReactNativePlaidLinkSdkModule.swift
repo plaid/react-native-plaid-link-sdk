@@ -96,6 +96,46 @@ public class ReactNativePlaidLinkSdkModule: Module {
             }
         }
 
+        AsyncFunction(ModuleFunctionName.createPlaidHeadlessSession.rawValue) { (token: String, onLoadPromise: Promise) in
+            let onSuccess: OnSuccessHandler = { [weak self] success in
+                self?.sendEvent(ModuleEventName.onSuccess.rawValue, success.asDictionary)
+                self?.headlessSession = nil
+            }
+
+            let onExit: OnExitHandler = { [weak self] exit in
+                self?.sendEvent(ModuleEventName.onExit.rawValue, exit.asDictionary)
+                self?.headlessSession = nil
+            }
+
+            let onEvent: OnEventHandler = { [weak self] event in
+                self?.sendEvent(ModuleEventName.onEvent.rawValue, event.asDictionary)
+            }
+
+            let onLoad: OnLoadHandler = {
+                DispatchQueue.main.async {
+                    onLoadPromise.resolve()
+                }
+            }
+
+            let config = LinkTokenConfiguration(
+                token: token,
+                onSuccess: onSuccess,
+                onExit: onExit,
+                onEvent: onEvent,
+                onLoad: onLoad
+            )
+
+            do {
+                let session = try Plaid.createHeadlessSession(configuration: config)
+                self.headlessSession = session
+            } catch {
+                self.sessionCreationError = error
+                DispatchQueue.main.async {
+                    onLoadPromise.reject("HEADLESS_SESSION_CREATE_ERROR", error.localizedDescription)
+                }
+            }
+        }
+
         AsyncFunction(ModuleFunctionName.openLinkSession.rawValue) { (fullScreen: Bool, promise: Promise) in
             guard let session = self.linkSession else {
                 let errorMessage = self.sessionCreationError?.localizedDescription ?? "createPlaidLinkSession was not called."
@@ -203,6 +243,39 @@ public class ReactNativePlaidLinkSdkModule: Module {
                 promise.resolve()
             }
         }
+
+        AsyncFunction(ModuleFunctionName.startHeadlessSession.rawValue) { (promise: Promise) in
+            guard let headlessSession = self.headlessSession else {
+                let errorMessage = self.sessionCreationError?.localizedDescription ?? "createPlaidHeadlessSession was not called."
+                let errorCode = self.sessionCreationError.map { String($0._code) } ?? "-1"
+                self.sendEvent(ModuleEventName.onExit.rawValue, [
+                    "displayMessage": errorMessage,
+                    "errorCode": errorCode,
+                    "errorType": "creation error",
+                    "errorMessage": errorMessage,
+                    "errorDisplayMessage": errorMessage,
+                    "errorJson": NSNull(),
+                    "metadata": [
+                        "linkSessionId": NSNull(),
+                        "institution": NSNull(),
+                        "status": NSNull(),
+                        "requestId": NSNull(),
+                        "metadataJson": NSNull(),
+                    ]
+                ])
+                
+                DispatchQueue.main.async {
+                    promise.resolve()
+                }
+
+                return
+            }
+
+            DispatchQueue.main.async {
+                headlessSession.start()
+                promise.resolve()
+            }
+        }
     }
 
     // MARK: Enums
@@ -218,15 +291,18 @@ public class ReactNativePlaidLinkSdkModule: Module {
     enum ModuleFunctionName: String, CaseIterable {
         case createPlaidLinkSession
         case createPlaidLayerSession
+        case createPlaidHeadlessSession
         case openLinkSession
         case openLayerSession
         case submitLayerData
+        case startHeadlessSession
     }
 
     // MARK: Private
 
     private var linkSession: PlaidLinkSession?
     private var layerSession: PlaidLayerSession?
+    private var headlessSession: PlaidHeadlessSession?
     private var sessionCreationError: Error?
 }
 

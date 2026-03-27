@@ -6,6 +6,7 @@ import {
   PlaidLinkSession,
   LayerTokenConfiguration,
   PlaidLayerSession,
+  PlaidHeadlessSession,
   SubmissionData,
 } from "./ReactNativePlaidLinkSdk.types";
 import NativePlaidModule from "./ReactNativePlaidLinkSdkModule";
@@ -117,6 +118,59 @@ export async function createPlaidLayerSession(
     };
   } catch (e) {
     console.error("[PlaidLink] createPlaidLayerSession failed:", e);
+    throw e;
+  }
+}
+
+export async function createPlaidHeadlessSession(
+  config: LinkTokenConfiguration,
+): Promise<PlaidHeadlessSession> {
+  try {
+    cleanupListeners();
+
+    console.log(
+      "[PlaidLink] createPlaidHeadlessSession - setting up listeners",
+    );
+
+    successSub = NativePlaidModule.addListener(
+      "onSuccess",
+      (success: LinkSuccess) => {
+        console.log("[PlaidLink] JS received onSuccess event");
+        config.onSuccess(success);
+        cleanupListeners();
+      },
+    );
+
+    exitSub = NativePlaidModule.addListener("onExit", (exit: LinkExit) => {
+      console.log("[PlaidLink] JS received onExit event");
+      config.onExit(exit);
+      cleanupListeners();
+    });
+
+    eventSub = NativePlaidModule.addListener("onEvent", (event: LinkEvent) => {
+      console.log("[PlaidLink] JS received onEvent:", event.eventName);
+      config.onEvent(event);
+    });
+
+    console.log(
+      "[PlaidLink] Listeners registered, creating native headless session",
+    );
+    await NativePlaidModule.createPlaidHeadlessSession(config.token);
+
+    console.log("[PlaidLink] createPlaidHeadlessSession - returning session");
+
+    if (config.onLoad) {
+      config.onLoad();
+    }
+
+    return {
+      start: () => {
+        console.log("[PlaidLink] headless start called");
+        return NativePlaidModule.startHeadlessSession();
+      },
+    };
+  } catch (e) {
+    console.error("[PlaidLink] createPlaidHeadlessSession failed:", e);
     throw e;
   }
 }

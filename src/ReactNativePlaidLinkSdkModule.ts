@@ -6,8 +6,10 @@ declare class ReactNativePlaidLinkSdkModule extends NativeModule<ReactNativePlai
   sdkVersion: string;
   createPlaidLinkSession(token: string): Promise<void>;
   createPlaidLayerSession(token: string): Promise<void>;
+  createPlaidHeadlessSession(token: string): Promise<void>;
   openLinkSession(fullScreen: boolean): Promise<void>;
   openLayerSession(): Promise<void>;
+  startHeadlessSession(): Promise<void>;
   submitLayerData(
     phoneNumber?: string,
     dateOfBirth?: string,

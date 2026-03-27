@@ -8,8 +8,7 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/*.types.ts',
-    '!src/**/*.d.ts',
-    '!src/ReactNativePlaidLinkSdkView.tsx'
+    '!src/**/*.d.ts'
   ],
   coverageThreshold: {
     global: {

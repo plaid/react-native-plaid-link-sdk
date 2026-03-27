@@ -122,5 +122,4 @@ export async function createPlaidLayerSession(
 }
 
 export { default } from "./ReactNativePlaidLinkSdkModule";
-export { default as ReactNativePlaidLinkSdkView } from "./ReactNativePlaidLinkSdkView";
 export * from "./ReactNativePlaidLinkSdk.types";

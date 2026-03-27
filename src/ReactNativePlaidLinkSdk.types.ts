@@ -98,323 +98,320 @@ export interface LinkAccountSubtype {}
 export class LinkAccountSubtypeCredit implements LinkAccountSubtype {
   public static readonly ALL = new LinkAccountSubtypeCredit(
     LinkAccountType.CREDIT,
-    LinkAccountSubtypes.ALL,
+    LinkAccountSubtypes.ALL
   );
   public static readonly CREDIT_CARD = new LinkAccountSubtypeCredit(
     LinkAccountType.CREDIT,
-    LinkAccountSubtypes.CREDIT_CARD,
+    LinkAccountSubtypes.CREDIT_CARD
   );
   public static readonly PAYPAL = new LinkAccountSubtypeCredit(
     LinkAccountType.CREDIT,
-    LinkAccountSubtypes.PAYPAL,
+    LinkAccountSubtypes.PAYPAL
   );
 
   private constructor(
     public readonly type: LinkAccountType,
-    public readonly subtype: LinkAccountSubtype,
+    public readonly subtype: LinkAccountSubtype
   ) {}
 }
 
 export class LinkAccountSubtypeDepository implements LinkAccountSubtype {
   public static readonly ALL = new LinkAccountSubtypeDepository(
     LinkAccountType.DEPOSITORY,
-    LinkAccountSubtypes.ALL,
+    LinkAccountSubtypes.ALL
   );
   public static readonly CASH_MANAGEMENT = new LinkAccountSubtypeDepository(
     LinkAccountType.DEPOSITORY,
-    LinkAccountSubtypes.CASH_MANAGEMENT,
+    LinkAccountSubtypes.CASH_MANAGEMENT
   );
   public static readonly CD = new LinkAccountSubtypeDepository(
     LinkAccountType.DEPOSITORY,
-    LinkAccountSubtypes.CD,
+    LinkAccountSubtypes.CD
   );
   public static readonly CHECKING = new LinkAccountSubtypeDepository(
     LinkAccountType.DEPOSITORY,
-    LinkAccountSubtypes.CHECKING,
+    LinkAccountSubtypes.CHECKING
   );
   public static readonly EBT = new LinkAccountSubtypeDepository(
     LinkAccountType.DEPOSITORY,
-    LinkAccountSubtypes.EBT,
+    LinkAccountSubtypes.EBT
   );
   public static readonly HSA = new LinkAccountSubtypeDepository(
     LinkAccountType.DEPOSITORY,
-    LinkAccountSubtypes.HSA,
+    LinkAccountSubtypes.HSA
   );
   public static readonly MONEY_MARKET = new LinkAccountSubtypeDepository(
     LinkAccountType.DEPOSITORY,
-    LinkAccountSubtypes.MONEY_MARKET,
+    LinkAccountSubtypes.MONEY_MARKET
   );
   public static readonly PAYPAL = new LinkAccountSubtypeDepository(
     LinkAccountType.DEPOSITORY,
-    LinkAccountSubtypes.PAYPAL,
+    LinkAccountSubtypes.PAYPAL
   );
   public static readonly PREPAID = new LinkAccountSubtypeDepository(
     LinkAccountType.DEPOSITORY,
-    LinkAccountSubtypes.PREPAID,
+    LinkAccountSubtypes.PREPAID
   );
   public static readonly SAVINGS = new LinkAccountSubtypeDepository(
     LinkAccountType.DEPOSITORY,
-    LinkAccountSubtypes.SAVINGS,
+    LinkAccountSubtypes.SAVINGS
   );
 
   private constructor(
     public readonly type: LinkAccountType,
-    public readonly subtype: LinkAccountSubtype,
+    public readonly subtype: LinkAccountSubtype
   ) {}
 }
 
 export class LinkAccountSubtypeInvestment implements LinkAccountSubtype {
   public static readonly ALL = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.ALL,
+    LinkAccountSubtypes.ALL
   );
   public static readonly BROKERAGE = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.BROKERAGE,
+    LinkAccountSubtypes.BROKERAGE
   );
   public static readonly CASH_ISA = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.CASH_ISA,
+    LinkAccountSubtypes.CASH_ISA
   );
   public static readonly EDUCATION_SAVINGS_ACCOUNT =
     new LinkAccountSubtypeInvestment(
       LinkAccountType.INVESTMENT,
-      LinkAccountSubtypes.EDUCATION_SAVINGS_ACCOUNT,
+      LinkAccountSubtypes.EDUCATION_SAVINGS_ACCOUNT
     );
   public static readonly FIXED_ANNUNITY = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.FIXED_ANNUNITY,
+    LinkAccountSubtypes.FIXED_ANNUNITY
   );
   public static readonly GIC = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.GIC,
+    LinkAccountSubtypes.GIC
   );
   public static readonly HEALTH_REIMBURSEMENT_ARRANGEMENT =
     new LinkAccountSubtypeInvestment(
       LinkAccountType.INVESTMENT,
-      LinkAccountSubtypes.HEALTH_REIMBURSEMENT_ARRANGEMENT,
+      LinkAccountSubtypes.HEALTH_REIMBURSEMENT_ARRANGEMENT
     );
   public static readonly HSA = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.HSA,
+    LinkAccountSubtypes.HSA
   );
   public static readonly INVESTMENT_401A = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.FOUR_0_1_A,
+    LinkAccountSubtypes.FOUR_0_1_A
   );
   public static readonly INVESTMENT_401K = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.FOUR_0_1_K,
+    LinkAccountSubtypes.FOUR_0_1_K
   );
   public static readonly INVESTMENT_403B = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.FOUR_0_3_B,
+    LinkAccountSubtypes.FOUR_0_3_B
   );
   public static readonly INVESTMENT_457B = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.FOUR_5_7_B,
+    LinkAccountSubtypes.FOUR_5_7_B
   );
   public static readonly INVESTMENT_529 = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.FIVE_2_9,
+    LinkAccountSubtypes.FIVE_2_9
   );
   public static readonly IRA = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.IRA,
+    LinkAccountSubtypes.IRA
   );
   public static readonly ISA = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.ISA,
+    LinkAccountSubtypes.ISA
   );
   public static readonly KEOGH = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.KEOGH,
+    LinkAccountSubtypes.KEOGH
   );
   public static readonly LIF = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.LIF,
+    LinkAccountSubtypes.LIF
   );
   public static readonly LIRA = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.LIRA,
+    LinkAccountSubtypes.LIRA
   );
   public static readonly LRIF = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.LRIF,
+    LinkAccountSubtypes.LRIF
   );
   public static readonly LRSP = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.LRSP,
+    LinkAccountSubtypes.LRSP
   );
   public static readonly MUTUAL_FUND = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.MUTUAL_FUND,
+    LinkAccountSubtypes.MUTUAL_FUND
   );
   public static readonly NON_TAXABLE_BROKERAGE_ACCOUNT =
     new LinkAccountSubtypeInvestment(
       LinkAccountType.INVESTMENT,
-      LinkAccountSubtypes.NON_TAXABLE_BROKERAGE_ACCOUNT,
+      LinkAccountSubtypes.NON_TAXABLE_BROKERAGE_ACCOUNT
     );
   public static readonly PENSION = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.PENSION,
+    LinkAccountSubtypes.PENSION
   );
   public static readonly PLAN = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.PLAN,
+    LinkAccountSubtypes.PLAN
   );
   public static readonly PRIF = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.PRIF,
+    LinkAccountSubtypes.PRIF
   );
   public static readonly PROFIT_SHARING_PLAN = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.PROFIT_SHARING_PLAN,
+    LinkAccountSubtypes.PROFIT_SHARING_PLAN
   );
   public static readonly RDSP = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.RDSP,
+    LinkAccountSubtypes.RDSP
   );
   public static readonly RESP = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.RESP,
+    LinkAccountSubtypes.RESP
   );
   public static readonly RETIREMENT = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.RETIREMENT,
+    LinkAccountSubtypes.RETIREMENT
   );
   public static readonly RLIF = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.RLIF,
+    LinkAccountSubtypes.RLIF
   );
   public static readonly ROTH = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.ROTH,
+    LinkAccountSubtypes.ROTH
   );
   public static readonly ROTH_401K = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.ROTH_401K,
+    LinkAccountSubtypes.ROTH_401K
   );
   public static readonly RRIF = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.RRIF,
+    LinkAccountSubtypes.RRIF
   );
   public static readonly RRSP = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.RRSP,
+    LinkAccountSubtypes.RRSP
   );
   public static readonly SARSEP = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.SARSEP,
+    LinkAccountSubtypes.SARSEP
   );
   public static readonly SEP_IRA = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.SEP_IRA,
+    LinkAccountSubtypes.SEP_IRA
   );
   public static readonly SIMPLE_IRA = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.SIMPLE_IRA,
+    LinkAccountSubtypes.SIMPLE_IRA
   );
   public static readonly SIIP = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.SIPP,
+    LinkAccountSubtypes.SIPP
   );
   public static readonly STOCK_PLAN = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.STOCK_PLAN,
+    LinkAccountSubtypes.STOCK_PLAN
   );
   public static readonly TFSA = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.TFSA,
+    LinkAccountSubtypes.TFSA
   );
   public static readonly THRIFT_SAVINGS_PLAN = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.THRIFT_SAVINGS_PLAN,
+    LinkAccountSubtypes.THRIFT_SAVINGS_PLAN
   );
   public static readonly TRUST = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.TRUST,
+    LinkAccountSubtypes.TRUST
   );
   public static readonly UGMA = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.UGMA,
+    LinkAccountSubtypes.UGMA
   );
   public static readonly UTMA = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.UTMA,
+    LinkAccountSubtypes.UTMA
   );
   public static readonly VARIABLE_ANNUITY = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
-    LinkAccountSubtypes.VARIABLE_ANNUITY,
+    LinkAccountSubtypes.VARIABLE_ANNUITY
   );
 
   private constructor(
     public readonly type: LinkAccountType,
-    public readonly subtype: LinkAccountSubtype,
+    public readonly subtype: LinkAccountSubtype
   ) {}
 }
 
 export class LinkAccountSubtypeLoan implements LinkAccountSubtype {
   public static readonly ALL = new LinkAccountSubtypeLoan(
     LinkAccountType.LOAN,
-    LinkAccountSubtypes.ALL,
+    LinkAccountSubtypes.ALL
   );
   public static readonly AUTO = new LinkAccountSubtypeLoan(
     LinkAccountType.LOAN,
-    LinkAccountSubtypes.AUTO,
+    LinkAccountSubtypes.AUTO
   );
   public static readonly BUSINESS = new LinkAccountSubtypeLoan(
     LinkAccountType.LOAN,
-    LinkAccountSubtypes.BUSINESS,
+    LinkAccountSubtypes.BUSINESS
   );
   public static readonly COMMERCIAL = new LinkAccountSubtypeLoan(
     LinkAccountType.LOAN,
-    LinkAccountSubtypes.COMMERCIAL,
+    LinkAccountSubtypes.COMMERCIAL
   );
   public static readonly CONSTRUCTION = new LinkAccountSubtypeLoan(
     LinkAccountType.LOAN,
-    LinkAccountSubtypes.CONSTRUCTION,
+    LinkAccountSubtypes.CONSTRUCTION
   );
   public static readonly CONSUMER = new LinkAccountSubtypeLoan(
     LinkAccountType.LOAN,
-    LinkAccountSubtypes.CONSUMER,
+    LinkAccountSubtypes.CONSUMER
   );
   public static readonly HOME_EQUITY = new LinkAccountSubtypeLoan(
     LinkAccountType.LOAN,
-    LinkAccountSubtypes.HOME_EQUITY,
+    LinkAccountSubtypes.HOME_EQUITY
   );
   public static readonly LINE_OF_CREDIT = new LinkAccountSubtypeLoan(
     LinkAccountType.LOAN,
-    LinkAccountSubtypes.LINE_OF_CREDIT,
+    LinkAccountSubtypes.LINE_OF_CREDIT
   );
   public static readonly LOAN = new LinkAccountSubtypeLoan(
     LinkAccountType.LOAN,
-    LinkAccountSubtypes.LOAN,
+    LinkAccountSubtypes.LOAN
   );
   public static readonly MORTGAGE = new LinkAccountSubtypeLoan(
     LinkAccountType.LOAN,
-    LinkAccountSubtypes.MORTGAGE,
+    LinkAccountSubtypes.MORTGAGE
   );
   public static readonly OVERDRAFT = new LinkAccountSubtypeLoan(
     LinkAccountType.LOAN,
-    LinkAccountSubtypes.OVERDRAFT,
+    LinkAccountSubtypes.OVERDRAFT
   );
   public static readonly STUDENT = new LinkAccountSubtypeLoan(
     LinkAccountType.LOAN,
-    LinkAccountSubtypes.STUDENT,
+    LinkAccountSubtypes.STUDENT
   );
 
   private constructor(
     public readonly type: LinkAccountType,
-    public readonly subtype: LinkAccountSubtype,
+    public readonly subtype: LinkAccountSubtype
   ) {}
 }
 
 export class LinkAccountSubtypeUnknown implements LinkAccountSubtype {
-  constructor(
-    public readonly type: string,
-    public readonly subtype: string,
-  ) {}
+  constructor(public readonly type: string, public readonly subtype: string) {}
 }
 
 export interface LinkSuccess {
@@ -832,3 +829,48 @@ export interface PlaidLayerSession {
 export interface PlaidHeadlessSession {
   start: () => Promise<void>;
 }
+
+export enum FinanceKitSyncBehavior {
+  LIVE = 0,
+  SIMULATED = 1,
+}
+
+export enum FinanceKitErrorType {
+  InvalidToken = 0,
+  PermissionError = 1,
+  LinkApiError = 2,
+  PermissionAccessError = 3,
+  Unknown = 4,
+}
+
+interface InvalidTokenError {
+  type: FinanceKitErrorType.InvalidToken;
+  message: string;
+}
+
+interface PermissionError {
+  type: FinanceKitErrorType.PermissionError;
+  message: string;
+}
+
+interface LinkApiError {
+  type: FinanceKitErrorType.LinkApiError;
+  message: string;
+}
+
+interface PermissionAccessError {
+  type: FinanceKitErrorType.PermissionAccessError;
+  message: string;
+}
+
+interface UnknownError {
+  type: FinanceKitErrorType.Unknown;
+  message: string;
+}
+
+export type FinanceKitError =
+  | InvalidTokenError
+  | PermissionError
+  | LinkApiError
+  | PermissionAccessError
+  | UnknownError;

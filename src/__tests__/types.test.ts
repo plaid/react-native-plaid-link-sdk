@@ -14,6 +14,9 @@ import {
   LinkErrorType,
   LinkEventName,
   LinkIOSPresentationStyle,
+  FinanceKitSyncBehavior,
+  FinanceKitErrorType,
+  FinanceKitError,
 } from "../ReactNativePlaidLinkSdk.types";
 
 describe("Type Definitions", () => {
@@ -71,13 +74,13 @@ describe("Type Definitions", () => {
       it("has institution error codes", () => {
         expect(LinkErrorCode.INSTITUTION_DOWN).toBe("INSTITUTION_DOWN");
         expect(LinkErrorCode.INSTITUTION_NOT_RESPONDING).toBe(
-          "INSTITUTION_NOT_RESPONDING",
+          "INSTITUTION_NOT_RESPONDING"
         );
       });
 
       it("has API error codes", () => {
         expect(LinkErrorCode.INTERNAL_SERVER_ERROR).toBe(
-          "INTERNAL_SERVER_ERROR",
+          "INTERNAL_SERVER_ERROR"
         );
         expect(LinkErrorCode.PLANNED_MAINTENANCE).toBe("PLANNED_MAINTENANCE");
       });
@@ -96,13 +99,13 @@ describe("Type Definitions", () => {
     describe("LinkAccountVerificationStatus", () => {
       it("has correct values", () => {
         expect(
-          LinkAccountVerificationStatus.PENDING_AUTOMATIC_VERIFICATION,
+          LinkAccountVerificationStatus.PENDING_AUTOMATIC_VERIFICATION
         ).toBe("pending_automatic_verification");
         expect(LinkAccountVerificationStatus.PENDING_MANUAL_VERIFICATION).toBe(
-          "pending_manual_verification",
+          "pending_manual_verification"
         );
         expect(LinkAccountVerificationStatus.MANUALLY_VERIFIED).toBe(
-          "manually_verified",
+          "manually_verified"
         );
       });
     });
@@ -111,7 +114,7 @@ describe("Type Definitions", () => {
       it("has correct values", () => {
         expect(LinkExitMetadataStatus.CONNECTED).toBe("connected");
         expect(LinkExitMetadataStatus.REQUIRES_CREDENTIALS).toBe(
-          "requires_credentials",
+          "requires_credentials"
         );
         expect(LinkExitMetadataStatus.REQUIRES_CODE).toBe("requires_code");
       });
@@ -210,7 +213,7 @@ describe("Type Definitions", () => {
       it("handles arbitrary types", () => {
         const unknown = new LinkAccountSubtypeUnknown(
           "custom_type",
-          "custom_subtype",
+          "custom_subtype"
         );
         expect(unknown.type).toBe("custom_type");
         expect(unknown.subtype).toBe("custom_subtype");
@@ -438,7 +441,7 @@ describe("Type Definitions", () => {
 
       expect(linkSuccess).toBeDefined();
       expect(linkSuccess.metadata.accounts[0].verificationStatus).toBe(
-        "manually_verified",
+        "manually_verified"
       );
     });
 
@@ -499,6 +502,77 @@ describe("Type Definitions", () => {
       expect(linkEvent.metadata.errorCode).toBeDefined();
       expect(linkEvent.metadata.errorMessage).toBeDefined();
       expect(linkEvent.metadata.institutionId).toBeDefined();
+    });
+  });
+
+  describe("FinanceKit Types", () => {
+    describe("FinanceKitSyncBehavior", () => {
+      it("has correct values", () => {
+        expect(FinanceKitSyncBehavior.LIVE).toBe(0);
+        expect(FinanceKitSyncBehavior.SIMULATED).toBe(1);
+      });
+    });
+
+    describe("FinanceKitErrorType", () => {
+      it("has correct values", () => {
+        expect(FinanceKitErrorType.InvalidToken).toBe(0);
+        expect(FinanceKitErrorType.PermissionError).toBe(1);
+        expect(FinanceKitErrorType.LinkApiError).toBe(2);
+        expect(FinanceKitErrorType.PermissionAccessError).toBe(3);
+        expect(FinanceKitErrorType.Unknown).toBe(4);
+      });
+    });
+
+    describe("FinanceKitError", () => {
+      it("InvalidTokenError structure", () => {
+        const error: FinanceKitError = {
+          type: FinanceKitErrorType.InvalidToken,
+          message: "Invalid token provided",
+        };
+
+        expect(error.type).toBe(FinanceKitErrorType.InvalidToken);
+        expect(error.message).toBe("Invalid token provided");
+      });
+
+      it("PermissionError structure", () => {
+        const error: FinanceKitError = {
+          type: FinanceKitErrorType.PermissionError,
+          message: "Permission denied",
+        };
+
+        expect(error.type).toBe(FinanceKitErrorType.PermissionError);
+        expect(error.message).toBe("Permission denied");
+      });
+
+      it("LinkApiError structure", () => {
+        const error: FinanceKitError = {
+          type: FinanceKitErrorType.LinkApiError,
+          message: "API error occurred",
+        };
+
+        expect(error.type).toBe(FinanceKitErrorType.LinkApiError);
+        expect(error.message).toBe("API error occurred");
+      });
+
+      it("PermissionAccessError structure", () => {
+        const error: FinanceKitError = {
+          type: FinanceKitErrorType.PermissionAccessError,
+          message: "Cannot access permissions",
+        };
+
+        expect(error.type).toBe(FinanceKitErrorType.PermissionAccessError);
+        expect(error.message).toBe("Cannot access permissions");
+      });
+
+      it("UnknownError structure", () => {
+        const error: FinanceKitError = {
+          type: FinanceKitErrorType.Unknown,
+          message: "An unknown error occurred",
+        };
+
+        expect(error.type).toBe(FinanceKitErrorType.Unknown);
+        expect(error.message).toBe("An unknown error occurred");
+      });
     });
   });
 });

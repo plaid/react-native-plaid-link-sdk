@@ -8,6 +8,7 @@ import {
   PlaidLayerSession,
   PlaidHeadlessSession,
   SubmissionData,
+  FinanceKitSyncBehavior,
 } from "./ReactNativePlaidLinkSdk.types";
 import NativePlaidModule from "./ReactNativePlaidLinkSdkModule";
 
@@ -27,7 +28,7 @@ function cleanupListeners() {
 }
 
 export async function createPlaidLinkSession(
-  config: LinkTokenConfiguration,
+  config: LinkTokenConfiguration
 ): Promise<PlaidLinkSession> {
   try {
     cleanupListeners();
@@ -37,7 +38,7 @@ export async function createPlaidLinkSession(
       (success: LinkSuccess) => {
         config.onSuccess(success);
         cleanupListeners();
-      },
+      }
     );
 
     exitSub = NativePlaidModule.addListener("onExit", (exit: LinkExit) => {
@@ -66,7 +67,7 @@ export async function createPlaidLinkSession(
 }
 
 export async function createPlaidLayerSession(
-  config: LayerTokenConfiguration,
+  config: LayerTokenConfiguration
 ): Promise<PlaidLayerSession> {
   try {
     cleanupListeners();
@@ -74,7 +75,7 @@ export async function createPlaidLayerSession(
     console.log("[PlaidLink] createPlaidLayerSession - setting up listeners");
     console.log(
       "[PlaidLink] onEvent callback provided:",
-      typeof config.onEvent,
+      typeof config.onEvent
     );
 
     successSub = NativePlaidModule.addListener(
@@ -83,7 +84,7 @@ export async function createPlaidLayerSession(
         console.log("[PlaidLink] JS received onSuccess event");
         config.onSuccess(success);
         cleanupListeners();
-      },
+      }
     );
 
     exitSub = NativePlaidModule.addListener("onExit", (exit: LinkExit) => {
@@ -112,7 +113,7 @@ export async function createPlaidLayerSession(
         return NativePlaidModule.submitLayerData(
           data.phoneNumber,
           data.dateOfBirth,
-          data.params,
+          data.params
         );
       },
     };
@@ -123,13 +124,13 @@ export async function createPlaidLayerSession(
 }
 
 export async function createPlaidHeadlessSession(
-  config: LinkTokenConfiguration,
+  config: LinkTokenConfiguration
 ): Promise<PlaidHeadlessSession> {
   try {
     cleanupListeners();
 
     console.log(
-      "[PlaidLink] createPlaidHeadlessSession - setting up listeners",
+      "[PlaidLink] createPlaidHeadlessSession - setting up listeners"
     );
 
     successSub = NativePlaidModule.addListener(
@@ -138,7 +139,7 @@ export async function createPlaidHeadlessSession(
         console.log("[PlaidLink] JS received onSuccess event");
         config.onSuccess(success);
         cleanupListeners();
-      },
+      }
     );
 
     exitSub = NativePlaidModule.addListener("onExit", (exit: LinkExit) => {
@@ -153,7 +154,7 @@ export async function createPlaidHeadlessSession(
     });
 
     console.log(
-      "[PlaidLink] Listeners registered, creating native headless session",
+      "[PlaidLink] Listeners registered, creating native headless session"
     );
     await NativePlaidModule.createPlaidHeadlessSession(config.token);
 
@@ -171,6 +172,25 @@ export async function createPlaidHeadlessSession(
     };
   } catch (e) {
     console.error("[PlaidLink] createPlaidHeadlessSession failed:", e);
+    throw e;
+  }
+}
+
+export async function syncFinanceKit(config: {
+  token: string;
+  requestAuthorizationIfNeeded?: boolean;
+  syncBehavior?: FinanceKitSyncBehavior;
+}): Promise<void> {
+  try {
+    console.log("[PlaidLink] syncFinanceKit called");
+    await NativePlaidModule.syncFinanceKit(
+      config.token,
+      config.requestAuthorizationIfNeeded ?? true,
+      config.syncBehavior ?? FinanceKitSyncBehavior.LIVE
+    );
+    console.log("[PlaidLink] syncFinanceKit completed successfully");
+  } catch (e) {
+    console.error("[PlaidLink] syncFinanceKit failed:", e);
     throw e;
   }
 }

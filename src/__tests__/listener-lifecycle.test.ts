@@ -1,11 +1,11 @@
-import { createPlaidLinkSession, createPlaidLayerSession } from "../index";
-import NativePlaidModule from "../ReactNativePlaidLinkSdkModule";
 import {
   LinkSuccess,
   LinkExit,
   LinkEvent,
   LinkEventName,
 } from "../ReactNativePlaidLinkSdk.types";
+import NativePlaidModule from "../ReactNativePlaidLinkSdkModule";
+import { createPlaidLinkSession, createPlaidLayerSession } from "../index";
 
 describe("Listener Lifecycle", () => {
   beforeEach(() => {
@@ -26,13 +26,13 @@ describe("Listener Lifecycle", () => {
     await createPlaidLinkSession(config);
 
     expect(
-      (NativePlaidModule as any).__getListenerCount("onSuccess")
+      (NativePlaidModule as any).__getListenerCount("onSuccess"),
     ).toBeGreaterThan(0);
     expect(
-      (NativePlaidModule as any).__getListenerCount("onExit")
+      (NativePlaidModule as any).__getListenerCount("onExit"),
     ).toBeGreaterThan(0);
     expect(
-      (NativePlaidModule as any).__getListenerCount("onEvent")
+      (NativePlaidModule as any).__getListenerCount("onEvent"),
     ).toBeGreaterThan(0);
 
     const mockSuccess: LinkSuccess = {
@@ -293,7 +293,7 @@ describe("Listener Lifecycle", () => {
     });
 
     expect(
-      (NativePlaidModule as any).__getListenerCount("onEvent")
+      (NativePlaidModule as any).__getListenerCount("onEvent"),
     ).toBeGreaterThan(0);
   });
 

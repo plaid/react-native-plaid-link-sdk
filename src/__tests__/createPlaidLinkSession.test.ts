@@ -1,11 +1,11 @@
-import { createPlaidLinkSession } from "../index";
-import NativePlaidModule from "../ReactNativePlaidLinkSdkModule";
 import {
   LinkSuccess,
   LinkExit,
   LinkEvent,
   LinkEventName,
 } from "../ReactNativePlaidLinkSdk.types";
+import NativePlaidModule from "../ReactNativePlaidLinkSdkModule";
+import { createPlaidLinkSession } from "../index";
 
 describe("createPlaidLinkSession", () => {
   beforeEach(() => {
@@ -26,22 +26,22 @@ describe("createPlaidLinkSession", () => {
     const session = await createPlaidLinkSession(config);
 
     expect(NativePlaidModule.createPlaidLinkSession).toHaveBeenCalledWith(
-      "link-sandbox-token-123"
+      "link-sandbox-token-123",
     );
     expect(session).toHaveProperty("open");
     expect(typeof session.open).toBe("function");
     expect(NativePlaidModule.addListener).toHaveBeenCalledTimes(3);
     expect(NativePlaidModule.addListener).toHaveBeenCalledWith(
       "onSuccess",
-      expect.any(Function)
+      expect.any(Function),
     );
     expect(NativePlaidModule.addListener).toHaveBeenCalledWith(
       "onExit",
-      expect.any(Function)
+      expect.any(Function),
     );
     expect(NativePlaidModule.addListener).toHaveBeenCalledWith(
       "onEvent",
-      expect.any(Function)
+      expect.any(Function),
     );
   });
 
@@ -209,7 +209,7 @@ describe("createPlaidLinkSession", () => {
     expect(onEventMock).toHaveBeenCalledWith(mockEvent2);
 
     expect(
-      (NativePlaidModule as any).__getListenerCount("onEvent")
+      (NativePlaidModule as any).__getListenerCount("onEvent"),
     ).toBeGreaterThan(0);
   });
 
@@ -227,11 +227,11 @@ describe("createPlaidLinkSession", () => {
     };
 
     await expect(createPlaidLinkSession(config)).rejects.toThrow(
-      "Native session creation failed"
+      "Native session creation failed",
     );
     expect(console.error).toHaveBeenCalledWith(
       "[PlaidLink] createPlaidLinkSession failed:",
-      mockError
+      mockError,
     );
   });
 

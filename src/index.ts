@@ -1,4 +1,3 @@
-import NativePlaidModule from "./ReactNativePlaidLinkSdkModule";
 import {
   LinkExit,
   LinkEvent,
@@ -9,6 +8,7 @@ import {
   PlaidLayerSession,
   SubmissionData,
 } from "./ReactNativePlaidLinkSdk.types";
+import NativePlaidModule from "./ReactNativePlaidLinkSdkModule";
 
 type Subscription = ReturnType<typeof NativePlaidModule.addListener>;
 
@@ -26,7 +26,7 @@ function cleanupListeners() {
 }
 
 export async function createPlaidLinkSession(
-  config: LinkTokenConfiguration
+  config: LinkTokenConfiguration,
 ): Promise<PlaidLinkSession> {
   try {
     cleanupListeners();
@@ -36,7 +36,7 @@ export async function createPlaidLinkSession(
       (success: LinkSuccess) => {
         config.onSuccess(success);
         cleanupListeners();
-      }
+      },
     );
 
     exitSub = NativePlaidModule.addListener("onExit", (exit: LinkExit) => {
@@ -65,7 +65,7 @@ export async function createPlaidLinkSession(
 }
 
 export async function createPlaidLayerSession(
-  config: LayerTokenConfiguration
+  config: LayerTokenConfiguration,
 ): Promise<PlaidLayerSession> {
   try {
     cleanupListeners();
@@ -73,7 +73,7 @@ export async function createPlaidLayerSession(
     console.log("[PlaidLink] createPlaidLayerSession - setting up listeners");
     console.log(
       "[PlaidLink] onEvent callback provided:",
-      typeof config.onEvent
+      typeof config.onEvent,
     );
 
     successSub = NativePlaidModule.addListener(
@@ -82,7 +82,7 @@ export async function createPlaidLayerSession(
         console.log("[PlaidLink] JS received onSuccess event");
         config.onSuccess(success);
         cleanupListeners();
-      }
+      },
     );
 
     exitSub = NativePlaidModule.addListener("onExit", (exit: LinkExit) => {
@@ -111,7 +111,7 @@ export async function createPlaidLayerSession(
         return NativePlaidModule.submitLayerData(
           data.phoneNumber,
           data.dateOfBirth,
-          data.params
+          data.params,
         );
       },
     };

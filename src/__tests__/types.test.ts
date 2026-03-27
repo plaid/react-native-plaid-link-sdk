@@ -13,7 +13,6 @@ import {
   LinkErrorCode,
   LinkErrorType,
   LinkEventName,
-  LinkEventViewName,
   LinkIOSPresentationStyle,
 } from "../ReactNativePlaidLinkSdk.types";
 
@@ -72,13 +71,13 @@ describe("Type Definitions", () => {
       it("has institution error codes", () => {
         expect(LinkErrorCode.INSTITUTION_DOWN).toBe("INSTITUTION_DOWN");
         expect(LinkErrorCode.INSTITUTION_NOT_RESPONDING).toBe(
-          "INSTITUTION_NOT_RESPONDING"
+          "INSTITUTION_NOT_RESPONDING",
         );
       });
 
       it("has API error codes", () => {
         expect(LinkErrorCode.INTERNAL_SERVER_ERROR).toBe(
-          "INTERNAL_SERVER_ERROR"
+          "INTERNAL_SERVER_ERROR",
         );
         expect(LinkErrorCode.PLANNED_MAINTENANCE).toBe("PLANNED_MAINTENANCE");
       });
@@ -97,13 +96,13 @@ describe("Type Definitions", () => {
     describe("LinkAccountVerificationStatus", () => {
       it("has correct values", () => {
         expect(
-          LinkAccountVerificationStatus.PENDING_AUTOMATIC_VERIFICATION
+          LinkAccountVerificationStatus.PENDING_AUTOMATIC_VERIFICATION,
         ).toBe("pending_automatic_verification");
         expect(LinkAccountVerificationStatus.PENDING_MANUAL_VERIFICATION).toBe(
-          "pending_manual_verification"
+          "pending_manual_verification",
         );
         expect(LinkAccountVerificationStatus.MANUALLY_VERIFIED).toBe(
-          "manually_verified"
+          "manually_verified",
         );
       });
     });
@@ -112,7 +111,7 @@ describe("Type Definitions", () => {
       it("has correct values", () => {
         expect(LinkExitMetadataStatus.CONNECTED).toBe("connected");
         expect(LinkExitMetadataStatus.REQUIRES_CREDENTIALS).toBe(
-          "requires_credentials"
+          "requires_credentials",
         );
         expect(LinkExitMetadataStatus.REQUIRES_CODE).toBe("requires_code");
       });
@@ -211,7 +210,7 @@ describe("Type Definitions", () => {
       it("handles arbitrary types", () => {
         const unknown = new LinkAccountSubtypeUnknown(
           "custom_type",
-          "custom_subtype"
+          "custom_subtype",
         );
         expect(unknown.type).toBe("custom_type");
         expect(unknown.subtype).toBe("custom_subtype");
@@ -449,7 +448,7 @@ describe("Type Definitions", () => {
 
       expect(linkSuccess).toBeDefined();
       expect(linkSuccess.metadata.accounts[0].verificationStatus).toBe(
-        "manually_verified"
+        "manually_verified",
       );
     });
 

@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import {
   LinkExit,
   LinkEvent,
@@ -181,6 +183,10 @@ export async function syncFinanceKit(config: {
   requestAuthorizationIfNeeded?: boolean;
   syncBehavior?: FinanceKitSyncBehavior;
 }): Promise<void> {
+  if (Platform.OS === "android") {
+    throw new Error("FinanceKit is only available on iOS");
+  }
+
   try {
     console.log("[PlaidLink] syncFinanceKit called");
     await NativePlaidModule.syncFinanceKit(

@@ -24,6 +24,14 @@ const mockNativeModule = {
       Promise.resolve()
   ),
 
+  syncFinanceKit: jest.fn(
+    (
+      token: string,
+      requestAuthorizationIfNeeded: boolean,
+      syncBehavior: number
+    ) => Promise.resolve()
+  ),
+
   addListener: jest
     .fn()
     .mockImplementation((eventName: string, callback: Function) => {

@@ -201,5 +201,9 @@ export async function syncFinanceKit(config: {
   }
 }
 
+export {
+  PlaidEmbeddedSearchView,
+  type PlaidEmbeddedSearchViewProps,
+} from "./PlaidEmbeddedSearchView";
 export { default } from "./ReactNativePlaidLinkSdkModule";
 export * from "./ReactNativePlaidLinkSdk.types";

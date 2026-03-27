@@ -811,6 +811,20 @@ export interface LayerTokenConfiguration {
   onEvent: LinkOnEventListener;
 }
 
+export interface EmbeddedLinkTokenConfiguration {
+  /** The link-token your server retrieved from the /link/token/create endpoint. */
+  token: string;
+
+  /** Called when a user has successfully onboarded an Item. */
+  onSuccess: LinkSuccessListener;
+
+  /** Called when a user has specifically exited the Embedded Link flow. */
+  onExit?: LinkExitListener;
+
+  /** Called when the user has reached certain points in the Embedded Link flow. */
+  onEvent?: LinkOnEventListener;
+}
+
 export interface PlaidLinkSession {
   open: (fullScreen?: boolean) => Promise<void>;
 }

@@ -1,4 +1,5 @@
 import { Platform } from "react-native";
+
 import { FinanceKitSyncBehavior } from "../ReactNativePlaidLinkSdk.types";
 import NativePlaidModule from "../ReactNativePlaidLinkSdkModule";
 import { syncFinanceKit } from "../index";

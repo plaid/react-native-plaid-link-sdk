@@ -17,6 +17,7 @@ import {
   FinanceKitSyncBehavior,
   FinanceKitErrorType,
   FinanceKitError,
+  EmbeddedLinkTokenConfiguration,
 } from "../ReactNativePlaidLinkSdk.types";
 
 describe("Type Definitions", () => {
@@ -341,6 +342,30 @@ describe("Type Definitions", () => {
     it("LayerTokenConfiguration has all required fields", () => {
       const config = {
         token: "layer-token",
+        onSuccess: jest.fn(),
+        onExit: jest.fn(),
+        onEvent: jest.fn(),
+      };
+
+      expect(config.token).toBeDefined();
+      expect(typeof config.onSuccess).toBe("function");
+      expect(typeof config.onExit).toBe("function");
+      expect(typeof config.onEvent).toBe("function");
+    });
+
+    it("EmbeddedLinkTokenConfiguration has required fields", () => {
+      const config: EmbeddedLinkTokenConfiguration = {
+        token: "embedded-token",
+        onSuccess: jest.fn(),
+      };
+
+      expect(config.token).toBeDefined();
+      expect(typeof config.onSuccess).toBe("function");
+    });
+
+    it("EmbeddedLinkTokenConfiguration with optional fields", () => {
+      const config: EmbeddedLinkTokenConfiguration = {
+        token: "embedded-token",
         onSuccess: jest.fn(),
         onExit: jest.fn(),
         onEvent: jest.fn(),

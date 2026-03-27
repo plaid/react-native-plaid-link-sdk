@@ -276,6 +276,36 @@ public class ReactNativePlaidLinkSdkModule: Module {
                 promise.resolve()
             }
         }
+
+        AsyncFunction(ModuleFunctionName.syncFinanceKit.rawValue) { (token: String, requestAuthorizationIfNeeded: Bool, syncBehavior: Int, promise: Promise) in
+            if #available(iOS 17.4, *) {
+                let behavior: PlaidFinanceKit.SyncBehavior = syncBehavior == 0 ? .live : .simulated
+                
+                PlaidFinanceKit.sync(
+                    token: token,
+                    requestAuthorizationIfNeeded: requestAuthorizationIfNeeded,
+                    syncBehavior: behavior,
+                    completion: { result in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success:
+                                promise.resolve()
+                            case .failure(let error):
+                                let errorDict = error.asFinanceKitErrorDictionary
+                                promise.reject(
+                                    errorDict["errorCode"] as? String ?? "FINANCE_KIT_ERROR",
+                                    errorDict["errorMessage"] as? String ?? error.localizedDescription
+                                )
+                            }
+                        }
+                    }
+                )
+            } else {
+                DispatchQueue.main.async {
+                    promise.reject("UNSUPPORTED_IOS_VERSION", "FinanceKit requires iOS 17.4 or later")
+                }
+            }
+        }
     }
 
     // MARK: Enums
@@ -296,6 +326,7 @@ public class ReactNativePlaidLinkSdkModule: Module {
         case openLayerSession
         case submitLayerData
         case startHeadlessSession
+        case syncFinanceKit
     }
 
     // MARK: Private
@@ -451,4 +482,46 @@ struct LayerSubmissionData: SubmissionData {
     let phoneNumber: String?
     let dateOfBirth: String?
     let params: [String: String]?
+}
+
+@available(iOS 17.4, *)
+fileprivate extension LinkKit.FinanceKitError {
+    var asFinanceKitErrorDictionary: [String: Any] {
+        let errorType: Int
+        let errorCode: String
+        let errorMessage: String
+        
+        switch self {
+        case .invalidToken:
+            errorType = 0
+            errorCode = "INVALID_TOKEN"
+            errorMessage = self.localizedDescription
+        case .permissionError:
+            errorType = 1
+            errorCode = "PERMISSION_ERROR"
+            errorMessage = self.localizedDescription
+        case .linkApiError:
+            errorType = 2
+            errorCode = "LINK_API_ERROR"
+            errorMessage = self.localizedDescription
+        case .permissionAccessError:
+            errorType = 3
+            errorCode = "PERMISSION_ACCESS_ERROR"
+            errorMessage = self.localizedDescription
+        case .unknown(let error):
+            errorType = 4
+            errorCode = "UNKNOWN"
+            errorMessage = error.localizedDescription
+        @unknown default:
+            errorType = 4
+            errorCode = "UNKNOWN"
+            errorMessage = self.localizedDescription
+        }
+        
+        return [
+            "errorType": errorType,
+            "errorCode": errorCode,
+            "errorMessage": errorMessage,
+        ]
+    }
 }

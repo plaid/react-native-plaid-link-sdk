@@ -21,7 +21,15 @@ const mockNativeModule = {
 
   submitLayerData: jest.fn(
     (phone?: string, dob?: string, params?: Record<string, string>) =>
-      Promise.resolve(),
+      Promise.resolve()
+  ),
+
+  syncFinanceKit: jest.fn(
+    (
+      token: string,
+      requestAuthorizationIfNeeded: boolean,
+      syncBehavior: number
+    ) => Promise.resolve()
   ),
 
   addListener: jest

@@ -19,6 +19,16 @@ public class ReactNativePlaidLinkSdkModule: Module {
         // Defines event names that the module can send to JavaScript.
         Events(ModuleEventName.allCases.map { $0.rawValue })
 
+        // MARK: Views
+        
+        View(PlaidEmbeddedSearchView.self) {
+            Events("onSuccess", "onExit", "onEvent", "onLoad")
+            
+            Prop("token") { (view: PlaidEmbeddedSearchView, token: String) in
+                view.setToken(token)
+            }
+        }
+
         // MARK: Functions
 
         AsyncFunction(ModuleFunctionName.createPlaidLinkSession.rawValue) { (token: String, onLoadPromise: Promise) in
@@ -337,9 +347,9 @@ public class ReactNativePlaidLinkSdkModule: Module {
     private var sessionCreationError: Error?
 }
 
-// MARK: Private Extensions
+// MARK: Internal Extensions
 
-fileprivate extension Institution {
+internal extension Institution {
     var asDictionary: [String: Any] {
         return [
             "name": name,
@@ -348,7 +358,7 @@ fileprivate extension Institution {
     }
 }
 
-fileprivate extension Account {
+internal extension Account {
     var asDictionary: [String: Any] {
         [
             "id": self.id,
@@ -362,7 +372,7 @@ fileprivate extension Account {
 }
 
 // FIXME: Remove this once type is public on AccountSubtype.
-fileprivate extension AccountSubtype {
+internal extension AccountSubtype {
     var typeName: String {
         switch self {
         case .other:        return "other"
@@ -376,7 +386,7 @@ fileprivate extension AccountSubtype {
     }
 }
 
-fileprivate extension LinkSuccess {
+internal extension LinkSuccess {
     var asDictionary: [String: Any] {
         [
             "publicToken": publicToken,
@@ -390,7 +400,7 @@ fileprivate extension LinkSuccess {
     }
 }
 
-fileprivate extension LinkExit {
+internal extension LinkExit {
     var asDictionary: [String: Any] {
         [
             "error": error?.asDictionary ?? [:],
@@ -405,7 +415,7 @@ fileprivate extension LinkExit {
     }
 }
 
-fileprivate extension LinkEvent {
+internal extension LinkEvent {
     var asDictionary: [String: Any] {
         [
             "eventName": eventName.description,
@@ -414,7 +424,7 @@ fileprivate extension LinkEvent {
     }
 }
 
-fileprivate extension EventMetadata {
+internal extension EventMetadata {
     var asDictionary: [String: Any] {
         [
             "errorType": errorCode?.description ?? "",
@@ -442,7 +452,7 @@ fileprivate extension EventMetadata {
     }
 }
 
-fileprivate extension ExitError {
+internal extension ExitError {
     var asDictionary: [String: Any] {
         [
             "errorType": self.errorCode.description,
@@ -454,7 +464,7 @@ fileprivate extension ExitError {
     }
 }
 
-fileprivate extension ExitErrorCode {
+internal extension ExitErrorCode {
     var errorCodeString: String {
         switch self {
         case .apiError(let code): return code.description

@@ -808,10 +808,10 @@ export interface LayerTokenConfiguration {
   onSuccess: LinkSuccessListener;
 
   /** Called when a user has specifically exited the Layer flow. */
-  onExit?: LinkExitListener;
+  onExit: LinkExitListener;
 
   /** Called when the user has reached certain points in the Layer flow. */
-  onEvent?: LinkOnEventListener;
+  onEvent: LinkOnEventListener;
 }
 
 export interface PlaidLinkSession {

@@ -1,24 +1,24 @@
 import ExpoModulesCore
-import UIKit
 internal import LinkKit
+import UIKit
 
 class PlaidEmbeddedSearchView: ExpoView {
     private var embeddedView: EmbeddedSearchUIView?
-    
+
     let onSuccess = EventDispatcher()
     let onExit = EventDispatcher()
     let onEvent = EventDispatcher()
     let onLoad = EventDispatcher()
-    
+
     required init(appContext: AppContext? = nil) {
         super.init(appContext: appContext)
         clipsToBounds = true
     }
-    
+
     func setToken(_ token: String) {
         embeddedView?.removeFromSuperview()
         embeddedView = nil
-        
+
         let configuration = EmbeddedLinkTokenConfiguration(
             token: token,
             onSuccess: { [weak self] linkSuccess in
@@ -31,7 +31,7 @@ class PlaidEmbeddedSearchView: ExpoView {
                 self?.onEvent(linkEvent.asDictionary)
             }
         )
-        
+
         guard let viewController = appContext?.utilities?.currentViewController() else {
             let errorExit: [String: Any] = [
                 "error": [
@@ -47,32 +47,32 @@ class PlaidEmbeddedSearchView: ExpoView {
                     "status": NSNull(),
                     "requestId": NSNull(),
                     "metadataJson": NSNull(),
-                ]
+                ],
             ]
             self.onExit(errorExit)
             return
         }
-        
+
         do {
             let plaidEmbeddedView = try Plaid.createEmbeddedLinkUIView(
                 configuration: configuration,
                 presentationMethod: .viewController(viewController)
             )
-            
+
             self.embeddedView = plaidEmbeddedView
-            
+
             plaidEmbeddedView.translatesAutoresizingMaskIntoConstraints = false
             addSubview(plaidEmbeddedView)
-            
+
             NSLayoutConstraint.activate([
                 plaidEmbeddedView.topAnchor.constraint(equalTo: topAnchor),
                 plaidEmbeddedView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 plaidEmbeddedView.trailingAnchor.constraint(equalTo: trailingAnchor),
                 plaidEmbeddedView.bottomAnchor.constraint(equalTo: bottomAnchor),
             ])
-            
+
             self.onLoad([:])
-            
+
         } catch {
             let errorExit: [String: Any] = [
                 "error": [
@@ -88,12 +88,12 @@ class PlaidEmbeddedSearchView: ExpoView {
                     "status": NSNull(),
                     "requestId": NSNull(),
                     "metadataJson": NSNull(),
-                ]
+                ],
             ]
             self.onExit(errorExit)
         }
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         embeddedView?.frame = bounds

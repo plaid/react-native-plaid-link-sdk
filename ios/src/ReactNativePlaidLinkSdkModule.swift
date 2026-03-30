@@ -14,16 +14,16 @@ public class ReactNativePlaidLinkSdkModule: Module {
         Name("ReactNativePlaidLinkSdk")
 
         // --- Version API ---
-        Constant("sdkVersion") { Plaid.version }
+        Constant("sdkVersion") { RNPlaidLinkSdkVersion.sdkVersion }
 
         // Defines event names that the module can send to JavaScript.
         Events(ModuleEventName.allCases.map { $0.rawValue })
 
         // MARK: Views
-        
+
         View(PlaidEmbeddedSearchView.self) {
             Events("onSuccess", "onExit", "onEvent", "onLoad")
-            
+
             Prop("token") { (view: PlaidEmbeddedSearchView, token: String) in
                 view.setToken(token)
             }
@@ -106,7 +106,8 @@ public class ReactNativePlaidLinkSdkModule: Module {
             }
         }
 
-        AsyncFunction(ModuleFunctionName.createPlaidHeadlessSession.rawValue) { (token: String, onLoadPromise: Promise) in
+        AsyncFunction(ModuleFunctionName.createPlaidHeadlessSession.rawValue) {
+            (token: String, onLoadPromise: Promise) in
             let onSuccess: OnSuccessHandler = { [weak self] success in
                 self?.sendEvent(ModuleEventName.onSuccess.rawValue, success.asDictionary)
                 self?.headlessSession = nil
@@ -148,26 +149,30 @@ public class ReactNativePlaidLinkSdkModule: Module {
 
         AsyncFunction(ModuleFunctionName.openLinkSession.rawValue) { (fullScreen: Bool, promise: Promise) in
             guard let session = self.linkSession else {
-                let errorMessage = self.sessionCreationError?.localizedDescription ?? "createPlaidLinkSession was not called."
+                let errorMessage =
+                    self.sessionCreationError?.localizedDescription ?? "createPlaidLinkSession was not called."
                 let errorCode = self.sessionCreationError.map { String($0._code) } ?? "-1"
-                self.sendEvent(ModuleEventName.onExit.rawValue, [
-                    "displayMessage": errorMessage,
-                    "errorCode": errorCode,
-                    "errorType": "creation error",
-                    "errorMessage": errorMessage,
-                    "errorDisplayMessage": errorMessage,
-                    "errorJson": NSNull(),
-                    "metadata": [
-                        "linkSessionId": NSNull(),
-                        "institution": NSNull(),
-                        "status": NSNull(),
-                        "requestId": NSNull(),
-                        "metadataJson": NSNull(),
+                self.sendEvent(
+                    ModuleEventName.onExit.rawValue,
+                    [
+                        "displayMessage": errorMessage,
+                        "errorCode": errorCode,
+                        "errorType": "creation error",
+                        "errorMessage": errorMessage,
+                        "errorDisplayMessage": errorMessage,
+                        "errorJson": NSNull(),
+                        "metadata": [
+                            "linkSessionId": NSNull(),
+                            "institution": NSNull(),
+                            "status": NSNull(),
+                            "requestId": NSNull(),
+                            "metadataJson": NSNull(),
+                        ],
                     ]
-                ])
-                
+                )
+
                 DispatchQueue.main.async {
-                    promise.resolve() // not a failure to open, just a miscall
+                    promise.resolve()  // not a failure to open, just a miscall
                 }
 
                 return
@@ -199,24 +204,28 @@ public class ReactNativePlaidLinkSdkModule: Module {
 
         AsyncFunction(ModuleFunctionName.openLayerSession.rawValue) { (promise: Promise) in
             guard let layerSession = self.layerSession else {
-                let errorMessage = self.sessionCreationError?.localizedDescription ?? "createPlaidLayerSession was not called."
+                let errorMessage =
+                    self.sessionCreationError?.localizedDescription ?? "createPlaidLayerSession was not called."
                 let errorCode = self.sessionCreationError.map { String($0._code) } ?? "-1"
-                self.sendEvent(ModuleEventName.onExit.rawValue, [
-                    "displayMessage": errorMessage,
-                    "errorCode": errorCode,
-                    "errorType": "creation error",
-                    "errorMessage": errorMessage,
-                    "errorDisplayMessage": errorMessage,
-                    "errorJson": NSNull(),
-                    "metadata": [
-                        "linkSessionId": NSNull(),
-                        "institution": NSNull(),
-                        "status": NSNull(),
-                        "requestId": NSNull(),
-                        "metadataJson": NSNull(),
+                self.sendEvent(
+                    ModuleEventName.onExit.rawValue,
+                    [
+                        "displayMessage": errorMessage,
+                        "errorCode": errorCode,
+                        "errorType": "creation error",
+                        "errorMessage": errorMessage,
+                        "errorDisplayMessage": errorMessage,
+                        "errorJson": NSNull(),
+                        "metadata": [
+                            "linkSessionId": NSNull(),
+                            "institution": NSNull(),
+                            "status": NSNull(),
+                            "requestId": NSNull(),
+                            "metadataJson": NSNull(),
+                        ],
                     ]
-                ])
-                
+                )
+
                 DispatchQueue.main.async {
                     promise.resolve()
                 }
@@ -236,7 +245,8 @@ public class ReactNativePlaidLinkSdkModule: Module {
             }
         }
 
-        AsyncFunction(ModuleFunctionName.submitLayerData.rawValue) { (phoneNumber: String?, dateOfBirth: String?, params: [String: String]?, promise: Promise) in
+        AsyncFunction(ModuleFunctionName.submitLayerData.rawValue) {
+            (phoneNumber: String?, dateOfBirth: String?, params: [String: String]?, promise: Promise) in
             guard let layerSession = self.layerSession else {
                 promise.reject("PLAID_NO_LAYER_SESSION", "Layer session not found. Call createPlaidLayerSession first.")
                 return
@@ -256,24 +266,28 @@ public class ReactNativePlaidLinkSdkModule: Module {
 
         AsyncFunction(ModuleFunctionName.startHeadlessSession.rawValue) { (promise: Promise) in
             guard let headlessSession = self.headlessSession else {
-                let errorMessage = self.sessionCreationError?.localizedDescription ?? "createPlaidHeadlessSession was not called."
+                let errorMessage =
+                    self.sessionCreationError?.localizedDescription ?? "createPlaidHeadlessSession was not called."
                 let errorCode = self.sessionCreationError.map { String($0._code) } ?? "-1"
-                self.sendEvent(ModuleEventName.onExit.rawValue, [
-                    "displayMessage": errorMessage,
-                    "errorCode": errorCode,
-                    "errorType": "creation error",
-                    "errorMessage": errorMessage,
-                    "errorDisplayMessage": errorMessage,
-                    "errorJson": NSNull(),
-                    "metadata": [
-                        "linkSessionId": NSNull(),
-                        "institution": NSNull(),
-                        "status": NSNull(),
-                        "requestId": NSNull(),
-                        "metadataJson": NSNull(),
+                self.sendEvent(
+                    ModuleEventName.onExit.rawValue,
+                    [
+                        "displayMessage": errorMessage,
+                        "errorCode": errorCode,
+                        "errorType": "creation error",
+                        "errorMessage": errorMessage,
+                        "errorDisplayMessage": errorMessage,
+                        "errorJson": NSNull(),
+                        "metadata": [
+                            "linkSessionId": NSNull(),
+                            "institution": NSNull(),
+                            "status": NSNull(),
+                            "requestId": NSNull(),
+                            "metadataJson": NSNull(),
+                        ],
                     ]
-                ])
-                
+                )
+
                 DispatchQueue.main.async {
                     promise.resolve()
                 }
@@ -287,10 +301,11 @@ public class ReactNativePlaidLinkSdkModule: Module {
             }
         }
 
-        AsyncFunction(ModuleFunctionName.syncFinanceKit.rawValue) { (token: String, requestAuthorizationIfNeeded: Bool, syncBehavior: Int, promise: Promise) in
+        AsyncFunction(ModuleFunctionName.syncFinanceKit.rawValue) {
+            (token: String, requestAuthorizationIfNeeded: Bool, syncBehavior: Int, promise: Promise) in
             if #available(iOS 17.4, *) {
                 let behavior: PlaidFinanceKit.SyncBehavior = syncBehavior == 0 ? .live : .simulated
-                
+
                 PlaidFinanceKit.sync(
                     token: token,
                     requestAuthorizationIfNeeded: requestAuthorizationIfNeeded,
@@ -349,7 +364,7 @@ public class ReactNativePlaidLinkSdkModule: Module {
 
 // MARK: Internal Extensions
 
-internal extension Institution {
+extension Institution {
     var asDictionary: [String: Any] {
         return [
             "name": name,
@@ -358,7 +373,7 @@ internal extension Institution {
     }
 }
 
-internal extension Account {
+extension Account {
     var asDictionary: [String: Any] {
         [
             "id": self.id,
@@ -372,21 +387,21 @@ internal extension Account {
 }
 
 // FIXME: Remove this once type is public on AccountSubtype.
-internal extension AccountSubtype {
+extension AccountSubtype {
     var typeName: String {
         switch self {
-        case .other:        return "other"
-        case .credit:       return "credit"
-        case .loan:         return "loan"
-        case .depository:   return "depository"
-        case .investment:   return "investment"
+        case .other: return "other"
+        case .credit: return "credit"
+        case .loan: return "loan"
+        case .depository: return "depository"
+        case .investment: return "investment"
         case .unknown(let type, _): return type
         @unknown default: return "UNKNOWN"
         }
     }
 }
 
-internal extension LinkSuccess {
+extension LinkSuccess {
     var asDictionary: [String: Any] {
         [
             "publicToken": publicToken,
@@ -395,12 +410,12 @@ internal extension LinkSuccess {
                 "institution": metadata.institution.asDictionary,
                 "accounts": metadata.accounts.map { $0.asDictionary },
                 "metadataJson": metadata.metadataJSON ?? "",
-            ]
+            ],
         ]
     }
 }
 
-internal extension LinkExit {
+extension LinkExit {
     var asDictionary: [String: Any] {
         [
             "error": error?.asDictionary ?? [:],
@@ -410,12 +425,12 @@ internal extension LinkExit {
                 "requestId": metadata.requestID ?? "",
                 "linkSessionId": metadata.linkSessionID ?? "",
                 "metadataJson": metadata.metadataJSON ?? "",
-            ]
+            ],
         ]
     }
 }
 
-internal extension LinkEvent {
+extension LinkEvent {
     var asDictionary: [String: Any] {
         [
             "eventName": eventName.description,
@@ -424,7 +439,7 @@ internal extension LinkEvent {
     }
 }
 
-internal extension EventMetadata {
+extension EventMetadata {
     var asDictionary: [String: Any] {
         [
             "errorType": errorCode?.description ?? "",
@@ -452,7 +467,7 @@ internal extension EventMetadata {
     }
 }
 
-internal extension ExitError {
+extension ExitError {
     var asDictionary: [String: Any] {
         [
             "errorType": self.errorCode.description,
@@ -464,7 +479,7 @@ internal extension ExitError {
     }
 }
 
-internal extension ExitErrorCode {
+extension ExitErrorCode {
     var errorCodeString: String {
         switch self {
         case .apiError(let code): return code.description
@@ -495,12 +510,12 @@ struct LayerSubmissionData: SubmissionData {
 }
 
 @available(iOS 17.4, *)
-fileprivate extension LinkKit.FinanceKitError {
-    var asFinanceKitErrorDictionary: [String: Any] {
+extension LinkKit.FinanceKitError {
+    fileprivate var asFinanceKitErrorDictionary: [String: Any] {
         let errorType: Int
         let errorCode: String
         let errorMessage: String
-        
+
         switch self {
         case .invalidToken:
             errorType = 0
@@ -527,7 +542,7 @@ fileprivate extension LinkKit.FinanceKitError {
             errorCode = "UNKNOWN"
             errorMessage = self.localizedDescription
         }
-        
+
         return [
             "errorType": errorType,
             "errorCode": errorCode,

@@ -26,13 +26,13 @@ describe("Listener Lifecycle", () => {
     await createPlaidLinkSession(config);
 
     expect(
-      (NativePlaidModule as any).__getListenerCount("onSuccess")
+      (NativePlaidModule as any).__getListenerCount("PlaidLink.onSuccess")
     ).toBeGreaterThan(0);
     expect(
-      (NativePlaidModule as any).__getListenerCount("onExit")
+      (NativePlaidModule as any).__getListenerCount("PlaidLink.onExit")
     ).toBeGreaterThan(0);
     expect(
-      (NativePlaidModule as any).__getListenerCount("onEvent")
+      (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent")
     ).toBeGreaterThan(0);
 
     const mockSuccess: LinkSuccess = {
@@ -43,11 +43,11 @@ describe("Listener Lifecycle", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onSuccess", mockSuccess);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onSuccess", mockSuccess);
 
-    expect((NativePlaidModule as any).__getListenerCount("onSuccess")).toBe(0);
-    expect((NativePlaidModule as any).__getListenerCount("onExit")).toBe(0);
-    expect((NativePlaidModule as any).__getListenerCount("onEvent")).toBe(0);
+    expect((NativePlaidModule as any).__getListenerCount("PlaidLink.onSuccess")).toBe(0);
+    expect((NativePlaidModule as any).__getListenerCount("PlaidLink.onExit")).toBe(0);
+    expect((NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent")).toBe(0);
   });
 
   it("multiple session creations do not stack listeners", async () => {
@@ -80,7 +80,7 @@ describe("Listener Lifecycle", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onSuccess", mockSuccess);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onSuccess", mockSuccess);
 
     expect(firstSuccess).not.toHaveBeenCalled();
     expect(secondSuccess).toHaveBeenCalledTimes(1);
@@ -111,12 +111,12 @@ describe("Listener Lifecycle", () => {
         },
       };
 
-      (NativePlaidModule as any).__triggerEvent("onSuccess", mockSuccess);
+      (NativePlaidModule as any).__triggerEvent("PlaidLink.onSuccess", mockSuccess);
     }
 
-    expect((NativePlaidModule as any).__getListenerCount("onSuccess")).toBe(0);
-    expect((NativePlaidModule as any).__getListenerCount("onExit")).toBe(0);
-    expect((NativePlaidModule as any).__getListenerCount("onEvent")).toBe(0);
+    expect((NativePlaidModule as any).__getListenerCount("PlaidLink.onSuccess")).toBe(0);
+    expect((NativePlaidModule as any).__getListenerCount("PlaidLink.onExit")).toBe(0);
+    expect((NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent")).toBe(0);
 
     successCallbacks.forEach((callback, index) => {
       expect(callback).toHaveBeenCalledTimes(1);
@@ -145,7 +145,7 @@ describe("Listener Lifecycle", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onSuccess", mockSuccess);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onSuccess", mockSuccess);
 
     expect(onSuccess).toHaveBeenCalledTimes(1);
 
@@ -166,8 +166,8 @@ describe("Listener Lifecycle", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onExit", mockExit);
-    (NativePlaidModule as any).__triggerEvent("onEvent", mockEvent);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onExit", mockExit);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onEvent", mockEvent);
 
     expect(onExit).not.toHaveBeenCalled();
     expect(onEvent).not.toHaveBeenCalled();
@@ -194,7 +194,7 @@ describe("Listener Lifecycle", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onExit", mockExit);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onExit", mockExit);
 
     expect(onExit).toHaveBeenCalledTimes(1);
 
@@ -216,8 +216,8 @@ describe("Listener Lifecycle", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onSuccess", mockSuccess);
-    (NativePlaidModule as any).__triggerEvent("onEvent", mockEvent);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onSuccess", mockSuccess);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onEvent", mockEvent);
 
     expect(onSuccess).not.toHaveBeenCalled();
     expect(onEvent).not.toHaveBeenCalled();
@@ -284,7 +284,7 @@ describe("Listener Lifecycle", () => {
     ];
 
     events.forEach((event) => {
-      (NativePlaidModule as any).__triggerEvent("onEvent", event);
+      (NativePlaidModule as any).__triggerEvent("PlaidLink.onEvent", event);
     });
 
     expect(onEvent).toHaveBeenCalledTimes(5);
@@ -293,7 +293,7 @@ describe("Listener Lifecycle", () => {
     });
 
     expect(
-      (NativePlaidModule as any).__getListenerCount("onEvent")
+      (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent")
     ).toBeGreaterThan(0);
   });
 
@@ -319,11 +319,11 @@ describe("Listener Lifecycle", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onSuccess", mockSuccess);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onSuccess", mockSuccess);
 
     expect(onSuccess).toHaveBeenCalledTimes(1);
 
-    (NativePlaidModule as any).__triggerEvent("onExit", {});
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onExit", {});
     expect(onExit).not.toHaveBeenCalled();
   });
 
@@ -357,7 +357,7 @@ describe("Listener Lifecycle", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onSuccess", mockSuccess);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onSuccess", mockSuccess);
 
     expect(linkSuccess).not.toHaveBeenCalled();
     expect(layerSuccess).toHaveBeenCalledTimes(1);

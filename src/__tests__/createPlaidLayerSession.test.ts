@@ -53,7 +53,7 @@ describe("createPlaidLayerSession", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onExit", mockExit);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onExit", mockExit);
     expect(onExitMock).toHaveBeenCalledWith(mockExit);
   });
 
@@ -78,7 +78,7 @@ describe("createPlaidLayerSession", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onEvent", mockEvent);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onEvent", mockEvent);
     expect(onEventMock).toHaveBeenCalledWith(mockEvent);
   });
 
@@ -145,11 +145,11 @@ describe("createPlaidLayerSession", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onSuccess", mockSuccess);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onSuccess", mockSuccess);
 
     expect(onSuccessMock).toHaveBeenCalledWith(mockSuccess);
 
-    (NativePlaidModule as any).__triggerEvent("onExit", {});
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onExit", {});
     expect(onExitMock).not.toHaveBeenCalled();
   });
 

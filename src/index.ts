@@ -36,19 +36,19 @@ export async function createPlaidLinkSession(
     cleanupListeners();
 
     successSub = NativePlaidModule.addListener(
-      "onSuccess",
+      "PlaidLink.onSuccess",
       (success: LinkSuccess) => {
         config.onSuccess(success);
         cleanupListeners();
       }
     );
 
-    exitSub = NativePlaidModule.addListener("onExit", (exit: LinkExit) => {
+    exitSub = NativePlaidModule.addListener("PlaidLink.onExit", (exit: LinkExit) => {
       config.onExit(exit);
       cleanupListeners();
     });
 
-    eventSub = NativePlaidModule.addListener("onEvent", (event: LinkEvent) => {
+    eventSub = NativePlaidModule.addListener("PlaidLink.onEvent", (event: LinkEvent) => {
       config.onEvent(event);
     });
 
@@ -81,7 +81,7 @@ export async function createPlaidLayerSession(
     );
 
     successSub = NativePlaidModule.addListener(
-      "onSuccess",
+      "PlaidLink.onSuccess",
       (success: LinkSuccess) => {
         console.log("[PlaidLink] JS received onSuccess event");
         config.onSuccess(success);
@@ -89,13 +89,13 @@ export async function createPlaidLayerSession(
       }
     );
 
-    exitSub = NativePlaidModule.addListener("onExit", (exit: LinkExit) => {
+    exitSub = NativePlaidModule.addListener("PlaidLink.onExit", (exit: LinkExit) => {
       console.log("[PlaidLink] JS received onExit event");
       config.onExit?.(exit);
       cleanupListeners();
     });
 
-    eventSub = NativePlaidModule.addListener("onEvent", (event: LinkEvent) => {
+    eventSub = NativePlaidModule.addListener("PlaidLink.onEvent", (event: LinkEvent) => {
       console.log("[PlaidLink] JS received onEvent:", event.eventName);
       config.onEvent?.(event);
     });
@@ -136,7 +136,7 @@ export async function createPlaidHeadlessSession(
     );
 
     successSub = NativePlaidModule.addListener(
-      "onSuccess",
+      "PlaidLink.onSuccess",
       (success: LinkSuccess) => {
         console.log("[PlaidLink] JS received onSuccess event");
         config.onSuccess(success);
@@ -144,13 +144,13 @@ export async function createPlaidHeadlessSession(
       }
     );
 
-    exitSub = NativePlaidModule.addListener("onExit", (exit: LinkExit) => {
+    exitSub = NativePlaidModule.addListener("PlaidLink.onExit", (exit: LinkExit) => {
       console.log("[PlaidLink] JS received onExit event");
       config.onExit(exit);
       cleanupListeners();
     });
 
-    eventSub = NativePlaidModule.addListener("onEvent", (event: LinkEvent) => {
+    eventSub = NativePlaidModule.addListener("PlaidLink.onEvent", (event: LinkEvent) => {
       console.log("[PlaidLink] JS received onEvent:", event.eventName);
       config.onEvent(event);
     });

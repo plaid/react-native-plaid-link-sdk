@@ -337,9 +337,9 @@ public class ReactNativePlaidLinkSdkModule: Module {
 
     /// Event names that the module can send to JavaScript.
     enum ModuleEventName: String, CaseIterable {
-        case onSuccess
-        case onExit
-        case onEvent
+        case onSuccess = "PlaidLink.onSuccess"
+        case onExit = "PlaidLink.onExit"
+        case onEvent = "PlaidLink.onEvent"
     }
 
     /// Function names that the module can call from JavaScript.

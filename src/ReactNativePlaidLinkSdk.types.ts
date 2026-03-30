@@ -767,9 +767,9 @@ export enum LinkIOSPresentationStyle {
 }
 
 export type ReactNativePlaidLinkSdkModuleEvents = {
-  onSuccess: (success: LinkSuccess) => void;
-  onExit: (exit: LinkExit) => void;
-  onEvent: (event: LinkEvent) => void;
+  "PlaidLink.onSuccess": (success: LinkSuccess) => void;
+  "PlaidLink.onExit": (exit: LinkExit) => void;
+  "PlaidLink.onEvent": (event: LinkEvent) => void;
 };
 
 export type LinkSuccessListener = (LinkSuccess: LinkSuccess) => void;

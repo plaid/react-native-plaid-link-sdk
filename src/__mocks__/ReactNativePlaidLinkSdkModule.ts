@@ -1,7 +1,7 @@
 const mockListeners: Record<string, Function[]> = {
-  onSuccess: [],
-  onExit: [],
-  onEvent: [],
+  "PlaidLink.onSuccess": [],
+  "PlaidLink.onExit": [],
+  "PlaidLink.onEvent": [],
 };
 
 const mockNativeModule = {
@@ -54,9 +54,9 @@ const mockNativeModule = {
   },
 
   __clearListeners: () => {
-    mockListeners.onSuccess = [];
-    mockListeners.onExit = [];
-    mockListeners.onEvent = [];
+    mockListeners["PlaidLink.onSuccess"] = [];
+    mockListeners["PlaidLink.onExit"] = [];
+    mockListeners["PlaidLink.onEvent"] = [];
   },
 
   __getListenerCount: (eventName: string) => {

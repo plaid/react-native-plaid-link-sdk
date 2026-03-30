@@ -32,15 +32,15 @@ describe("createPlaidLinkSession", () => {
     expect(typeof session.open).toBe("function");
     expect(NativePlaidModule.addListener).toHaveBeenCalledTimes(3);
     expect(NativePlaidModule.addListener).toHaveBeenCalledWith(
-      "onSuccess",
+      "PlaidLink.onSuccess",
       expect.any(Function)
     );
     expect(NativePlaidModule.addListener).toHaveBeenCalledWith(
-      "onExit",
+      "PlaidLink.onExit",
       expect.any(Function)
     );
     expect(NativePlaidModule.addListener).toHaveBeenCalledWith(
-      "onEvent",
+      "PlaidLink.onEvent",
       expect.any(Function)
     );
   });
@@ -128,12 +128,12 @@ describe("createPlaidLinkSession", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onSuccess", mockSuccessData);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onSuccess", mockSuccessData);
 
     expect(onSuccessMock).toHaveBeenCalledWith(mockSuccessData);
     expect(onSuccessMock).toHaveBeenCalledTimes(1);
 
-    (NativePlaidModule as any).__triggerEvent("onExit", {});
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onExit", {});
     expect(onExitMock).not.toHaveBeenCalled();
   });
 
@@ -159,12 +159,12 @@ describe("createPlaidLinkSession", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onExit", mockExitData);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onExit", mockExitData);
 
     expect(onExitMock).toHaveBeenCalledWith(mockExitData);
     expect(onExitMock).toHaveBeenCalledTimes(1);
 
-    (NativePlaidModule as any).__triggerEvent("onSuccess", {});
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onSuccess", {});
     expect(onSuccessMock).not.toHaveBeenCalled();
   });
 
@@ -200,16 +200,16 @@ describe("createPlaidLinkSession", () => {
       },
     };
 
-    (NativePlaidModule as any).__triggerEvent("onEvent", mockEvent1);
-    (NativePlaidModule as any).__triggerEvent("onEvent", mockEvent2);
-    (NativePlaidModule as any).__triggerEvent("onEvent", mockEvent1);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onEvent", mockEvent1);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onEvent", mockEvent2);
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onEvent", mockEvent1);
 
     expect(onEventMock).toHaveBeenCalledTimes(3);
     expect(onEventMock).toHaveBeenCalledWith(mockEvent1);
     expect(onEventMock).toHaveBeenCalledWith(mockEvent2);
 
     expect(
-      (NativePlaidModule as any).__getListenerCount("onEvent")
+      (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent")
     ).toBeGreaterThan(0);
   });
 

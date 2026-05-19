@@ -151,9 +151,9 @@ For iOS OAuth to work, specific requirements must be met.
 
 ##### Link Token OAuth Requirements
 
-- On iOS you must configure your `link_token` with a [redirect_uri](https://plaid.com/docs/api/tokens/#link-token-create-request-redirect-uri) to support OAuth. When creating a `link_token` for initializing Link on Android, `android_package_name` must be specified and `redirect_uri` must be left blank.
+- On iOS you must configure your `link_token` with a [redirect_uri](https://plaid.com/docs/api/link/#link-token-create-request-redirect-uri) to support OAuth. When creating a `link_token` for initializing Link on Android, `android_package_name` must be specified and `redirect_uri` must be left blank.
 
-- On Android you must configure your `link_token` with an [android_package_name](https://plaid.com/docs/api/tokens/#link-token-create-request-android-package-name) to support OAuth. When creating a `link_token` for initializing Link on iOS, `android_package_name` must be left blank and `redirect_uri` should be used instead.
+- On Android you must configure your `link_token` with an [android_package_name](https://plaid.com/docs/api/link/#link-token-create-request-android-package-name) to support OAuth. When creating a `link_token` for initializing Link on iOS, `android_package_name` must be left blank and `redirect_uri` should be used instead.
 
 
 #### To receive onEvent callbacks:

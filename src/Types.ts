@@ -195,18 +195,18 @@ export class LinkAccountSubtypeInvestment implements LinkAccountSubtype {
 }
 
 export class LinkAccountSubtypeLoan implements LinkAccountSubtype {
-    public static readonly ALL = new LinkAccountSubtypeLoan(LinkAccountType.CREDIT, LinkAccountSubtypes.ALL);
-    public static readonly AUTO = new LinkAccountSubtypeLoan(LinkAccountType.CREDIT, LinkAccountSubtypes.AUTO);
-    public static readonly BUSINESS = new LinkAccountSubtypeLoan(LinkAccountType.CREDIT, LinkAccountSubtypes.BUSINESS);
-    public static readonly COMMERCIAL = new LinkAccountSubtypeLoan(LinkAccountType.CREDIT, LinkAccountSubtypes.COMMERCIAL);
-    public static readonly CONSTRUCTION = new LinkAccountSubtypeLoan(LinkAccountType.CREDIT, LinkAccountSubtypes.CONSTRUCTION);
-    public static readonly CONSUMER = new LinkAccountSubtypeLoan(LinkAccountType.CREDIT, LinkAccountSubtypes.CONSUMER);
-    public static readonly HOME_EQUITY = new LinkAccountSubtypeLoan(LinkAccountType.CREDIT, LinkAccountSubtypes.HOME_EQUITY);
-    public static readonly LINE_OF_CREDIT = new LinkAccountSubtypeLoan(LinkAccountType.CREDIT, LinkAccountSubtypes.LINE_OF_CREDIT);
-    public static readonly LOAN = new LinkAccountSubtypeLoan(LinkAccountType.CREDIT, LinkAccountSubtypes.LOAN);
-    public static readonly MORTGAGE = new LinkAccountSubtypeLoan(LinkAccountType.CREDIT, LinkAccountSubtypes.MORTGAGE);
-    public static readonly OVERDRAFT = new LinkAccountSubtypeLoan(LinkAccountType.CREDIT, LinkAccountSubtypes.OVERDRAFT);
-    public static readonly STUDENT = new LinkAccountSubtypeLoan(LinkAccountType.CREDIT, LinkAccountSubtypes.STUDENT);
+    public static readonly ALL = new LinkAccountSubtypeLoan(LinkAccountType.LOAN, LinkAccountSubtypes.ALL);
+    public static readonly AUTO = new LinkAccountSubtypeLoan(LinkAccountType.LOAN, LinkAccountSubtypes.AUTO);
+    public static readonly BUSINESS = new LinkAccountSubtypeLoan(LinkAccountType.LOAN, LinkAccountSubtypes.BUSINESS);
+    public static readonly COMMERCIAL = new LinkAccountSubtypeLoan(LinkAccountType.LOAN, LinkAccountSubtypes.COMMERCIAL);
+    public static readonly CONSTRUCTION = new LinkAccountSubtypeLoan(LinkAccountType.LOAN, LinkAccountSubtypes.CONSTRUCTION);
+    public static readonly CONSUMER = new LinkAccountSubtypeLoan(LinkAccountType.LOAN, LinkAccountSubtypes.CONSUMER);
+    public static readonly HOME_EQUITY = new LinkAccountSubtypeLoan(LinkAccountType.LOAN, LinkAccountSubtypes.HOME_EQUITY);
+    public static readonly LINE_OF_CREDIT = new LinkAccountSubtypeLoan(LinkAccountType.LOAN, LinkAccountSubtypes.LINE_OF_CREDIT);
+    public static readonly LOAN = new LinkAccountSubtypeLoan(LinkAccountType.LOAN, LinkAccountSubtypes.LOAN);
+    public static readonly MORTGAGE = new LinkAccountSubtypeLoan(LinkAccountType.LOAN, LinkAccountSubtypes.MORTGAGE);
+    public static readonly OVERDRAFT = new LinkAccountSubtypeLoan(LinkAccountType.LOAN, LinkAccountSubtypes.OVERDRAFT);
+    public static readonly STUDENT = new LinkAccountSubtypeLoan(LinkAccountType.LOAN, LinkAccountSubtypes.STUDENT);
   
     private constructor(public readonly type: LinkAccountType, public readonly subtype: LinkAccountSubtype) { }
 }

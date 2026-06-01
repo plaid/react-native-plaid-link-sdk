@@ -315,7 +315,7 @@ export class LinkAccountSubtypeInvestment implements LinkAccountSubtype {
     LinkAccountType.INVESTMENT,
     LinkAccountSubtypes.SIMPLE_IRA
   );
-  public static readonly SIIP = new LinkAccountSubtypeInvestment(
+  public static readonly SIPP = new LinkAccountSubtypeInvestment(
     LinkAccountType.INVESTMENT,
     LinkAccountSubtypes.SIPP
   );

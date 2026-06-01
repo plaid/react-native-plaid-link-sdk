@@ -182,6 +182,8 @@ export class LinkAccountSubtypeInvestment implements LinkAccountSubtype {
     public static readonly SARSEP = new LinkAccountSubtypeInvestment(LinkAccountType.INVESTMENT, LinkAccountSubtypes.SARSEP);
     public static readonly SEP_IRA = new LinkAccountSubtypeInvestment(LinkAccountType.INVESTMENT, LinkAccountSubtypes.SEP_IRA);
     public static readonly SIMPLE_IRA = new LinkAccountSubtypeInvestment(LinkAccountType.INVESTMENT, LinkAccountSubtypes.SIMPLE_IRA);
+    public static readonly SIPP = new LinkAccountSubtypeInvestment(LinkAccountType.INVESTMENT, LinkAccountSubtypes.SIPP);
+    /** @deprecated Misspelling of SIPP. Use LinkAccountSubtypeInvestment.SIPP instead. */
     public static readonly SIIP = new LinkAccountSubtypeInvestment(LinkAccountType.INVESTMENT, LinkAccountSubtypes.SIPP);
     public static readonly STOCK_PLAN = new LinkAccountSubtypeInvestment(LinkAccountType.INVESTMENT, LinkAccountSubtypes.STOCK_PLAN);
     public static readonly TFSA = new LinkAccountSubtypeInvestment(LinkAccountType.INVESTMENT, LinkAccountSubtypes.TFSA);

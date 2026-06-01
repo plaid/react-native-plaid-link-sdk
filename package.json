@@ -74,6 +74,13 @@
     "jsSrcsDir": "./src/fabric",
     "android": {
       "javaPackageName": "com.plaid"
+    },
+    "ios": {
+      "modules": {
+        "RNLinksdk": {
+          "className": "RNLinksdk"
+        }
+      }
     }
   }
 }

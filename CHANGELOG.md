@@ -1,6 +1,6 @@
 # RELEASES
 
-## LinkKit V12.8.1 — 2026-06-01
+## LinkKit V12.8.2 — 2026-06-01
 
 #### Requirements
 

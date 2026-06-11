@@ -1,5 +1,58 @@
 # RELEASES
 
+## LinkKit V12.8.3 — 2026-06-11
+
+#### Requirements
+
+This SDK now works with any supported version of React Native.
+
+### Changes
+
+- **[Unable to resolve path to module 'react-native-plaid-link-sdk' #915)](https://github.com/plaid/react-native-plaid-link-sdk/issues/915)**
+
+### Android
+
+Android SDK [5.5.2](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.2)
+
+### Additions
+
+- None
+
+### Changes
+
+- Remove kotlin.Metadata consumer proguard rule.
+- Fix flutter reporting.
+
+### Removals
+
+- None
+
+#### Requirements
+
+
+| Name           | Version                            |
+| -------------- | ---------------------------------- |
+| Android Studio | 4.0+                               |
+| Kotlin         | 1.9.25+ (Kotlin integrations only) |
+
+
+### iOS
+
+iOS SDK [6.4.3](https://github.com/plaid/plaid-link-ios/releases/tag/6.4.3)
+
+### Changes
+
+- No changes.
+
+#### Requirements
+
+
+| Name  | Version   |
+| ----- | --------- |
+| Xcode | >= 16.1.0 |
+| iOS   | >= 14.0   |
+
+
 ## LinkKit V12.8.2 — 2026-06-01
 
 #### Requirements

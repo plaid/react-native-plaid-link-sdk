@@ -17,14 +17,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Use Node.js 19
+      - name: Use Node.js 22
         uses: actions/setup-node@v3
         with:
-          node-version: 19
+          node-version: 22
           cache: "npm"
 
       - name: Install Node modules
         run: npm ci --legacy-peer-deps
+
+      - name: Build TypeScript output
+        run: npm run build
 
       - name: Package sanity checks
         run: npm run check:package

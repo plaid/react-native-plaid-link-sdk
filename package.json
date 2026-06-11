@@ -13,6 +13,7 @@
     "src/**/*"
   ],
   "scripts": {
+    "build": "tsc",
     "check:package": "node scripts/check-package-entrypoints.js",
     "lint": "eslint \"*.js\" \"scripts/**/*.js\" --fix",
     "prettier": "prettier \"./**/*.{js,jsx}\" --write",

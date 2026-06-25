@@ -128,7 +128,7 @@ export function PlaidLayerSessionScreen({ onBack }: Props) {
   const canCreateSession = isIdle && isValidToken(token);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, styles.androidSafeArea]}>
       <ScrollView style={styles.container}>
         <View style={styles.backButton}>
           <Button title="← Back" onPress={onBack} />

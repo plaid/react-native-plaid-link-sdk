@@ -3,8 +3,10 @@ import { useState } from "react";
 import {
   Alert,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   TouchableOpacity,
   View,
@@ -33,7 +35,7 @@ export function LinkSuccessScreen({ linkSuccess, events, onClose }: Props) {
 
   return (
     <Modal animationType="slide" presentationStyle="pageSheet">
-      <View style={styles.container}>
+      <View style={[styles.container, styles.androidSafeArea]}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>🟢 LinkSuccess</Text>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -181,6 +183,9 @@ function getInstitution(institution: unknown): LinkInstitution | null {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f2f2f7" },
+  androidSafeArea: {
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",

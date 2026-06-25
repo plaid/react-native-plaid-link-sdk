@@ -116,7 +116,7 @@ export function PlaidLinkHeadlessSessionScreen({ onBack }: Props) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, styles.androidSafeArea]}>
       <ScrollView style={styles.container}>
         <View style={styles.backButton}>
           <Button title="← Back" onPress={onBack} />

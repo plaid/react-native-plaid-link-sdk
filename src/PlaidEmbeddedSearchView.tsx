@@ -1,6 +1,6 @@
 import { requireNativeViewManager } from "expo-modules-core";
 import * as React from "react";
-import { Platform, ViewProps } from "react-native";
+import { ViewProps } from "react-native";
 
 import {
   LinkExit,
@@ -16,16 +16,11 @@ export type PlaidEmbeddedSearchViewProps = {
   onLoad?: () => void;
 } & ViewProps;
 
-const NativeView: React.ComponentType<any> =
-  Platform.OS === "ios"
-    ? requireNativeViewManager("ReactNativePlaidLinkSdk")
-    : () => null;
+const NativeView: React.ComponentType<any> = requireNativeViewManager(
+  "ReactNativePlaidLinkSdk",
+);
 
 export function PlaidEmbeddedSearchView(props: PlaidEmbeddedSearchViewProps) {
-  if (Platform.OS !== "ios") {
-    return null;
-  }
-
   const { onSuccess, onExit, onEvent, onLoad, ...restProps } = props;
 
   return (

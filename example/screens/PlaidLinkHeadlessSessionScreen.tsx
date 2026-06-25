@@ -5,7 +5,6 @@ import {
   ScrollView,
   Text,
   View,
-  ActivityIndicator,
   StyleSheet,
 } from "react-native";
 import {
@@ -19,6 +18,7 @@ import {
 import ReactNativePlaidLinkSdk from "react-native-plaid-link-sdk";
 import {
   ErrorView,
+  PrimaryButton,
   SdkVersionView,
   TokenInputView,
 } from "../components/components";
@@ -140,20 +140,12 @@ export function PlaidLinkHeadlessSessionScreen({ onBack }: Props) {
             <ErrorView message={errorMessage} />
           )}
 
-          <View
-            style={[styles.button, !isEnabled && styles.buttonDisabled]}
-            pointerEvents={isEnabled ? "auto" : "none"}
-          >
-            <Button
-              title={buttonTitle}
-              onPress={isReady ? handleStart : createSession}
-              disabled={!isEnabled}
-              color="#fff"
-            />
-            {isLoading && (
-              <ActivityIndicator color="#fff" style={styles.spinner} />
-            )}
-          </View>
+          <PrimaryButton
+            title={buttonTitle}
+            onPress={isReady ? handleStart : createSession}
+            disabled={!isEnabled}
+            loading={isLoading}
+          />
         </View>
       </ScrollView>
 

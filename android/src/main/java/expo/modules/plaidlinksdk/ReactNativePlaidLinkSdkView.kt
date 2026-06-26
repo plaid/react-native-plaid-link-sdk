@@ -41,6 +41,7 @@ class ReactNativePlaidLinkSdkView(
       config,
       OnLinkContinuation { session ->
         val activity = appContext.currentActivity ?: return@OnLinkContinuation
+        activity.prepareForPlaidKeyboard()
         session.open(activity)
       },
     )

@@ -129,6 +129,7 @@ class ReactNativePlaidLinkSdkModule : Module() {
     try {
       val activity = requireActivity()
       activeSession = session
+      activity.prepareForPlaidKeyboard()
       session.open(activity)
       promise.resolve(null)
     } catch (error: Throwable) {

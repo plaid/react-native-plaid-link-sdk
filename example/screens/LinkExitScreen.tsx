@@ -1,15 +1,19 @@
 import {
   Alert,
   Modal,
-  Pressable,
+  Platform,
   ScrollView,
-  SectionList,
   StyleSheet,
+  StatusBar,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { LinkExit, LinkEvent } from "react-native-plaid-link-sdk";
+import {
+  LinkExit,
+  LinkEvent,
+  LinkInstitution,
+} from "react-native-plaid-link-sdk";
 
 type Props = {
   linkExit: LinkExit;
@@ -19,16 +23,15 @@ type Props = {
 
 export function LinkExitScreen({ linkExit, events, onClose }: Props) {
   const { error, metadata } = linkExit;
+  const institution = getInstitution(metadata.institution);
 
   const copyToClipboard = async (text: string) => {
-    // expo-clipboard if available, otherwise Alert
     Alert.alert("Copied", text);
   };
 
   return (
     <Modal animationType="slide" presentationStyle="pageSheet">
-      <View style={styles.container}>
-        {/* Header */}
+      <View style={[styles.container, styles.androidSafeArea]}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>🔴 LinkExit</Text>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -37,7 +40,6 @@ export function LinkExitScreen({ linkExit, events, onClose }: Props) {
         </View>
 
         <ScrollView style={styles.scroll}>
-          {/* Exit Error */}
           <SectionHeader title="Exit Error" />
           <View style={styles.card}>
             {error ? (
@@ -54,12 +56,11 @@ export function LinkExitScreen({ linkExit, events, onClose }: Props) {
             )}
           </View>
 
-          {/* Metadata */}
           <SectionHeader title="Metadata" />
           <View style={styles.card}>
             {metadata.status && <Row label="Status" value={metadata.status} />}
-            {metadata.institution && (
-              <Row label="Institution" value={metadata.institution.name} />
+            {institution && (
+              <Row label="Institution" value={institution.name} />
             )}
             <Row label="Request ID" value={metadata.requestId || "---"} />
             <TouchableOpacity
@@ -77,7 +78,6 @@ export function LinkExitScreen({ linkExit, events, onClose }: Props) {
             </TouchableOpacity>
           </View>
 
-          {/* Metadata JSON */}
           <SectionHeader title="Metadata JSON" />
           <View style={styles.card}>
             <Text style={styles.mono} selectable>
@@ -85,7 +85,6 @@ export function LinkExitScreen({ linkExit, events, onClose }: Props) {
             </Text>
           </View>
 
-          {/* Link Events */}
           {events.length > 0 && (
             <>
               <SectionHeader title="Link Events" />
@@ -124,8 +123,24 @@ function ExpandableEvent({ event }: { event: LinkEvent }) {
   );
 }
 
+function getInstitution(institution: unknown): LinkInstitution | null {
+  if (
+    typeof institution === "object" &&
+    institution !== null &&
+    "name" in institution &&
+    "id" in institution
+  ) {
+    return institution as LinkInstitution;
+  }
+
+  return null;
+}
+
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f2f2f7" },
+  androidSafeArea: {
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",

@@ -76,8 +76,22 @@ export function SyncFinanceKitScreen({ onBack }: Props) {
 
   const canSync = isValidToken(token) && !isSyncing && Platform.OS === "ios";
 
+  if (Platform.OS === "android") {
+    return (
+      <SafeAreaView style={[styles.container, styles.androidSafeArea]}>
+        <View style={styles.backButton}>
+          <Button title="← Back" onPress={onBack} />
+        </View>
+
+        <View style={styles.content}>
+          <ErrorView message="FinanceKit is only available on iOS" />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, styles.androidSafeArea]}>
       <ScrollView style={styles.container}>
         <View style={styles.backButton}>
           <Button title="← Back" onPress={onBack} />

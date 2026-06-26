@@ -16,3 +16,28 @@ android {
     abortOnError false
   }
 }
+
+
+kotlin {
+  compilerOptions {
+    freeCompilerArgs.add("-Xskip-metadata-version-check")
+  }
+}
+
+dependencies {
+  implementation "com.plaid.link:sdk-core:6.0.0"
+  testImplementation "junit:junit:4.13.2"
+}
+
+gradle.projectsEvaluated {
+  rootProject.allprojects { project ->
+    project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach { task ->
+      task.compilerOptions.freeCompilerArgs.add("-Xskip-metadata-version-check")
+    }
+    if (project.name.startsWith("expo")) {
+      project.tasks.withType(org.gradle.api.tasks.testing.Test).configureEach { task ->
+        task.failOnNoDiscoveredTests = false
+      }
+    }
+  }
+}

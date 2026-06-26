@@ -18,6 +18,7 @@ import {
 import ReactNativePlaidLinkSdk from "react-native-plaid-link-sdk";
 import {
   ErrorView,
+  PrimaryButton,
   SdkVersionView,
   TokenInputView,
 } from "../components/components";
@@ -128,7 +129,7 @@ export function PlaidLayerSessionScreen({ onBack }: Props) {
   const canCreateSession = isIdle && isValidToken(token);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, styles.androidSafeArea]}>
       <ScrollView style={styles.container}>
         <View style={styles.backButton}>
           <Button title="← Back" onPress={onBack} />
@@ -144,17 +145,12 @@ export function PlaidLayerSessionScreen({ onBack }: Props) {
             <ErrorView message={errorMessage} />
           )}
 
-          <View
-            style={[styles.button, !canCreateSession && styles.buttonDisabled]}
-            pointerEvents={canCreateSession ? "auto" : "none"}
-          >
-            <Button
-              title={isLoading ? "Initializing..." : "Create Layer Session"}
-              onPress={createSession}
-              disabled={!canCreateSession || isLoading}
-              color="#fff"
-            />
-          </View>
+          <PrimaryButton
+            title={isLoading ? "Initializing..." : "Create Layer Session"}
+            onPress={createSession}
+            disabled={!canCreateSession}
+            loading={isLoading}
+          />
 
           {sessionCreated && (
             <View style={styles.userDataSection}>
@@ -187,27 +183,16 @@ export function PlaidLayerSessionScreen({ onBack }: Props) {
                 />
               </View>
 
-              <View
-                style={[
-                  styles.button,
-                  !sessionRef.current && styles.buttonDisabled,
-                ]}
-                pointerEvents={sessionRef.current ? "auto" : "none"}
-              >
-                <Button
-                  title="Submit User Data"
-                  onPress={handleSubmit}
-                  disabled={!sessionRef.current}
-                  color="#fff"
-                />
-              </View>
+              <PrimaryButton
+                title="Submit User Data"
+                onPress={handleSubmit}
+                disabled={!sessionRef.current}
+              />
             </View>
           )}
 
           {isReady && (
-            <View style={styles.button}>
-              <Button title="Launch Layer" onPress={handleOpen} color="#fff" />
-            </View>
+            <PrimaryButton title="Launch Layer" onPress={handleOpen} />
           )}
         </View>
       </ScrollView>

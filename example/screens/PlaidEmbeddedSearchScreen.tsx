@@ -1,25 +1,21 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Button,
+  Platform,
   SafeAreaView,
   ScrollView,
+  StyleSheet,
   Text,
   View,
-  Platform,
-  StyleSheet,
 } from "react-native";
 import {
-  PlaidEmbeddedSearchView,
   LinkExit,
   LinkEvent,
   LinkSuccess,
+  PlaidEmbeddedSearchView,
 } from "react-native-plaid-link-sdk";
 import ReactNativePlaidLinkSdk from "react-native-plaid-link-sdk";
-import {
-  ErrorView,
-  SdkVersionView,
-  TokenInputView,
-} from "../components/components";
+import { SdkVersionView, TokenInputView } from "../components/components";
 import { styles } from "../styles/common";
 import { isValidToken } from "../utils/validation";
 import { LinkExitScreen } from "./LinkExitScreen";
@@ -30,13 +26,18 @@ type Props = { onBack: () => void };
 export function PlaidEmbeddedSearchScreen({ onBack }: Props) {
   const [token, setToken] = useState("");
   const [isViewReady, setIsViewReady] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [linkExit, setLinkExit] = useState<LinkExit | null>(null);
   const [linkSuccess, setLinkSuccess] = useState<LinkSuccess | null>(null);
   const events = useRef<LinkEvent[]>([]);
 
-  const hasValidToken = isValidToken(token.trim());
-  const canShowView = hasValidToken && Platform.OS === "ios";
+  const trimmedToken = token.trim();
+  const hasValidToken = isValidToken(trimmedToken);
+  const canShowView = hasValidToken;
+
+  useEffect(() => {
+    setIsViewReady(false);
+    events.current = [];
+  }, [trimmedToken]);
 
   const handleSuccess = (success: LinkSuccess) => {
     console.log(
@@ -62,11 +63,10 @@ export function PlaidEmbeddedSearchScreen({ onBack }: Props) {
   const handleLoad = () => {
     console.log("[PlaidEmbeddedSearch] onLoad - view is ready");
     setIsViewReady(true);
-    setErrorMessage(null);
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, styles.androidSafeArea]}>
       <ScrollView style={styles.container}>
         <View style={styles.backButton}>
           <Button title="← Back" onPress={onBack} />
@@ -78,16 +78,19 @@ export function PlaidEmbeddedSearchScreen({ onBack }: Props) {
 
           <TokenInputView token={token} onTokenChange={setToken} />
 
-          {Platform.OS !== "ios" && (
-            <ErrorView message="Embedded Search is only available on iOS" />
-          )}
+          <View style={componentStyles.statusCard}>
+            <StatusRow label="Platform" value={Platform.OS} />
+            <StatusRow
+              label="View"
+              value={isViewReady ? "Loaded" : canShowView ? "Loading" : "Idle"}
+            />
+            <StatusRow label="Events" value={String(events.current.length)} />
+          </View>
 
-          {errorMessage && <ErrorView message={errorMessage} />}
-
-          {canShowView && (
+          {canShowView ? (
             <View style={componentStyles.embeddedContainer}>
               <PlaidEmbeddedSearchView
-                token={token.trim()}
+                token={trimmedToken}
                 style={componentStyles.embeddedView}
                 onSuccess={handleSuccess}
                 onExit={handleExit}
@@ -95,9 +98,7 @@ export function PlaidEmbeddedSearchScreen({ onBack }: Props) {
                 onLoad={handleLoad}
               />
             </View>
-          )}
-
-          {!hasValidToken && (
+          ) : (
             <View style={componentStyles.placeholderContainer}>
               <Text style={componentStyles.placeholderText}>
                 Enter a valid link token to see the embedded search view
@@ -134,7 +135,38 @@ export function PlaidEmbeddedSearchScreen({ onBack }: Props) {
   );
 }
 
+function StatusRow({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={componentStyles.statusRow}>
+      <Text style={componentStyles.statusLabel}>{label}</Text>
+      <Text style={componentStyles.statusValue}>{value}</Text>
+    </View>
+  );
+}
+
 const componentStyles = StyleSheet.create({
+  statusCard: {
+    width: "100%",
+    maxWidth: 330,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+  },
+  statusRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 4,
+  },
+  statusLabel: {
+    fontSize: 13,
+    color: "#555",
+  },
+  statusValue: {
+    fontSize: 13,
+    color: "#111",
+    fontWeight: "600",
+  },
   embeddedContainer: {
     width: "100%",
     maxWidth: 330,

@@ -33,7 +33,7 @@ export default function App() {
     return <SyncFinanceKitScreen onBack={() => setScreen("list")} />;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, styles.androidSafeArea]}>
       <ScrollView style={styles.container}>
         <Text style={styles.header}>LinkKit Examples</Text>
         <Text style={styles.sdkVersion}>

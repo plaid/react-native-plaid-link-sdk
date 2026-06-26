@@ -1,5 +1,4 @@
 import {
-  Button,
   View,
   Text,
   ActivityIndicator,
@@ -7,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Clipboard,
+  Pressable,
 } from "react-native";
 import { styles } from "../styles/common";
 import { SessionState } from "../types/types";
@@ -110,18 +110,44 @@ export function ConnectButton({
   }
 
   return (
-    <View
-      style={[styles.button, !isEnabled && styles.buttonDisabled]}
-      pointerEvents={isEnabled ? "auto" : "none"}
+    <PrimaryButton
+      title={buttonTitle}
+      onPress={isReady ? onOpen : onRetry}
+      disabled={!isEnabled}
+      loading={isLoading}
+    />
+  );
+}
+
+export function PrimaryButton({
+  title,
+  onPress,
+  disabled,
+  loading = false,
+}: {
+  title: string;
+  onPress: () => void;
+  disabled?: boolean;
+  loading?: boolean;
+}) {
+  const isDisabled = disabled || loading;
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ disabled: isDisabled }}
+      disabled={isDisabled}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.button,
+        componentStyles.primaryButton,
+        isDisabled && styles.buttonDisabled,
+        pressed && !isDisabled && componentStyles.primaryButtonPressed,
+      ]}
     >
-      <Button
-        title={buttonTitle}
-        onPress={isReady ? onOpen : onRetry}
-        disabled={!isEnabled}
-        color="#fff"
-      />
-      {isLoading && <ActivityIndicator color="#fff" style={styles.spinner} />}
-    </View>
+      {loading && <ActivityIndicator color="#fff" style={styles.spinner} />}
+      <Text style={componentStyles.primaryButtonText}>{title}</Text>
+    </Pressable>
   );
 }
 
@@ -170,5 +196,23 @@ const componentStyles = StyleSheet.create({
     fontSize: 12,
     color: "#ff3b30",
     marginTop: 4,
+  },
+  primaryButton: {
+    minHeight: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  primaryButtonPressed: {
+    opacity: 0.75,
+  },
+  primaryButtonText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "700",
+    textAlign: "center",
+    textTransform: "uppercase",
   },
 });

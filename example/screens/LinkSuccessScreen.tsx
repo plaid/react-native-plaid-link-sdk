@@ -3,8 +3,10 @@ import { useState } from "react";
 import {
   Alert,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   TouchableOpacity,
   View,
@@ -12,6 +14,7 @@ import {
 import {
   LinkAccount,
   LinkEvent,
+  LinkInstitution,
   LinkSuccess,
 } from "react-native-plaid-link-sdk";
 
@@ -23,6 +26,7 @@ type Props = {
 
 export function LinkSuccessScreen({ linkSuccess, events, onClose }: Props) {
   const { publicToken, metadata } = linkSuccess;
+  const institution = getInstitution(metadata.institution);
 
   const copyToClipboard = async (text: string, label: string) => {
     await Clipboard.setStringAsync(text);
@@ -31,8 +35,7 @@ export function LinkSuccessScreen({ linkSuccess, events, onClose }: Props) {
 
   return (
     <Modal animationType="slide" presentationStyle="pageSheet">
-      <View style={styles.container}>
-        {/* Header */}
+      <View style={[styles.container, styles.androidSafeArea]}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>🟢 LinkSuccess</Text>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -41,7 +44,6 @@ export function LinkSuccessScreen({ linkSuccess, events, onClose }: Props) {
         </View>
 
         <ScrollView style={styles.scroll}>
-          {/* Public Token */}
           <SectionHeader title="Public Token" />
           <View style={styles.card}>
             <TouchableOpacity
@@ -55,7 +57,6 @@ export function LinkSuccessScreen({ linkSuccess, events, onClose }: Props) {
             </TouchableOpacity>
           </View>
 
-          {/* Events */}
           {events.length > 0 && (
             <>
               <SectionHeader title="Link Events" />
@@ -71,13 +72,12 @@ export function LinkSuccessScreen({ linkSuccess, events, onClose }: Props) {
             </>
           )}
 
-          {/* Metadata */}
           <SectionHeader title="Metadata" />
           <View style={styles.card}>
-            {metadata.institution && (
+            {institution && (
               <Row
                 label="Institution"
-                value={`${metadata.institution.name} (${metadata.institution.id})`}
+                value={`${institution.name} (${institution.id})`}
               />
             )}
             <AccountsRow accounts={metadata.accounts} />
@@ -97,7 +97,6 @@ export function LinkSuccessScreen({ linkSuccess, events, onClose }: Props) {
             </TouchableOpacity>
           </View>
 
-          {/* Metadata JSON */}
           <SectionHeader title="Metadata JSON" />
           <View style={styles.card}>
             <Text style={styles.mono} selectable>
@@ -169,8 +168,24 @@ function ExpandableEvent({
   );
 }
 
+function getInstitution(institution: unknown): LinkInstitution | null {
+  if (
+    typeof institution === "object" &&
+    institution !== null &&
+    "name" in institution &&
+    "id" in institution
+  ) {
+    return institution as LinkInstitution;
+  }
+
+  return null;
+}
+
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f2f2f7" },
+  androidSafeArea: {
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",

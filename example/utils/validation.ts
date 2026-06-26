@@ -1,7 +1,8 @@
 export function isValidToken(token: string): boolean {
-  if (token.trim().length === 0) return false;
+  const trimmedToken = token.trim();
+  if (trimmedToken.length === 0) return false;
   const validPrefixes = ["link-sandbox", "link-production", "link-devenv"];
-  return validPrefixes.some((prefix) => token.startsWith(prefix));
+  return validPrefixes.some((prefix) => trimmedToken.startsWith(prefix));
 }
 
 export function getTokenValidationError(token: string): string | null {

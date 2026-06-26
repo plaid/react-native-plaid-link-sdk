@@ -85,7 +85,7 @@ iOS SDK [7.0.0](https://github.com/plaid/plaid-link-ios/releases/tag/7.0.0)
 | Name  | Version   |
 | ----- | --------- |
 | Xcode | >= 16.1.0 |
-| iOS   | >= 14.0   |
+| iOS   | >= 15.0   |
 
 ## LinkKit V12.8.3 — 2026-06-11
 

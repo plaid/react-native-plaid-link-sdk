@@ -26,10 +26,6 @@ export const styles = StyleSheet.create({
     gap: 16,
     padding: 20,
   },
-  scrollContent: {
-    flexGrow: 1,
-    paddingBottom: 40,
-  },
   button: {
     width: "100%",
     backgroundColor: "#007AFF",

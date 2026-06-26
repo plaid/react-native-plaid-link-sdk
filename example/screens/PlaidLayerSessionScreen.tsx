@@ -1,8 +1,6 @@
 import { useRef, useState } from "react";
 import {
   Button,
-  KeyboardAvoidingView,
-  Platform,
   SafeAreaView,
   ScrollView,
   Text,
@@ -132,84 +130,72 @@ export function PlaidLayerSessionScreen({ onBack }: Props) {
 
   return (
     <SafeAreaView style={[styles.container, styles.androidSafeArea]}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
-        >
-          <View style={styles.backButton}>
-            <Button title="← Back" onPress={onBack} />
-          </View>
+      <ScrollView style={styles.container}>
+        <View style={styles.backButton}>
+          <Button title="← Back" onPress={onBack} />
+        </View>
 
-          <View style={styles.content}>
-            <Text style={styles.title}>Plaid Layer Session Example</Text>
-            <SdkVersionView version={ReactNativePlaidLinkSdk.sdkVersion} />
+        <View style={styles.content}>
+          <Text style={styles.title}>Plaid Layer Session Example</Text>
+          <SdkVersionView version={ReactNativePlaidLinkSdk.sdkVersion} />
 
-            <TokenInputView token={token} onTokenChange={setToken} />
+          <TokenInputView token={token} onTokenChange={setToken} />
 
-            {state === "error" && errorMessage && (
-              <ErrorView message={errorMessage} />
-            )}
+          {state === "error" && errorMessage && (
+            <ErrorView message={errorMessage} />
+          )}
 
-            <PrimaryButton
-              title={isLoading ? "Initializing..." : "Create Layer Session"}
-              onPress={createSession}
-              disabled={!canCreateSession}
-              loading={isLoading}
-            />
+          <PrimaryButton
+            title={isLoading ? "Initializing..." : "Create Layer Session"}
+            onPress={createSession}
+            disabled={!canCreateSession}
+            loading={isLoading}
+          />
 
-            {sessionCreated && (
-              <View style={styles.userDataSection}>
-                <Text style={styles.sectionTitle}>User Information</Text>
+          {sessionCreated && (
+            <View style={styles.userDataSection}>
+              <Text style={styles.sectionTitle}>User Information</Text>
 
-                <View style={styles.inputGroup}>
-                  <Text style={styles.inputLabel}>User Phone Number</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="+1 415-555-0011"
-                    placeholderTextColor="#999"
-                    value={phoneNumber}
-                    onChangeText={setPhoneNumber}
-                    keyboardType="phone-pad"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="done"
-                  />
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <Text style={styles.inputLabel}>User Date of Birth</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="YYYY-MM-DD"
-                    placeholderTextColor="#999"
-                    value={dateOfBirth}
-                    onChangeText={setDateOfBirth}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    returnKeyType="done"
-                  />
-                </View>
-
-                <PrimaryButton
-                  title="Submit User Data"
-                  onPress={handleSubmit}
-                  disabled={!sessionRef.current}
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>User Phone Number</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="+1 415-555-0011"
+                  placeholderTextColor="#999"
+                  value={phoneNumber}
+                  onChangeText={setPhoneNumber}
+                  keyboardType="phone-pad"
+                  autoCapitalize="none"
+                  autoCorrect={false}
                 />
               </View>
-            )}
 
-            {isReady && (
-              <PrimaryButton title="Launch Layer" onPress={handleOpen} />
-            )}
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>User Date of Birth</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="YYYY-MM-DD"
+                  placeholderTextColor="#999"
+                  value={dateOfBirth}
+                  onChangeText={setDateOfBirth}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </View>
+
+              <PrimaryButton
+                title="Submit User Data"
+                onPress={handleSubmit}
+                disabled={!sessionRef.current}
+              />
+            </View>
+          )}
+
+          {isReady && (
+            <PrimaryButton title="Launch Layer" onPress={handleOpen} />
+          )}
+        </View>
+      </ScrollView>
 
       {linkSuccess && (
         <LinkSuccessScreen

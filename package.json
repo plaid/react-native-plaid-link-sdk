@@ -6,6 +6,7 @@
   "types": "build/index.d.ts",
   "scripts": {
     "build": "expo-module build",
+    "check:package": "node scripts/check-package-entrypoints.js",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",

@@ -78,6 +78,33 @@ function extractCurlyBlock(source: string, marker: string): string {
   throw new Error(`Could not read block for ${marker}`);
 }
 
+function extractSwiftDictionaryAfter(source: string, marker: string): string {
+  const markerIndex = source.indexOf(marker);
+  if (markerIndex === -1) {
+    throw new Error(`Could not find ${marker}`);
+  }
+
+  const start = source.indexOf("[", markerIndex);
+  if (start === -1) {
+    throw new Error(`Could not find dictionary for ${marker}`);
+  }
+
+  let depth = 0;
+  for (let index = start; index < source.length; index += 1) {
+    const char = source[index];
+    if (char === "[") {
+      depth += 1;
+    } else if (char === "]") {
+      depth -= 1;
+      if (depth === 0) {
+        return source.slice(start, index + 1);
+      }
+    }
+  }
+
+  throw new Error(`Could not read dictionary for ${marker}`);
+}
+
 function extractSwiftKeys(block: string, targetDepth: number): string[] {
   const keys = new Set<string>();
   let depth = 0;
@@ -177,6 +204,33 @@ describe("native callback payload contract", () => {
     expect(
       extractSwiftKeys(extractCurlyBlock(iosSource, "extension ExitError"), 1),
     ).toEqual(contract.error);
+  });
+
+  it("keeps iOS fallback exit dictionary keys aligned with the RN contract", () => {
+    const fallbackExitMessages = [
+      "createPlaidLinkSession was not called.",
+      "createPlaidLayerSession was not called.",
+      "createPlaidHeadlessSession was not called.",
+    ];
+
+    for (const message of fallbackExitMessages) {
+      const fallbackExit = extractSwiftDictionaryAfter(iosSource, message);
+
+      expect(fallbackExit).not.toContain("errorDisplayMessage");
+      expect(extractSwiftKeys(fallbackExit, 1)).toEqual(contract.exit);
+      expect(
+        extractSwiftKeys(
+          extractSwiftDictionaryAfter(fallbackExit, '"error"'),
+          1,
+        ),
+      ).toEqual(contract.error);
+      expect(
+        extractSwiftKeys(
+          extractSwiftDictionaryAfter(fallbackExit, '"metadata"'),
+          1,
+        ),
+      ).toEqual(contract.exitMetadata);
+    }
   });
 
   it("keeps Android callback mapper keys aligned with the RN contract", () => {

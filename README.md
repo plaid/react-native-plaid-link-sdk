@@ -1,41 +1,39 @@
-# react-native-plaid-link-sdk
+# Plaid React Native SDK
 
-React Native Plaid Link SDK (New Architecture & Expo)
+React Native SDK for Plaid Link, built on Expo Modules for the v13 native architecture.
 
-
-# API documentation
+## API documentation
 
 - [Documentation for the latest stable release](https://docs.expo.dev/versions/latest/sdk/react-native-plaid-link-sdk/)
 - [Documentation for the main branch](https://docs.expo.dev/versions/unversioned/sdk/react-native-plaid-link-sdk/)
 
-# Migration guides
+## Migration guides
 
 - [v13 migration guide](./V13_MIGRATION_GUIDE.md)
 
-# Installation in managed Expo projects
+## Installation
 
-For [managed](https://docs.expo.dev/archive/managed-vs-bare/) Expo projects, please follow the installation instructions in the [API documentation for the latest stable release](#api-documentation). If you follow the link and there is no documentation available then this library is not yet usable within managed projects &mdash; it is likely to be included in an upcoming Expo SDK release.
+### Expo projects
 
+Install the package and run the app in a development build or another custom native runtime. Expo Go cannot load custom native modules.
 
-# Installation in bare React Native projects
-
-For bare React Native projects, you must ensure that you have [installed and configured the `expo` package](https://docs.expo.dev/bare/installing-expo-modules/) before continuing.
-
-### Add the package to your npm dependencies
-
-```
+```sh
 npm install react-native-plaid-link-sdk
 ```
 
-### Configure for Android
+### Bare React Native projects
 
+Bare React Native apps must install and configure the [`expo` package](https://docs.expo.dev/bare/installing-expo-modules/) before using this SDK.
 
+```sh
+npm install react-native-plaid-link-sdk
+npx pod-install
+```
 
+### Platform setup
 
-### Configure for iOS
+Configure Android package names, iOS bundle identifiers, and OAuth redirect settings in the Plaid Dashboard for the environments your app supports.
 
-Run `npx pod-install` after installing the npm package.
+## Contributing
 
-# Contributing
-
-Contributions are very welcome! Please refer to guidelines described in the [contributing guide]( https://github.com/expo/expo#contributing).
+Issues and pull requests are welcome in this repository.

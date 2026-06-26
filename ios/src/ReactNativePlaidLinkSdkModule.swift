@@ -155,12 +155,13 @@ public class ReactNativePlaidLinkSdkModule: Module {
                 self.sendEvent(
                     ModuleEventName.onExit.rawValue,
                     [
-                        "displayMessage": errorMessage,
-                        "errorCode": errorCode,
-                        "errorType": "creation error",
-                        "errorMessage": errorMessage,
-                        "errorDisplayMessage": errorMessage,
-                        "errorJson": NSNull(),
+                        "error": [
+                            "displayMessage": errorMessage,
+                            "errorCode": errorCode,
+                            "errorType": "creation error",
+                            "errorMessage": errorMessage,
+                            "errorJson": NSNull(),
+                        ],
                         "metadata": [
                             "linkSessionId": NSNull(),
                             "institution": NSNull(),
@@ -210,12 +211,13 @@ public class ReactNativePlaidLinkSdkModule: Module {
                 self.sendEvent(
                     ModuleEventName.onExit.rawValue,
                     [
-                        "displayMessage": errorMessage,
-                        "errorCode": errorCode,
-                        "errorType": "creation error",
-                        "errorMessage": errorMessage,
-                        "errorDisplayMessage": errorMessage,
-                        "errorJson": NSNull(),
+                        "error": [
+                            "displayMessage": errorMessage,
+                            "errorCode": errorCode,
+                            "errorType": "creation error",
+                            "errorMessage": errorMessage,
+                            "errorJson": NSNull(),
+                        ],
                         "metadata": [
                             "linkSessionId": NSNull(),
                             "institution": NSNull(),
@@ -272,12 +274,13 @@ public class ReactNativePlaidLinkSdkModule: Module {
                 self.sendEvent(
                     ModuleEventName.onExit.rawValue,
                     [
-                        "displayMessage": errorMessage,
-                        "errorCode": errorCode,
-                        "errorType": "creation error",
-                        "errorMessage": errorMessage,
-                        "errorDisplayMessage": errorMessage,
-                        "errorJson": NSNull(),
+                        "error": [
+                            "displayMessage": errorMessage,
+                            "errorCode": errorCode,
+                            "errorType": "creation error",
+                            "errorMessage": errorMessage,
+                            "errorJson": NSNull(),
+                        ],
                         "metadata": [
                             "linkSessionId": NSNull(),
                             "institution": NSNull(),

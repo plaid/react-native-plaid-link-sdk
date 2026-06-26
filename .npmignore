@@ -8,6 +8,8 @@ __mocks__
 __tests__
 
 /babel.config.js
+/coverage/
+/dist/
 /android/src/androidTest/
 /android/src/test/
 /android/build/

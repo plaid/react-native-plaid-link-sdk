@@ -39,6 +39,16 @@ jobs:
         env:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
 
+      - name: Build package
+        run: npm run build
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Package sanity check
+        run: npm run check:package
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
       - name: Upload coverage artifacts
         uses: actions/upload-artifact@v4
         if: always()

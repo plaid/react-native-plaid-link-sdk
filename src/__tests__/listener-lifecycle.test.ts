@@ -162,7 +162,7 @@ describe("Listener Lifecycle", () => {
         linkSessionId: "session-1",
         viewName: "EXIT" as any,
         timestamp: "2026-03-27T12:00:00Z",
-        metadata_json: "{}",
+        metadataJson: "{}",
       },
     };
 
@@ -212,7 +212,7 @@ describe("Listener Lifecycle", () => {
         linkSessionId: "session-1",
         viewName: "CONNECTED" as any,
         timestamp: "2026-03-27T12:00:00Z",
-        metadata_json: "{}",
+        metadataJson: "{}",
       },
     };
 
@@ -242,7 +242,7 @@ describe("Listener Lifecycle", () => {
           linkSessionId: "session-1",
           viewName: "CONNECTED" as any,
           timestamp: "2026-03-27T12:00:00Z",
-          metadata_json: "{}",
+          metadataJson: "{}",
         },
       },
       {
@@ -251,7 +251,7 @@ describe("Listener Lifecycle", () => {
           linkSessionId: "session-1",
           viewName: "SELECT_INSTITUTION" as any,
           timestamp: "2026-03-27T12:01:00Z",
-          metadata_json: "{}",
+          metadataJson: "{}",
         },
       },
       {
@@ -260,7 +260,7 @@ describe("Listener Lifecycle", () => {
           linkSessionId: "session-1",
           viewName: "CREDENTIAL" as any,
           timestamp: "2026-03-27T12:02:00Z",
-          metadata_json: "{}",
+          metadataJson: "{}",
         },
       },
       {
@@ -269,7 +269,7 @@ describe("Listener Lifecycle", () => {
           linkSessionId: "session-1",
           viewName: "MFA" as any,
           timestamp: "2026-03-27T12:03:00Z",
-          metadata_json: "{}",
+          metadataJson: "{}",
         },
       },
       {
@@ -278,7 +278,7 @@ describe("Listener Lifecycle", () => {
           linkSessionId: "session-1",
           viewName: "CONNECTED" as any,
           timestamp: "2026-03-27T12:04:00Z",
-          metadata_json: "{}",
+          metadataJson: "{}",
         },
       },
     ];

@@ -295,7 +295,7 @@ describe("Type Definitions", () => {
           linkSessionId: "session-123",
           viewName: "SELECT_INSTITUTION" as any,
           timestamp: "2026-03-27T12:00:00Z",
-          metadata_json: "{}",
+          metadataJson: "{}",
           institutionId: "inst-1",
           institutionName: "Test Bank",
         },
@@ -305,7 +305,7 @@ describe("Type Definitions", () => {
       expect(linkEvent.metadata.linkSessionId).toBeDefined();
       expect(linkEvent.metadata.viewName).toBeDefined();
       expect(linkEvent.metadata.timestamp).toBeDefined();
-      expect(linkEvent.metadata.metadata_json).toBeDefined();
+      expect(linkEvent.metadata.metadataJson).toBeDefined();
     });
 
     it("LinkAccount has verification status", () => {
@@ -520,7 +520,7 @@ describe("Type Definitions", () => {
           institutionName: "Test Bank",
           institutionSearchQuery: "test",
           timestamp: "2026-03-27T12:00:00Z",
-          metadata_json: "{}",
+          metadataJson: "{}",
         },
       };
 

@@ -110,7 +110,7 @@ describe("createPlaidHeadlessSession", () => {
         linkSessionId: "session-123",
         viewName: "CONNECTED" as any,
         timestamp: "2026-03-27T12:00:00Z",
-        metadata_json: "{}",
+        metadataJson: "{}",
       },
     };
 

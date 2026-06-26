@@ -637,7 +637,7 @@ export interface LinkEventMetadata {
   // see possible values for selection at https://plaid.com/docs/link/web/#link-web-onevent-selection
   selection?: null | string;
   timestamp: string;
-  metadata_json: string;
+  metadataJson: string;
 }
 
 export enum LinkEventName {

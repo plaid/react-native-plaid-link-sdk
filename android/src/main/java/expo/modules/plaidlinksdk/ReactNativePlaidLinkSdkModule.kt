@@ -28,7 +28,7 @@ class ReactNativePlaidLinkSdkModule : Module() {
   override fun definition() = ModuleDefinition {
     Name("ReactNativePlaidLinkSdk")
 
-    Constant("sdkVersion") { Plaid.VERSION_NAME }
+    Constant("sdkVersion") { RNPlaidLinkSdkVersion.SDK_VERSION }
 
     Events("PlaidLink.onSuccess", "PlaidLink.onExit", "PlaidLink.onEvent")
 

@@ -53,3 +53,50 @@ describe("Swift Version Sync", () => {
     expect(swiftVersion).toMatch(semverRegex);
   });
 });
+
+describe("Android Version Sync", () => {
+  it("RNPlaidLinkSdkVersion.kt should match package.json version", () => {
+    const kotlinFilePath = path.join(
+      __dirname,
+      "../../android/src/main/java/expo/modules/plaidlinksdk/RNPlaidLinkSdkVersion.kt",
+    );
+    const kotlinContent = fs.readFileSync(kotlinFilePath, "utf-8");
+
+    const versionMatch = kotlinContent.match(/SDK_VERSION\s*=\s*"([^"]+)"/);
+
+    expect(versionMatch).not.toBeNull();
+
+    if (!versionMatch) {
+      fail(
+        "Could not find SDK_VERSION in RNPlaidLinkSdkVersion.kt. " +
+          'Expected format: const val SDK_VERSION = "X.X.X"',
+      );
+      return;
+    }
+
+    const kotlinVersion = versionMatch[1];
+    const packageVersion = packageJson.version;
+
+    expect(kotlinVersion).toBe(packageVersion);
+  });
+
+  it("Android version should be a valid semver string", () => {
+    const kotlinFilePath = path.join(
+      __dirname,
+      "../../android/src/main/java/expo/modules/plaidlinksdk/RNPlaidLinkSdkVersion.kt",
+    );
+    const kotlinContent = fs.readFileSync(kotlinFilePath, "utf-8");
+
+    const versionMatch = kotlinContent.match(/SDK_VERSION\s*=\s*"([^"]+)"/);
+
+    if (!versionMatch) {
+      fail("Could not find SDK_VERSION in Kotlin file");
+      return;
+    }
+
+    const kotlinVersion = versionMatch[1];
+    const semverRegex = /^\d+\.\d+\.\d+/;
+
+    expect(kotlinVersion).toMatch(semverRegex);
+  });
+});

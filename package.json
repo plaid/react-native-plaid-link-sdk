@@ -39,7 +39,7 @@
     "check:package": "node scripts/check-package-entrypoints.js",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
-    "test": "expo-module test",
+    "test": "expo-module test --watchman=false",
     "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",

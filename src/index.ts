@@ -30,7 +30,7 @@ function cleanupListeners() {
 }
 
 export async function createPlaidLinkSession(
-  config: LinkTokenConfiguration
+  config: LinkTokenConfiguration,
 ): Promise<PlaidLinkSession> {
   cleanupListeners();
 
@@ -39,7 +39,7 @@ export async function createPlaidLinkSession(
     (success: LinkSuccess) => {
       config.onSuccess(success);
       cleanupListeners();
-    }
+    },
   );
 
   exitSub = NativePlaidModule.addListener(
@@ -47,14 +47,14 @@ export async function createPlaidLinkSession(
     (exit: LinkExit) => {
       config.onExit(exit);
       cleanupListeners();
-    }
+    },
   );
 
   eventSub = NativePlaidModule.addListener(
     "PlaidLink.onEvent",
     (event: LinkEvent) => {
       config.onEvent(event);
-    }
+    },
   );
 
   await NativePlaidModule.createPlaidLinkSession(config.token);
@@ -65,7 +65,7 @@ export async function createPlaidLinkSession(
 }
 
 export async function createPlaidLayerSession(
-  config: LayerTokenConfiguration
+  config: LayerTokenConfiguration,
 ): Promise<PlaidLayerSession> {
   cleanupListeners();
 
@@ -74,7 +74,7 @@ export async function createPlaidLayerSession(
     (success: LinkSuccess) => {
       config.onSuccess(success);
       cleanupListeners();
-    }
+    },
   );
 
   exitSub = NativePlaidModule.addListener(
@@ -82,14 +82,14 @@ export async function createPlaidLayerSession(
     (exit: LinkExit) => {
       config.onExit?.(exit);
       cleanupListeners();
-    }
+    },
   );
 
   eventSub = NativePlaidModule.addListener(
     "PlaidLink.onEvent",
     (event: LinkEvent) => {
       config.onEvent?.(event);
-    }
+    },
   );
 
   await NativePlaidModule.createPlaidLayerSession(config.token);
@@ -100,13 +100,13 @@ export async function createPlaidLayerSession(
       NativePlaidModule.submitLayerData(
         data.phoneNumber,
         data.dateOfBirth,
-        data.params
+        data.params,
       ),
   };
 }
 
 export async function createPlaidHeadlessSession(
-  config: LinkTokenConfiguration
+  config: LinkTokenConfiguration,
 ): Promise<PlaidHeadlessSession> {
   cleanupListeners();
 
@@ -115,7 +115,7 @@ export async function createPlaidHeadlessSession(
     (success: LinkSuccess) => {
       config.onSuccess(success);
       cleanupListeners();
-    }
+    },
   );
 
   exitSub = NativePlaidModule.addListener(
@@ -123,14 +123,14 @@ export async function createPlaidHeadlessSession(
     (exit: LinkExit) => {
       config.onExit(exit);
       cleanupListeners();
-    }
+    },
   );
 
   eventSub = NativePlaidModule.addListener(
     "PlaidLink.onEvent",
     (event: LinkEvent) => {
       config.onEvent(event);
-    }
+    },
   );
 
   await NativePlaidModule.createPlaidHeadlessSession(config.token);
@@ -156,7 +156,7 @@ export async function syncFinanceKit(config: {
   await NativePlaidModule.syncFinanceKit(
     config.token,
     config.requestAuthorizationIfNeeded ?? true,
-    config.syncBehavior ?? FinanceKitSyncBehavior.LIVE
+    config.syncBehavior ?? FinanceKitSyncBehavior.LIVE,
   );
 }
 

@@ -26,7 +26,7 @@ describe("createPlaidLayerSession", () => {
     const session = await createPlaidLayerSession(config);
 
     expect(NativePlaidModule.createPlaidLayerSession).toHaveBeenCalledWith(
-      "layer-token-123",
+      "layer-token-123"
     );
     expect(session).toHaveProperty("open");
     expect(session).toHaveProperty("submit");
@@ -96,21 +96,21 @@ describe("createPlaidLayerSession", () => {
     expect(NativePlaidModule.submitLayerData).toHaveBeenCalledWith(
       "555-1234",
       undefined,
-      undefined,
+      undefined
     );
 
     await session.submit({ dateOfBirth: "1990-01-01" });
     expect(NativePlaidModule.submitLayerData).toHaveBeenCalledWith(
       undefined,
       "1990-01-01",
-      undefined,
+      undefined
     );
 
     await session.submit({ params: { foo: "bar", baz: "qux" } });
     expect(NativePlaidModule.submitLayerData).toHaveBeenCalledWith(
       undefined,
       undefined,
-      { foo: "bar", baz: "qux" },
+      { foo: "bar", baz: "qux" }
     );
 
     await session.submit({
@@ -121,7 +121,7 @@ describe("createPlaidLayerSession", () => {
     expect(NativePlaidModule.submitLayerData).toHaveBeenCalledWith(
       "555-9999",
       "1985-12-25",
-      { key: "value" },
+      { key: "value" }
     );
   });
 
@@ -147,7 +147,7 @@ describe("createPlaidLayerSession", () => {
 
     (NativePlaidModule as any).__triggerEvent(
       "PlaidLink.onSuccess",
-      mockSuccess,
+      mockSuccess
     );
 
     expect(onSuccessMock).toHaveBeenCalledWith(mockSuccess);
@@ -169,6 +169,8 @@ describe("createPlaidLayerSession", () => {
     await session.open();
     expect(NativePlaidModule.openLayerSession).toHaveBeenCalled();
     expect(NativePlaidModule.openLayerSession).toHaveBeenCalledTimes(1);
+    expect(console.log).not.toHaveBeenCalled();
+    expect(console.error).not.toHaveBeenCalled();
   });
 
   it("handles errors from native module", async () => {
@@ -185,11 +187,8 @@ describe("createPlaidLayerSession", () => {
     };
 
     await expect(createPlaidLayerSession(config)).rejects.toThrow(
-      "Layer session creation failed",
+      "Layer session creation failed"
     );
-    expect(console.error).toHaveBeenCalledWith(
-      "[PlaidLink] createPlaidLayerSession failed:",
-      mockError,
-    );
+    expect(console.error).not.toHaveBeenCalled();
   });
 });

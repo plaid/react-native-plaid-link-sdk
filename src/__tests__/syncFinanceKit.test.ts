@@ -32,6 +32,8 @@ describe("syncFinanceKit", () => {
       true,
       FinanceKitSyncBehavior.LIVE
     );
+    expect(console.log).not.toHaveBeenCalled();
+    expect(console.error).not.toHaveBeenCalled();
   });
 
   it("uses default values for optional parameters", async () => {
@@ -106,5 +108,6 @@ describe("syncFinanceKit", () => {
     await expect(syncFinanceKit(config)).rejects.toThrow(
       "INVALID_TOKEN: Token is invalid"
     );
+    expect(console.error).not.toHaveBeenCalled();
   });
 });

@@ -26,7 +26,7 @@ describe("createPlaidHeadlessSession", () => {
     const session = await createPlaidHeadlessSession(config);
 
     expect(NativePlaidModule.createPlaidHeadlessSession).toHaveBeenCalledWith(
-      "headless-token-123",
+      "headless-token-123"
     );
     expect(session).toHaveProperty("start");
     expect(typeof session.start).toBe("function");
@@ -46,6 +46,8 @@ describe("createPlaidHeadlessSession", () => {
     await session.start();
     expect(NativePlaidModule.startHeadlessSession).toHaveBeenCalled();
     expect(NativePlaidModule.startHeadlessSession).toHaveBeenCalledTimes(1);
+    expect(console.log).not.toHaveBeenCalled();
+    expect(console.error).not.toHaveBeenCalled();
   });
 
   it("onSuccess callback is invoked correctly", async () => {
@@ -69,7 +71,7 @@ describe("createPlaidHeadlessSession", () => {
 
     (NativePlaidModule as any).__triggerEvent(
       "PlaidLink.onSuccess",
-      mockSuccess,
+      mockSuccess
     );
     expect(onSuccessMock).toHaveBeenCalledWith(mockSuccess);
   });
@@ -171,7 +173,7 @@ describe("createPlaidHeadlessSession", () => {
 
     (NativePlaidModule as any).__triggerEvent(
       "PlaidLink.onSuccess",
-      mockSuccess,
+      mockSuccess
     );
 
     expect(onSuccessMock).toHaveBeenCalledWith(mockSuccess);
@@ -222,12 +224,9 @@ describe("createPlaidHeadlessSession", () => {
     };
 
     await expect(createPlaidHeadlessSession(config)).rejects.toThrow(
-      "Headless session creation failed",
+      "Headless session creation failed"
     );
-    expect(console.error).toHaveBeenCalledWith(
-      "[PlaidLink] createPlaidHeadlessSession failed:",
-      mockError,
-    );
+    expect(console.error).not.toHaveBeenCalled();
   });
 
   it("cleans up existing listeners before creating new session", async () => {

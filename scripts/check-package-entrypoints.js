@@ -63,6 +63,15 @@ function assertPackageMetadata() {
   if (!Array.isArray(packageJson.files) || packageJson.files.length === 0) {
     fail("package.json must define a non-empty files allowlist.");
   }
+
+  if (
+    !packageJson.repository ||
+    packageJson.repository.type !== "git" ||
+    packageJson.repository.url !==
+      "git+https://github.com/plaid/react-native-plaid-link-sdk.git"
+  ) {
+    fail("package.json repository must use npm's normalized git object shape.");
+  }
 }
 
 function parsePackJson(output) {

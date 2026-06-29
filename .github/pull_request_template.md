@@ -1,21 +1,26 @@
 ## Summary
-<!-- Simple summary of what was changed. -->
 
-## Motivation
-<!-- Why are you making this change? If it's for fixing a bug, if possible, please include a link to the relevant issue, a code snippet, or an example project that demonstrates the bug. -->
+<!-- Describe what changed and why. -->
 
-## :pencil: Checklist
-- [ ] I have performed a self-review of my own code.
-- [ ] I have optimized code readability (class/variable names, straight forward logic paths, short clarifying docs,...).
+## Testing
 
-## :green_heart: Testing
-<!--- Explain how to test your changes -->
-- [ ] I have manually tested my changes.
+<!-- Include commands run and any manual iOS/Android validation. -->
 
+- [ ] `npm run lint`
+- [ ] `npm test -- --coverage --no-watch --passWithNoTests`
+- [ ] `npm run build`
+- [ ] `npm run check:package`
+- [ ] iOS manually tested or not applicable
+- [ ] Android manually tested or not applicable
 
 ## Documentation
 
-Select one:
- 
-- [ ] I have added relevant documentation for my changes.
-- [ ] This PR does not result in any developer-facing changes.
+- [ ] I updated relevant docs or migration guidance.
+- [ ] This PR does not change developer-facing behavior.
+
+## Release impact
+
+- [ ] Public API is unchanged.
+- [ ] Public API change is intentional and documented.
+- [ ] Package contents or publish behavior changed; `npm run pack:dry-run` and
+      `npm run publish:dry-run` passed.

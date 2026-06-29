@@ -125,8 +125,7 @@ jobs:
 
       - name: Pack local SDK
         run: |
-          PACK_OUTPUT="$(npm pack --pack-destination "$RUNNER_TEMP" --json)"
-          PACKAGE_TARBALL="$(node -e "const path = require('path'); const data = JSON.parse(process.argv[1]); console.log(path.join(process.env.RUNNER_TEMP, data[0].filename));" "$PACK_OUTPUT")"
+          PACKAGE_TARBALL="$(node scripts/pack-compat-tarball.js "$RUNNER_TEMP")"
           echo "PACKAGE_TARBALL=$PACKAGE_TARBALL" >> "$GITHUB_ENV"
         env:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org/

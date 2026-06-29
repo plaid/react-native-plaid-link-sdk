@@ -34,6 +34,21 @@ native module.
 - Kotlin 1.9.25 or newer for Kotlin integrations
 - A package name registered in the Plaid Dashboard for Android OAuth flows
 
+## Compatibility
+
+The SDK supports React Native 0.76 or newer and Expo 52 or newer. Expo support
+requires a development build, custom native build, or bare native app; Expo Go is
+not supported.
+
+| Lane              | React Native | Expo | CI coverage                                                                         |
+| ----------------- | ------------ | ---- | ----------------------------------------------------------------------------------- |
+| Minimum supported | 0.76         | 52   | Peer install and package export smoke test                                          |
+| Current example   | 0.83         | 55   | Peer install and package export smoke test, Android unit tests, iOS simulator build |
+
+The root package unit tests run against the repository's development
+dependencies, while the example app validates the current native integration on
+both platforms.
+
 ## Migration guides
 
 - [v13 migration guide](./V13_MIGRATION_GUIDE.md)

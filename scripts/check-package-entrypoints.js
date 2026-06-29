@@ -23,11 +23,46 @@ function assertPackageFieldExists(fieldName) {
 
   if (!fs.existsSync(absolutePath)) {
     fail(
-      `package.json field "${fieldName}" points to a missing file: ${fieldValue}`,
+      `package.json field "${fieldName}" points to a missing file: ${fieldValue}`
     );
   }
 
   return fieldValue;
+}
+
+function assertPackageMetadata() {
+  const rootExport = packageJson.exports && packageJson.exports["."];
+
+  if (!rootExport || typeof rootExport !== "object") {
+    fail(
+      'package.json must define exports["."] for the public root entrypoint.'
+    );
+  }
+
+  if (rootExport.types !== `./${packageJson.types}`) {
+    fail(`exports["."].types must point to ./${packageJson.types}.`);
+  }
+
+  for (const condition of ["react-native", "import", "require", "default"]) {
+    if (rootExport[condition] !== `./${packageJson.main}`) {
+      fail(`exports["."].${condition} must point to ./${packageJson.main}.`);
+    }
+  }
+
+  if (packageJson.exports["./package.json"] !== "./package.json") {
+    fail('package.json must export "./package.json".');
+  }
+
+  if (
+    !packageJson.publishConfig ||
+    packageJson.publishConfig.registry !== "https://registry.npmjs.org/"
+  ) {
+    fail("package.json publishConfig.registry must force public npm.");
+  }
+
+  if (!Array.isArray(packageJson.files) || packageJson.files.length === 0) {
+    fail("package.json must define a non-empty files allowlist.");
+  }
 }
 
 function parsePackJson(output) {
@@ -87,6 +122,7 @@ function parsePackJson(output) {
 
 const main = assertPackageFieldExists("main");
 const types = assertPackageFieldExists("types");
+assertPackageMetadata();
 
 try {
   const resolved = require.resolve(root);
@@ -96,8 +132,8 @@ try {
     fail(
       `require.resolve('.') resolved to ${path.relative(
         root,
-        resolved,
-      )}, expected ${main}`,
+        resolved
+      )}, expected ${main}`
     );
   }
 } catch (error) {
@@ -114,7 +150,7 @@ try {
       ...process.env,
       npm_config_cache: path.join(
         os.tmpdir(),
-        "react-native-plaid-link-sdk-npm-cache",
+        "react-native-plaid-link-sdk-npm-cache"
       ),
     },
   });
@@ -133,14 +169,53 @@ for (const entrypoint of [main, types]) {
   }
 }
 
-for (const forbiddenPrefix of ["coverage/", "dist/", "example/"]) {
+for (const requiredFile of [
+  "package.json",
+  "README.md",
+  "LICENSE",
+  "CHANGELOG.md",
+  "V13_MIGRATION_GUIDE.md",
+  "expo-module.config.json",
+  "android/build.gradle",
+  "android/src/main/AndroidManifest.xml",
+  "build/index.js",
+  "build/index.d.ts",
+  "ios/ReactNativePlaidLinkSdk.podspec",
+  "ios/src/ReactNativePlaidLinkSdkModule.swift",
+  "ios/Frameworks/LinkKit.xcframework/Info.plist",
+  "src/index.ts",
+]) {
+  if (!files.has(requiredFile)) {
+    fail(`packed package must include ${requiredFile}`);
+  }
+}
+
+for (const forbiddenPrefix of [
+  ".github/",
+  "android/src/androidTest/",
+  "android/src/test/",
+  "coverage/",
+  "dist/",
+  "example/",
+  "scripts/",
+  "src/__mocks__/",
+  "src/__tests__/",
+]) {
   const forbiddenFile = packedFiles.find((file) =>
-    file.path.startsWith(forbiddenPrefix),
+    file.path.startsWith(forbiddenPrefix)
   );
 
   if (forbiddenFile) {
     fail(`packed package must not include ${forbiddenFile.path}`);
   }
+}
+
+const forbiddenFile = packedFiles.find((file) =>
+  file.path.endsWith(".DS_Store")
+);
+
+if (forbiddenFile) {
+  fail(`packed package must not include ${forbiddenFile.path}`);
 }
 
 console.log(`Package entrypoints are valid: ${main}, ${types}`);

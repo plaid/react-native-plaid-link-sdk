@@ -1,0 +1,54 @@
+name: Release Validation
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install Node modules
+        run: npm ci
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit and integration tests
+        run: npm test -- --coverage --no-watch --passWithNoTests
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Build package
+        run: npm run build
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Package sanity check
+        run: npm run check:package
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Pack dry run
+        run: npm run pack:dry-run
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Publish dry run
+        run: npm run publish:dry-run
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/

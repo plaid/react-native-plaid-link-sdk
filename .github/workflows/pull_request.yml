@@ -49,6 +49,16 @@ jobs:
         env:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
 
+      - name: Pack dry run
+        run: npm run pack:dry-run
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Publish dry run
+        run: npm run publish:dry-run
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
       - name: Upload coverage artifacts
         uses: actions/upload-artifact@v4
         if: always()
@@ -77,6 +87,63 @@ jobs:
           lcov-file: ./coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
           delete-old-comments: true
+
+  compatibility-smoke:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Minimum supported
+            expo: "52"
+            react: "18"
+            react-native: "0.76"
+          - name: Current example
+            expo: "55"
+            react: "19.2.0"
+            react-native: "0.83"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install Node modules
+        run: npm ci
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Build package
+        run: npm run build
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Pack local SDK
+        run: |
+          PACKAGE_TARBALL="$(node scripts/pack-compat-tarball.js "$RUNNER_TEMP")"
+          echo "PACKAGE_TARBALL=$PACKAGE_TARBALL" >> "$GITHUB_ENV"
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Install SDK with ${{ matrix.name }} peers
+        run: |
+          mkdir "$RUNNER_TEMP/compat-app"
+          cd "$RUNNER_TEMP/compat-app"
+          npm init -y
+          npm install "$PACKAGE_TARBALL" \
+            "expo@${{ matrix.expo }}" \
+            "react@${{ matrix.react }}" \
+            "react-native@${{ matrix.react-native }}" \
+            --package-lock=false
+          npm ls react-native-plaid-link-sdk expo react react-native
+          node -e "const pkg = require('react-native-plaid-link-sdk/package.json'); if (!pkg.exports || !pkg.exports['.']) throw new Error('Missing root export');"
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
 
   build-ios-example:
     runs-on: macos-latest

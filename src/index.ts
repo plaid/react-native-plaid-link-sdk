@@ -30,152 +30,118 @@ function cleanupListeners() {
 }
 
 export async function createPlaidLinkSession(
-  config: LinkTokenConfiguration
+  config: LinkTokenConfiguration,
 ): Promise<PlaidLinkSession> {
-  try {
-    cleanupListeners();
+  cleanupListeners();
 
-    successSub = NativePlaidModule.addListener(
-      "PlaidLink.onSuccess",
-      (success: LinkSuccess) => {
-        config.onSuccess(success);
-        cleanupListeners();
-      }
-    );
+  successSub = NativePlaidModule.addListener(
+    "PlaidLink.onSuccess",
+    (success: LinkSuccess) => {
+      config.onSuccess(success);
+      cleanupListeners();
+    },
+  );
 
-    exitSub = NativePlaidModule.addListener("PlaidLink.onExit", (exit: LinkExit) => {
+  exitSub = NativePlaidModule.addListener(
+    "PlaidLink.onExit",
+    (exit: LinkExit) => {
       config.onExit(exit);
       cleanupListeners();
-    });
+    },
+  );
 
-    eventSub = NativePlaidModule.addListener("PlaidLink.onEvent", (event: LinkEvent) => {
+  eventSub = NativePlaidModule.addListener(
+    "PlaidLink.onEvent",
+    (event: LinkEvent) => {
       config.onEvent(event);
-    });
+    },
+  );
 
-    await NativePlaidModule.createPlaidLinkSession(config.token);
+  await NativePlaidModule.createPlaidLinkSession(config.token);
 
-    console.log("[PlaidLink] createPlaidLinkSession - returning session");
-
-    return {
-      open: (fullScreen = false) => {
-        console.log("[PlaidLink] open called", fullScreen);
-        return NativePlaidModule.openLinkSession(fullScreen);
-      },
-    };
-  } catch (e) {
-    console.error("[PlaidLink] createPlaidLinkSession failed:", e);
-    throw e;
-  }
+  return {
+    open: (fullScreen = false) => NativePlaidModule.openLinkSession(fullScreen),
+  };
 }
 
 export async function createPlaidLayerSession(
-  config: LayerTokenConfiguration
+  config: LayerTokenConfiguration,
 ): Promise<PlaidLayerSession> {
-  try {
-    cleanupListeners();
+  cleanupListeners();
 
-    console.log("[PlaidLink] createPlaidLayerSession - setting up listeners");
-    console.log(
-      "[PlaidLink] onEvent callback provided:",
-      typeof config.onEvent
-    );
+  successSub = NativePlaidModule.addListener(
+    "PlaidLink.onSuccess",
+    (success: LinkSuccess) => {
+      config.onSuccess(success);
+      cleanupListeners();
+    },
+  );
 
-    successSub = NativePlaidModule.addListener(
-      "PlaidLink.onSuccess",
-      (success: LinkSuccess) => {
-        console.log("[PlaidLink] JS received onSuccess event");
-        config.onSuccess(success);
-        cleanupListeners();
-      }
-    );
-
-    exitSub = NativePlaidModule.addListener("PlaidLink.onExit", (exit: LinkExit) => {
-      console.log("[PlaidLink] JS received onExit event");
+  exitSub = NativePlaidModule.addListener(
+    "PlaidLink.onExit",
+    (exit: LinkExit) => {
       config.onExit?.(exit);
       cleanupListeners();
-    });
+    },
+  );
 
-    eventSub = NativePlaidModule.addListener("PlaidLink.onEvent", (event: LinkEvent) => {
-      console.log("[PlaidLink] JS received onEvent:", event.eventName);
+  eventSub = NativePlaidModule.addListener(
+    "PlaidLink.onEvent",
+    (event: LinkEvent) => {
       config.onEvent?.(event);
-    });
+    },
+  );
 
-    console.log("[PlaidLink] Listeners registered, creating native session");
-    await NativePlaidModule.createPlaidLayerSession(config.token);
+  await NativePlaidModule.createPlaidLayerSession(config.token);
 
-    console.log("[PlaidLink] createPlaidLayerSession - returning session");
-
-    return {
-      open: () => {
-        console.log("[PlaidLink] layer open called");
-        return NativePlaidModule.openLayerSession();
-      },
-      submit: (data: SubmissionData) => {
-        console.log("[PlaidLink] layer submit called", data);
-        return NativePlaidModule.submitLayerData(
-          data.phoneNumber,
-          data.dateOfBirth,
-          data.params
-        );
-      },
-    };
-  } catch (e) {
-    console.error("[PlaidLink] createPlaidLayerSession failed:", e);
-    throw e;
-  }
+  return {
+    open: () => NativePlaidModule.openLayerSession(),
+    submit: (data: SubmissionData) =>
+      NativePlaidModule.submitLayerData(
+        data.phoneNumber,
+        data.dateOfBirth,
+        data.params,
+      ),
+  };
 }
 
 export async function createPlaidHeadlessSession(
-  config: LinkTokenConfiguration
+  config: LinkTokenConfiguration,
 ): Promise<PlaidHeadlessSession> {
-  try {
-    cleanupListeners();
+  cleanupListeners();
 
-    console.log(
-      "[PlaidLink] createPlaidHeadlessSession - setting up listeners"
-    );
+  successSub = NativePlaidModule.addListener(
+    "PlaidLink.onSuccess",
+    (success: LinkSuccess) => {
+      config.onSuccess(success);
+      cleanupListeners();
+    },
+  );
 
-    successSub = NativePlaidModule.addListener(
-      "PlaidLink.onSuccess",
-      (success: LinkSuccess) => {
-        console.log("[PlaidLink] JS received onSuccess event");
-        config.onSuccess(success);
-        cleanupListeners();
-      }
-    );
-
-    exitSub = NativePlaidModule.addListener("PlaidLink.onExit", (exit: LinkExit) => {
-      console.log("[PlaidLink] JS received onExit event");
+  exitSub = NativePlaidModule.addListener(
+    "PlaidLink.onExit",
+    (exit: LinkExit) => {
       config.onExit(exit);
       cleanupListeners();
-    });
+    },
+  );
 
-    eventSub = NativePlaidModule.addListener("PlaidLink.onEvent", (event: LinkEvent) => {
-      console.log("[PlaidLink] JS received onEvent:", event.eventName);
+  eventSub = NativePlaidModule.addListener(
+    "PlaidLink.onEvent",
+    (event: LinkEvent) => {
       config.onEvent(event);
-    });
+    },
+  );
 
-    console.log(
-      "[PlaidLink] Listeners registered, creating native headless session"
-    );
-    await NativePlaidModule.createPlaidHeadlessSession(config.token);
+  await NativePlaidModule.createPlaidHeadlessSession(config.token);
 
-    console.log("[PlaidLink] createPlaidHeadlessSession - returning session");
-
-    if (config.onLoad) {
-      config.onLoad();
-    }
-
-    return {
-      start: () => {
-        console.log("[PlaidLink] headless start called");
-        return NativePlaidModule.startHeadlessSession();
-      },
-    };
-  } catch (e) {
-    console.error("[PlaidLink] createPlaidHeadlessSession failed:", e);
-    throw e;
+  if (config.onLoad) {
+    config.onLoad();
   }
+
+  return {
+    start: () => NativePlaidModule.startHeadlessSession(),
+  };
 }
 
 export async function syncFinanceKit(config: {
@@ -187,18 +153,11 @@ export async function syncFinanceKit(config: {
     throw new Error("FinanceKit is only available on iOS");
   }
 
-  try {
-    console.log("[PlaidLink] syncFinanceKit called");
-    await NativePlaidModule.syncFinanceKit(
-      config.token,
-      config.requestAuthorizationIfNeeded ?? true,
-      config.syncBehavior ?? FinanceKitSyncBehavior.LIVE
-    );
-    console.log("[PlaidLink] syncFinanceKit completed successfully");
-  } catch (e) {
-    console.error("[PlaidLink] syncFinanceKit failed:", e);
-    throw e;
-  }
+  await NativePlaidModule.syncFinanceKit(
+    config.token,
+    config.requestAuthorizationIfNeeded ?? true,
+    config.syncBehavior ?? FinanceKitSyncBehavior.LIVE,
+  );
 }
 
 export {

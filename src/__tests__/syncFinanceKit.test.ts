@@ -30,8 +30,10 @@ describe("syncFinanceKit", () => {
     expect(NativePlaidModule.syncFinanceKit).toHaveBeenCalledWith(
       "link-sandbox-token-123",
       true,
-      FinanceKitSyncBehavior.LIVE
+      FinanceKitSyncBehavior.LIVE,
     );
+    expect(console.log).not.toHaveBeenCalled();
+    expect(console.error).not.toHaveBeenCalled();
   });
 
   it("uses default values for optional parameters", async () => {
@@ -44,7 +46,7 @@ describe("syncFinanceKit", () => {
     expect(NativePlaidModule.syncFinanceKit).toHaveBeenCalledWith(
       "link-sandbox-token-123",
       true,
-      FinanceKitSyncBehavior.LIVE
+      FinanceKitSyncBehavior.LIVE,
     );
   });
 
@@ -59,7 +61,7 @@ describe("syncFinanceKit", () => {
     expect(NativePlaidModule.syncFinanceKit).toHaveBeenCalledWith(
       "link-sandbox-token-123",
       false,
-      FinanceKitSyncBehavior.LIVE
+      FinanceKitSyncBehavior.LIVE,
     );
   });
 
@@ -75,7 +77,7 @@ describe("syncFinanceKit", () => {
     expect(NativePlaidModule.syncFinanceKit).toHaveBeenCalledWith(
       "link-sandbox-token-123",
       true,
-      FinanceKitSyncBehavior.SIMULATED
+      FinanceKitSyncBehavior.SIMULATED,
     );
   });
 
@@ -87,7 +89,7 @@ describe("syncFinanceKit", () => {
     };
 
     await expect(syncFinanceKit(config)).rejects.toThrow(
-      "FinanceKit is only available on iOS"
+      "FinanceKit is only available on iOS",
     );
 
     expect(NativePlaidModule.syncFinanceKit).not.toHaveBeenCalled();
@@ -96,7 +98,7 @@ describe("syncFinanceKit", () => {
   it("propagates native module errors", async () => {
     const nativeError = new Error("INVALID_TOKEN: Token is invalid");
     (NativePlaidModule.syncFinanceKit as jest.Mock).mockRejectedValueOnce(
-      nativeError
+      nativeError,
     );
 
     const config = {
@@ -104,7 +106,8 @@ describe("syncFinanceKit", () => {
     };
 
     await expect(syncFinanceKit(config)).rejects.toThrow(
-      "INVALID_TOKEN: Token is invalid"
+      "INVALID_TOKEN: Token is invalid",
     );
+    expect(console.error).not.toHaveBeenCalled();
   });
 });

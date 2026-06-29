@@ -16,16 +16,16 @@ declare class ReactNativePlaidLinkSdkModule extends NativeModule<ReactNativePlai
   submitLayerData(
     phoneNumber?: string,
     dateOfBirth?: string,
-    params?: Record<string, string>
+    params?: Record<string, string>,
   ): Promise<void>;
   syncFinanceKit(
     token: string,
     requestAuthorizationIfNeeded: boolean,
-    syncBehavior: FinanceKitSyncBehavior
+    syncBehavior: FinanceKitSyncBehavior,
   ): Promise<void>;
 }
 
 // This call loads the native module object from the JSI.
 export default requireNativeModule<ReactNativePlaidLinkSdkModule>(
-  "ReactNativePlaidLinkSdk"
+  "ReactNativePlaidLinkSdk",
 );

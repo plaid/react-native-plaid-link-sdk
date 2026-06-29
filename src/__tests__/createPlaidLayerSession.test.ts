@@ -169,6 +169,8 @@ describe("createPlaidLayerSession", () => {
     await session.open();
     expect(NativePlaidModule.openLayerSession).toHaveBeenCalled();
     expect(NativePlaidModule.openLayerSession).toHaveBeenCalledTimes(1);
+    expect(console.log).not.toHaveBeenCalled();
+    expect(console.error).not.toHaveBeenCalled();
   });
 
   it("handles errors from native module", async () => {
@@ -187,9 +189,6 @@ describe("createPlaidLayerSession", () => {
     await expect(createPlaidLayerSession(config)).rejects.toThrow(
       "Layer session creation failed",
     );
-    expect(console.error).toHaveBeenCalledWith(
-      "[PlaidLink] createPlaidLayerSession failed:",
-      mockError,
-    );
+    expect(console.error).not.toHaveBeenCalled();
   });
 });

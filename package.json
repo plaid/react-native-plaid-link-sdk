@@ -4,12 +4,44 @@
   "description": "React Native Plaid Link SDK (New Architecture & Expo)",
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "react-native": "./build/index.js",
+      "import": "./build/index.js",
+      "require": "./build/index.js",
+      "default": "./build/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "android/build.gradle",
+    "android/src/main/",
+    "build/",
+    "CHANGELOG.md",
+    "expo-module.config.json",
+    "ios/Frameworks/",
+    "ios/ReactNativePlaidLinkSdk.podspec",
+    "ios/src/",
+    "LICENSE",
+    "README.md",
+    "src/index.ts",
+    "src/PlaidEmbeddedSearchView.tsx",
+    "src/ReactNativePlaidLinkSdk.types.ts",
+    "src/ReactNativePlaidLinkSdkModule.ts",
+    "V13_MIGRATION_GUIDE.md"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "expo-module build",
     "check:package": "node scripts/check-package-entrypoints.js",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
-    "test": "expo-module test",
+    "pack:dry-run": "node scripts/npm-dry-run.js pack",
+    "test": "expo-module test --watchman=false",
+    "publish:dry-run": "node scripts/npm-dry-run.js publish",
     "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",
@@ -23,7 +55,10 @@
     "react-native-plaid-link-sdk",
     "ReactNativePlaidLinkSdk"
   ],
-  "repository": "https://github.com/plaid/react-native-plaid-link-sdk",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plaid/react-native-plaid-link-sdk.git"
+  },
   "bugs": {
     "url": "https://github.com/plaid/react-native-plaid-link-sdk/issues"
   },

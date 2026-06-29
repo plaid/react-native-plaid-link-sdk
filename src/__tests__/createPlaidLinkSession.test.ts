@@ -92,6 +92,8 @@ describe("createPlaidLinkSession", () => {
 
     await session.open();
     expect(NativePlaidModule.openLinkSession).toHaveBeenCalledWith(false);
+    expect(console.log).not.toHaveBeenCalled();
+    expect(console.error).not.toHaveBeenCalled();
   });
 
   it("onSuccess callback triggers and cleans up listeners", async () => {
@@ -232,10 +234,7 @@ describe("createPlaidLinkSession", () => {
     await expect(createPlaidLinkSession(config)).rejects.toThrow(
       "Native session creation failed",
     );
-    expect(console.error).toHaveBeenCalledWith(
-      "[PlaidLink] createPlaidLinkSession failed:",
-      mockError,
-    );
+    expect(console.error).not.toHaveBeenCalled();
   });
 
   it("handles errors during session creation and still returns session", async () => {

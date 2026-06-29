@@ -46,6 +46,8 @@ describe("createPlaidHeadlessSession", () => {
     await session.start();
     expect(NativePlaidModule.startHeadlessSession).toHaveBeenCalled();
     expect(NativePlaidModule.startHeadlessSession).toHaveBeenCalledTimes(1);
+    expect(console.log).not.toHaveBeenCalled();
+    expect(console.error).not.toHaveBeenCalled();
   });
 
   it("onSuccess callback is invoked correctly", async () => {
@@ -224,10 +226,7 @@ describe("createPlaidHeadlessSession", () => {
     await expect(createPlaidHeadlessSession(config)).rejects.toThrow(
       "Headless session creation failed",
     );
-    expect(console.error).toHaveBeenCalledWith(
-      "[PlaidLink] createPlaidHeadlessSession failed:",
-      mockError,
-    );
+    expect(console.error).not.toHaveBeenCalled();
   });
 
   it("cleans up existing listeners before creating new session", async () => {

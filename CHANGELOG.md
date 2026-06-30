@@ -1,5 +1,17 @@
 # RELEASES
 
+## LinkKit V13.0.1 — 2026-06-30
+
+### Changes
+
+- Fixes Expo SDK 56 iOS prebuild failures caused by the npm-packed
+  `LinkKit.xcframework` including an unsupported Mac Catalyst slice whose
+  framework symlinks were not preserved during packaging.
+- Ships an iOS-only `LinkKit.xcframework` with supported device and simulator
+  slices.
+- Adds package and CI validation for LinkKit XCFramework slices, signatures, and
+  Expo SDK 56 iOS prebuild compatibility.
+
 ## LinkKit V13.0.0 — 2026-06-26
 
 #### Requirements

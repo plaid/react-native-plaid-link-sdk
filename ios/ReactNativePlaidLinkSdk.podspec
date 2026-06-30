@@ -17,14 +17,12 @@ Pod::Spec.new do |s|
   s.source_files = 'src/**/*.{h,m,mm,swift,hpp,cpp}'
   s.dependency 'ExpoModulesCore'
   s.vendored_frameworks = 'Frameworks/LinkKit.xcframework'
-  s.preserve_paths      = 'Frameworks/LinkKit.xcframework'
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'SWIFT_COMPILATION_MODE' => 'wholemodule'
   }
 
-  # Add this to ensure the folder isn't stripped during the build
   s.preserve_paths = 'Frameworks/LinkKit.xcframework'
 
   install_modules_dependencies(s)

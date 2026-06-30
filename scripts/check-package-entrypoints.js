@@ -133,6 +133,18 @@ const main = assertPackageFieldExists("main");
 const types = assertPackageFieldExists("types");
 assertPackageMetadata();
 
+const linkKitInfoPath = path.join(
+  root,
+  "ios/Frameworks/LinkKit.xcframework/Info.plist"
+);
+const linkKitInfo = fs.readFileSync(linkKitInfoPath, "utf8");
+
+if (linkKitInfo.includes("maccatalyst")) {
+  fail(
+    "LinkKit.xcframework must not include an unsupported Mac Catalyst slice."
+  );
+}
+
 try {
   const resolved = require.resolve(root);
   const expected = path.join(root, main);
@@ -192,6 +204,8 @@ for (const requiredFile of [
   "ios/ReactNativePlaidLinkSdk.podspec",
   "ios/src/ReactNativePlaidLinkSdkModule.swift",
   "ios/Frameworks/LinkKit.xcframework/Info.plist",
+  "ios/Frameworks/LinkKit.xcframework/ios-arm64/LinkKit.framework/LinkKit",
+  "ios/Frameworks/LinkKit.xcframework/ios-arm64_x86_64-simulator/LinkKit.framework/LinkKit",
   "src/index.ts",
 ]) {
   if (!files.has(requiredFile)) {
@@ -201,11 +215,13 @@ for (const requiredFile of [
 
 for (const forbiddenPrefix of [
   ".github/",
+  "__MACOSX/",
   "android/src/androidTest/",
   "android/src/test/",
   "coverage/",
   "dist/",
   "example/",
+  "ios/Frameworks/LinkKit.xcframework/ios-arm64_x86_64-maccatalyst/",
   "scripts/",
   "src/__mocks__/",
   "src/__tests__/",
@@ -225,6 +241,16 @@ const forbiddenFile = packedFiles.find((file) =>
 
 if (forbiddenFile) {
   fail(`packed package must not include ${forbiddenFile.path}`);
+}
+
+const catalystFile = packedFiles.find((file) =>
+  file.path.includes("maccatalyst")
+);
+
+if (catalystFile) {
+  fail(
+    `packed package must not include unsupported Catalyst slice: ${catalystFile.path}`
+  );
 }
 
 console.log(`Package entrypoints are valid: ${main}, ${types}`);

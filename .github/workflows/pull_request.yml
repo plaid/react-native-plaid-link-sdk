@@ -145,6 +145,103 @@ jobs:
         env:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
 
+  validate-linkkit-xcframework:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate LinkKit XCFramework slices and signatures
+        run: npm run check:linkkit
+
+  expo-56-ios-prebuild:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install Node modules
+        run: npm ci
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Build package
+        run: npm run build
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Pack local SDK
+        run: |
+          PACKAGE_TARBALL="$(node scripts/pack-compat-tarball.js "$RUNNER_TEMP")"
+          echo "PACKAGE_TARBALL=$PACKAGE_TARBALL" >> "$GITHUB_ENV"
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Create Expo SDK 56 app with packed SDK
+        run: |
+          mkdir "$RUNNER_TEMP/expo-56-ios-app"
+          cd "$RUNNER_TEMP/expo-56-ios-app"
+          npm init -y
+          npm pkg set \
+            name=expo-56-ios-app \
+            private=true \
+            main=node_modules/expo/AppEntry.js
+          cat > app.json <<'JSON'
+          {
+            "expo": {
+              "name": "Expo 56 iOS App",
+              "slug": "expo-56-ios-app",
+              "ios": {
+                "bundleIdentifier": "com.plaid.expo56iosapp"
+              }
+            }
+          }
+          JSON
+          cat > App.js <<'JS'
+          import { Text } from "react-native";
+
+          export default function App() {
+            return <Text>Expo 56 iOS App</Text>;
+          }
+          JS
+          npm install "$PACKAGE_TARBALL" \
+            expo@56.0.12 \
+            react@19.2.3 \
+            react-native@0.85.3 \
+            --package-lock=false
+          npm ls react-native-plaid-link-sdk expo react react-native
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
+      - name: Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/CocoaPods
+            ${{ runner.temp }}/expo-56-ios-app/ios/Pods
+          key: ${{ runner.os }}-expo-56-pods-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-expo-56-pods-
+
+      - name: Generate iOS project with Expo SDK 56
+        working-directory: ${{ runner.temp }}/expo-56-ios-app
+        run: npx expo prebuild --platform ios --clean
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
   build-ios-example:
     runs-on: macos-latest
 

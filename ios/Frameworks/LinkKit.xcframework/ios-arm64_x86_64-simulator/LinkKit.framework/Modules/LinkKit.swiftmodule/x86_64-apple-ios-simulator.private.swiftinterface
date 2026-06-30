@@ -206,6 +206,9 @@ public enum AccountSubtype : Swift.Codable, Swift.Equatable, Swift.CustomStringC
   }
   public init(from decoder: any Swift.Decoder) throws
   public func encode(to encoder: any Swift.Encoder) throws
+  public var type: Swift.String {
+    get
+  }
   public static func == (a: LinkKit.AccountSubtype, b: LinkKit.AccountSubtype) -> Swift.Bool
 }
 extension LinkKit.AccountSubtype {

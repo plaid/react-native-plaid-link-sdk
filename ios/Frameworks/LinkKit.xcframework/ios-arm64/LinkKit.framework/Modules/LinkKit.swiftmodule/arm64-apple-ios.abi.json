@@ -52600,6 +52600,20 @@
       "value": "\"plaid_link_sheet_root\""
     },
     {
+      "filePath": "\/opt\/homebrew\/var\/buildkite-agent\/builds\/i-0926a7a7701540b80-2\/plaid\/client-ci\/link\/apple\/Sources\/Internal\/DefaultDeviceMetadataProvider.swift",
+      "kind": "StringLiteral",
+      "offset": 1634,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/opt\/homebrew\/var\/buildkite-agent\/builds\/i-0926a7a7701540b80-2\/plaid\/client-ci\/link\/apple\/Sources\/Internal\/DefaultDeviceMetadataProvider.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1726,
+      "length": 1,
+      "value": "0"
+    },
+    {
       "filePath": "\/opt\/homebrew\/var\/buildkite-agent\/builds\/i-0926a7a7701540b80-2\/plaid\/client-ci\/link\/apple\/Sources\/Public\/Models\/Structs\/LinkEvent.swift",
       "kind": "StringLiteral",
       "offset": 1408,

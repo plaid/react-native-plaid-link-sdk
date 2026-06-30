@@ -44,6 +44,7 @@ not supported.
 | ----------------- | ------------ | ---- | ----------------------------------------------------------------------------------- |
 | Minimum supported | 0.76         | 52   | Peer install and package export smoke test                                          |
 | Current example   | 0.83         | 55   | Peer install and package export smoke test, Android unit tests, iOS simulator build |
+| Latest Expo       | 0.85         | 56   | Packed SDK install and iOS prebuild smoke test                                      |
 
 The root package unit tests run against the repository's development
 dependencies, while the example app validates the current native integration on

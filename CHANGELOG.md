@@ -9,6 +9,50 @@
 - Restores Android manifest metadata so the native Android SDK reports React
   Native wrapper usage instead of plain Android.
 
+### Android
+
+Android SDK [6.0.0](https://github.com/plaid/plaid-link-android)
+
+### Additions
+
+- Adds native session APIs for Standard Link, Layer, and Headless Link.
+- Adds Embedded Search continuation support.
+- Adds Layer submit support.
+
+### Changes
+
+- Updates Android integration to `com.plaid.link:sdk-core:6.0.0`.
+
+### Removals
+
+- Removes the legacy React Native Android bridge implementation.
+
+#### Requirements
+
+| Name           | Version                            |
+| -------------- | ---------------------------------- |
+| Android Studio | 4.0+                               |
+| Kotlin         | 1.9.25+ (Kotlin integrations only) |
+
+### iOS
+
+iOS SDK [7.0.0](https://github.com/plaid/plaid-link-ios/releases/tag/7.0.0)
+
+### Changes
+
+- Updates to LinkKit 7.0.0.
+- Uses the new session-based LinkKit APIs for Standard Link, Layer, Headless
+  Link, and Embedded Search.
+- Uses the modernized FinanceKit sync API.
+- Bundles `LinkKit.xcframework` with the npm package for native iOS builds.
+
+#### Requirements
+
+| Name  | Version   |
+| ----- | --------- |
+| Xcode | >= 16.1.0 |
+| iOS   | >= 15.0   |
+
 ## LinkKit V13.0.1 — 2026-06-30
 
 ### Changes

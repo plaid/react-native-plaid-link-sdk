@@ -36,15 +36,11 @@ Android SDK [6.0.0](https://github.com/plaid/plaid-link-android)
 
 ### iOS
 
-iOS SDK [7.0.0](https://github.com/plaid/plaid-link-ios/releases/tag/7.0.0)
+iOS SDK [7.0.1](https://github.com/plaid/plaid-link-ios/releases/tag/7.0.1)
 
 ### Changes
 
-- Updates to LinkKit 7.0.0.
-- Uses the new session-based LinkKit APIs for Standard Link, Layer, Headless
-  Link, and Embedded Search.
-- Uses the modernized FinanceKit sync API.
-- Bundles `LinkKit.xcframework` with the npm package for native iOS builds.
+- Fix React Native Version Parsing
 
 #### Requirements
 

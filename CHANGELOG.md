@@ -1,5 +1,14 @@
 # RELEASES
 
+## LinkKit V13.0.2 — 2026-07-01
+
+### Changes
+
+- Updates the bundled iOS SDK to LinkKit 7.0.1, which restores native React
+  Native wrapper detection for v13 apps.
+- Restores Android manifest metadata so the native Android SDK reports React
+  Native wrapper usage instead of plain Android.
+
 ## LinkKit V13.0.1 — 2026-06-30
 
 ### Changes

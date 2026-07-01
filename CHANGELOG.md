@@ -1,5 +1,54 @@
 # RELEASES
 
+## LinkKit V13.0.2 — 2026-07-01
+
+### Changes
+
+- Updates the bundled iOS SDK to LinkKit 7.0.1, which restores native React
+  Native wrapper detection for v13 apps.
+- Restores Android manifest metadata so the native Android SDK reports React
+  Native wrapper usage instead of plain Android.
+
+### Android
+
+Android SDK [6.0.0](https://github.com/plaid/plaid-link-android)
+
+### Additions
+
+- Adds native session APIs for Standard Link, Layer, and Headless Link.
+- Adds Embedded Search continuation support.
+- Adds Layer submit support.
+
+### Changes
+
+- Updates Android integration to `com.plaid.link:sdk-core:6.0.0`.
+
+### Removals
+
+- Removes the legacy React Native Android bridge implementation.
+
+#### Requirements
+
+| Name           | Version                            |
+| -------------- | ---------------------------------- |
+| Android Studio | 4.0+                               |
+| Kotlin         | 1.9.25+ (Kotlin integrations only) |
+
+### iOS
+
+iOS SDK [7.0.1](https://github.com/plaid/plaid-link-ios/releases/tag/7.0.1)
+
+### Changes
+
+- Fix React Native Version Parsing
+
+#### Requirements
+
+| Name  | Version   |
+| ----- | --------- |
+| Xcode | >= 16.1.0 |
+| iOS   | >= 15.0   |
+
 ## LinkKit V13.0.1 — 2026-06-30
 
 ### Changes

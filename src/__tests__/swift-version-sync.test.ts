@@ -56,6 +56,11 @@ describe("Swift Version Sync", () => {
 });
 
 describe("Android Version Sync", () => {
+  const androidManifestPath = path.join(
+    __dirname,
+    "../../android/src/main/AndroidManifest.xml",
+  );
+
   it("RNPlaidLinkSdkVersion.kt should match package.json version", () => {
     const kotlinFilePath = path.join(
       __dirname,
@@ -99,5 +104,24 @@ describe("Android Version Sync", () => {
     const semverRegex = /^\d+\.\d+\.\d+/;
 
     expect(kotlinVersion).toMatch(semverRegex);
+  });
+
+  it("Android manifest should expose React Native wrapper metadata", () => {
+    const manifestContent = fs.readFileSync(androidManifestPath, "utf-8");
+
+    const metadataMatch = manifestContent.match(
+      /<meta-data\s+android:name="com\.plaid\.link\.react_native"\s+android:value="([^"]+)"\s*\/>/,
+    );
+
+    expect(metadataMatch).not.toBeNull();
+
+    if (!metadataMatch) {
+      fail(
+        "Could not find com.plaid.link.react_native metadata in AndroidManifest.xml.",
+      );
+      return;
+    }
+
+    expect(metadataMatch[1]).toBe(packageJson.version);
   });
 });

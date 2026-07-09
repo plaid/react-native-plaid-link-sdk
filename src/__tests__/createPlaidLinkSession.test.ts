@@ -237,6 +237,53 @@ describe("createPlaidLinkSession", () => {
     expect(console.error).not.toHaveBeenCalled();
   });
 
+  it("onLoad callback is invoked when provided", async () => {
+    const onLoadMock = jest.fn();
+    const config = {
+      token: "link-token",
+      onSuccess: jest.fn(),
+      onExit: jest.fn(),
+      onEvent: jest.fn(),
+      onLoad: onLoadMock,
+    };
+
+    await createPlaidLinkSession(config);
+
+    expect(onLoadMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not throw when onLoad is not provided", async () => {
+    const config = {
+      token: "link-token",
+      onSuccess: jest.fn(),
+      onExit: jest.fn(),
+      onEvent: jest.fn(),
+    };
+
+    await expect(createPlaidLinkSession(config)).resolves.toBeDefined();
+  });
+
+  it("does not invoke onLoad when native session creation fails", async () => {
+    const onLoadMock = jest.fn();
+    const mockError = new Error("Native session creation failed");
+    (
+      NativePlaidModule.createPlaidLinkSession as jest.Mock
+    ).mockRejectedValueOnce(mockError);
+
+    const config = {
+      token: "link-token",
+      onSuccess: jest.fn(),
+      onExit: jest.fn(),
+      onEvent: jest.fn(),
+      onLoad: onLoadMock,
+    };
+
+    await expect(createPlaidLinkSession(config)).rejects.toThrow(
+      "Native session creation failed",
+    );
+    expect(onLoadMock).not.toHaveBeenCalled();
+  });
+
   it("handles errors during session creation and still returns session", async () => {
     const config = {
       token: "link-token",

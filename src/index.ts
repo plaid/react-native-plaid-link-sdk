@@ -59,6 +59,8 @@ export async function createPlaidLinkSession(
 
   await NativePlaidModule.createPlaidLinkSession(config.token);
 
+  config.onLoad?.();
+
   return {
     open: (fullScreen = false) => NativePlaidModule.openLinkSession(fullScreen),
   };

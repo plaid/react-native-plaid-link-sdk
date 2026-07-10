@@ -5,12 +5,11 @@
 ### Changes
 
 - Updates the bundled iOS SDK to LinkKit 7.0.2.
-- Keeps Android integration on `com.plaid.link:sdk-core:6.0.0`; Android SDK
-  6.0.1 will be picked up in a future React Native SDK patch after release.
+- Updates Android SDK to `6.0.1`
 
 ### Android
 
-Android SDK [6.0.0](https://github.com/plaid/plaid-link-android)
+Android SDK [6.0.1](https://github.com/plaid/plaid-link-android/releases/tag/v6.0.1)
 
 ### iOS
 

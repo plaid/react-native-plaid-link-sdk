@@ -15,5 +15,5 @@ public class RNPlaidLinkSdkVersion: NSObject {
     ///
     /// This should match the version specified in package.json.
     /// Update this value when bumping the SDK version.
-    @objc public static let sdkVersion: String = "13.0.2"
+    @objc public static let sdkVersion: String = "13.0.3"
 }

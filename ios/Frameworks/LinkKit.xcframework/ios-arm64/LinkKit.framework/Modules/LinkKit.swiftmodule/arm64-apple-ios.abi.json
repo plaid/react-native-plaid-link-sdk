@@ -53624,14 +53624,14 @@
     {
       "filePath": "\/opt\/homebrew\/var\/buildkite-agent\/builds\/i-0926a7a7701540b80-1\/plaid\/client-ci\/link\/apple\/Sources\/Public\/Models\/Structs\/SuccessMetadata.swift",
       "kind": "StringLiteral",
-      "offset": 1682,
+      "offset": 1802,
       "length": 17,
       "value": "\"link_session_id\""
     },
     {
       "filePath": "\/opt\/homebrew\/var\/buildkite-agent\/builds\/i-0926a7a7701540b80-1\/plaid\/client-ci\/link\/apple\/Sources\/Public\/Models\/Structs\/SuccessMetadata.swift",
       "kind": "StringLiteral",
-      "offset": 1728,
+      "offset": 1848,
       "length": 15,
       "value": "\"metadata_json\""
     },

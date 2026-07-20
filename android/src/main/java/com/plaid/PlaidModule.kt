@@ -38,10 +38,17 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
   private val jsonConverter by lazy { PlaidJsonConverter() }
 
-  private var onSuccessCallback: Callback? = null
-  private var onExitCallback: Callback? = null
+  // Written on the RN native-modules thread (open/create), read and cleared on the
+  // main thread (onActivityResult); @Volatile for cross-thread visibility.
+  @Volatile private var onSuccessCallback: Callback? = null
+  @Volatile private var onExitCallback: Callback? = null
 
   private var plaidHandler: PlaidHandler? = null
+
+  // Tracks whether this module has created a Link session in this process. Guards
+  // releaseCurrentSession() so Plaid.destroy() isn't called when there is nothing to
+  // release, which would tear down sessions this module doesn't own (e.g. embedded Link).
+  private var didCreateSession = false
 
   companion object {
     private const val LINK_TOKEN_PREFIX = "link"
@@ -145,6 +152,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
         }
       }
     )
+    this.didCreateSession = true
   }
 
   @ReactMethod
@@ -217,10 +225,12 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
       val tokenConfiguration = getLinkTokenConfiguration(token, noLoadingState, getLogLevel(logLevel))
       tokenConfiguration?.let {
-        Plaid.create(
+        val handler = Plaid.create(
           reactApplicationContext.getApplicationContext() as Application,
           it
-        ).open(activity)
+        )
+        this.didCreateSession = true
+        handler.open(activity)
         return
       }
 
@@ -236,16 +246,29 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   override fun removeListeners(count: Double) = Unit
 
   /**
-   * Releases the current Link session: drops any pending success/exit callbacks, tears down the
-   * underlying Plaid SDK resources (WebView / token component) via [Plaid.destroy], and clears the
-   * cached handler. Safe to call when no session exists (no-op). Used before creating a new session so
-   * a stale session cannot deliver a result into spent callbacks.
+   * Releases the current Link session: drops any pending success/exit callbacks, clears the cached
+   * handler, and tears down the underlying Plaid SDK resources (preloaded WebView / token component)
+   * via [Plaid.destroy]. Safe to call when no session exists (no-op). Used before creating a new
+   * session so a stale session cannot deliver a result into spent callbacks.
+   *
+   * Plaid.destroy() is deliberately called synchronously on the calling (RN native-modules) thread
+   * rather than posted to the main looper: the caller creates the replacement session immediately
+   * afterwards on this thread, and an async destroy could run after Plaid.create() and null the new
+   * session's token component.
    */
   private fun releaseCurrentSession() {
     onSuccessCallback = null
     onExitCallback = null
-    Plaid.destroy()
     plaidHandler = null
+    if (!didCreateSession) {
+      return
+    }
+    didCreateSession = false
+    try {
+      Plaid.destroy()
+    } catch (ex: Exception) {
+      Log.w("PlaidModule", "Failed to destroy previous Plaid session", ex)
+    }
   }
 
   private fun maybeGetStringField(obj: JSONObject, fieldName: String): String? {

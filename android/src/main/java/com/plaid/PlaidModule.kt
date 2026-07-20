@@ -31,10 +31,17 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
   private val jsonConverter by lazy { PlaidJsonConverter() }
 
-  private var onSuccessCallback: Callback? = null
-  private var onExitCallback: Callback? = null
+  // Written on the RN native-modules thread (open/create), read and cleared on the
+  // main thread (onActivityResult); @Volatile for cross-thread visibility.
+  @Volatile private var onSuccessCallback: Callback? = null
+  @Volatile private var onExitCallback: Callback? = null
 
   private var plaidHandler: PlaidHandler? = null
+
+  // Tracks whether this module has created a Link session in this process. Guards
+  // releaseCurrentSession() so Plaid.destroy() isn't called when there is nothing to
+  // release, which would tear down sessions this module doesn't own (e.g. embedded Link).
+  private var didCreateSession = false
 
   companion object {
     private const val LINK_TOKEN_PREFIX = "link"
@@ -96,6 +103,12 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       throw LinkException("Unable to open link, please check that your configuration is valid")
     }
 
+    // Tear down any previous session before creating a new one. Without this, a stale session (e.g. the
+    // user bypassed the OAuth redirect and relaunched Link) leaves old callbacks in place, and its result
+    // can re-invoke a spent RN Callback, crashing with "This callback type only permits a single
+    // invocation from native code."
+    releaseCurrentSession()
+
     // Set the event listener here instead of in open for Layer use cases.
     try {
       Plaid.setLinkEventListener { linkEvent: LinkEvent ->
@@ -114,6 +127,7 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       reactApplicationContext.getApplicationContext() as Application,
       tokenConfiguration
     )
+    this.didCreateSession = true
   }
 
   @ReactMethod
@@ -141,6 +155,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     onExitCallback: Callback
   ) {
     val activity = currentActivity ?: throw IllegalStateException("Current activity is null")
+
+    // Tear down any previous session before starting a new one. See create() for rationale.
+    releaseCurrentSession()
+
     this.onSuccessCallback = onSuccessCallback
     this.onExitCallback = onExitCallback
 
@@ -154,10 +172,12 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
 
       val tokenConfiguration = getLinkTokenConfiguration(token, noLoadingState, getLogLevel(logLevel))
       tokenConfiguration?.let {
-        Plaid.create(
+        val handler = Plaid.create(
           reactApplicationContext.getApplicationContext() as Application,
           it
-        ).open(activity)
+        )
+        this.didCreateSession = true
+        handler.open(activity)
         return
       }
 
@@ -171,6 +191,32 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   override fun addListener(eventName: String?) = Unit
 
   override fun removeListeners(count: Double) = Unit
+
+  /**
+   * Releases the current Link session: drops any pending success/exit callbacks, clears the cached
+   * handler, and tears down the underlying Plaid SDK resources (preloaded WebView / token component)
+   * via [Plaid.destroy]. Safe to call when no session exists (no-op). Used before creating a new
+   * session so a stale session cannot deliver a result into spent callbacks.
+   *
+   * Plaid.destroy() is deliberately called synchronously on the calling (RN native-modules) thread
+   * rather than posted to the main looper: the caller creates the replacement session immediately
+   * afterwards on this thread, and an async destroy could run after Plaid.create() and null the new
+   * session's token component.
+   */
+  private fun releaseCurrentSession() {
+    onSuccessCallback = null
+    onExitCallback = null
+    plaidHandler = null
+    if (!didCreateSession) {
+      return
+    }
+    didCreateSession = false
+    try {
+      Plaid.destroy()
+    } catch (ex: Exception) {
+      Log.w("PlaidModule", "Failed to destroy previous Plaid session", ex)
+    }
+  }
 
   private fun maybeGetStringField(obj: JSONObject, fieldName: String): String? {
     if (obj.has(fieldName) && !TextUtils.isEmpty(obj.getString(fieldName))) {
@@ -214,13 +260,19 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     val linkHandler = LinkResultHandler(
       onSuccess = { success ->
         val result = convertJsonToMap(JSONObject(jsonConverter.convert(success)))
-        print(result)
-        this.onSuccessCallback?.invoke(result)
+        // Capture and null both callbacks before invoking so a duplicate result delivery cannot
+        // re-invoke a single-use RN Callback.
+        val callback = this.onSuccessCallback
+        this.onSuccessCallback = null
+        this.onExitCallback = null
+        callback?.invoke(result)
       },
       onExit = { exit ->
         val result = convertJsonToMap(JSONObject(jsonConverter.convert(exit)))
-        print(result)
-        this.onExitCallback?.invoke(result)
+        val callback = this.onExitCallback
+        this.onSuccessCallback = null
+        this.onExitCallback = null
+        callback?.invoke(result)
       }
     )
 

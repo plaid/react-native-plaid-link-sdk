@@ -96,6 +96,12 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
       throw LinkException("Unable to open link, please check that your configuration is valid")
     }
 
+    // Tear down any previous session before creating a new one. Without this, a stale session (e.g. the
+    // user bypassed the OAuth redirect and relaunched Link) leaves old callbacks in place, and its result
+    // can re-invoke a spent RN Callback, crashing with "This callback type only permits a single
+    // invocation from native code."
+    releaseCurrentSession()
+
     // Set the event listener here instead of in open for Layer use cases.
     try {
       Plaid.setLinkEventListener { linkEvent: LinkEvent ->
@@ -141,6 +147,10 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     onExitCallback: Callback
   ) {
     val activity = currentActivity ?: throw IllegalStateException("Current activity is null")
+
+    // Tear down any previous session before starting a new one. See create() for rationale.
+    releaseCurrentSession()
+
     this.onSuccessCallback = onSuccessCallback
     this.onExitCallback = onExitCallback
 
@@ -171,6 +181,19 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
   override fun addListener(eventName: String?) = Unit
 
   override fun removeListeners(count: Double) = Unit
+
+  /**
+   * Releases the current Link session: drops any pending success/exit callbacks, tears down the
+   * underlying Plaid SDK resources (WebView / token component) via [Plaid.destroy], and clears the
+   * cached handler. Safe to call when no session exists (no-op). Used before creating a new session so
+   * a stale session cannot deliver a result into spent callbacks.
+   */
+  private fun releaseCurrentSession() {
+    onSuccessCallback = null
+    onExitCallback = null
+    Plaid.destroy()
+    plaidHandler = null
+  }
 
   private fun maybeGetStringField(obj: JSONObject, fieldName: String): String? {
     if (obj.has(fieldName) && !TextUtils.isEmpty(obj.getString(fieldName))) {
@@ -214,13 +237,19 @@ class PlaidModule internal constructor(reactContext: ReactApplicationContext) :
     val linkHandler = LinkResultHandler(
       onSuccess = { success ->
         val result = convertJsonToMap(JSONObject(jsonConverter.convert(success)))
-        print(result)
-        this.onSuccessCallback?.invoke(result)
+        // Capture and null both callbacks before invoking so a duplicate result delivery cannot
+        // re-invoke a single-use RN Callback.
+        val callback = this.onSuccessCallback
+        this.onSuccessCallback = null
+        this.onExitCallback = null
+        callback?.invoke(result)
       },
       onExit = { exit ->
         val result = convertJsonToMap(JSONObject(jsonConverter.convert(exit)))
-        print(result)
-        this.onExitCallback?.invoke(result)
+        val callback = this.onExitCallback
+        this.onSuccessCallback = null
+        this.onExitCallback = null
+        callback?.invoke(result)
       }
     )
 

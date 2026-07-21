@@ -4,6 +4,10 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>.DS_Store</key>
+		<data>
+		4IMHiMtR4egh14Zlt9TJ2LiJqj8=
+		</data>
 		<key>Headers/LinkKit-Swift.h</key>
 		<data>
 		T0kPYIntgQ61352a4qfCVCfTcVM=
@@ -14,11 +18,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		yGvyOveDR+6D+HdLdewq6+Vyb6c=
+		0qEqMiGHH1FF4MwRNbZp6IN8HPg=
 		</data>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		UPYIHFtyZvFEUsyLSqTT8JvnIRc=
+		BkrqlOFDwvfFphmlzgh2TjvplfM=
 		</data>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -34,11 +38,11 @@
 		</data>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		e7/VPOq3kmJRaIXSuqr1t2X/0P8=
+		4lRFW70l5HwRmmb60qm4EL1ivag=
 		</data>
 		<key>Modules/LinkKit.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		UPYIHFtyZvFEUsyLSqTT8JvnIRc=
+		BkrqlOFDwvfFphmlzgh2TjvplfM=
 		</data>
 		<key>Modules/LinkKit.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -54,7 +58,7 @@
 		</data>
 		<key>Modules/LinkKit.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		2M4ybrIVcfW5+qbhS0Q6l6bVupM=
+		U4n8BDsdrLL0Jp0JJUAnvOmLrUI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -85,7 +89,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			PHEM420B+PW8C+EOB35iiQIVMJUOor5EvkmxaQ1fDlk=
+			JOixkVppvFrWL0o2YutfZ5DQLS58K/l7cmuE48xpMqM=
 			</data>
 		</dict>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -113,14 +117,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			qpJR4ZZXPpE1V+zAWfNRM0d6pCwEN0+7LRyWNmDdjnM=
+			PbebpXva0crbCfCxOt3xokGbkesohnJkTXcPScHPRwE=
 			</data>
 		</dict>
 		<key>Modules/LinkKit.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			PHEM420B+PW8C+EOB35iiQIVMJUOor5EvkmxaQ1fDlk=
+			JOixkVppvFrWL0o2YutfZ5DQLS58K/l7cmuE48xpMqM=
 			</data>
 		</dict>
 		<key>Modules/LinkKit.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -148,7 +152,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			5biW+ZhUHGGexST+VOf23q8oRLAxq6TO9vROvBfOlyI=
+			9oOlbNYMW0VV99UwkszWUdrSA0HC/VIOBYekc++71Hk=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

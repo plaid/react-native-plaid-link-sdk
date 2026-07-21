@@ -1,26 +1,19 @@
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
-import {PlaidEmbeddedLinkScreen} from './Screens/PlaidEmbeddedLinkScreen';
-import {PlaidLinkScreen} from './Screens/PlaidLinkScreen';
-
-const Tab = createBottomTabNavigator();
+import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
+import {PlaidLayerScreen} from './Screens/PlaidLayerScreen';
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator screenOptions={{
-          tabBarLabelPosition: 'beside-icon',
-          tabBarLabelStyle: {
-            fontWeight: '700',
-            fontSize: 15,
-          },
-          tabBarIconStyle: {display: 'none'},
-        }}>
-        <Tab.Screen name="Standard Link" component={PlaidLinkScreen} />
-        <Tab.Screen name="Embedded Link" component={PlaidEmbeddedLinkScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      <PlaidLayerScreen />
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});

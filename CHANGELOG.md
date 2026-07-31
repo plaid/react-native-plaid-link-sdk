@@ -20,7 +20,8 @@ Android SDK [5.5.3](https://github.com/plaid/plaid-link-android/releases/tag/v5.
 
 ### Changes
 
-- Upgrade to Android SDK [5.5.3](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.3).
+- Fix file uploads in Link. File picker, camera capture, and camera permission results now reach Link again, restoring document uploads (such as Document Income) that could silently fail since 3.9.0.
+- Report official Flutter wrapper metadata in SDK version details.
 
 ### iOS
 
@@ -28,7 +29,7 @@ iOS SDK [6.5.0](https://github.com/plaid/plaid-link-ios/releases/tag/6.5.0)
 
 ### Changes
 
-- Upgrade to iOS SDK [6.5.0](https://github.com/plaid/plaid-link-ios/releases/tag/6.5.0).
+- Fix FinanceKit Crash
 
 ## LinkKit V12.8.4 — 2026-07-20
 

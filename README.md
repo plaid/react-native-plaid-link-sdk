@@ -168,7 +168,7 @@ The React Native Plaid module emits `onEvent` events throughout the account link
 
 #### Clearing Previous Session State with `destroy()`
 
-The `destroy()` method clears state and resources from a previously opened session.  
+The `destroy()` method clears state and resources from a previously opened session. On iOS, it also dismisses any presented Link UI and clears stored callback state.
 It's especially useful if you're seeing unexpected behavior when calling `create()` multiple times — for example, if the phone number isn't submitting properly after multiple `create()` calls.
 
 #### Problem scenario:
@@ -215,6 +215,7 @@ If migrating from older versions, see the [docs](https://plaid.com/docs/link/rea
 
 | Plaid SDK Version | Min React Native Version | Android SDK | Android Min Version | Android Compile Version| iOS SDK | iOS Min Version | Status                        |
 |-------------------|--------------------------|-------------|---------------------|------------------------|---------|-----------------|-------------------------------|
+| 12.8.5            | *                        | [5.5.3+]    | 21                  | 34                     | >=6.5.0 |  14.0           | Active, supports Xcode 16.1.0 |
 | 12.8.4            | *                        | [5.5.2+]    | 21                  | 34                     | >=6.4.7 |  14.0           | Active, supports Xcode 16.1.0 |
 | 12.8.3            | *                        | [5.5.1+]    | 21                  | 34                     | >=6.4.3 |  14.0           | Active, supports Xcode 16.1.0 |
 | 12.8.2            | *                        | [5.5.1+]    | 21                  | 34                     | >=6.4.3 |  14.0           | Active, supports Xcode 16.1.0 |

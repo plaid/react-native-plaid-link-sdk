@@ -1,5 +1,36 @@
 # RELEASES
 
+## LinkKit V12.8.5 — 2026-07-31
+
+#### Requirements
+
+This SDK works with any supported version of React Native.
+
+### Changes
+
+- Harden iOS Link session cleanup for React Native New Architecture apps by clearing stored callbacks and releasing stale sessions before replacing them.
+- Add iOS support for `destroy()` so apps can dismiss Link and clear native callback state before starting a replacement session.
+- Enable the pull request workflow for PRs targeting `master-v12`.
+- Upgrade the Android SDK to version 5.5.3.
+- Upgrade the iOS SDK to LinkKit 6.5.0.
+
+### Android
+
+Android SDK [5.5.3](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.3)
+
+### Changes
+
+- Fix file uploads in Link. File picker, camera capture, and camera permission results now reach Link again, restoring document uploads (such as Document Income) that could silently fail since 3.9.0.
+- Report official Flutter wrapper metadata in SDK version details.
+
+### iOS
+
+iOS SDK [6.5.0](https://github.com/plaid/plaid-link-ios/releases/tag/6.5.0)
+
+### Changes
+
+- Fix FinanceKit Crash
+
 ## LinkKit V12.8.4 — 2026-07-20
 
 #### Requirements

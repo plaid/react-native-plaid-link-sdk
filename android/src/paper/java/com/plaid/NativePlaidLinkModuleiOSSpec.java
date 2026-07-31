@@ -14,6 +14,7 @@ package com.plaid;
 
 import com.facebook.proguard.annotations.DoNotStrip;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -44,6 +45,10 @@ public abstract class NativePlaidLinkModuleiOSSpec extends ReactContextBaseJavaM
   @ReactMethod
   @DoNotStrip
   public abstract void dismiss();
+
+  @ReactMethod
+  @DoNotStrip
+  public abstract void destroy(Promise promise);
 
   @ReactMethod
   @DoNotStrip

@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 #import <LinkKit/LinkKit.h>
+#import <React/RCTBridgeModule.h>
 #import <React/RCTConvert.h>
 #import <React/RCTUtils.h>
 
@@ -28,7 +29,7 @@ static NSString* const kRNLinkKitVersionConstant = @"version";
 RCT_EXPORT_MODULE();
 
 + (NSString*)sdkVersion {
-    return @"12.8.4"; // SDK_VERSION
+    return @"12.8.5"; // SDK_VERSION
 }
 
 + (NSString*)objCBridgeVersion {
@@ -67,16 +68,38 @@ RCT_EXPORT_MODULE();
     self.hasObservers = NO;
 }
 
+- (void)invalidate {
+    [self releaseCurrentSession];
+    [super invalidate];
+}
+
+- (void)dismissPresentedViewController {
+    [self.presentingViewController dismissViewControllerAnimated:YES
+                                                      completion:nil];
+    self.presentingViewController = nil;
+}
+
+- (void)releaseCurrentSession {
+    [self dismissPresentedViewController];
+    self.successCallback = nil;
+    self.exitCallback = nil;
+    self.linkHandler = nil;
+    self.creationError = nil;
+}
+
 RCT_EXPORT_METHOD(createPlaidLink:(NSString*)token noLoadingState:(BOOL)noLoadingState onLoad:(RCTResponseSenderBlock)onLoad) {
+    [self releaseCurrentSession];
+
     __weak RNLinksdk *weakSelf = self;
 
     void (^onSuccess)(PLKLinkSuccess *) = ^(PLKLinkSuccess *success) {
         RNLinksdk *strongSelf = weakSelf;
 
         if (strongSelf.successCallback) {
+            RCTResponseSenderBlock successCallback = strongSelf.successCallback;
             NSDictionary<NSString*, id> *jsMetadata = [RNLinksdk dictionaryFromSuccess:success];
-            strongSelf.successCallback(@[jsMetadata]);
-            strongSelf.successCallback = nil;
+            [strongSelf releaseCurrentSession];
+            successCallback(@[jsMetadata]);
         }
     };
 
@@ -84,14 +107,16 @@ RCT_EXPORT_METHOD(createPlaidLink:(NSString*)token noLoadingState:(BOOL)noLoadin
         RNLinksdk *strongSelf = weakSelf;
 
         if (strongSelf.exitCallback) {
+            RCTResponseSenderBlock exitCallback = strongSelf.exitCallback;
             NSDictionary *exitMetadata = [RNLinksdk dictionaryFromExit:exit];
+            NSArray *callbackArguments = nil;
             if (exit.error) {
-                strongSelf.exitCallback(@[exitMetadata[@"error"], exitMetadata]);
+                callbackArguments = @[exitMetadata[@"error"], exitMetadata];
             } else {
-                strongSelf.exitCallback(@[[NSNull null], exitMetadata]);
+                callbackArguments = @[[NSNull null], exitMetadata];
             }
-            strongSelf.exitCallback = nil;
-            strongSelf.linkHandler = nil;
+            [strongSelf releaseCurrentSession];
+            exitCallback(callbackArguments);
         }
     };
 
@@ -135,8 +160,14 @@ RCT_EXPORT_METHOD(createPlaidLink:(NSString*)token noLoadingState:(BOOL)noLoadin
 
 RCT_EXPORT_METHOD(open:(BOOL)fullScreen onSuccess:(RCTResponseSenderBlock)onSuccess onExit:(RCTResponseSenderBlock)onExit) {
     if (self.linkHandler) {
+        BOOL alreadyOpen = self.successCallback || self.exitCallback;
         self.successCallback = onSuccess;
         self.exitCallback = onExit;
+
+        if (alreadyOpen) {
+            return;
+        }
+
         self.presentingViewController = RCTPresentedViewController();
 
         // Some link flows do not need to present UI, so track if presentation happened so dismissal isn't
@@ -156,7 +187,7 @@ RCT_EXPORT_METHOD(open:(BOOL)fullScreen onSuccess:(RCTResponseSenderBlock)onSucc
         };
         void(^dismissalHandler)(UIViewController *) = ^(UIViewController *linkViewController) {
             if (didPresent) {
-                [weakSelf dismiss];
+                [weakSelf dismissPresentedViewController];
                 didPresent = NO;
             }
         };
@@ -186,9 +217,12 @@ RCT_EXPORT_METHOD(open:(BOOL)fullScreen onSuccess:(RCTResponseSenderBlock)onSucc
 }
 
 RCT_EXPORT_METHOD(dismiss) {
-    [self.presentingViewController dismissViewControllerAnimated:YES
-                                                      completion:nil];
-    self.presentingViewController = nil;
+    [self releaseCurrentSession];
+}
+
+RCT_EXPORT_METHOD(destroy:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    [self releaseCurrentSession];
+    resolve(nil);
 }
 
 RCT_EXPORT_METHOD(syncFinanceKit:(NSString *)token

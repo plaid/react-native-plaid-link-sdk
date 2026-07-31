@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,6 +9,9 @@ import {
   Alert,
   StyleSheet,
   TextInput,
+  NativeEventEmitter,
+  Platform,
+  TurboModuleRegistry,
 } from 'react-native';
 
 import { 
@@ -31,27 +34,34 @@ function isValidString(str: string): boolean {
 function createLinkTokenConfiguration(
   token: string,
   noLoadingState: boolean = false,
+  appendLog: (message: string, payload?: unknown) => void,
 ): LinkTokenConfiguration {
   console.log(`token: ${token}`);
+  appendLog('token', token);
   return {
     token,
     noLoadingState,
     onLoad: () => {
       console.log('Link onLoad: finished loading');
+      appendLog('Link onLoad: finished loading');
     },
   };
 }
 
-function createLinkOpenProps(): LinkOpenProps {
+function createLinkOpenProps(
+  appendLog: (message: string, payload?: unknown) => void,
+): LinkOpenProps {
   return {
     onSuccess: (success: LinkSuccess) => {
       Alert.alert('Success', `Link successful: ${JSON.stringify(success, null, 2)}`);
       console.log('Success: ', success);
+      appendLog('Success', success);
       success.metadata.accounts.forEach(account => console.log('accounts', account));
     },
     onExit: (linkExit: LinkExit) => {
       Alert.alert('Exit', `Link exited: ${JSON.stringify(linkExit, null, 2)}`);
       console.log('Exit: ', linkExit);
+      appendLog('Exit', linkExit);
     },
     iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
     logLevel: LinkLogLevel.ERROR,
@@ -62,13 +72,54 @@ function App(): React.JSX.Element {
   const [linkToken, setLinkToken] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [currentScreen, setCurrentScreen] = useState('main');
+  const [logs, setLogs] = useState<string[]>([]);
+
+  const appendLog = useCallback((message: string, payload?: unknown) => {
+    const timestamp = new Date().toLocaleTimeString();
+    const serializedPayload =
+      payload === undefined
+        ? ''
+        : ` ${typeof payload === 'string' ? payload : JSON.stringify(payload, null, 2)}`;
+    const line = `[${timestamp}] ${message}${serializedPayload}`;
+    console.log(line);
+    setLogs(previousLogs => [line, ...previousLogs].slice(0, 30));
+  }, []);
+
+  useEffect(() => {
+    if (Platform.OS !== 'ios') {
+      return;
+    }
+
+    const plaidModule = TurboModuleRegistry.get('RNLinksdk');
+    if (!plaidModule) {
+      appendLog('Plaid event listener: RNLinksdk native module unavailable');
+      return;
+    }
+
+    appendLog('Plaid event listener: subscribed');
+    const emitter = new NativeEventEmitter(plaidModule as any);
+    const listener = emitter.addListener('onEvent', event => {
+      console.log('Event: ', event);
+      appendLog('Event', event);
+    });
+
+    return () => {
+      appendLog('Plaid event listener: unsubscribed');
+      listener.remove();
+    };
+  }, [appendLog]);
 
   const handleCreateLink = () => {
     try {
       if (isValidString(linkToken)) {
-        const tokenConfiguration = createLinkTokenConfiguration(linkToken);
+        const tokenConfiguration = createLinkTokenConfiguration(
+          linkToken,
+          false,
+          appendLog,
+        );
         create(tokenConfiguration);
         setDisabled(false);
+        appendLog('create() called');
         Alert.alert('Success', 'Link created successfully!');
       } else {
         Alert.alert('Error', 'Please enter a valid link token');
@@ -80,7 +131,8 @@ function App(): React.JSX.Element {
 
   const handleOpenLink = () => {
     try {
-      const openProps = createLinkOpenProps();
+      const openProps = createLinkOpenProps(appendLog);
+      appendLog('open() called');
       open(openProps);
       setDisabled(true);
     } catch (error) {
@@ -161,6 +213,24 @@ function App(): React.JSX.Element {
               </Text>
             </TouchableOpacity>
           </View>
+
+          <View style={styles.logContainer}>
+            <View style={styles.logHeader}>
+              <Text style={styles.logTitle}>Debug log</Text>
+              <TouchableOpacity onPress={() => setLogs([])}>
+                <Text style={styles.clearLogText}>Clear</Text>
+              </TouchableOpacity>
+            </View>
+            {logs.length === 0 ? (
+              <Text style={styles.emptyLogText}>No logs yet</Text>
+            ) : (
+              logs.map((line, index) => (
+                <Text key={`${line}-${index}`} style={styles.logLine}>
+                  {line}
+                </Text>
+              ))
+            )}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -230,6 +300,39 @@ const styles = StyleSheet.create({
     color: '#ccddff',
     fontSize: 14,
     textAlign: 'center',
+  },
+  logContainer: {
+    borderColor: '#dddddd',
+    borderRadius: 8,
+    borderWidth: 1,
+    marginHorizontal: 20,
+    marginTop: 12,
+    padding: 12,
+  },
+  logHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  logTitle: {
+    color: '#222222',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  clearLogText: {
+    color: '#0066cc',
+    fontSize: 14,
+  },
+  emptyLogText: {
+    color: '#777777',
+    fontSize: 13,
+  },
+  logLine: {
+    color: '#222222',
+    fontFamily: Platform.select({ios: 'Courier', android: 'monospace'}),
+    fontSize: 11,
+    marginBottom: 6,
   },
 });
 

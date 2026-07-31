@@ -11,22 +11,24 @@ This SDK works with any supported version of React Native.
 - Harden iOS Link session cleanup for React Native New Architecture apps by clearing stored callbacks and releasing stale sessions before replacing them.
 - Add iOS support for `destroy()` so apps can dismiss Link and clear native callback state before starting a replacement session.
 - Enable the pull request workflow for PRs targeting `master-v12`.
+- Upgrade the Android SDK to version 5.5.3.
+- Upgrade the iOS SDK to LinkKit 6.5.0.
 
 ### Android
 
-Android SDK [5.5.2](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.2)
+Android SDK [5.5.3](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.3)
 
 ### Changes
 
-- No underlying Android SDK upgrade.
+- Upgrade to Android SDK [5.5.3](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.3).
 
 ### iOS
 
-iOS SDK [6.4.7](https://github.com/plaid/plaid-link-ios/releases/tag/6.4.7)
+iOS SDK [6.5.0](https://github.com/plaid/plaid-link-ios/releases/tag/6.5.0)
 
 ### Changes
 
-- No underlying iOS SDK upgrade.
+- Upgrade to iOS SDK [6.5.0](https://github.com/plaid/plaid-link-ios/releases/tag/6.5.0).
 
 ## LinkKit V12.8.4 — 2026-07-20
 

@@ -1,5 +1,33 @@
 # RELEASES
 
+## LinkKit V12.8.5 — 2026-07-31
+
+#### Requirements
+
+This SDK works with any supported version of React Native.
+
+### Changes
+
+- Harden iOS Link session cleanup for React Native New Architecture apps by clearing stored callbacks and releasing stale sessions before replacing them.
+- Add iOS support for `destroy()` so apps can dismiss Link and clear native callback state before starting a replacement session.
+- Enable the pull request workflow for PRs targeting `master-v12`.
+
+### Android
+
+Android SDK [5.5.2](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.2)
+
+### Changes
+
+- No underlying Android SDK upgrade.
+
+### iOS
+
+iOS SDK [6.4.7](https://github.com/plaid/plaid-link-ios/releases/tag/6.4.7)
+
+### Changes
+
+- No underlying iOS SDK upgrade.
+
 ## LinkKit V12.8.4 — 2026-07-20
 
 #### Requirements

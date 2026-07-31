@@ -13,6 +13,7 @@ export interface Spec extends TurboModule {
         onExit: (error: UnsafeObject<LinkError>, result: UnsafeObject<LinkExit>) => void,
       ): void;
     dismiss(): void;
+    destroy(): Promise<void>;
     submit(
       phoneNumber: string | undefined,
       dateOfBirth: string | undefined,

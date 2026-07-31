@@ -106,6 +106,8 @@ export const open = (props: LinkOpenProps) => {
 export const destroy = async () => {
   if (Platform.OS === 'android') {
     await RNLinksdkAndroid?.destroy();
+  } else {
+    await RNLinksdkiOS?.destroy();
   }
 };
 

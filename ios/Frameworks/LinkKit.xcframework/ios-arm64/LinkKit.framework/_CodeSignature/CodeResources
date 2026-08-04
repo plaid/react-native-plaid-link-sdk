@@ -4,10 +4,6 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>.DS_Store</key>
-		<data>
-		Lgpr8MeyN71Sbx3XpUPILxVX8bI=
-		</data>
 		<key>Headers/LinkKit-Swift.h</key>
 		<data>
 		9jY8sAjFPCyHvNo5AAqiMfhBWHI=
@@ -18,27 +14,27 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		rNt+PKf5YY0ZOpJVVpqqSZPPUJ0=
+		jySfKF6V8L646L2ZIfm9UoZ3TrI=
 		</data>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
-		BkrqlOFDwvfFphmlzgh2TjvplfM=
+		Frak3Juz1BPKI5pcBVTZH7nL1V8=
 		</data>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<data>
-		xeUMKDnpAHpJfeA5CXoW9Ll4DNM=
+		LOHgNu4F+jwvSBeB31Ila3Tv51I=
 		</data>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		kYXgefnqh5Yv8/pPP+ZCePh9Jo4=
+		zTzbqvASOQGa3yfWXzApjfj/lNA=
 		</data>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		xeUMKDnpAHpJfeA5CXoW9Ll4DNM=
+		LOHgNu4F+jwvSBeB31Ila3Tv51I=
 		</data>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		EwUI7VmSW67kkEAR+myUEkWS2hY=
+		oErkT7zey9FCB/EEFoQNdFGsHdQ=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -69,35 +65,35 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			JOixkVppvFrWL0o2YutfZ5DQLS58K/l7cmuE48xpMqM=
+			MgpS3X8PCg5Zcf3p4En59oThXpm8Y9yOPi2iiHJL2zs=
 			</data>
 		</dict>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			16M6jMCEDB0b9dQ2K7+b/OajxUbVb2UVvn3Q/i22ySo=
+			2w8NLehQW1Jw6LcDGYchPjITw6s1So638fNdjSgO2WU=
 			</data>
 		</dict>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+0LFinj6zA3WM49bT/Xk/XsMS1hA3Dw1uTQMjSfRkQE=
+			SoXPLbi/iUHLIb9pug9BB423FMsI0ffrS16akA9zQ6Q=
 			</data>
 		</dict>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			16M6jMCEDB0b9dQ2K7+b/OajxUbVb2UVvn3Q/i22ySo=
+			2w8NLehQW1Jw6LcDGYchPjITw6s1So638fNdjSgO2WU=
 			</data>
 		</dict>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			52ypgFbVLw2OKdvIDAf5pHrC1n5F8aVfOeHfHa2WCg4=
+			v8AaePRyKSHfIMgeJp2LcEsv8AibCAcf8cpwZ50qx+8=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

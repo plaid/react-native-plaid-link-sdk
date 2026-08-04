@@ -252,11 +252,13 @@ public enum ConfigurationError : Foundation.LocalizedError {
     get
   }
 }
+@available(*, deprecated, message: "Present Link with PlaidLinkSheet(session:) or session.sheet() instead")
 @_Concurrency.MainActor @preconcurrency public struct PlaidLinkView<ErrorView> : SwiftUICore.View where ErrorView : SwiftUICore.View {
   @_Concurrency.MainActor @preconcurrency public init(token: Swift.String, onSuccess: @escaping LinkKit.OnSuccessHandler, onExit: LinkKit.OnExitHandler? = nil, onEvent: LinkKit.OnEventHandler? = nil, @SwiftUICore.ViewBuilder errorView: @escaping (any Swift.Error) -> ErrorView)
   @_Concurrency.MainActor @preconcurrency public var body: some SwiftUICore.View {
     get
   }
+  @available(*, deprecated, message: "Present Link with PlaidLinkSheet(session:) or session.sheet() instead")
   public typealias Body = @_opaqueReturnTypeOf("$s7LinkKit05PlaidA4ViewV4bodyQrvp", 0) __<ErrorView>
 }
 public enum AuthErrorCode : Swift.Error, Swift.CustomStringConvertible, Swift.Codable, Swift.Equatable {
@@ -679,17 +681,15 @@ public struct PlaidFinanceKit {
   @available(iOS 17.4, *)
   public static func sync(token: Swift.String, requestAuthorizationIfNeeded: Swift.Bool, syncBehavior: LinkKit.PlaidFinanceKit.SyncBehavior = .live) async throws
 }
-@_Concurrency.MainActor @preconcurrency public struct PlaidLinkUIViewControllerRepresentable : SwiftUI.UIViewControllerRepresentable {
+@available(*, deprecated, message: "Present Link with PlaidLinkSheet(session:) or session.sheet() instead")
+@_Concurrency.MainActor @preconcurrency public struct PlaidLinkUIViewControllerRepresentable : SwiftUICore.View {
   @_Concurrency.MainActor @preconcurrency public init(session: LinkKit.PlaidLinkSession)
   @_Concurrency.MainActor @preconcurrency public init(session: LinkKit.PlaidLayerSession)
-  @objc @_hasMissingDesignatedInitializers final public class Coordinator : ObjectiveC.NSObject {
-    @objc deinit
+  @_Concurrency.MainActor @preconcurrency public var body: some SwiftUICore.View {
+    get
   }
-  @_Concurrency.MainActor @preconcurrency public func makeCoordinator() -> LinkKit.PlaidLinkUIViewControllerRepresentable.Coordinator
-  @_Concurrency.MainActor @preconcurrency public func makeUIViewController(context: LinkKit.PlaidLinkUIViewControllerRepresentable.Context) -> UIKit.UIViewController
-  @_Concurrency.MainActor @preconcurrency public func updateUIViewController(_ uiViewController: UIKit.UIViewController, context: LinkKit.PlaidLinkUIViewControllerRepresentable.Context)
-  public typealias Body = Swift.Never
-  public typealias UIViewControllerType = UIKit.UIViewController
+  @available(*, deprecated, message: "Present Link with PlaidLinkSheet(session:) or session.sheet() instead")
+  public typealias Body = @_opaqueReturnTypeOf("$s7LinkKit05PlaidA29UIViewControllerRepresentableV4bodyQrvp", 0) __
 }
 public enum InstitutionErrorCode : Swift.Error, Swift.CustomStringConvertible, Swift.Equatable, Swift.Codable {
   case institutionDown
@@ -747,6 +747,7 @@ public enum ExitStatus : Swift.CustomStringConvertible, Swift.Codable, Swift.Equ
   public static func == (a: LinkKit.ExitStatus, b: LinkKit.ExitStatus) -> Swift.Bool
 }
 extension LinkKit.EmbeddedSearchView : Swift.Sendable {}
+@available(*, deprecated, message: "Present Link with PlaidLinkSheet(session:) or session.sheet() instead")
 extension LinkKit.PlaidLinkView : Swift.Sendable {}
 extension LinkKit.MFAType : Swift.Hashable {}
 extension LinkKit.PlaidLinkSheet : Swift.Sendable {}
@@ -756,4 +757,5 @@ extension LinkKit.Environment : Swift.Hashable {}
 extension LinkKit.PlaidFinanceKit.SyncBehavior : Swift.Equatable {}
 @available(iOS 17.4, *)
 extension LinkKit.PlaidFinanceKit.SyncBehavior : Swift.Hashable {}
+@available(*, deprecated, message: "Present Link with PlaidLinkSheet(session:) or session.sheet() instead")
 extension LinkKit.PlaidLinkUIViewControllerRepresentable : Swift.Sendable {}

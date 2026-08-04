@@ -1,5 +1,24 @@
 # RELEASES
 
+## LinkKit V13.0.4 — 2026-08-04
+
+### Changes
+
+- Updates the bundled iOS SDK to LinkKit 7.1.0.
+- Fixes multi-item Link flows where an early `HANDOFF` event could dismiss Link
+  before success completion.
+- Preserves post-success `HANDOFF` event delivery to React Native `onEvent`
+  callbacks.
+- Leaves Android integration unchanged at `com.plaid.link:sdk-core:6.1.0`.
+
+### Android
+
+Android SDK [6.1.0](https://github.com/plaid/plaid-link-android/releases/tag/v6.1.0)
+
+### iOS
+
+iOS SDK [7.1.0](https://github.com/plaid/plaid-link-ios/releases/tag/7.1.0)
+
 ## LinkKit V13.0.3 — 2026-07-21
 
 ### Changes

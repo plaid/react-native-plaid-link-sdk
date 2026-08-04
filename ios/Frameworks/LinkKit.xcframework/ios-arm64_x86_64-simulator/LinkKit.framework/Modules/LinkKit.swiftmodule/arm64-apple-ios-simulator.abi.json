@@ -17165,10 +17165,12 @@
         "moduleName": "LinkKit",
         "genericSig": "<τ_0_0 where τ_0_0 : SwiftUI.View>",
         "sugared_genericSig": "<ErrorView where ErrorView : SwiftUI.View>",
+        "deprecated": true,
         "declAttributes": [
           "Preconcurrency",
           "Custom",
           "AccessControl",
+          "Available",
           "RawDocComment"
         ],
         "conformances": [
@@ -45768,10 +45770,217 @@
             "init_kind": "Designated"
           },
           {
+            "kind": "Var",
+            "name": "body",
+            "printedName": "body",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "OpaqueTypeArchetype",
+                "printedName": "some SwiftUI.View",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "View",
+                    "printedName": "SwiftUI.View",
+                    "usr": "s:7SwiftUI4ViewP"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV4bodyQrvp",
+            "mangledName": "$s7LinkKit05PlaidA29UIViewControllerRepresentableV4bodyQrvp",
+            "moduleName": "LinkKit",
+            "declAttributes": [
+              "Preconcurrency",
+              "Custom",
+              "AccessControl"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "OpaqueTypeArchetype",
+                    "printedName": "some SwiftUI.View",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "View",
+                        "printedName": "SwiftUI.View",
+                        "usr": "s:7SwiftUI4ViewP"
+                      }
+                    ]
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV4bodyQrvg",
+                "mangledName": "$s7LinkKit05PlaidA29UIViewControllerRepresentableV4bodyQrvg",
+                "moduleName": "LinkKit",
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV",
+        "mangledName": "$s7LinkKit05PlaidA29UIViewControllerRepresentableV",
+        "moduleName": "LinkKit",
+        "deprecated": true,
+        "declAttributes": [
+          "Preconcurrency",
+          "Custom",
+          "AccessControl",
+          "Available",
+          "RawDocComment"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "View",
+            "printedName": "View",
+            "children": [
+              {
+                "kind": "TypeWitness",
+                "name": "Body",
+                "printedName": "Body",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "OpaqueTypeArchetype",
+                    "printedName": "some SwiftUI.View",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "View",
+                        "printedName": "SwiftUI.View",
+                        "usr": "s:7SwiftUI4ViewP"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "usr": "s:7SwiftUI4ViewP",
+            "mangledName": "$s7SwiftUI4ViewP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "InternalLinkRepresentable",
+        "printedName": "InternalLinkRepresentable",
+        "children": [
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(session:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "InternalLinkRepresentable",
+                "printedName": "LinkKit.InternalLinkRepresentable",
+                "usr": "s:7LinkKit08InternalA13RepresentableV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "PlaidSessionOpenable",
+                "printedName": "any LinkKit.PlaidSessionOpenable",
+                "usr": "s:7LinkKit20PlaidSessionOpenableP"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:7LinkKit08InternalA13RepresentableV7sessionAcA20PlaidSessionOpenable_p_tcfc",
+            "mangledName": "$s7LinkKit08InternalA13RepresentableV7sessionAcA20PlaidSessionOpenable_p_tcfc",
+            "moduleName": "LinkKit",
+            "declAttributes": [
+              "Preconcurrency",
+              "Custom"
+            ],
+            "init_kind": "Designated"
+          },
+          {
             "kind": "TypeDecl",
             "name": "Coordinator",
             "printedName": "Coordinator",
             "children": [
+              {
+                "kind": "Var",
+                "name": "parent",
+                "printedName": "parent",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "InternalLinkRepresentable",
+                    "printedName": "LinkKit.InternalLinkRepresentable",
+                    "usr": "s:7LinkKit08InternalA13RepresentableV"
+                  }
+                ],
+                "declKind": "Var",
+                "usr": "s:7LinkKit08InternalA13RepresentableV11CoordinatorC6parent33_852EEF9518A948E766E9E441B0D6DF54LLACvp",
+                "mangledName": "$s7LinkKit08InternalA13RepresentableV11CoordinatorC6parent33_852EEF9518A948E766E9E441B0D6DF54LLACvp",
+                "moduleName": "LinkKit",
+                "isInternal": true,
+                "declAttributes": [
+                  "Final",
+                  "HasStorage",
+                  "AccessControl"
+                ],
+                "fixedbinaryorder": 0,
+                "isLet": true,
+                "hasStorage": true
+              },
+              {
+                "kind": "Var",
+                "name": "session",
+                "printedName": "session",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "PlaidSessionOpenable",
+                    "printedName": "any LinkKit.PlaidSessionOpenable",
+                    "usr": "s:7LinkKit20PlaidSessionOpenableP"
+                  }
+                ],
+                "declKind": "Var",
+                "usr": "s:7LinkKit08InternalA13RepresentableV11CoordinatorC7session33_852EEF9518A948E766E9E441B0D6DF54LLAA20PlaidSessionOpenable_pvp",
+                "mangledName": "$s7LinkKit08InternalA13RepresentableV11CoordinatorC7session33_852EEF9518A948E766E9E441B0D6DF54LLAA20PlaidSessionOpenable_pvp",
+                "moduleName": "LinkKit",
+                "isInternal": true,
+                "declAttributes": [
+                  "Final",
+                  "HasStorage",
+                  "AccessControl"
+                ],
+                "fixedbinaryorder": 1,
+                "isLet": true,
+                "hasStorage": true
+              },
               {
                 "kind": "Function",
                 "name": "present",
@@ -45796,8 +46005,8 @@
                   }
                 ],
                 "declKind": "Func",
-                "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV11CoordinatorC7present_2inyAA0C15SessionOpenable_p_So0dE0CtF",
-                "mangledName": "$s7LinkKit05PlaidA29UIViewControllerRepresentableV11CoordinatorC7present_2inyAA0C15SessionOpenable_p_So0dE0CtF",
+                "usr": "s:7LinkKit08InternalA13RepresentableV11CoordinatorC7present_2inyAA20PlaidSessionOpenable_p_So16UIViewControllerCtF",
+                "mangledName": "$s7LinkKit08InternalA13RepresentableV11CoordinatorC7present_2inyAA20PlaidSessionOpenable_p_So16UIViewControllerCtF",
                 "moduleName": "LinkKit",
                 "declAttributes": [
                   "Final",
@@ -45813,13 +46022,13 @@
                   {
                     "kind": "TypeNominal",
                     "name": "Coordinator",
-                    "printedName": "LinkKit.PlaidLinkUIViewControllerRepresentable.Coordinator",
-                    "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV11CoordinatorC"
+                    "printedName": "LinkKit.InternalLinkRepresentable.Coordinator",
+                    "usr": "s:7LinkKit08InternalA13RepresentableV11CoordinatorC"
                   }
                 ],
                 "declKind": "Constructor",
-                "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV11CoordinatorCAEycfc",
-                "mangledName": "$s7LinkKit05PlaidA29UIViewControllerRepresentableV11CoordinatorCAEycfc",
+                "usr": "s:7LinkKit08InternalA13RepresentableV11CoordinatorCAEycfc",
+                "mangledName": "$s7LinkKit08InternalA13RepresentableV11CoordinatorCAEycfc",
                 "moduleName": "LinkKit",
                 "overriding": true,
                 "implicit": true,
@@ -45833,8 +46042,8 @@
               }
             ],
             "declKind": "Class",
-            "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV11CoordinatorC",
-            "mangledName": "$s7LinkKit05PlaidA29UIViewControllerRepresentableV11CoordinatorC",
+            "usr": "s:7LinkKit08InternalA13RepresentableV11CoordinatorC",
+            "mangledName": "$s7LinkKit08InternalA13RepresentableV11CoordinatorC",
             "moduleName": "LinkKit",
             "declAttributes": [
               "Final",
@@ -45843,7 +46052,6 @@
               "ObjC"
             ],
             "superclassUsr": "c:objc(cs)NSObject",
-            "hasMissingDesignatedInitializers": true,
             "superclassNames": [
               "ObjectiveC.NSObject"
             ],
@@ -45921,13 +46129,13 @@
               {
                 "kind": "TypeNominal",
                 "name": "Coordinator",
-                "printedName": "LinkKit.PlaidLinkUIViewControllerRepresentable.Coordinator",
-                "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV11CoordinatorC"
+                "printedName": "LinkKit.InternalLinkRepresentable.Coordinator",
+                "usr": "s:7LinkKit08InternalA13RepresentableV11CoordinatorC"
               }
             ],
             "declKind": "Func",
-            "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV15makeCoordinatorAC0H0CyF",
-            "mangledName": "$s7LinkKit05PlaidA29UIViewControllerRepresentableV15makeCoordinatorAC0H0CyF",
+            "usr": "s:7LinkKit08InternalA13RepresentableV15makeCoordinatorAC0F0CyF",
+            "mangledName": "$s7LinkKit08InternalA13RepresentableV15makeCoordinatorAC0F0CyF",
             "moduleName": "LinkKit",
             "declAttributes": [
               "Preconcurrency",
@@ -45950,21 +46158,21 @@
               {
                 "kind": "TypeNominal",
                 "name": "UIViewControllerRepresentableContext",
-                "printedName": "SwiftUI.UIViewControllerRepresentableContext<LinkKit.PlaidLinkUIViewControllerRepresentable>",
+                "printedName": "SwiftUI.UIViewControllerRepresentableContext<LinkKit.InternalLinkRepresentable>",
                 "children": [
                   {
                     "kind": "TypeNominal",
-                    "name": "PlaidLinkUIViewControllerRepresentable",
-                    "printedName": "LinkKit.PlaidLinkUIViewControllerRepresentable",
-                    "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV"
+                    "name": "InternalLinkRepresentable",
+                    "printedName": "LinkKit.InternalLinkRepresentable",
+                    "usr": "s:7LinkKit08InternalA13RepresentableV"
                   }
                 ],
                 "usr": "s:7SwiftUI36UIViewControllerRepresentableContextV"
               }
             ],
             "declKind": "Func",
-            "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV04makedE07contextSo0dE0C7SwiftUI0deF7ContextVyACG_tF",
-            "mangledName": "$s7LinkKit05PlaidA29UIViewControllerRepresentableV04makedE07contextSo0dE0C7SwiftUI0deF7ContextVyACG_tF",
+            "usr": "s:7LinkKit08InternalA13RepresentableV20makeUIViewController7contextSo0fG0C7SwiftUI0fgD7ContextVyACG_tF",
+            "mangledName": "$s7LinkKit08InternalA13RepresentableV20makeUIViewController7contextSo0fG0C7SwiftUI0fgD7ContextVyACG_tF",
             "moduleName": "LinkKit",
             "declAttributes": [
               "Preconcurrency",
@@ -45992,21 +46200,21 @@
               {
                 "kind": "TypeNominal",
                 "name": "UIViewControllerRepresentableContext",
-                "printedName": "SwiftUI.UIViewControllerRepresentableContext<LinkKit.PlaidLinkUIViewControllerRepresentable>",
+                "printedName": "SwiftUI.UIViewControllerRepresentableContext<LinkKit.InternalLinkRepresentable>",
                 "children": [
                   {
                     "kind": "TypeNominal",
-                    "name": "PlaidLinkUIViewControllerRepresentable",
-                    "printedName": "LinkKit.PlaidLinkUIViewControllerRepresentable",
-                    "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV"
+                    "name": "InternalLinkRepresentable",
+                    "printedName": "LinkKit.InternalLinkRepresentable",
+                    "usr": "s:7LinkKit08InternalA13RepresentableV"
                   }
                 ],
                 "usr": "s:7SwiftUI36UIViewControllerRepresentableContextV"
               }
             ],
             "declKind": "Func",
-            "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV06updatedE0_7contextySo0dE0C_7SwiftUI0deF7ContextVyACGtF",
-            "mangledName": "$s7LinkKit05PlaidA29UIViewControllerRepresentableV06updatedE0_7contextySo0dE0C_7SwiftUI0deF7ContextVyACGtF",
+            "usr": "s:7LinkKit08InternalA13RepresentableV22updateUIViewController_7contextySo0fG0C_7SwiftUI0fgD7ContextVyACGtF",
+            "mangledName": "$s7LinkKit08InternalA13RepresentableV22updateUIViewController_7contextySo0fG0C_7SwiftUI0fgD7ContextVyACGtF",
             "moduleName": "LinkKit",
             "declAttributes": [
               "Preconcurrency",
@@ -46014,17 +46222,44 @@
               "AccessControl"
             ],
             "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "session",
+            "printedName": "session",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "PlaidSessionOpenable",
+                "printedName": "any LinkKit.PlaidSessionOpenable",
+                "usr": "s:7LinkKit20PlaidSessionOpenableP"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:7LinkKit08InternalA13RepresentableV7session33_852EEF9518A948E766E9E441B0D6DF54LLAA20PlaidSessionOpenable_pvp",
+            "mangledName": "$s7LinkKit08InternalA13RepresentableV7session33_852EEF9518A948E766E9E441B0D6DF54LLAA20PlaidSessionOpenable_pvp",
+            "moduleName": "LinkKit",
+            "isInternal": true,
+            "declAttributes": [
+              "Preconcurrency",
+              "Custom",
+              "HasStorage",
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "fixedbinaryorder": 0,
+            "isLet": true,
+            "hasStorage": true
           }
         ],
         "declKind": "Struct",
-        "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV",
-        "mangledName": "$s7LinkKit05PlaidA29UIViewControllerRepresentableV",
+        "usr": "s:7LinkKit08InternalA13RepresentableV",
+        "mangledName": "$s7LinkKit08InternalA13RepresentableV",
         "moduleName": "LinkKit",
         "declAttributes": [
           "Preconcurrency",
           "Custom",
-          "AccessControl",
-          "RawDocComment"
+          "AccessControl"
         ],
         "conformances": [
           {
@@ -46067,8 +46302,8 @@
                   {
                     "kind": "TypeNominal",
                     "name": "Coordinator",
-                    "printedName": "LinkKit.PlaidLinkUIViewControllerRepresentable.Coordinator",
-                    "usr": "s:7LinkKit05PlaidA29UIViewControllerRepresentableV11CoordinatorC"
+                    "printedName": "LinkKit.InternalLinkRepresentable.Coordinator",
+                    "usr": "s:7LinkKit08InternalA13RepresentableV11CoordinatorC"
                   }
                 ]
               }

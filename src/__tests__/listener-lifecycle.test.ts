@@ -64,7 +64,7 @@ describe("Listener Lifecycle", () => {
       (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent"),
     ).toBeGreaterThan(0);
 
-    jest.advanceTimersByTime(2500);
+    jest.advanceTimersByTime(1500);
 
     expect(
       (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent"),
@@ -142,7 +142,7 @@ describe("Listener Lifecycle", () => {
         mockSuccess,
       );
 
-      jest.advanceTimersByTime(2500);
+      jest.advanceTimersByTime(1500);
     }
 
     expect(
@@ -305,7 +305,7 @@ describe("Listener Lifecycle", () => {
       (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent"),
     ).toBeGreaterThan(0);
 
-    jest.advanceTimersByTime(2500);
+    jest.advanceTimersByTime(1500);
 
     expect(
       (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent"),
@@ -340,7 +340,7 @@ describe("Listener Lifecycle", () => {
       onEvent: secondEvent,
     });
 
-    jest.advanceTimersByTime(2500);
+    jest.advanceTimersByTime(1500);
 
     const mockEvent: LinkEvent = {
       eventName: LinkEventName.OPEN,

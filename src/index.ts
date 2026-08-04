@@ -23,7 +23,7 @@ let eventSub: Subscription | null = null;
 let postSuccessHandoffCleanupTimeout: ReturnType<typeof setTimeout> | null =
   null;
 
-const POST_SUCCESS_HANDOFF_EVENT_WINDOW_MS = 2500;
+const POST_SUCCESS_HANDOFF_EVENT_WINDOW_MS = 1500;
 
 function clearPostSuccessHandoffCleanupTimeout() {
   if (postSuccessHandoffCleanupTimeout) {

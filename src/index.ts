@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import {
   LinkExit,
   LinkEvent,
+  LinkEventName,
   LinkSuccess,
   LinkTokenConfiguration,
   PlaidLinkSession,
@@ -19,14 +20,37 @@ type Subscription = ReturnType<typeof NativePlaidModule.addListener>;
 let successSub: Subscription | null = null;
 let exitSub: Subscription | null = null;
 let eventSub: Subscription | null = null;
+let postSuccessHandoffCleanupTimeout: ReturnType<typeof setTimeout> | null =
+  null;
 
-function cleanupListeners() {
+const POST_SUCCESS_HANDOFF_EVENT_WINDOW_MS = 1500;
+
+function clearPostSuccessHandoffCleanupTimeout() {
+  if (postSuccessHandoffCleanupTimeout) {
+    clearTimeout(postSuccessHandoffCleanupTimeout);
+    postSuccessHandoffCleanupTimeout = null;
+  }
+}
+
+function cleanupListeners(options: { keepEventListener?: boolean } = {}) {
+  clearPostSuccessHandoffCleanupTimeout();
   successSub?.remove();
   exitSub?.remove();
-  eventSub?.remove();
+  if (!options.keepEventListener) {
+    eventSub?.remove();
+    eventSub = null;
+  }
   successSub = null;
   exitSub = null;
-  eventSub = null;
+}
+
+function cleanupAfterPostSuccessHandoffWindow() {
+  postSuccessHandoffCleanupTimeout = setTimeout(() => {
+    cleanupListeners();
+  }, POST_SUCCESS_HANDOFF_EVENT_WINDOW_MS);
+  (
+    postSuccessHandoffCleanupTimeout as unknown as { unref?: () => void }
+  ).unref?.();
 }
 
 export async function createPlaidLinkSession(
@@ -38,7 +62,8 @@ export async function createPlaidLinkSession(
     "PlaidLink.onSuccess",
     (success: LinkSuccess) => {
       config.onSuccess(success);
-      cleanupListeners();
+      cleanupListeners({ keepEventListener: true });
+      cleanupAfterPostSuccessHandoffWindow();
     },
   );
 
@@ -54,6 +79,12 @@ export async function createPlaidLinkSession(
     "PlaidLink.onEvent",
     (event: LinkEvent) => {
       config.onEvent(event);
+      if (
+        postSuccessHandoffCleanupTimeout &&
+        event.eventName === LinkEventName.HANDOFF
+      ) {
+        cleanupListeners();
+      }
     },
   );
 

@@ -15,7 +15,13 @@ describe("Listener Lifecycle", () => {
     (console.log as jest.Mock).mockClear();
   });
 
-  it("cleanupListeners removes all subscriptions", async () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it("success keeps event listener until the post-success handoff window closes", async () => {
+    jest.useFakeTimers();
+
     const config = {
       token: "token-1",
       onSuccess: jest.fn(),
@@ -54,6 +60,12 @@ describe("Listener Lifecycle", () => {
     expect(
       (NativePlaidModule as any).__getListenerCount("PlaidLink.onExit"),
     ).toBe(0);
+    expect(
+      (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent"),
+    ).toBeGreaterThan(0);
+
+    jest.advanceTimersByTime(1500);
+
     expect(
       (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent"),
     ).toBe(0);
@@ -100,6 +112,8 @@ describe("Listener Lifecycle", () => {
   });
 
   it("memory leak prevention with multiple sessions", async () => {
+    jest.useFakeTimers();
+
     const successCallbacks: jest.Mock[] = [];
 
     for (let i = 0; i < 10; i++) {
@@ -127,6 +141,8 @@ describe("Listener Lifecycle", () => {
         "PlaidLink.onSuccess",
         mockSuccess,
       );
+
+      jest.advanceTimersByTime(1500);
     }
 
     expect(
@@ -144,7 +160,7 @@ describe("Listener Lifecycle", () => {
     });
   });
 
-  it("listeners are cleaned up after success", async () => {
+  it("success removes terminal listeners while keeping events for handoff", async () => {
     const onSuccess = jest.fn();
     const onExit = jest.fn();
     const onEvent = jest.fn();
@@ -181,10 +197,10 @@ describe("Listener Lifecycle", () => {
     };
 
     const mockEvent: LinkEvent = {
-      eventName: LinkEventName.EXIT,
+      eventName: LinkEventName.OPEN,
       metadata: {
         linkSessionId: "session-1",
-        viewName: "EXIT" as any,
+        viewName: "CONNECTED" as any,
         timestamp: "2026-03-27T12:00:00Z",
         metadataJson: "{}",
       },
@@ -194,7 +210,152 @@ describe("Listener Lifecycle", () => {
     (NativePlaidModule as any).__triggerEvent("PlaidLink.onEvent", mockEvent);
 
     expect(onExit).not.toHaveBeenCalled();
-    expect(onEvent).not.toHaveBeenCalled();
+    expect(onEvent).toHaveBeenCalledWith(mockEvent);
+  });
+
+  it("post-success handoff event is delivered before cleanup", async () => {
+    const onEvent = jest.fn();
+
+    const config = {
+      token: "token",
+      onSuccess: jest.fn(),
+      onExit: jest.fn(),
+      onEvent,
+    };
+
+    await createPlaidLinkSession(config);
+
+    const mockSuccess: LinkSuccess = {
+      publicToken: "token",
+      metadata: {
+        accounts: [],
+        linkSessionId: "session-1",
+      },
+    };
+
+    const mockHandoffEvent: LinkEvent = {
+      eventName: LinkEventName.HANDOFF,
+      metadata: {
+        linkSessionId: "session-1",
+        viewName: "CONNECTED" as any,
+        timestamp: "2026-03-27T12:00:00Z",
+        metadataJson: "{}",
+      },
+    };
+
+    (NativePlaidModule as any).__triggerEvent(
+      "PlaidLink.onSuccess",
+      mockSuccess,
+    );
+    (NativePlaidModule as any).__triggerEvent(
+      "PlaidLink.onEvent",
+      mockHandoffEvent,
+    );
+
+    expect(onEvent).toHaveBeenCalledTimes(1);
+    expect(onEvent).toHaveBeenCalledWith(mockHandoffEvent);
+    expect(
+      (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent"),
+    ).toBe(0);
+  });
+
+  it("post-success non-handoff events do not prematurely clean up listener", async () => {
+    jest.useFakeTimers();
+
+    const onEvent = jest.fn();
+
+    const config = {
+      token: "token",
+      onSuccess: jest.fn(),
+      onExit: jest.fn(),
+      onEvent,
+    };
+
+    await createPlaidLinkSession(config);
+
+    const mockSuccess: LinkSuccess = {
+      publicToken: "token",
+      metadata: {
+        accounts: [],
+        linkSessionId: "session-1",
+      },
+    };
+
+    const mockOpenEvent: LinkEvent = {
+      eventName: LinkEventName.OPEN,
+      metadata: {
+        linkSessionId: "session-1",
+        viewName: "CONNECTED" as any,
+        timestamp: "2026-03-27T12:00:00Z",
+        metadataJson: "{}",
+      },
+    };
+
+    (NativePlaidModule as any).__triggerEvent(
+      "PlaidLink.onSuccess",
+      mockSuccess,
+    );
+    (NativePlaidModule as any).__triggerEvent(
+      "PlaidLink.onEvent",
+      mockOpenEvent,
+    );
+
+    expect(onEvent).toHaveBeenCalledWith(mockOpenEvent);
+    expect(
+      (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent"),
+    ).toBeGreaterThan(0);
+
+    jest.advanceTimersByTime(1500);
+
+    expect(
+      (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent"),
+    ).toBe(0);
+  });
+
+  it("new session creation cancels pending post-success handoff cleanup", async () => {
+    jest.useFakeTimers();
+
+    const firstEvent = jest.fn();
+    const secondEvent = jest.fn();
+
+    await createPlaidLinkSession({
+      token: "token-1",
+      onSuccess: jest.fn(),
+      onExit: jest.fn(),
+      onEvent: firstEvent,
+    });
+
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onSuccess", {
+      publicToken: "token",
+      metadata: {
+        accounts: [],
+        linkSessionId: "session-1",
+      },
+    });
+
+    await createPlaidLinkSession({
+      token: "token-2",
+      onSuccess: jest.fn(),
+      onExit: jest.fn(),
+      onEvent: secondEvent,
+    });
+
+    jest.advanceTimersByTime(1500);
+
+    const mockEvent: LinkEvent = {
+      eventName: LinkEventName.OPEN,
+      metadata: {
+        linkSessionId: "session-2",
+        viewName: "CONNECTED" as any,
+        timestamp: "2026-03-27T12:00:00Z",
+        metadataJson: "{}",
+      },
+    };
+
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onEvent", mockEvent);
+
+    expect(firstEvent).not.toHaveBeenCalled();
+    expect(secondEvent).toHaveBeenCalledWith(mockEvent);
   });
 
   it("listeners are cleaned up after exit", async () => {

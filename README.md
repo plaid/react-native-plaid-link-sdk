@@ -185,6 +185,10 @@ const session = await createPlaidHeadlessSession({
 await session.start();
 ```
 
+If a created session will no longer be opened, started, or submitted, call
+`await session.destroy()` to release it. Completed and exited sessions are
+released automatically.
+
 ## Embedded Search
 
 Embedded Search is available on iOS and Android through

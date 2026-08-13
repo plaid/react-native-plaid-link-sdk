@@ -3,26 +3,46 @@ const mockListeners: Record<string, Function[]> = {
   "PlaidLink.onExit": [],
   "PlaidLink.onEvent": [],
 };
+const mockCreatedSessionIds: string[] = [];
 
 const mockNativeModule = {
   sdkVersion: "13.0.4",
 
-  createPlaidLinkSession: jest.fn(() => Promise.resolve()),
+  createPlaidLinkSession: jest.fn((clientSessionId: string, token: string) => {
+    mockCreatedSessionIds.push(clientSessionId);
+    return Promise.resolve();
+  }),
 
-  createPlaidLayerSession: jest.fn(() => Promise.resolve()),
+  createPlaidLayerSession: jest.fn((clientSessionId: string, token: string) => {
+    mockCreatedSessionIds.push(clientSessionId);
+    return Promise.resolve();
+  }),
 
-  createPlaidHeadlessSession: jest.fn(() => Promise.resolve()),
+  createPlaidHeadlessSession: jest.fn(
+    (clientSessionId: string, token: string) => {
+      mockCreatedSessionIds.push(clientSessionId);
+      return Promise.resolve();
+    },
+  ),
 
-  openLinkSession: jest.fn((fullScreen: boolean) => Promise.resolve()),
+  openLinkSession: jest.fn((clientSessionId: string, fullScreen: boolean) =>
+    Promise.resolve(),
+  ),
 
-  openLayerSession: jest.fn(() => Promise.resolve()),
+  openLayerSession: jest.fn((clientSessionId: string) => Promise.resolve()),
 
-  startHeadlessSession: jest.fn(() => Promise.resolve()),
+  startHeadlessSession: jest.fn((clientSessionId: string) => Promise.resolve()),
 
   submitLayerData: jest.fn(
-    (phone?: string, dob?: string, params?: Record<string, string>) =>
-      Promise.resolve(),
+    (
+      clientSessionId: string,
+      phone?: string,
+      dob?: string,
+      params?: Record<string, string>,
+    ) => Promise.resolve(),
   ),
+
+  destroySession: jest.fn((clientSessionId: string) => Promise.resolve()),
 
   syncFinanceKit: jest.fn(
     (
@@ -48,16 +68,28 @@ const mockNativeModule = {
       };
     }),
 
-  __triggerEvent: (eventName: string, data: any) => {
+  __triggerEvent: (
+    eventName: string,
+    data: any,
+    clientSessionId = mockCreatedSessionIds[mockCreatedSessionIds.length - 1],
+  ) => {
     const listeners = mockListeners[eventName] || [];
-    listeners.forEach((callback) => callback(data));
+    listeners.forEach((callback) =>
+      callback({
+        clientSessionId,
+        payload: data,
+      }),
+    );
   },
 
   __clearListeners: () => {
     mockListeners["PlaidLink.onSuccess"] = [];
     mockListeners["PlaidLink.onExit"] = [];
     mockListeners["PlaidLink.onEvent"] = [];
+    mockCreatedSessionIds.length = 0;
   },
+
+  __getCreatedSessionIds: () => [...mockCreatedSessionIds],
 
   __getListenerCount: (eventName: string) => {
     return mockListeners[eventName]?.length || 0;

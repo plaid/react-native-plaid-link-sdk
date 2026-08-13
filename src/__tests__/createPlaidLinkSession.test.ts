@@ -5,10 +5,12 @@ import {
   LinkEventName,
 } from "../ReactNativePlaidLinkSdk.types";
 import NativePlaidModule from "../ReactNativePlaidLinkSdkModule";
+import { resetSessionStateForTesting } from "../SessionManager";
 import { createPlaidLinkSession } from "../index";
 
 describe("createPlaidLinkSession", () => {
   beforeEach(() => {
+    resetSessionStateForTesting();
     jest.clearAllMocks();
     (NativePlaidModule as any).__clearListeners();
     (console.error as jest.Mock).mockClear();
@@ -26,6 +28,7 @@ describe("createPlaidLinkSession", () => {
     const session = await createPlaidLinkSession(config);
 
     expect(NativePlaidModule.createPlaidLinkSession).toHaveBeenCalledWith(
+      expect.any(String),
       "link-sandbox-token-123",
     );
     expect(session).toHaveProperty("open");
@@ -45,7 +48,7 @@ describe("createPlaidLinkSession", () => {
     );
   });
 
-  it("cleans up existing listeners before creating new session", async () => {
+  it("shares native listeners without replacing session callbacks", async () => {
     const config1 = {
       token: "token-1",
       onSuccess: jest.fn(),
@@ -71,7 +74,7 @@ describe("createPlaidLinkSession", () => {
       .mock.calls.length;
 
     expect(firstListenerCalls).toBe(3);
-    expect(secondListenerCalls).toBe(3);
+    expect(secondListenerCalls).toBe(0);
   });
 
   it("returns session with working open method", async () => {
@@ -85,13 +88,22 @@ describe("createPlaidLinkSession", () => {
     const session = await createPlaidLinkSession(config);
 
     await session.open(true);
-    expect(NativePlaidModule.openLinkSession).toHaveBeenCalledWith(true);
+    expect(NativePlaidModule.openLinkSession).toHaveBeenCalledWith(
+      expect.any(String),
+      true,
+    );
 
     await session.open(false);
-    expect(NativePlaidModule.openLinkSession).toHaveBeenCalledWith(false);
+    expect(NativePlaidModule.openLinkSession).toHaveBeenCalledWith(
+      expect.any(String),
+      false,
+    );
 
     await session.open();
-    expect(NativePlaidModule.openLinkSession).toHaveBeenCalledWith(false);
+    expect(NativePlaidModule.openLinkSession).toHaveBeenCalledWith(
+      expect.any(String),
+      false,
+    );
     expect(console.log).not.toHaveBeenCalled();
     expect(console.error).not.toHaveBeenCalled();
   });
@@ -309,6 +321,9 @@ describe("createPlaidLinkSession", () => {
     const session = await createPlaidLinkSession(config);
     await session.open();
 
-    expect(NativePlaidModule.openLinkSession).toHaveBeenCalledWith(false);
+    expect(NativePlaidModule.openLinkSession).toHaveBeenCalledWith(
+      expect.any(String),
+      false,
+    );
   });
 });

@@ -19,6 +19,10 @@ public class ReactNativePlaidLinkSdkModule: Module {
         // Defines event names that the module can send to JavaScript.
         Events(ModuleEventName.allCases.map { $0.rawValue })
 
+        OnDestroy {
+            self.clearAllSessions()
+        }
+
         // MARK: Views
 
         View(PlaidEmbeddedSearchView.self) {
@@ -31,18 +35,35 @@ public class ReactNativePlaidLinkSdkModule: Module {
 
         // MARK: Functions
 
-        AsyncFunction(ModuleFunctionName.createPlaidLinkSession.rawValue) { (token: String, onLoadPromise: Promise) in
+        AsyncFunction(ModuleFunctionName.createPlaidLinkSession.rawValue) {
+            (clientSessionId: String, token: String, onLoadPromise: Promise) in
             let onSuccess: OnSuccessHandler = { [weak self] success in
-                self?.sendEvent(ModuleEventName.onSuccess.rawValue, success.asDictionary)
+                self?.sendSessionEvent(
+                    ModuleEventName.onSuccess.rawValue,
+                    clientSessionId: clientSessionId,
+                    payload: success.asDictionary
+                )
+                self?.retainLinkSessionAfterSuccess(clientSessionId)
             }
 
             let onExit: OnExitHandler = { [weak self] exit in
-                self?.sendEvent(ModuleEventName.onExit.rawValue, exit.asDictionary)
-                self?.linkSession = nil
+                self?.sendSessionEvent(
+                    ModuleEventName.onExit.rawValue,
+                    clientSessionId: clientSessionId,
+                    payload: exit.asDictionary
+                )
+                self?.clearSession(clientSessionId)
             }
 
             let onEvent: OnEventHandler = { [weak self] event in
-                self?.sendEvent(ModuleEventName.onEvent.rawValue, event.asDictionary)
+                self?.sendSessionEvent(
+                    ModuleEventName.onEvent.rawValue,
+                    clientSessionId: clientSessionId,
+                    payload: event.asDictionary
+                )
+                if event.eventName == .handoff {
+                    self?.clearSession(clientSessionId)
+                }
             }
 
             let onLoad: OnLoadHandler = {
@@ -61,28 +82,41 @@ public class ReactNativePlaidLinkSdkModule: Module {
 
             do {
                 let session = try Plaid.createPlaidLinkSession(configuration: config)
-                self.linkSession = session
+                self.linkSessions[clientSessionId] = session
             } catch {
-                self.sessionCreationError = error
+                self.clearSession(clientSessionId)
                 DispatchQueue.main.async {
                     onLoadPromise.reject("LINK_SESSION_CREATE_ERROR", error.localizedDescription)
                 }
             }
         }
 
-        AsyncFunction(ModuleFunctionName.createPlaidLayerSession.rawValue) { (token: String, promise: Promise) in
+        AsyncFunction(ModuleFunctionName.createPlaidLayerSession.rawValue) {
+            (clientSessionId: String, token: String, promise: Promise) in
             let onSuccess: OnSuccessHandler = { [weak self] success in
-                self?.sendEvent(ModuleEventName.onSuccess.rawValue, success.asDictionary)
-                self?.layerSession = nil
+                self?.sendSessionEvent(
+                    ModuleEventName.onSuccess.rawValue,
+                    clientSessionId: clientSessionId,
+                    payload: success.asDictionary
+                )
+                self?.clearSession(clientSessionId)
             }
 
             let onExit: OnExitHandler = { [weak self] exit in
-                self?.sendEvent(ModuleEventName.onExit.rawValue, exit.asDictionary)
-                self?.layerSession = nil
+                self?.sendSessionEvent(
+                    ModuleEventName.onExit.rawValue,
+                    clientSessionId: clientSessionId,
+                    payload: exit.asDictionary
+                )
+                self?.clearSession(clientSessionId)
             }
 
             let onEvent: OnEventHandler = { [weak self] event in
-                self?.sendEvent(ModuleEventName.onEvent.rawValue, event.asDictionary)
+                self?.sendSessionEvent(
+                    ModuleEventName.onEvent.rawValue,
+                    clientSessionId: clientSessionId,
+                    payload: event.asDictionary
+                )
             }
 
             let config = LayerTokenConfiguration(
@@ -94,12 +128,12 @@ public class ReactNativePlaidLinkSdkModule: Module {
 
             do {
                 let session = try Plaid.createPlaidLayerSession(configuration: config)
-                self.layerSession = session
+                self.layerSessions[clientSessionId] = session
                 DispatchQueue.main.async {
                     promise.resolve()
                 }
             } catch {
-                self.sessionCreationError = error
+                self.clearSession(clientSessionId)
                 DispatchQueue.main.async {
                     promise.reject("LAYER_SESSION_CREATE_ERROR", error.localizedDescription)
                 }
@@ -107,19 +141,31 @@ public class ReactNativePlaidLinkSdkModule: Module {
         }
 
         AsyncFunction(ModuleFunctionName.createPlaidHeadlessSession.rawValue) {
-            (token: String, onLoadPromise: Promise) in
+            (clientSessionId: String, token: String, onLoadPromise: Promise) in
             let onSuccess: OnSuccessHandler = { [weak self] success in
-                self?.sendEvent(ModuleEventName.onSuccess.rawValue, success.asDictionary)
-                self?.headlessSession = nil
+                self?.sendSessionEvent(
+                    ModuleEventName.onSuccess.rawValue,
+                    clientSessionId: clientSessionId,
+                    payload: success.asDictionary
+                )
+                self?.clearSession(clientSessionId)
             }
 
             let onExit: OnExitHandler = { [weak self] exit in
-                self?.sendEvent(ModuleEventName.onExit.rawValue, exit.asDictionary)
-                self?.headlessSession = nil
+                self?.sendSessionEvent(
+                    ModuleEventName.onExit.rawValue,
+                    clientSessionId: clientSessionId,
+                    payload: exit.asDictionary
+                )
+                self?.clearSession(clientSessionId)
             }
 
             let onEvent: OnEventHandler = { [weak self] event in
-                self?.sendEvent(ModuleEventName.onEvent.rawValue, event.asDictionary)
+                self?.sendSessionEvent(
+                    ModuleEventName.onEvent.rawValue,
+                    clientSessionId: clientSessionId,
+                    payload: event.asDictionary
+                )
             }
 
             let onLoad: OnLoadHandler = {
@@ -138,49 +184,28 @@ public class ReactNativePlaidLinkSdkModule: Module {
 
             do {
                 let session = try Plaid.createHeadlessSession(configuration: config)
-                self.headlessSession = session
+                self.headlessSessions[clientSessionId] = session
             } catch {
-                self.sessionCreationError = error
+                self.clearSession(clientSessionId)
                 DispatchQueue.main.async {
                     onLoadPromise.reject("HEADLESS_SESSION_CREATE_ERROR", error.localizedDescription)
                 }
             }
         }
 
-        AsyncFunction(ModuleFunctionName.openLinkSession.rawValue) { (fullScreen: Bool, promise: Promise) in
-            guard let session = self.linkSession else {
-                let errorMessage =
-                    self.sessionCreationError?.localizedDescription ?? "createPlaidLinkSession was not called."
-                let errorCode = self.sessionCreationError.map { String($0._code) } ?? "-1"
-                self.sendEvent(
-                    ModuleEventName.onExit.rawValue,
-                    [
-                        "error": [
-                            "displayMessage": errorMessage,
-                            "errorCode": errorCode,
-                            "errorType": "creation error",
-                            "errorMessage": errorMessage,
-                            "errorJson": NSNull(),
-                        ],
-                        "metadata": [
-                            "linkSessionId": NSNull(),
-                            "institution": NSNull(),
-                            "status": NSNull(),
-                            "requestId": NSNull(),
-                            "metadataJson": NSNull(),
-                        ],
-                    ]
-                )
-
-                DispatchQueue.main.async {
-                    promise.resolve()  // not a failure to open, just a miscall
-                }
-
+        AsyncFunction(ModuleFunctionName.openLinkSession.rawValue) {
+            (clientSessionId: String, fullScreen: Bool, promise: Promise) in
+            guard let session = self.linkSessions[clientSessionId] else {
+                promise.reject("PLAID_NO_SESSION", "Plaid session not found for the supplied session identifier.")
                 return
             }
 
             DispatchQueue.main.async {
+                guard self.activateSession(clientSessionId, promise: promise) else {
+                    return
+                }
                 guard let vc = self.appContext?.utilities?.currentViewController() else {
+                    self.activeSessionId = nil
                     promise.reject("PLAID_NO_VC", "Could not find current view controller.")
                     return
                 }
@@ -203,40 +228,19 @@ public class ReactNativePlaidLinkSdkModule: Module {
             }
         }
 
-        AsyncFunction(ModuleFunctionName.openLayerSession.rawValue) { (promise: Promise) in
-            guard let layerSession = self.layerSession else {
-                let errorMessage =
-                    self.sessionCreationError?.localizedDescription ?? "createPlaidLayerSession was not called."
-                let errorCode = self.sessionCreationError.map { String($0._code) } ?? "-1"
-                self.sendEvent(
-                    ModuleEventName.onExit.rawValue,
-                    [
-                        "error": [
-                            "displayMessage": errorMessage,
-                            "errorCode": errorCode,
-                            "errorType": "creation error",
-                            "errorMessage": errorMessage,
-                            "errorJson": NSNull(),
-                        ],
-                        "metadata": [
-                            "linkSessionId": NSNull(),
-                            "institution": NSNull(),
-                            "status": NSNull(),
-                            "requestId": NSNull(),
-                            "metadataJson": NSNull(),
-                        ],
-                    ]
-                )
-
-                DispatchQueue.main.async {
-                    promise.resolve()
-                }
-
+        AsyncFunction(ModuleFunctionName.openLayerSession.rawValue) {
+            (clientSessionId: String, promise: Promise) in
+            guard let layerSession = self.layerSessions[clientSessionId] else {
+                promise.reject("PLAID_NO_LAYER_SESSION", "Layer session not found for the supplied session identifier.")
                 return
             }
 
             DispatchQueue.main.async {
+                guard self.activateSession(clientSessionId, promise: promise) else {
+                    return
+                }
                 guard let vc = self.appContext?.utilities?.currentViewController() else {
+                    self.activeSessionId = nil
                     promise.reject("PLAID_NO_VC", "Could not find current view controller.")
                     return
                 }
@@ -248,9 +252,9 @@ public class ReactNativePlaidLinkSdkModule: Module {
         }
 
         AsyncFunction(ModuleFunctionName.submitLayerData.rawValue) {
-            (phoneNumber: String?, dateOfBirth: String?, params: [String: String]?, promise: Promise) in
-            guard let layerSession = self.layerSession else {
-                promise.reject("PLAID_NO_LAYER_SESSION", "Layer session not found. Call createPlaidLayerSession first.")
+            (clientSessionId: String, phoneNumber: String?, dateOfBirth: String?, params: [String: String]?, promise: Promise) in
+            guard let layerSession = self.layerSessions[clientSessionId] else {
+                promise.reject("PLAID_NO_LAYER_SESSION", "Layer session not found for the supplied session identifier.")
                 return
             }
 
@@ -261,47 +265,32 @@ public class ReactNativePlaidLinkSdkModule: Module {
             )
 
             DispatchQueue.main.async {
+                guard self.activateSession(clientSessionId, promise: promise) else {
+                    return
+                }
                 layerSession.submit(data: submissionData)
                 promise.resolve()
             }
         }
 
-        AsyncFunction(ModuleFunctionName.startHeadlessSession.rawValue) { (promise: Promise) in
-            guard let headlessSession = self.headlessSession else {
-                let errorMessage =
-                    self.sessionCreationError?.localizedDescription ?? "createPlaidHeadlessSession was not called."
-                let errorCode = self.sessionCreationError.map { String($0._code) } ?? "-1"
-                self.sendEvent(
-                    ModuleEventName.onExit.rawValue,
-                    [
-                        "error": [
-                            "displayMessage": errorMessage,
-                            "errorCode": errorCode,
-                            "errorType": "creation error",
-                            "errorMessage": errorMessage,
-                            "errorJson": NSNull(),
-                        ],
-                        "metadata": [
-                            "linkSessionId": NSNull(),
-                            "institution": NSNull(),
-                            "status": NSNull(),
-                            "requestId": NSNull(),
-                            "metadataJson": NSNull(),
-                        ],
-                    ]
-                )
-
-                DispatchQueue.main.async {
-                    promise.resolve()
-                }
-
+        AsyncFunction(ModuleFunctionName.startHeadlessSession.rawValue) {
+            (clientSessionId: String, promise: Promise) in
+            guard let headlessSession = self.headlessSessions[clientSessionId] else {
+                promise.reject("PLAID_NO_SESSION", "Plaid session not found for the supplied session identifier.")
                 return
             }
 
             DispatchQueue.main.async {
+                guard self.activateSession(clientSessionId, promise: promise) else {
+                    return
+                }
                 headlessSession.start()
                 promise.resolve()
             }
+        }
+
+        AsyncFunction(ModuleFunctionName.destroySession.rawValue) { (clientSessionId: String) in
+            self.clearSession(clientSessionId)
         }
 
         AsyncFunction(ModuleFunctionName.syncFinanceKit.rawValue) {
@@ -354,15 +343,78 @@ public class ReactNativePlaidLinkSdkModule: Module {
         case openLayerSession
         case submitLayerData
         case startHeadlessSession
+        case destroySession
         case syncFinanceKit
     }
 
     // MARK: Private
 
-    private var linkSession: PlaidLinkSession?
-    private var layerSession: PlaidLayerSession?
-    private var headlessSession: PlaidHeadlessSession?
-    private var sessionCreationError: Error?
+    private var linkSessions: [String: PlaidLinkSession] = [:]
+    private var layerSessions: [String: PlaidLayerSession] = [:]
+    private var headlessSessions: [String: PlaidHeadlessSession] = [:]
+    private var postSuccessCleanupTasks: [String: DispatchWorkItem] = [:]
+    private var activeSessionId: String?
+
+    private func sendSessionEvent(
+        _ eventName: String,
+        clientSessionId: String,
+        payload: [String: Any]
+    ) {
+        sendEvent(
+            eventName,
+            [
+                "clientSessionId": clientSessionId,
+                "payload": payload,
+            ]
+        )
+    }
+
+    private func activateSession(_ clientSessionId: String, promise: Promise) -> Bool {
+        if let activeSessionId, activeSessionId != clientSessionId {
+            promise.reject("PLAID_SESSION_ALREADY_ACTIVE", "Another Plaid session is already active.")
+            return false
+        }
+        activeSessionId = clientSessionId
+        return true
+    }
+
+    private func clearSession(_ clientSessionId: String) {
+        postSuccessCleanupTasks.removeValue(forKey: clientSessionId)?.cancel()
+        linkSessions.removeValue(forKey: clientSessionId)
+        layerSessions.removeValue(forKey: clientSessionId)
+        headlessSessions.removeValue(forKey: clientSessionId)
+        if activeSessionId == clientSessionId {
+            activeSessionId = nil
+        }
+    }
+
+    private func retainLinkSessionAfterSuccess(_ clientSessionId: String) {
+        if activeSessionId == clientSessionId {
+            activeSessionId = nil
+        }
+        postSuccessCleanupTasks.removeValue(forKey: clientSessionId)?.cancel()
+
+        let cleanupTask = DispatchWorkItem { [weak self] in
+            self?.postSuccessCleanupTasks.removeValue(forKey: clientSessionId)
+            self?.linkSessions.removeValue(forKey: clientSessionId)
+        }
+        postSuccessCleanupTasks[clientSessionId] = cleanupTask
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + Self.postSuccessEventWindow,
+            execute: cleanupTask
+        )
+    }
+
+    private func clearAllSessions() {
+        postSuccessCleanupTasks.values.forEach { $0.cancel() }
+        postSuccessCleanupTasks.removeAll()
+        linkSessions.removeAll()
+        layerSessions.removeAll()
+        headlessSessions.removeAll()
+        activeSessionId = nil
+    }
+
+    private static let postSuccessEventWindow: TimeInterval = 1.5
 }
 
 // MARK: Internal Extensions

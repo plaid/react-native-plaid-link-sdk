@@ -1,10 +1,6 @@
 import { Platform } from "react-native";
 
 import {
-  LinkExit,
-  LinkEvent,
-  LinkEventName,
-  LinkSuccess,
   LinkTokenConfiguration,
   PlaidLinkSession,
   LayerTokenConfiguration,
@@ -14,166 +10,90 @@ import {
   FinanceKitSyncBehavior,
 } from "./ReactNativePlaidLinkSdk.types";
 import NativePlaidModule from "./ReactNativePlaidLinkSdkModule";
+import { registerSession, removeSession } from "./SessionManager";
 
-type Subscription = ReturnType<typeof NativePlaidModule.addListener>;
-
-let successSub: Subscription | null = null;
-let exitSub: Subscription | null = null;
-let eventSub: Subscription | null = null;
-let postSuccessHandoffCleanupTimeout: ReturnType<typeof setTimeout> | null =
-  null;
-
-const POST_SUCCESS_HANDOFF_EVENT_WINDOW_MS = 1500;
-
-function clearPostSuccessHandoffCleanupTimeout() {
-  if (postSuccessHandoffCleanupTimeout) {
-    clearTimeout(postSuccessHandoffCleanupTimeout);
-    postSuccessHandoffCleanupTimeout = null;
+async function destroySession(clientSessionId: string): Promise<void> {
+  try {
+    await NativePlaidModule.destroySession(clientSessionId);
+  } finally {
+    removeSession(clientSessionId);
   }
-}
-
-function cleanupListeners(options: { keepEventListener?: boolean } = {}) {
-  clearPostSuccessHandoffCleanupTimeout();
-  successSub?.remove();
-  exitSub?.remove();
-  if (!options.keepEventListener) {
-    eventSub?.remove();
-    eventSub = null;
-  }
-  successSub = null;
-  exitSub = null;
-}
-
-function cleanupAfterPostSuccessHandoffWindow() {
-  postSuccessHandoffCleanupTimeout = setTimeout(() => {
-    cleanupListeners();
-  }, POST_SUCCESS_HANDOFF_EVENT_WINDOW_MS);
-  (
-    postSuccessHandoffCleanupTimeout as unknown as { unref?: () => void }
-  ).unref?.();
 }
 
 export async function createPlaidLinkSession(
   config: LinkTokenConfiguration,
 ): Promise<PlaidLinkSession> {
-  cleanupListeners();
+  const clientSessionId = registerSession("link", config);
 
-  successSub = NativePlaidModule.addListener(
-    "PlaidLink.onSuccess",
-    (success: LinkSuccess) => {
-      config.onSuccess(success);
-      cleanupListeners({ keepEventListener: true });
-      cleanupAfterPostSuccessHandoffWindow();
-    },
-  );
-
-  exitSub = NativePlaidModule.addListener(
-    "PlaidLink.onExit",
-    (exit: LinkExit) => {
-      config.onExit(exit);
-      cleanupListeners();
-    },
-  );
-
-  eventSub = NativePlaidModule.addListener(
-    "PlaidLink.onEvent",
-    (event: LinkEvent) => {
-      config.onEvent(event);
-      if (
-        postSuccessHandoffCleanupTimeout &&
-        event.eventName === LinkEventName.HANDOFF
-      ) {
-        cleanupListeners();
-      }
-    },
-  );
-
-  await NativePlaidModule.createPlaidLinkSession(config.token);
+  try {
+    await NativePlaidModule.createPlaidLinkSession(
+      clientSessionId,
+      config.token,
+    );
+  } catch (error) {
+    removeSession(clientSessionId);
+    throw error;
+  }
 
   config.onLoad?.();
 
   return {
-    open: (fullScreen = false) => NativePlaidModule.openLinkSession(fullScreen),
+    open: (fullScreen = false) =>
+      NativePlaidModule.openLinkSession(clientSessionId, fullScreen),
+    destroy: () => destroySession(clientSessionId),
   };
 }
 
 export async function createPlaidLayerSession(
   config: LayerTokenConfiguration,
 ): Promise<PlaidLayerSession> {
-  cleanupListeners();
+  const clientSessionId = registerSession("layer", config);
 
-  successSub = NativePlaidModule.addListener(
-    "PlaidLink.onSuccess",
-    (success: LinkSuccess) => {
-      config.onSuccess(success);
-      cleanupListeners();
-    },
-  );
-
-  exitSub = NativePlaidModule.addListener(
-    "PlaidLink.onExit",
-    (exit: LinkExit) => {
-      config.onExit?.(exit);
-      cleanupListeners();
-    },
-  );
-
-  eventSub = NativePlaidModule.addListener(
-    "PlaidLink.onEvent",
-    (event: LinkEvent) => {
-      config.onEvent?.(event);
-    },
-  );
-
-  await NativePlaidModule.createPlaidLayerSession(config.token);
+  try {
+    await NativePlaidModule.createPlaidLayerSession(
+      clientSessionId,
+      config.token,
+    );
+  } catch (error) {
+    removeSession(clientSessionId);
+    throw error;
+  }
 
   return {
-    open: () => NativePlaidModule.openLayerSession(),
+    open: () => NativePlaidModule.openLayerSession(clientSessionId),
     submit: (data: SubmissionData) =>
       NativePlaidModule.submitLayerData(
+        clientSessionId,
         data.phoneNumber,
         data.dateOfBirth,
         data.params,
       ),
+    destroy: () => destroySession(clientSessionId),
   };
 }
 
 export async function createPlaidHeadlessSession(
   config: LinkTokenConfiguration,
 ): Promise<PlaidHeadlessSession> {
-  cleanupListeners();
+  const clientSessionId = registerSession("headless", config);
 
-  successSub = NativePlaidModule.addListener(
-    "PlaidLink.onSuccess",
-    (success: LinkSuccess) => {
-      config.onSuccess(success);
-      cleanupListeners();
-    },
-  );
-
-  exitSub = NativePlaidModule.addListener(
-    "PlaidLink.onExit",
-    (exit: LinkExit) => {
-      config.onExit(exit);
-      cleanupListeners();
-    },
-  );
-
-  eventSub = NativePlaidModule.addListener(
-    "PlaidLink.onEvent",
-    (event: LinkEvent) => {
-      config.onEvent(event);
-    },
-  );
-
-  await NativePlaidModule.createPlaidHeadlessSession(config.token);
+  try {
+    await NativePlaidModule.createPlaidHeadlessSession(
+      clientSessionId,
+      config.token,
+    );
+  } catch (error) {
+    removeSession(clientSessionId);
+    throw error;
+  }
 
   if (config.onLoad) {
     config.onLoad();
   }
 
   return {
-    start: () => NativePlaidModule.startHeadlessSession(),
+    start: () => NativePlaidModule.startHeadlessSession(clientSessionId),
+    destroy: () => destroySession(clientSessionId),
   };
 }
 

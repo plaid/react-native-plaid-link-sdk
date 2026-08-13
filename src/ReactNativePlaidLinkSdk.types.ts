@@ -771,10 +771,15 @@ export enum LinkIOSPresentationStyle {
 }
 
 export type ReactNativePlaidLinkSdkModuleEvents = {
-  "PlaidLink.onSuccess": (success: LinkSuccess) => void;
-  "PlaidLink.onExit": (exit: LinkExit) => void;
-  "PlaidLink.onEvent": (event: LinkEvent) => void;
+  "PlaidLink.onSuccess": (event: NativeSessionEvent<LinkSuccess>) => void;
+  "PlaidLink.onExit": (event: NativeSessionEvent<LinkExit>) => void;
+  "PlaidLink.onEvent": (event: NativeSessionEvent<LinkEvent>) => void;
 };
+
+export interface NativeSessionEvent<T> {
+  clientSessionId: string;
+  payload: T;
+}
 
 export type LinkSuccessListener = (LinkSuccess: LinkSuccess) => void;
 export type LinkExitListener = (LinkExit: LinkExit) => void;
@@ -831,6 +836,7 @@ export interface EmbeddedLinkTokenConfiguration {
 
 export interface PlaidLinkSession {
   open: (fullScreen?: boolean) => Promise<void>;
+  destroy: () => Promise<void>;
 }
 
 export interface SubmissionData {
@@ -842,10 +848,12 @@ export interface SubmissionData {
 export interface PlaidLayerSession {
   open: () => Promise<void>;
   submit: (data: SubmissionData) => Promise<void>;
+  destroy: () => Promise<void>;
 }
 
 export interface PlaidHeadlessSession {
   start: () => Promise<void>;
+  destroy: () => Promise<void>;
 }
 
 export enum FinanceKitSyncBehavior {

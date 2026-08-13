@@ -7,17 +7,25 @@ import {
 
 declare class ReactNativePlaidLinkSdkModule extends NativeModule<ReactNativePlaidLinkSdkModuleEvents> {
   sdkVersion: string;
-  createPlaidLinkSession(token: string): Promise<void>;
-  createPlaidLayerSession(token: string): Promise<void>;
-  createPlaidHeadlessSession(token: string): Promise<void>;
-  openLinkSession(fullScreen: boolean): Promise<void>;
-  openLayerSession(): Promise<void>;
-  startHeadlessSession(): Promise<void>;
+  createPlaidLinkSession(clientSessionId: string, token: string): Promise<void>;
+  createPlaidLayerSession(
+    clientSessionId: string,
+    token: string,
+  ): Promise<void>;
+  createPlaidHeadlessSession(
+    clientSessionId: string,
+    token: string,
+  ): Promise<void>;
+  openLinkSession(clientSessionId: string, fullScreen: boolean): Promise<void>;
+  openLayerSession(clientSessionId: string): Promise<void>;
+  startHeadlessSession(clientSessionId: string): Promise<void>;
   submitLayerData(
+    clientSessionId: string,
     phoneNumber?: string,
     dateOfBirth?: string,
     params?: Record<string, string>,
   ): Promise<void>;
+  destroySession(clientSessionId: string): Promise<void>;
   syncFinanceKit(
     token: string,
     requestAuthorizationIfNeeded: boolean,

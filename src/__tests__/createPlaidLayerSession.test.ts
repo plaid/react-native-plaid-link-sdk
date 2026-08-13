@@ -5,10 +5,12 @@ import {
   LinkEventName,
 } from "../ReactNativePlaidLinkSdk.types";
 import NativePlaidModule from "../ReactNativePlaidLinkSdkModule";
+import { resetSessionStateForTesting } from "../SessionManager";
 import { createPlaidLayerSession } from "../index";
 
 describe("createPlaidLayerSession", () => {
   beforeEach(() => {
+    resetSessionStateForTesting();
     jest.clearAllMocks();
     (NativePlaidModule as any).__clearListeners();
     (console.error as jest.Mock).mockClear();
@@ -26,6 +28,7 @@ describe("createPlaidLayerSession", () => {
     const session = await createPlaidLayerSession(config);
 
     expect(NativePlaidModule.createPlaidLayerSession).toHaveBeenCalledWith(
+      expect.any(String),
       "layer-token-123",
     );
     expect(session).toHaveProperty("open");
@@ -94,6 +97,7 @@ describe("createPlaidLayerSession", () => {
 
     await session.submit({ phoneNumber: "555-1234" });
     expect(NativePlaidModule.submitLayerData).toHaveBeenCalledWith(
+      expect.any(String),
       "555-1234",
       undefined,
       undefined,
@@ -101,6 +105,7 @@ describe("createPlaidLayerSession", () => {
 
     await session.submit({ dateOfBirth: "1990-01-01" });
     expect(NativePlaidModule.submitLayerData).toHaveBeenCalledWith(
+      expect.any(String),
       undefined,
       "1990-01-01",
       undefined,
@@ -108,6 +113,7 @@ describe("createPlaidLayerSession", () => {
 
     await session.submit({ params: { foo: "bar", baz: "qux" } });
     expect(NativePlaidModule.submitLayerData).toHaveBeenCalledWith(
+      expect.any(String),
       undefined,
       undefined,
       { foo: "bar", baz: "qux" },
@@ -119,6 +125,7 @@ describe("createPlaidLayerSession", () => {
       params: { key: "value" },
     });
     expect(NativePlaidModule.submitLayerData).toHaveBeenCalledWith(
+      expect.any(String),
       "555-9999",
       "1985-12-25",
       { key: "value" },
@@ -167,7 +174,9 @@ describe("createPlaidLayerSession", () => {
     const session = await createPlaidLayerSession(config);
 
     await session.open();
-    expect(NativePlaidModule.openLayerSession).toHaveBeenCalled();
+    expect(NativePlaidModule.openLayerSession).toHaveBeenCalledWith(
+      expect.any(String),
+    );
     expect(NativePlaidModule.openLayerSession).toHaveBeenCalledTimes(1);
     expect(console.log).not.toHaveBeenCalled();
     expect(console.error).not.toHaveBeenCalled();

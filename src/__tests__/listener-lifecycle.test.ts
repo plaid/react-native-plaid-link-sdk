@@ -5,10 +5,12 @@ import {
   LinkEventName,
 } from "../ReactNativePlaidLinkSdk.types";
 import NativePlaidModule from "../ReactNativePlaidLinkSdkModule";
+import { resetSessionStateForTesting } from "../SessionManager";
 import { createPlaidLinkSession, createPlaidLayerSession } from "../index";
 
 describe("Listener Lifecycle", () => {
   beforeEach(() => {
+    resetSessionStateForTesting();
     jest.clearAllMocks();
     (NativePlaidModule as any).__clearListeners();
     (console.error as jest.Mock).mockClear();
@@ -56,10 +58,10 @@ describe("Listener Lifecycle", () => {
 
     expect(
       (NativePlaidModule as any).__getListenerCount("PlaidLink.onSuccess"),
-    ).toBe(0);
+    ).toBeGreaterThan(0);
     expect(
       (NativePlaidModule as any).__getListenerCount("PlaidLink.onExit"),
-    ).toBe(0);
+    ).toBeGreaterThan(0);
     expect(
       (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent"),
     ).toBeGreaterThan(0);
@@ -312,7 +314,7 @@ describe("Listener Lifecycle", () => {
     ).toBe(0);
   });
 
-  it("new session creation cancels pending post-success handoff cleanup", async () => {
+  it("an older handoff timeout does not remove a newer session", async () => {
     jest.useFakeTimers();
 
     const firstEvent = jest.fn();

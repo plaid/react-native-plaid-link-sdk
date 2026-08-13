@@ -78,33 +78,6 @@ function extractCurlyBlock(source: string, marker: string): string {
   throw new Error(`Could not read block for ${marker}`);
 }
 
-function extractSwiftDictionaryAfter(source: string, marker: string): string {
-  const markerIndex = source.indexOf(marker);
-  if (markerIndex === -1) {
-    throw new Error(`Could not find ${marker}`);
-  }
-
-  const start = source.indexOf("[", markerIndex);
-  if (start === -1) {
-    throw new Error(`Could not find dictionary for ${marker}`);
-  }
-
-  let depth = 0;
-  for (let index = start; index < source.length; index += 1) {
-    const char = source[index];
-    if (char === "[") {
-      depth += 1;
-    } else if (char === "]") {
-      depth -= 1;
-      if (depth === 0) {
-        return source.slice(start, index + 1);
-      }
-    }
-  }
-
-  throw new Error(`Could not read dictionary for ${marker}`);
-}
-
 function extractSwiftKeys(block: string, targetDepth: number): string[] {
   const keys = new Set<string>();
   let depth = 0;
@@ -175,6 +148,9 @@ describe("native callback payload contract", () => {
   const androidSource = readRepoFile(
     "android/src/main/java/expo/modules/plaidlinksdk/PlaidResultMappers.kt",
   );
+  const androidModuleSource = readRepoFile(
+    "android/src/main/java/expo/modules/plaidlinksdk/ReactNativePlaidLinkSdkModule.kt",
+  );
 
   it("keeps iOS callback dictionary keys aligned with the RN contract", () => {
     const success = extractCurlyBlock(iosSource, "extension LinkSuccess");
@@ -206,31 +182,33 @@ describe("native callback payload contract", () => {
     ).toEqual(contract.error);
   });
 
-  it("keeps iOS fallback exit dictionary keys aligned with the RN contract", () => {
-    const fallbackExitMessages = [
-      "createPlaidLinkSession was not called.",
-      "createPlaidLayerSession was not called.",
-      "createPlaidHeadlessSession was not called.",
-    ];
+  it("keys native session storage, operations, and callback envelopes by session identifier", () => {
+    expect(iosSource).toContain(
+      "private var linkSessions: [String: PlaidLinkSession]",
+    );
+    expect(iosSource).toContain(
+      "private var layerSessions: [String: PlaidLayerSession]",
+    );
+    expect(iosSource).toContain("self.linkSessions[clientSessionId]");
+    expect(iosSource).toContain("self.layerSessions[clientSessionId]");
+    expect(iosSource).toContain('"clientSessionId": clientSessionId');
+    expect(iosSource).toContain('"payload": payload');
+    expect(iosSource).toContain("clearSession(clientSessionId)");
 
-    for (const message of fallbackExitMessages) {
-      const fallbackExit = extractSwiftDictionaryAfter(iosSource, message);
-
-      expect(fallbackExit).not.toContain("errorDisplayMessage");
-      expect(extractSwiftKeys(fallbackExit, 1)).toEqual(contract.exit);
-      expect(
-        extractSwiftKeys(
-          extractSwiftDictionaryAfter(fallbackExit, '"error"'),
-          1,
-        ),
-      ).toEqual(contract.error);
-      expect(
-        extractSwiftKeys(
-          extractSwiftDictionaryAfter(fallbackExit, '"metadata"'),
-          1,
-        ),
-      ).toEqual(contract.exitMetadata);
-    }
+    expect(androidModuleSource).toContain(
+      "private val linkSessions = mutableMapOf<String, PlaidLinkSession>()",
+    );
+    expect(androidModuleSource).toContain(
+      "private val layerSessions = mutableMapOf<String, PlaidLayerSession>()",
+    );
+    expect(androidModuleSource).toContain("linkSessions[clientSessionId]");
+    expect(androidModuleSource).toContain("layerSessions[clientSessionId]");
+    expect(androidModuleSource).toContain(
+      '"clientSessionId" to clientSessionId',
+    );
+    expect(androidModuleSource).toContain('"payload" to payload');
+    expect(androidModuleSource).toContain("clearSession(clientSessionId)");
+    expect(androidModuleSource).toContain("PLAID_SESSION_ALREADY_ACTIVE");
   });
 
   it("keeps Android callback mapper keys aligned with the RN contract", () => {

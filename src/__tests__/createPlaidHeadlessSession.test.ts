@@ -5,10 +5,12 @@ import {
   LinkEventName,
 } from "../ReactNativePlaidLinkSdk.types";
 import NativePlaidModule from "../ReactNativePlaidLinkSdkModule";
+import { resetSessionStateForTesting } from "../SessionManager";
 import { createPlaidHeadlessSession } from "../index";
 
 describe("createPlaidHeadlessSession", () => {
   beforeEach(() => {
+    resetSessionStateForTesting();
     jest.clearAllMocks();
     (NativePlaidModule as any).__clearListeners();
     (console.error as jest.Mock).mockClear();
@@ -26,6 +28,7 @@ describe("createPlaidHeadlessSession", () => {
     const session = await createPlaidHeadlessSession(config);
 
     expect(NativePlaidModule.createPlaidHeadlessSession).toHaveBeenCalledWith(
+      expect.any(String),
       "headless-token-123",
     );
     expect(session).toHaveProperty("start");
@@ -44,7 +47,9 @@ describe("createPlaidHeadlessSession", () => {
     const session = await createPlaidHeadlessSession(config);
 
     await session.start();
-    expect(NativePlaidModule.startHeadlessSession).toHaveBeenCalled();
+    expect(NativePlaidModule.startHeadlessSession).toHaveBeenCalledWith(
+      expect.any(String),
+    );
     expect(NativePlaidModule.startHeadlessSession).toHaveBeenCalledTimes(1);
     expect(console.log).not.toHaveBeenCalled();
     expect(console.error).not.toHaveBeenCalled();
@@ -229,7 +234,7 @@ describe("createPlaidHeadlessSession", () => {
     expect(console.error).not.toHaveBeenCalled();
   });
 
-  it("cleans up existing listeners before creating new session", async () => {
+  it("shares native listeners without replacing session callbacks", async () => {
     const config1 = {
       token: "token-1",
       onSuccess: jest.fn(),
@@ -255,6 +260,6 @@ describe("createPlaidHeadlessSession", () => {
       .mock.calls.length;
 
     expect(firstListenerCalls).toBe(3);
-    expect(secondListenerCalls).toBe(3);
+    expect(secondListenerCalls).toBe(0);
   });
 });

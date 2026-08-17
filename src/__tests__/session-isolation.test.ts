@@ -27,12 +27,13 @@ describe("session isolation", () => {
     const onSuccessA = jest.fn();
     const onSuccessB = jest.fn();
 
-    await createPlaidLinkSession({
+    const sessionA = await createPlaidLinkSession({
       token: "token-a",
       onSuccess: onSuccessA,
       onExit: jest.fn(),
       onEvent: jest.fn(),
     });
+    await sessionA.open();
     await createPlaidLinkSession({
       token: "token-b",
       onSuccess: onSuccessB,
@@ -40,12 +41,12 @@ describe("session isolation", () => {
       onEvent: jest.fn(),
     });
 
-    const [sessionA] = createdSessionIds();
+    const [sessionAId] = createdSessionIds();
     const successA = successFor("native-session-a", "public-token-a");
     (NativePlaidModule as any).__triggerEvent(
       "PlaidLink.onSuccess",
       successA,
-      sessionA,
+      sessionAId,
     );
 
     expect(onSuccessA).toHaveBeenCalledWith(successA);
@@ -100,6 +101,7 @@ describe("session isolation", () => {
       onExit: jest.fn(),
       onEvent: jest.fn(),
     });
+    await sessionA.open(true);
     await createPlaidLinkSession({
       token: "token-b",
       onSuccess: jest.fn(),
@@ -108,7 +110,6 @@ describe("session isolation", () => {
     });
 
     const [sessionAId, sessionBId] = createdSessionIds();
-    await sessionA.open(true);
 
     expect(NativePlaidModule.openLinkSession).toHaveBeenCalledWith(
       sessionAId,
@@ -127,6 +128,10 @@ describe("session isolation", () => {
       onExit: jest.fn(),
       onEvent: jest.fn(),
     });
+    await sessionA.submit({
+      phoneNumber: "415-555-0100",
+      dateOfBirth: "1975-01-18",
+    });
     await createPlaidLayerSession({
       token: "layer-token-b",
       onSuccess: jest.fn(),
@@ -135,10 +140,6 @@ describe("session isolation", () => {
     });
 
     const [sessionAId, sessionBId] = createdSessionIds();
-    await sessionA.submit({
-      phoneNumber: "415-555-0100",
-      dateOfBirth: "1975-01-18",
-    });
 
     expect(NativePlaidModule.submitLayerData).toHaveBeenCalledWith(
       sessionAId,
@@ -158,12 +159,13 @@ describe("session isolation", () => {
     const onExitA = jest.fn();
     const onSuccessB = jest.fn();
 
-    await createPlaidLinkSession({
+    const sessionA = await createPlaidLinkSession({
       token: "token-a",
       onSuccess: jest.fn(),
       onExit: onExitA,
       onEvent: jest.fn(),
     });
+    await sessionA.open();
     const sessionB = await createPlaidLinkSession({
       token: "token-b",
       onSuccess: onSuccessB,
@@ -203,6 +205,7 @@ describe("session isolation", () => {
       onExit: jest.fn(),
       onEvent: jest.fn(),
     });
+    await sessionA.open();
     await createPlaidLinkSession({
       token: "token-b",
       onSuccess: onSuccessB,

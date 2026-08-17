@@ -187,7 +187,9 @@ await session.start();
 
 If a created session will no longer be opened, started, or submitted, call
 `await session.destroy()` to release it. Completed and exited sessions are
-released automatically.
+released automatically. Creating a new session also releases any previous
+session of the same kind that was never opened, started, or submitted;
+methods on a replaced session's handle will reject.
 
 ## Embedded Search
 

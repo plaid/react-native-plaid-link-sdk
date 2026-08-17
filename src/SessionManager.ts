@@ -12,6 +12,7 @@ type SessionConfiguration = LinkTokenConfiguration | LayerTokenConfiguration;
 interface SessionRecord {
   kind: SessionKind;
   config: SessionConfiguration;
+  activated: boolean;
   terminal: boolean;
   cleanupTimeout: ReturnType<typeof setTimeout> | null;
 }
@@ -103,6 +104,28 @@ function ensureNativeListeners() {
   });
 }
 
+// Creating a session replaces any prior session of the same kind that was
+// never activated (opened, started, or submitted). Activated sessions are
+// released by their terminal callbacks, and terminal sessions are kept until
+// the post-success handoff window closes.
+function evictReplacedSessions(kind: SessionKind, newClientSessionId: string) {
+  for (const [clientSessionId, record] of sessions) {
+    if (
+      clientSessionId === newClientSessionId ||
+      record.kind !== kind ||
+      record.activated ||
+      record.terminal
+    ) {
+      continue;
+    }
+
+    removeSession(clientSessionId);
+    NativePlaidModule.destroySession(clientSessionId).catch(() => {
+      // Native cleanup is best-effort; the JS record is already removed.
+    });
+  }
+}
+
 export function registerSession(
   kind: SessionKind,
   config: SessionConfiguration,
@@ -111,11 +134,23 @@ export function registerSession(
   sessions.set(clientSessionId, {
     kind,
     config,
+    activated: false,
     terminal: false,
     cleanupTimeout: null,
   });
+  evictReplacedSessions(kind, clientSessionId);
   ensureNativeListeners();
   return clientSessionId;
+}
+
+export function markSessionActivated(
+  clientSessionId: string,
+  activated: boolean,
+) {
+  const record = sessions.get(clientSessionId);
+  if (record) {
+    record.activated = activated;
+  }
 }
 
 export function removeSession(clientSessionId: string) {

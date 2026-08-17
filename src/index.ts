@@ -10,13 +10,33 @@ import {
   FinanceKitSyncBehavior,
 } from "./ReactNativePlaidLinkSdk.types";
 import NativePlaidModule from "./ReactNativePlaidLinkSdkModule";
-import { registerSession, removeSession } from "./SessionManager";
+import {
+  markSessionActivated,
+  registerSession,
+  removeSession,
+} from "./SessionManager";
 
 async function destroySession(clientSessionId: string): Promise<void> {
   try {
     await NativePlaidModule.destroySession(clientSessionId);
   } finally {
     removeSession(clientSessionId);
+  }
+}
+
+// Activation is marked before the native call so an in-flight open cannot be
+// evicted by a concurrent create, and reverted on failure so the session
+// becomes replaceable again.
+async function activateSession(
+  clientSessionId: string,
+  action: () => Promise<void>,
+): Promise<void> {
+  markSessionActivated(clientSessionId, true);
+  try {
+    await action();
+  } catch (error) {
+    markSessionActivated(clientSessionId, false);
+    throw error;
   }
 }
 
@@ -39,7 +59,9 @@ export async function createPlaidLinkSession(
 
   return {
     open: (fullScreen = false) =>
-      NativePlaidModule.openLinkSession(clientSessionId, fullScreen),
+      activateSession(clientSessionId, () =>
+        NativePlaidModule.openLinkSession(clientSessionId, fullScreen),
+      ),
     destroy: () => destroySession(clientSessionId),
   };
 }
@@ -60,13 +82,18 @@ export async function createPlaidLayerSession(
   }
 
   return {
-    open: () => NativePlaidModule.openLayerSession(clientSessionId),
+    open: () =>
+      activateSession(clientSessionId, () =>
+        NativePlaidModule.openLayerSession(clientSessionId),
+      ),
     submit: (data: SubmissionData) =>
-      NativePlaidModule.submitLayerData(
-        clientSessionId,
-        data.phoneNumber,
-        data.dateOfBirth,
-        data.params,
+      activateSession(clientSessionId, () =>
+        NativePlaidModule.submitLayerData(
+          clientSessionId,
+          data.phoneNumber,
+          data.dateOfBirth,
+          data.params,
+        ),
       ),
     destroy: () => destroySession(clientSessionId),
   };
@@ -92,7 +119,10 @@ export async function createPlaidHeadlessSession(
   }
 
   return {
-    start: () => NativePlaidModule.startHeadlessSession(clientSessionId),
+    start: () =>
+      activateSession(clientSessionId, () =>
+        NativePlaidModule.startHeadlessSession(clientSessionId),
+      ),
     destroy: () => destroySession(clientSessionId),
   };
 }

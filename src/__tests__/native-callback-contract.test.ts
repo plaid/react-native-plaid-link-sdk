@@ -175,6 +175,9 @@ describe("native callback payload contract", () => {
   const androidSource = readRepoFile(
     "android/src/main/java/expo/modules/plaidlinksdk/PlaidResultMappers.kt",
   );
+  const androidModuleSource = readRepoFile(
+    "android/src/main/java/expo/modules/plaidlinksdk/ReactNativePlaidLinkSdkModule.kt",
+  );
 
   it("keeps iOS callback dictionary keys aligned with the RN contract", () => {
     const success = extractCurlyBlock(iosSource, "extension LinkSuccess");
@@ -261,6 +264,26 @@ describe("native callback payload contract", () => {
     expect(extractKotlinFunctionKeys(androidSource, "accountPayload")).toEqual(
       contract.account,
     );
+  });
+
+  it("creates IDV sessions without an onLoad callback on both platforms", () => {
+    const iosIdvCreate = extractCurlyBlock(
+      iosSource,
+      "AsyncFunction(ModuleFunctionName.createPlaidIdentityVerificationSession.rawValue)",
+    );
+    const androidIdvCreate = extractCurlyBlock(
+      androidModuleSource,
+      'AsyncFunction("createPlaidIdentityVerificationSession")',
+    );
+
+    expect(iosIdvCreate).toContain("onLoad: nil");
+    expect(iosIdvCreate).toContain("self.linkSession = session");
+    expect(iosIdvCreate).toContain("promise.resolve()");
+    expect(iosIdvCreate).not.toContain("OnLoadHandler");
+
+    expect(androidIdvCreate).toContain("linkSession =");
+    expect(androidIdvCreate).toContain("promise.resolve(null)");
+    expect(androidIdvCreate).not.toContain("OnLoadCallback");
   });
 });
 

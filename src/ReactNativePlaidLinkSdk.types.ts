@@ -801,6 +801,24 @@ export interface LinkTokenConfiguration {
   onLoad?: () => void;
 }
 
+/** Configuration for an Identity Verification Link session. */
+export interface IdentityVerificationTokenConfiguration {
+  /** The Identity Verification link token created by your server. */
+  token: string;
+
+  /** Called when the Identity Verification flow completes successfully. */
+  onSuccess: LinkSuccessListener;
+
+  /** Called when the user exits the Identity Verification flow. */
+  onExit: LinkExitListener;
+
+  /** Called as the user reaches points in the Identity Verification flow. */
+  onEvent: LinkOnEventListener;
+
+  /** Identity Verification sessions do not emit onLoad. */
+  onLoad?: never;
+}
+
 export interface LayerTokenConfiguration {
   /** The link-token your server retrieved from the /link/token/create endpoint. */
   token: string;

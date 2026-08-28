@@ -6,6 +6,7 @@ import {
   LinkEventName,
   LinkSuccess,
   LinkTokenConfiguration,
+  IdentityVerificationTokenConfiguration,
   PlaidLinkSession,
   LayerTokenConfiguration,
   PlaidLayerSession,
@@ -91,6 +92,59 @@ export async function createPlaidLinkSession(
   await NativePlaidModule.createPlaidLinkSession(config.token);
 
   config.onLoad?.();
+
+  return {
+    open: (fullScreen = false) => NativePlaidModule.openLinkSession(fullScreen),
+  };
+}
+
+/**
+ * Creates an Identity Verification session without waiting for an onLoad
+ * callback, which Identity Verification flows do not emit.
+ */
+export async function createPlaidIdentityVerificationSession(
+  config: IdentityVerificationTokenConfiguration,
+): Promise<PlaidLinkSession> {
+  cleanupListeners();
+
+  successSub = NativePlaidModule.addListener(
+    "PlaidLink.onSuccess",
+    (success: LinkSuccess) => {
+      config.onSuccess(success);
+      cleanupListeners({ keepEventListener: true });
+      cleanupAfterPostSuccessHandoffWindow();
+    },
+  );
+
+  exitSub = NativePlaidModule.addListener(
+    "PlaidLink.onExit",
+    (exit: LinkExit) => {
+      config.onExit(exit);
+      cleanupListeners();
+    },
+  );
+
+  eventSub = NativePlaidModule.addListener(
+    "PlaidLink.onEvent",
+    (event: LinkEvent) => {
+      config.onEvent(event);
+      if (
+        postSuccessHandoffCleanupTimeout &&
+        event.eventName === LinkEventName.HANDOFF
+      ) {
+        cleanupListeners();
+      }
+    },
+  );
+
+  try {
+    await NativePlaidModule.createPlaidIdentityVerificationSession(
+      config.token,
+    );
+  } catch (error) {
+    cleanupListeners();
+    throw error;
+  }
 
   return {
     open: (fullScreen = false) => NativePlaidModule.openLinkSession(fullScreen),

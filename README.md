@@ -123,6 +123,33 @@ await session.open();
 Pass `true` to `session.open(true)` to request full-screen presentation on iOS.
 The default presentation is used when this argument is omitted or `false`.
 
+## Identity Verification
+
+Identity Verification sessions use a dedicated creation function because IDV
+flows do not emit the Link `onLoad` callback.
+
+```ts
+import { createPlaidIdentityVerificationSession } from "react-native-plaid-link-sdk";
+
+const session = await createPlaidIdentityVerificationSession({
+  token: "#GENERATED_IDENTITY_VERIFICATION_LINK_TOKEN#",
+  onSuccess: (success) => {
+    console.log("Success", success);
+  },
+  onExit: (exit) => {
+    console.log("Exit", exit);
+  },
+  onEvent: (event) => {
+    console.log("Event", event);
+  },
+});
+
+await session.open();
+```
+
+The promise resolves as soon as the native IDV session is created. Do not wait
+for `onLoad` before opening an Identity Verification session.
+
 ## Layer
 
 Layer uses a dedicated session object. Submit user data once the Layer session is

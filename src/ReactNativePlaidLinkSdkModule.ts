@@ -8,6 +8,7 @@ import {
 declare class ReactNativePlaidLinkSdkModule extends NativeModule<ReactNativePlaidLinkSdkModuleEvents> {
   sdkVersion: string;
   createPlaidLinkSession(token: string): Promise<void>;
+  createPlaidIdentityVerificationSession(token: string): Promise<void>;
   createPlaidLayerSession(token: string): Promise<void>;
   createPlaidHeadlessSession(token: string): Promise<void>;
   openLinkSession(fullScreen: boolean): Promise<void>;

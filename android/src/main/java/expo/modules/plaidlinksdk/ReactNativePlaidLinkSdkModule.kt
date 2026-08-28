@@ -60,6 +60,27 @@ class ReactNativePlaidLinkSdkModule : Module() {
       }
     }
 
+    AsyncFunction("createPlaidIdentityVerificationSession") { token: String, promise: Promise ->
+      try {
+        val activity = requireActivity()
+        Plaid.setLinkEventListener { event -> sendEvent("PlaidLink.onEvent", event.toWritableMap()) }
+        val config = LinkTokenConfiguration.Builder()
+          .token(token)
+          .build()
+        linkSession = Plaid.createPlaidLinkSession(activity, config)
+        activeSession = linkSession
+        sessionCreationError = null
+        promise.resolve(null)
+      } catch (error: Throwable) {
+        sessionCreationError = error
+        promise.reject(
+          "IDENTITY_VERIFICATION_SESSION_CREATE_ERROR",
+          error.message ?: "Failed to create Identity Verification session",
+          error,
+        )
+      }
+    }
+
     AsyncFunction("createPlaidLayerSession") { token: String, promise: Promise ->
       try {
         val activity = requireActivity()

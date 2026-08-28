@@ -70,6 +70,40 @@ public class ReactNativePlaidLinkSdkModule: Module {
             }
         }
 
+        AsyncFunction(ModuleFunctionName.createPlaidIdentityVerificationSession.rawValue) {
+            (token: String, promise: Promise) in
+            let onSuccess: OnSuccessHandler = { [weak self] success in
+                self?.sendEvent(ModuleEventName.onSuccess.rawValue, success.asDictionary)
+            }
+
+            let onExit: OnExitHandler = { [weak self] exit in
+                self?.sendEvent(ModuleEventName.onExit.rawValue, exit.asDictionary)
+                self?.linkSession = nil
+            }
+
+            let onEvent: OnEventHandler = { [weak self] event in
+                self?.sendEvent(ModuleEventName.onEvent.rawValue, event.asDictionary)
+            }
+
+            let config = LinkTokenConfiguration(
+                token: token,
+                onSuccess: onSuccess,
+                onExit: onExit,
+                onEvent: onEvent,
+                onLoad: nil
+            )
+
+            do {
+                let session = try Plaid.createPlaidLinkSession(configuration: config)
+                self.linkSession = session
+                self.sessionCreationError = nil
+                promise.resolve()
+            } catch {
+                self.sessionCreationError = error
+                promise.reject("IDENTITY_VERIFICATION_SESSION_CREATE_ERROR", error.localizedDescription)
+            }
+        }
+
         AsyncFunction(ModuleFunctionName.createPlaidLayerSession.rawValue) { (token: String, promise: Promise) in
             let onSuccess: OnSuccessHandler = { [weak self] success in
                 self?.sendEvent(ModuleEventName.onSuccess.rawValue, success.asDictionary)
@@ -348,6 +382,7 @@ public class ReactNativePlaidLinkSdkModule: Module {
     /// Function names that the module can call from JavaScript.
     enum ModuleFunctionName: String, CaseIterable {
         case createPlaidLinkSession
+        case createPlaidIdentityVerificationSession
         case createPlaidLayerSession
         case createPlaidHeadlessSession
         case openLinkSession

@@ -9,6 +9,8 @@ const mockNativeModule = {
 
   createPlaidLinkSession: jest.fn(() => Promise.resolve()),
 
+  createPlaidIdentityVerificationSession: jest.fn(() => Promise.resolve()),
+
   createPlaidLayerSession: jest.fn(() => Promise.resolve()),
 
   createPlaidHeadlessSession: jest.fn(() => Promise.resolve()),

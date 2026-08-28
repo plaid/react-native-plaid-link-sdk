@@ -1,5 +1,23 @@
 # RELEASES
 
+## LinkKit V13.0.5 — 2026-08-28
+
+### Changes
+
+- Adds an explicit Identity Verification session API that creates and returns
+  the native Link session without waiting for an `onLoad` callback.
+- Leaves the existing `createPlaidLinkSession` behavior unchanged.
+- Leaves Android integration unchanged at `com.plaid.link:sdk-core:6.1.0`.
+- Leaves the bundled iOS SDK unchanged at LinkKit 7.1.0.
+
+### Android
+
+Android SDK [6.1.0](https://github.com/plaid/plaid-link-android/releases/tag/v6.1.0)
+
+### iOS
+
+iOS SDK [7.1.0](https://github.com/plaid/plaid-link-ios/releases/tag/7.1.0)
+
 ## LinkKit V13.0.4 — 2026-08-04
 
 ### Changes

@@ -5,7 +5,7 @@ const mockListeners: Record<string, Function[]> = {
 };
 
 const mockNativeModule = {
-  sdkVersion: "13.0.4",
+  sdkVersion: "13.0.5",
 
   createPlaidLinkSession: jest.fn(() => Promise.resolve()),
 

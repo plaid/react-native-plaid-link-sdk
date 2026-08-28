@@ -814,9 +814,6 @@ export interface IdentityVerificationTokenConfiguration {
 
   /** Called as the user reaches points in the Identity Verification flow. */
   onEvent: LinkOnEventListener;
-
-  /** Identity Verification sessions do not emit onLoad. */
-  onLoad?: never;
 }
 
 export interface LayerTokenConfiguration {

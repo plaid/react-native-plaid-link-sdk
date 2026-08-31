@@ -196,6 +196,7 @@ for (const requiredFile of [
   "LICENSE",
   "CHANGELOG.md",
   "V13_MIGRATION_GUIDE.md",
+  "AGENTS.md",
   "expo-module.config.json",
   "android/build.gradle",
   "android/src/main/AndroidManifest.xml",

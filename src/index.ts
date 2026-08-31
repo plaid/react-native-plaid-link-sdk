@@ -16,6 +16,52 @@ import {
 } from "./ReactNativePlaidLinkSdk.types";
 import NativePlaidModule from "./ReactNativePlaidLinkSdkModule";
 
+const V13_MIGRATION_GUIDE_URL =
+  "https://github.com/plaid/react-native-plaid-link-sdk/blob/master/V13_MIGRATION_GUIDE.md";
+
+function removedApi(name: string, replacement: string): () => never {
+  return () => {
+    throw new Error(
+      `${name} was removed in react-native-plaid-link-sdk v13. ${replacement} See ${V13_MIGRATION_GUIDE_URL}`,
+    );
+  };
+}
+
+/**
+ * @deprecated Removed in v13. Use `await createPlaidLinkSession(config)`, then
+ * call `await session.open()` on the returned session.
+ */
+export const create = removedApi(
+  "create",
+  "Use await createPlaidLinkSession(config), then call await session.open() on the returned session.",
+) as unknown as {
+  readonly __migration_error__: "Removed in v13. Use await createPlaidLinkSession(config), then call await session.open() on the returned session.";
+};
+
+/**
+ * @deprecated Removed in v13. Call `await session.open()` on the session
+ * returned by `createPlaidLinkSession(config)`.
+ */
+export const open = removedApi(
+  "open",
+  "Call await session.open() on the session returned by createPlaidLinkSession(config). Move onSuccess, onExit, and onEvent callbacks to the create call.",
+) as unknown as {
+  readonly __migration_error__: "Removed in v13. Call await session.open() on the session returned by createPlaidLinkSession(config). Move callbacks to the create call.";
+};
+
+/**
+ * @deprecated Removed in v13. Use `PlaidEmbeddedSearchView`.
+ */
+export const EmbeddedLinkView = removedApi(
+  "EmbeddedLinkView",
+  "Use PlaidEmbeddedSearchView.",
+) as unknown as {
+  readonly __migration_error__: "Removed in v13. Use PlaidEmbeddedSearchView.";
+};
+
+/** The React Native Plaid Link SDK version reported by the native module. */
+export const sdkVersion = NativePlaidModule.sdkVersion;
+
 type Subscription = ReturnType<typeof NativePlaidModule.addListener>;
 
 let successSub: Subscription | null = null;
@@ -251,5 +297,11 @@ export {
   PlaidEmbeddedSearchView,
   type PlaidEmbeddedSearchViewProps,
 } from "./PlaidEmbeddedSearchView";
-export { default } from "./ReactNativePlaidLinkSdkModule";
+
+/**
+ * @deprecated Use the package's named exports. Use `sdkVersion` to read the SDK
+ * version. The default export exposes internal native-module methods and will
+ * be removed in the next major version.
+ */
+export default NativePlaidModule;
 export * from "./ReactNativePlaidLinkSdk.types";

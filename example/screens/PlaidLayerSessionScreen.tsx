@@ -14,8 +14,8 @@ import {
   LinkSuccess,
   PlaidLayerSession,
   LinkEventName,
+  sdkVersion,
 } from "react-native-plaid-link-sdk";
-import ReactNativePlaidLinkSdk from "react-native-plaid-link-sdk";
 import {
   ErrorView,
   PrimaryButton,
@@ -137,7 +137,7 @@ export function PlaidLayerSessionScreen({ onBack }: Props) {
 
         <View style={styles.content}>
           <Text style={styles.title}>Plaid Layer Session Example</Text>
-          <SdkVersionView version={ReactNativePlaidLinkSdk.sdkVersion} />
+          <SdkVersionView version={sdkVersion} />
 
           <TokenInputView token={token} onTokenChange={setToken} />
 

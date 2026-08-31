@@ -13,8 +13,8 @@ import {
   LinkEvent,
   LinkSuccess,
   PlaidEmbeddedSearchView,
+  sdkVersion,
 } from "react-native-plaid-link-sdk";
-import ReactNativePlaidLinkSdk from "react-native-plaid-link-sdk";
 import { SdkVersionView, TokenInputView } from "../components/components";
 import { styles } from "../styles/common";
 import { isValidToken } from "../utils/validation";
@@ -74,7 +74,7 @@ export function PlaidEmbeddedSearchScreen({ onBack }: Props) {
 
         <View style={styles.content}>
           <Text style={styles.title}>Plaid Embedded Search Example</Text>
-          <SdkVersionView version={ReactNativePlaidLinkSdk.sdkVersion} />
+          <SdkVersionView version={sdkVersion} />
 
           <TokenInputView token={token} onTokenChange={setToken} />
 

@@ -39,6 +39,7 @@
     "build": "expo-module build",
     "check:linkkit": "node scripts/validate-linkkit-xcframework.js",
     "check:package": "node scripts/check-package-entrypoints.js",
+    "check:typescript-api": "node scripts/check-typescript-api.js",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "pack:dry-run": "node scripts/npm-dry-run.js pack",

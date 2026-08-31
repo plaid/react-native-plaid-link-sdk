@@ -289,7 +289,53 @@ configured in the Plaid Dashboard for the environment you are testing.
 Confirm that the iOS bundle identifier and redirect URI are configured in the
 Plaid Dashboard for the environment you are testing.
 
-### Import path fails after upgrading to v13
+### TS2614: Module '"react-native-plaid-link-sdk"' has no exported member 'create'
+
+v13 replaced the global `create` and `open` functions with session objects, so
+pre-v13 imports no longer compile. TypeScript reports one error per removed
+name:
+
+```
+error TS2614: Module '"react-native-plaid-link-sdk"' has no exported member 'create'.
+  Did you mean to use 'import create from "react-native-plaid-link-sdk"' instead?
+error TS2614: Module '"react-native-plaid-link-sdk"' has no exported member 'open'.
+  Did you mean to use 'import open from "react-native-plaid-link-sdk"' instead?
+error TS2614: Module '"react-native-plaid-link-sdk"' has no exported member 'EmbeddedLinkView'.
+  Did you mean to use 'import EmbeddedLinkView from "react-native-plaid-link-sdk"' instead?
+```
+
+The same error appears for `usePlaidEmitter`, `submit`, `destroy`, and
+`dismissLink`.
+
+**Do not follow the suggested default import.** The package does have a default
+export, but it is the native module object, not these functions. Rewriting the
+import as `import create from "react-native-plaid-link-sdk"` only moves the
+failure to the next line:
+
+```
+error TS2349: This expression is not callable.
+  Type 'ReactNativePlaidLinkSdkModule' has no call signatures.
+```
+
+Use the v13 replacements instead:
+
+| Pre-v13 | v13 |
+| --- | --- |
+| `create(config)` | `await createPlaidLinkSession(config)` |
+| `open({ onSuccess, onExit })` | `await session.open()` — callbacks move to the create call |
+| `openLink({ tokenConfig, ... })` | `createPlaidLinkSession(...)`, then `session.open()` |
+| `<PlaidLink>` component | Build your own button and call `createPlaidLinkSession` |
+| `usePlaidEmitter(listener)` | Pass `onEvent` to the create call |
+| `submit(data)` | `await session.submit(data)` on a Layer session |
+| `EmbeddedLinkView` | `PlaidEmbeddedSearchView` |
+| `syncFinanceKit(token, bool, bool, cb)` | `await syncFinanceKit({ token, ... })` |
+| `destroy()` | Not needed — each create call resets session state |
+| `dismissLink()` | No replacement in v13 |
+
+The [v13 migration guide](./V13_MIGRATION_GUIDE.md) has full before and after
+examples for every flow.
+
+### Cannot find module after upgrading to v13
 
 Import from the package root only:
 

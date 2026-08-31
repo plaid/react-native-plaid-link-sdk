@@ -1,5 +1,30 @@
 # RELEASES
 
+## LinkKit V13.1.0 — 2026-08-31
+
+### Changes
+
+- Adds deprecated migration diagnostics for the removed `create`, `open`, and
+  `EmbeddedLinkView` APIs. TypeScript and JavaScript errors now identify the
+  corresponding v13 session API instead of suggesting an incorrect default
+  import.
+- Adds a named `sdkVersion` export and deprecates the raw native-module default
+  export. The default export remains available in v13 for compatibility.
+- Adds packaged guidance for AI coding agents and expands troubleshooting for
+  integrations generated from pre-v13 API knowledge.
+- Adds packed-package TypeScript regression coverage for supported v13 APIs and
+  removed-API diagnostics.
+- Leaves Android integration unchanged at `com.plaid.link:sdk-core:6.1.0`.
+- Leaves the bundled iOS SDK unchanged at LinkKit 7.1.0.
+
+### Android
+
+Android SDK [6.1.0](https://github.com/plaid/plaid-link-android/releases/tag/v6.1.0)
+
+### iOS
+
+iOS SDK [7.1.0](https://github.com/plaid/plaid-link-ios/releases/tag/v7.1.0)
+
 ## LinkKit V13.0.5 — 2026-08-28
 
 ### Changes

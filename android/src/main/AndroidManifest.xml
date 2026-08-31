@@ -2,6 +2,6 @@
   <application>
     <meta-data
       android:name="com.plaid.link.react_native"
-      android:value="13.0.5" />
+      android:value="13.1.0" />
   </application>
 </manifest>

@@ -13,36 +13,39 @@ before writing any Plaid code.
 import { createPlaidLinkSession } from "react-native-plaid-link-sdk";
 ```
 
-These do not exist in v13 and will fail to compile:
+These pre-v13 names are retained only as migration diagnostics and are not
+callable:
 
 ```ts
-import { create, open } from "react-native-plaid-link-sdk";      // TS2614
-import { EmbeddedLinkView } from "react-native-plaid-link-sdk";  // TS2614
-import { usePlaidEmitter } from "react-native-plaid-link-sdk";   // TS2614
+import { create, open } from "react-native-plaid-link-sdk";
+import { EmbeddedLinkView } from "react-native-plaid-link-sdk";
 ```
 
-TypeScript reports these as `TS2614 ... Did you mean to use 'import create from
+Using one reports `TS2349: This expression is not callable` followed by an exact
+v13 replacement, such as `Removed in v13. Use await
+createPlaidLinkSession(config), then call await session.open() on the returned
+session.` JavaScript callers receive the same guidance as a runtime error.
+
+Older v13 releases reported `TS2614 ... Did you mean to use 'import create from
 "react-native-plaid-link-sdk"' instead?`. **That suggestion is wrong.** The
-package has a default export, so TypeScript assumes you meant to import it, but
-the default export is the native module object — not these functions. Following
-the hint just moves the error one line down to `TS2349: This expression is not
-callable`. Use the named exports below.
+deprecated default export is the native module object, not `create`, `open`, or
+`EmbeddedLinkView`. Do not follow the default-import suggestion.
 
 ## If you were about to write pre-v13 code
 
-| Pre-v13 | v13 |
-| --- | --- |
-| `create(config)` | `await createPlaidLinkSession(config)` |
-| `open({ onSuccess, onExit })` | `await session.open()` — callbacks now go to the create call |
-| `openLink({ tokenConfig, onSuccess })` | `createPlaidLinkSession(...)` then `session.open()` |
-| `<PlaidLink>` component | Build your own button, call `createPlaidLinkSession` |
-| `usePlaidEmitter(listener)` | Pass `onEvent` to the create call |
-| `submit(data)` | `await session.submit(data)` on a Layer session |
-| `EmbeddedLinkView` | `PlaidEmbeddedSearchView` |
-| `syncFinanceKit(token, bool, bool, cb)` | `await syncFinanceKit({ token, ... })` |
-| `iOSPresentationStyle: FULL_SCREEN` | `await session.open(true)` |
-| `destroy()` | Not needed — each create call resets session state |
-| `dismissLink()` | No replacement in v13 |
+| Pre-v13                                 | v13                                                          |
+| --------------------------------------- | ------------------------------------------------------------ |
+| `create(config)`                        | `await createPlaidLinkSession(config)`                       |
+| `open({ onSuccess, onExit })`           | `await session.open()` — callbacks now go to the create call |
+| `openLink({ tokenConfig, onSuccess })`  | `createPlaidLinkSession(...)` then `session.open()`          |
+| `<PlaidLink>` component                 | Build your own button, call `createPlaidLinkSession`         |
+| `usePlaidEmitter(listener)`             | Pass `onEvent` to the create call                            |
+| `submit(data)`                          | `await session.submit(data)` on a Layer session              |
+| `EmbeddedLinkView`                      | `PlaidEmbeddedSearchView`                                    |
+| `syncFinanceKit(token, bool, bool, cb)` | `await syncFinanceKit({ token, ... })`                       |
+| `iOSPresentationStyle: FULL_SCREEN`     | `await session.open(true)`                                   |
+| `destroy()`                             | Not needed — each create call resets session state           |
+| `dismissLink()`                         | No replacement in v13                                        |
 
 The two changes that trip up most generated code: **callbacks moved from `open`
 to the create call**, and **every create function is `async`**.
@@ -52,6 +55,8 @@ to the create call**, and **every create function is `async`**.
 Functions — `createPlaidLinkSession`, `createPlaidIdentityVerificationSession`,
 `createPlaidLayerSession`, `createPlaidHeadlessSession`, `syncFinanceKit`.
 
+Constant — `sdkVersion`.
+
 Component — `PlaidEmbeddedSearchView` (with `PlaidEmbeddedSearchViewProps`).
 
 Types and enums — `LinkSuccess`, `LinkExit`, `LinkEvent`, `LinkEventName`,
@@ -59,8 +64,8 @@ Types and enums — `LinkSuccess`, `LinkExit`, `LinkEvent`, `LinkEventName`,
 `PlaidHeadlessSession`, `SubmissionData`, `FinanceKitSyncBehavior`, and the
 other types in `ReactNativePlaidLinkSdk.types`.
 
-Default export — the native module instance. The only supported use is reading
-`.sdkVersion`. Do not call Link APIs on it.
+Default export — deprecated native module instance. Do not use it; use the named
+exports, including `sdkVersion`. It will be removed in the next major version.
 
 ## Standard Link
 

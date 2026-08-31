@@ -14,8 +14,8 @@ import {
   LinkSuccess,
   PlaidHeadlessSession,
   LinkEventName,
+  sdkVersion,
 } from "react-native-plaid-link-sdk";
-import ReactNativePlaidLinkSdk from "react-native-plaid-link-sdk";
 import {
   ErrorView,
   PrimaryButton,
@@ -124,7 +124,7 @@ export function PlaidLinkHeadlessSessionScreen({ onBack }: Props) {
 
         <View style={styles.content}>
           <Text style={styles.title}>Plaid Link Headless Session Example</Text>
-          <SdkVersionView version={ReactNativePlaidLinkSdk.sdkVersion} />
+          <SdkVersionView version={sdkVersion} />
 
           <View style={headlessStyles.warningBox}>
             <Text style={headlessStyles.warningIcon}>⚠️</Text>

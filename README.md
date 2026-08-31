@@ -292,8 +292,8 @@ Plaid Dashboard for the environment you are testing.
 ### TS2614: Module '"react-native-plaid-link-sdk"' has no exported member 'create'
 
 v13 replaced the global `create` and `open` functions with session objects, so
-pre-v13 imports no longer compile. TypeScript reports one error per removed
-name:
+pre-v13 usages no longer compile. Older v13 releases report one error per
+removed import:
 
 ```
 error TS2614: Module '"react-native-plaid-link-sdk"' has no exported member 'create'.
@@ -304,8 +304,7 @@ error TS2614: Module '"react-native-plaid-link-sdk"' has no exported member 'Emb
   Did you mean to use 'import EmbeddedLinkView from "react-native-plaid-link-sdk"' instead?
 ```
 
-The same error appears for `usePlaidEmitter`, `submit`, `destroy`, and
-`dismissLink`.
+The same error appears for other removed APIs.
 
 **Do not follow the suggested default import.** The package does have a default
 export, but it is the native module object, not these functions. Rewriting the
@@ -317,20 +316,32 @@ error TS2349: This expression is not callable.
   Type 'ReactNativePlaidLinkSdkModule' has no call signatures.
 ```
 
+Newer v13 releases retain `create`, `open`, and `EmbeddedLinkView` only as
+deprecated migration diagnostics. Their imports resolve, but trying to use one
+produces `TS2349` with the exact replacement in its type:
+
+```
+error TS2349: This expression is not callable.
+  Type '{ readonly __migration_error__: "Removed in v13. Use await createPlaidLinkSession(config), then call await session.open() on the returned session."; }' has no call signatures.
+```
+
+JavaScript callers receive the same replacement and a migration-guide link in a
+runtime error. These diagnostic exports do not restore the pre-v13 global API.
+
 Use the v13 replacements instead:
 
-| Pre-v13 | v13 |
-| --- | --- |
-| `create(config)` | `await createPlaidLinkSession(config)` |
-| `open({ onSuccess, onExit })` | `await session.open()` — callbacks move to the create call |
-| `openLink({ tokenConfig, ... })` | `createPlaidLinkSession(...)`, then `session.open()` |
-| `<PlaidLink>` component | Build your own button and call `createPlaidLinkSession` |
-| `usePlaidEmitter(listener)` | Pass `onEvent` to the create call |
-| `submit(data)` | `await session.submit(data)` on a Layer session |
-| `EmbeddedLinkView` | `PlaidEmbeddedSearchView` |
-| `syncFinanceKit(token, bool, bool, cb)` | `await syncFinanceKit({ token, ... })` |
-| `destroy()` | Not needed — each create call resets session state |
-| `dismissLink()` | No replacement in v13 |
+| Pre-v13                                 | v13                                                        |
+| --------------------------------------- | ---------------------------------------------------------- |
+| `create(config)`                        | `await createPlaidLinkSession(config)`                     |
+| `open({ onSuccess, onExit })`           | `await session.open()` — callbacks move to the create call |
+| `openLink({ tokenConfig, ... })`        | `createPlaidLinkSession(...)`, then `session.open()`       |
+| `<PlaidLink>` component                 | Build your own button and call `createPlaidLinkSession`    |
+| `usePlaidEmitter(listener)`             | Pass `onEvent` to the create call                          |
+| `submit(data)`                          | `await session.submit(data)` on a Layer session            |
+| `EmbeddedLinkView`                      | `PlaidEmbeddedSearchView`                                  |
+| `syncFinanceKit(token, bool, bool, cb)` | `await syncFinanceKit({ token, ... })`                     |
+| `destroy()`                             | Not needed — each create call resets session state         |
+| `dismissLink()`                         | No replacement in v13                                      |
 
 The [v13 migration guide](./V13_MIGRATION_GUIDE.md) has full before and after
 examples for every flow.

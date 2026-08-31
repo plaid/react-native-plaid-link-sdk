@@ -8,7 +8,7 @@ import {
   View,
   StyleSheet,
 } from "react-native";
-import ReactNativePlaidLinkSdk from "react-native-plaid-link-sdk";
+import { sdkVersion } from "react-native-plaid-link-sdk";
 
 import { styles } from "./styles/common";
 import { Screen, SCREENS } from "./types/types";
@@ -36,9 +36,7 @@ export default function App() {
     <SafeAreaView style={[styles.container, styles.androidSafeArea]}>
       <ScrollView style={styles.container}>
         <Text style={styles.header}>LinkKit Examples</Text>
-        <Text style={styles.sdkVersion}>
-          SDK: {ReactNativePlaidLinkSdk.sdkVersion}
-        </Text>
+        <Text style={styles.sdkVersion}>SDK: {sdkVersion}</Text>
         {SCREENS.map((s) => (
           <TouchableOpacity
             key={s.key}

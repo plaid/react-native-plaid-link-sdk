@@ -13,8 +13,8 @@ import {
 import {
   syncFinanceKit,
   FinanceKitSyncBehavior,
+  sdkVersion,
 } from "react-native-plaid-link-sdk";
-import ReactNativePlaidLinkSdk from "react-native-plaid-link-sdk";
 import {
   ErrorView,
   SdkVersionView,
@@ -99,7 +99,7 @@ export function SyncFinanceKitScreen({ onBack }: Props) {
 
         <View style={styles.content}>
           <Text style={styles.title}>Sync FinanceKit Example</Text>
-          <SdkVersionView version={ReactNativePlaidLinkSdk.sdkVersion} />
+          <SdkVersionView version={sdkVersion} />
 
           <TokenInputView token={token} onTokenChange={setToken} />
 

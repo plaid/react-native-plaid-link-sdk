@@ -49,6 +49,11 @@ jobs:
         env:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
 
+      - name: Packed TypeScript API check
+        run: npm run check:typescript-api
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
       - name: Pack dry run
         run: npm run pack:dry-run
         env:

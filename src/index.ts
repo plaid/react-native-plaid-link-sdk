@@ -19,11 +19,26 @@ import NativePlaidModule from "./ReactNativePlaidLinkSdkModule";
 const V13_MIGRATION_GUIDE_URL =
   "https://github.com/plaid/react-native-plaid-link-sdk/blob/master/V13_MIGRATION_GUIDE.md";
 
-function removedApi(name: string, replacement: string): () => never {
-  return () => {
+/**
+ * Builds a deprecated export for an API removed in v13.
+ *
+ * The replacement text is single-sourced: it is thrown at runtime and encoded
+ * into the returned type, so `tsc` prints the exact v13 replacement instead of
+ * suggesting the (incorrect) default import. Keeping one source for both
+ * prevents the runtime message and the compiler diagnostic from drifting apart.
+ */
+function migrationDiagnostic<Replacement extends string>(
+  name: string,
+  replacement: Replacement,
+): { readonly __migration_error__: `Removed in v13. ${Replacement}` } {
+  const removed = () => {
     throw new Error(
       `${name} was removed in react-native-plaid-link-sdk v13. ${replacement} See ${V13_MIGRATION_GUIDE_URL}`,
     );
+  };
+
+  return removed as unknown as {
+    readonly __migration_error__: `Removed in v13. ${Replacement}`;
   };
 }
 
@@ -31,33 +46,80 @@ function removedApi(name: string, replacement: string): () => never {
  * @deprecated Removed in v13. Use `await createPlaidLinkSession(config)`, then
  * call `await session.open()` on the returned session.
  */
-export const create = removedApi(
+export const create = migrationDiagnostic(
   "create",
   "Use await createPlaidLinkSession(config), then call await session.open() on the returned session.",
-) as unknown as {
-  readonly __migration_error__: "Removed in v13. Use await createPlaidLinkSession(config), then call await session.open() on the returned session.";
-};
+);
 
 /**
  * @deprecated Removed in v13. Call `await session.open()` on the session
  * returned by `createPlaidLinkSession(config)`.
  */
-export const open = removedApi(
+export const open = migrationDiagnostic(
   "open",
   "Call await session.open() on the session returned by createPlaidLinkSession(config). Move onSuccess, onExit, and onEvent callbacks to the create call.",
-) as unknown as {
-  readonly __migration_error__: "Removed in v13. Call await session.open() on the session returned by createPlaidLinkSession(config). Move callbacks to the create call.";
-};
+);
 
 /**
  * @deprecated Removed in v13. Use `PlaidEmbeddedSearchView`.
  */
-export const EmbeddedLinkView = removedApi(
+export const EmbeddedLinkView = migrationDiagnostic(
   "EmbeddedLinkView",
   "Use PlaidEmbeddedSearchView.",
-) as unknown as {
-  readonly __migration_error__: "Removed in v13. Use PlaidEmbeddedSearchView.";
-};
+);
+
+/**
+ * @deprecated Removed in v13. Use `await createPlaidLinkSession(config)`, then
+ * call `await session.open()` on the returned session.
+ */
+export const openLink = migrationDiagnostic(
+  "openLink",
+  "Use await createPlaidLinkSession(config), then call await session.open() on the returned session.",
+);
+
+/**
+ * @deprecated Removed in v13. Pass `onEvent` to the create call instead of
+ * subscribing separately.
+ */
+export const usePlaidEmitter = migrationDiagnostic(
+  "usePlaidEmitter",
+  "Pass onEvent to createPlaidLinkSession(config) instead of subscribing separately.",
+);
+
+/**
+ * @deprecated Removed in v13. Call `await session.submit(data)` on the session
+ * returned by `createPlaidLayerSession(config)`.
+ */
+export const submit = migrationDiagnostic(
+  "submit",
+  "Call await session.submit(data) on the session returned by createPlaidLayerSession(config).",
+);
+
+/**
+ * @deprecated Removed in v13. Build your own button and call
+ * `await createPlaidLinkSession(config)`, then `await session.open()`.
+ */
+export const PlaidLink = migrationDiagnostic(
+  "PlaidLink",
+  "Build your own button and call await createPlaidLinkSession(config), then await session.open().",
+);
+
+/**
+ * @deprecated Removed in v13. Each create call resets session state, so no
+ * teardown call is needed.
+ */
+export const destroy = migrationDiagnostic(
+  "destroy",
+  "Remove the call. Each create call resets session state, so no teardown is needed.",
+);
+
+/**
+ * @deprecated Removed in v13 with no replacement.
+ */
+export const dismissLink = migrationDiagnostic(
+  "dismissLink",
+  "Remove the call. There is no programmatic dismiss API in v13.",
+);
 
 /** The React Native Plaid Link SDK version reported by the native module. */
 export const sdkVersion = NativePlaidModule.sdkVersion;

@@ -72,7 +72,7 @@
   "devDependencies": {
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^30.0.0",
-    "@types/react": "~19.1.1",
+    "@types/react": "~19.2.18",
     "expo": "^55.0.8",
     "expo-module-scripts": "^55.0.2",
     "react-native": "0.82.1"

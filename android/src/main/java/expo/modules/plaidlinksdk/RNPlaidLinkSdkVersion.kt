@@ -1,5 +1,5 @@
 package expo.modules.plaidlinksdk
 
 internal object RNPlaidLinkSdkVersion {
-  const val SDK_VERSION = "13.0.5"
+  const val SDK_VERSION = "13.1.0"
 }

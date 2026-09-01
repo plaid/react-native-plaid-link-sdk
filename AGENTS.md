@@ -13,8 +13,9 @@ before writing any Plaid code.
 import { createPlaidLinkSession } from "react-native-plaid-link-sdk";
 ```
 
-These pre-v13 names are retained only as migration diagnostics and are not
-callable:
+Every removed pre-v13 name is retained only as a migration diagnostic and is
+not usable: `create`, `open`, `openLink`, `usePlaidEmitter`, `submit`,
+`destroy`, `dismissLink`, `PlaidLink`, and `EmbeddedLinkView`.
 
 ```ts
 import { create, open } from "react-native-plaid-link-sdk";
@@ -24,12 +25,14 @@ import { EmbeddedLinkView } from "react-native-plaid-link-sdk";
 Using one reports `TS2349: This expression is not callable` followed by an exact
 v13 replacement, such as `Removed in v13. Use await
 createPlaidLinkSession(config), then call await session.open() on the returned
-session.` JavaScript callers receive the same guidance as a runtime error.
+session.` Rendering `PlaidLink` or `EmbeddedLinkView` as JSX reports `TS2786`
+carrying the same replacement. JavaScript callers receive the same guidance as a
+runtime error.
 
 Older v13 releases reported `TS2614 ... Did you mean to use 'import create from
 "react-native-plaid-link-sdk"' instead?`. **That suggestion is wrong.** The
-deprecated default export is the native module object, not `create`, `open`, or
-`EmbeddedLinkView`. Do not follow the default-import suggestion.
+deprecated default export is the native module object, not any of these names.
+Do not follow the default-import suggestion.
 
 ## If you were about to write pre-v13 code
 

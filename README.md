@@ -304,7 +304,7 @@ error TS2614: Module '"react-native-plaid-link-sdk"' has no exported member 'Emb
   Did you mean to use 'import EmbeddedLinkView from "react-native-plaid-link-sdk"' instead?
 ```
 
-The same error appears for other removed APIs.
+Older v13 releases reported the same error for every other removed API.
 
 **Do not follow the suggested default import.** The package does have a default
 export, but it is the native module object, not these functions. Rewriting the
@@ -316,13 +316,23 @@ error TS2349: This expression is not callable.
   Type 'ReactNativePlaidLinkSdkModule' has no call signatures.
 ```
 
-Newer v13 releases retain `create`, `open`, and `EmbeddedLinkView` only as
-deprecated migration diagnostics. Their imports resolve, but trying to use one
-produces `TS2349` with the exact replacement in its type:
+Newer v13 releases retain every removed pre-v13 name — `create`, `open`,
+`openLink`, `usePlaidEmitter`, `submit`, `destroy`, `dismissLink`, `PlaidLink`,
+and `EmbeddedLinkView` — only as deprecated migration diagnostics. Their imports
+resolve, but trying to use one produces `TS2349` with the exact replacement in
+its type:
 
 ```
 error TS2349: This expression is not callable.
   Type '{ readonly __migration_error__: "Removed in v13. Use await createPlaidLinkSession(config), then call await session.open() on the returned session."; }' has no call signatures.
+```
+
+Rendering `PlaidLink` or `EmbeddedLinkView` as a JSX element reports `TS2786`
+with the same replacement:
+
+```
+error TS2786: 'EmbeddedLinkView' cannot be used as a JSX component.
+  Its type '{ readonly __migration_error__: "Removed in v13. Use PlaidEmbeddedSearchView."; }' is not a valid JSX element type.
 ```
 
 JavaScript callers receive the same replacement and a migration-guide link in a

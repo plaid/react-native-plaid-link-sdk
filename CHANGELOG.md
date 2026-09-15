@@ -1,6 +1,6 @@
 # RELEASES
 
-## LinkKit V13.1.1 — 2026-09-15
+## LinkKit V13.2.0 — 2026-09-15
 
 ### Changes
 

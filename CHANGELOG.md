@@ -1,5 +1,31 @@
 # RELEASES
 
+## LinkKit V13.2.0 — 2026-09-15
+
+### Changes
+
+- Updates Android integration to `com.plaid.link:sdk-core:6.2.1`, which narrows
+  the SDK's consumer ProGuard rules from a blanket `-keep` to `-keepnames`. R8
+  can now shrink and optimize Plaid SDK code in minified apps while keeping
+  stack traces readable.
+- Lowers the minimum supported Android version to API level 25 (Android 7.1),
+  down from API level 26 (Android 8.0), through the Android SDK update.
+- Picks up Android fixes for a white screen when connecting a second OAuth
+  institution in the same Link session, and for `income_verification` document
+  uploads through the WebView file chooser.
+- Updates the bundled iOS SDK to LinkKit 7.1.2, which fixes `onLoad` not being
+  called for Identity Verification sessions and corrects an invalid purpose
+  value in the privacy manifest.
+- No changes to the JavaScript API.
+
+### Android
+
+Android SDK [6.2.1](https://github.com/plaid/plaid-link-android/releases/tag/v6.2.1)
+
+### iOS
+
+iOS SDK [7.1.2](https://github.com/plaid/plaid-link-ios/releases/tag/7.1.2)
+
 ## LinkKit V13.1.0 — 2026-08-31
 
 ### Changes
@@ -23,7 +49,7 @@ Android SDK [6.1.0](https://github.com/plaid/plaid-link-android/releases/tag/v6.
 
 ### iOS
 
-iOS SDK [7.1.0](https://github.com/plaid/plaid-link-ios/releases/tag/v7.1.0)
+iOS SDK [7.1.0](https://github.com/plaid/plaid-link-ios/releases/tag/7.1.0)
 
 ## LinkKit V13.0.5 — 2026-08-28
 

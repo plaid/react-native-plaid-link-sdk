@@ -4,6 +4,10 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>.DS_Store</key>
+		<data>
+		Qt6DR3oH9vuUX8osyQuqEav1eYk=
+		</data>
 		<key>Headers/LinkKit-Swift.h</key>
 		<data>
 		T0kPYIntgQ61352a4qfCVCfTcVM=
@@ -14,7 +18,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		S5G+/kcNZuPh7lisq8q9k97alZ4=
+		Dx4vQDklGmd1Tp97S5fmFsoJaQs=
 		</data>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
@@ -34,7 +38,7 @@
 		</data>
 		<key>Modules/LinkKit.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		e9KXnkp1qkZTpv4WAVvS7DZehHY=
+		jrOqgKxh2OPoY0/8rT1FUJxgOCc=
 		</data>
 		<key>Modules/LinkKit.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
@@ -54,7 +58,7 @@
 		</data>
 		<key>Modules/LinkKit.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		ke3ArYJwMaA/OO73VdnzLCQU4gs=
+		lVZdc6VNLvDrmbcy4FWTCIMj5UI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -62,7 +66,7 @@
 		</data>
 		<key>PrivacyInfo.xcprivacy</key>
 		<data>
-		ZslbibRlnYFZ3P3mPkRNxCiXM44=
+		pjjVumVtdN+hiy24Hab5CL1L/wM=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -113,7 +117,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+T9lGaQyVLSZoXK8rmY3EEcPafHFBa+iB2dqnhWrT/M=
+			TkKlm6x2WDLKO8Jjk/BtbgiLrKhve0vB2AgeBOmKZrw=
 			</data>
 		</dict>
 		<key>Modules/LinkKit.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
@@ -148,7 +152,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			YivCIJkm4STVAmLq4XDt9Cg3cKUt/mFm3zrhsJR1PeE=
+			c9ZI57I0djFkDnl0mIdawwi/WBnZzm/CHP8/Vp73Wog=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -162,7 +166,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			miWgwnkAGFMlwDVKKnSJH9MRPNSwFFxWqC4XV9/Zi4U=
+			1zSw0jafazYLr6FRuKDuoPXTVBT0TuOI/gOsu5RgxBM=
 			</data>
 		</dict>
 	</dict>

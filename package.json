@@ -73,7 +73,7 @@
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^30.0.0",
     "@types/react": "~19.1.1",
-    "expo": "^55.0.8",
+    "expo": "^57.0.18",
     "expo-module-scripts": "^55.0.2",
     "react-native": "0.82.1"
   },

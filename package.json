@@ -74,7 +74,7 @@
     "@types/jest": "^30.0.0",
     "@types/react": "~19.1.1",
     "expo": "^55.0.8",
-    "expo-module-scripts": "^55.0.2",
+    "expo-module-scripts": "^56.0.3",
     "react-native": "0.82.1"
   },
   "peerDependencies": {

@@ -2,6 +2,9 @@
 
 # dependencies
 node_modules/
+# Untracked on purpose: keeps the demo app's transitive tree out of the
+# dependency graph. See .github/dependabot.yml.
+package-lock.json
 
 # Expo
 .expo/

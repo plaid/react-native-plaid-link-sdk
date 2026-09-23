@@ -1,8 +1,21 @@
 version: 2
 updates:
+  # The example app is a local demo that is never published or deployed. Its
+  # lockfile is deliberately untracked so its transitive tree stays out of the
+  # dependency graph, which is the only thing that stops alerts and security
+  # update PRs for it -- exclude-paths alone does not suppress those.
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7
     exclude-paths:
       - "example/**"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7

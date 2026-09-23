@@ -1,5 +1,32 @@
 # RELEASES
 
+## LinkKit V13.3.0 — 2026-09-23
+
+### Changes
+
+- Updates the bundled iOS SDK to LinkKit 7.2.0, which adds automatic session
+  handoff for Embedded Link and delivers the Embedded Link start-failure
+  `onExit` callback on the main thread.
+- **Safari Web Inspector can no longer attach to production Link sessions on
+  iOS.** WebView inspection is now limited to Sandbox. Debug your integration
+  against a Sandbox link token.
+- Updates Android integration to `com.plaid.link:sdk-core:6.2.2`, which fixes a
+  static-initialization crash in `LinkAccountVerificationStatus` and other
+  public sealed classes when an activity is restored after the app's process
+  was killed.
+- `onLoad` now fires on Android for sessions whose WebView is not
+  eager-started.
+- Picks up security updates on both platforms.
+- No changes to the JavaScript API.
+
+### Android
+
+Android SDK [6.2.2](https://github.com/plaid/plaid-link-android/releases/tag/v6.2.2)
+
+### iOS
+
+iOS SDK [7.2.0](https://github.com/plaid/plaid-link-ios/releases/tag/7.2.0)
+
 ## LinkKit V13.2.0 — 2026-09-15
 
 ### Changes

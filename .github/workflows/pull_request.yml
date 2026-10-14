@@ -203,6 +203,12 @@ jobs:
 
       - name: Install CocoaPods dependencies
         working-directory: FabricExample
+        # React Native 0.81 compiles core and its third-party dependencies from
+        # source unless told to use the prebuilt Maven tarballs, which turns a
+        # ~14 minute simulator build into a ~1 minute one.
+        env:
+          RCT_USE_RN_DEP: "1"
+          RCT_USE_PREBUILT_RNCORE: "1"
         run: |
           bundle install
           cd ios && bundle exec pod install

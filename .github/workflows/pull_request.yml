@@ -232,7 +232,7 @@ jobs:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
 
       - name: Cache CocoaPods
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/Library/Caches/CocoaPods
@@ -272,7 +272,7 @@ jobs:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
 
       - name: Cache CocoaPods
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/Library/Caches/CocoaPods

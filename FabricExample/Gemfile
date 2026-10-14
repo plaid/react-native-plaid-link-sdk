@@ -14,3 +14,6 @@ gem 'bigdecimal'
 gem 'logger'
 gem 'benchmark'
 gem 'mutex_m'
+# Ruby 3.4 also dropped nkf; CFPropertyList needs it when CocoaPods reads a
+# vendored xcframework's Info.plist.
+gem 'nkf'

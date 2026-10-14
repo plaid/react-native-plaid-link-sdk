@@ -1,5 +1,43 @@
 # RELEASES
 
+## LinkKit V12.8.6 — 2026-10-14
+
+#### Requirements
+
+This SDK works with any supported version of React Native.
+
+### Changes
+
+- Upgrade the Android SDK to version 5.5.6.
+- Upgrade the iOS SDK to LinkKit 6.5.4.
+- **iOS: LinkKit is now bundled in the npm package as `LinkKit.xcframework`**
+  instead of being pulled from the `Plaid` CocoaPod. CocoaPods distribution of
+  LinkKit ended at 6.5.1 and CocoaPods trunk becomes read-only on
+  2026-12-02, so this is the only way for 12.x to ship newer LinkKit fixes. If
+  your Podfile declares `pod 'Plaid'` directly, remove it and run
+  `pod install`; otherwise no integration changes are required.
+
+### Android
+
+Android SDK [5.5.6](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.6)
+
+### Changes
+
+- Security improvements and bug fixes (5.5.6).
+- Fix a static-initialization crash in `LinkAccountVerificationStatus` and other public sealed classes when an activity is restored after the app's process was killed (5.5.5).
+- Fix back navigation for apps targeting SDK 36, where Android 16's predictive back caused Link to close with `LinkError(LinkException, "No result returned.")` and null metadata instead of a cancellation (5.5.4).
+
+### iOS
+
+iOS SDK [6.5.4](https://github.com/plaid/plaid-link-ios/releases/tag/6.5.4)
+
+### Changes
+
+- Fix Link opening at the size the window had when the session was created. Unfolding an iPhone Duo or resizing an iPad multitasking window before opening Link no longer leaves it in a column at the old width (6.5.4).
+- Fix a crash impacting Layer customers (6.5.3).
+- Security improvements (6.5.2).
+- Fix an invalid purpose value in the privacy manifest (6.5.1).
+
 ## LinkKit V12.8.5 — 2026-07-31
 
 #### Requirements

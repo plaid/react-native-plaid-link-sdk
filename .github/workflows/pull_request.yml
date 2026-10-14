@@ -1,5 +1,9 @@
 name: Pull Request
 
+permissions:
+  contents: read
+  pull-requests: write
+
 on:
   # Triggers the workflow on a pull request pointed at supported release branches.
   pull_request:
@@ -10,16 +14,95 @@ on:
   # Allows you to run this workflow manually from the Actions tab.
   workflow_dispatch:
 
+env:
+  NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+
 jobs:
   install-and-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Use Node.js 22
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install Node modules
+        run: npm ci --legacy-peer-deps
+
+      - name: Linting
+        run: npm run lint
+
+      - name: Unit & Integration tests with coverage
+        run: npm test -- --coverage --passWithNoTests
+
+      - name: Build TypeScript output
+        run: npm run build
+
+      - name: Package sanity checks
+        run: npm run check:package
+
+      - name: Packed TypeScript API check
+        run: npm run check:typescript-api
+
+      - name: Pack dry run
+        run: npm run pack:dry-run
+
+      - name: Publish dry run
+        run: npm run publish:dry-run
+
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 30
+
+      - name: Generate coverage summary
+        if: always()
+        run: |
+          echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f coverage/coverage-summary.json ]; then
+            echo "\`\`\`json" >> $GITHUB_STEP_SUMMARY
+            cat coverage/coverage-summary.json >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No coverage summary available" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Comment coverage on PR
+        uses: romeovs/lcov-reporter-action@v0.4.0
+        if: github.event_name == 'pull_request'
+        with:
+          lcov-file: ./coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          delete-old-comments: true
+
+  compatibility-smoke:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Oldest example (React Native 0.73)
+            react: "18.2.0"
+            react-native: "0.73.6"
+          - name: Current example (React Native 0.81)
+            react: "19.1.0"
+            react-native: "0.81.1"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: "npm"
@@ -30,11 +113,160 @@ jobs:
       - name: Build TypeScript output
         run: npm run build
 
-      - name: Package sanity checks
-        run: npm run check:package
+      - name: Pack local SDK
+        run: |
+          PACKAGE_TARBALL="$(node scripts/pack-compat-tarball.js "$RUNNER_TEMP")"
+          echo "PACKAGE_TARBALL=$PACKAGE_TARBALL" >> "$GITHUB_ENV"
 
-      - name: Linting
-        run: npm run lint
+      - name: Install SDK with ${{ matrix.name }} peers
+        run: |
+          mkdir "$RUNNER_TEMP/compat-app"
+          cd "$RUNNER_TEMP/compat-app"
+          npm init -y
+          npm install "$PACKAGE_TARBALL" \
+            "react@${{ matrix.react }}" \
+            "react-native@${{ matrix.react-native }}" \
+            --package-lock=false
+          npm ls react-native-plaid-link-sdk react react-native
+          node -e "
+            const path = require('path');
+            const fs = require('fs');
+            const pkgPath = require.resolve('react-native-plaid-link-sdk/package.json');
+            const pkg = require(pkgPath);
+            for (const field of ['main', 'types', 'react-native']) {
+              const target = path.join(path.dirname(pkgPath), pkg[field]);
+              if (!fs.existsSync(target)) throw new Error('Missing ' + field + ' entrypoint: ' + pkg[field]);
+            }
+            const podspec = path.join(path.dirname(pkgPath), 'react-native-plaid-link-sdk.podspec');
+            if (!fs.existsSync(podspec)) throw new Error('Missing podspec in packed package');
+            const xcframework = path.join(path.dirname(pkgPath), 'ios/Frameworks/LinkKit.xcframework/Info.plist');
+            if (!fs.existsSync(xcframework)) throw new Error('Missing bundled LinkKit.xcframework in packed package');
+          "
 
-      - name: Unit & Integration tests
-        run: npm test
+  validate-linkkit-xcframework:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Validate LinkKit XCFramework slices and signatures
+        run: npm run check:linkkit
+
+  build-ios-example:
+    # Installs the packed SDK into FabricExample, runs pod install against the
+    # bundled LinkKit.xcframework, and compiles the app for the simulator.
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install root dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build TypeScript output
+        run: npm run build
+
+      - name: Pack local SDK
+        run: |
+          PACKAGE_TARBALL="$(node scripts/pack-compat-tarball.js "$RUNNER_TEMP")"
+          echo "PACKAGE_TARBALL=$PACKAGE_TARBALL" >> "$GITHUB_ENV"
+
+      - name: Install example dependencies with the packed SDK
+        working-directory: FabricExample
+        run: |
+          npm install
+          npm install "$PACKAGE_TARBALL" --no-save
+          npm ls react-native-plaid-link-sdk
+
+      - name: Cache CocoaPods
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/Library/Caches/CocoaPods
+            FabricExample/ios/Pods
+          key: ${{ runner.os }}-fabric-pods-${{ hashFiles('FabricExample/ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-fabric-pods-
+
+      - name: Install CocoaPods dependencies
+        working-directory: FabricExample
+        run: |
+          bundle install
+          cd ios && bundle exec pod install
+
+      - name: Build iOS app for Simulator
+        working-directory: FabricExample
+        run: |
+          set -o pipefail
+          xcodebuild -workspace ios/FabricExample.xcworkspace \
+            -scheme FabricExample \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            build \
+            CODE_SIGNING_ALLOWED=NO \
+            | tee xcodebuild.log
+
+      - name: Upload build logs
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: ios-build-logs
+          path: FabricExample/xcodebuild.log
+          retention-days: 7
+
+  test-android-example:
+    # Resolves com.plaid.link:sdk-core from Maven through FabricExample and
+    # runs its unit tests, so a bad Android pin fails here.
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Use Java 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install root dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build TypeScript output
+        run: npm run build
+
+      - name: Pack local SDK
+        run: |
+          PACKAGE_TARBALL="$(node scripts/pack-compat-tarball.js "$RUNNER_TEMP")"
+          echo "PACKAGE_TARBALL=$PACKAGE_TARBALL" >> "$GITHUB_ENV"
+
+      - name: Install example dependencies with the packed SDK
+        working-directory: FabricExample
+        run: |
+          npm install
+          npm install "$PACKAGE_TARBALL" --no-save
+          npm ls react-native-plaid-link-sdk
+
+      - name: Run Android unit tests
+        working-directory: FabricExample/android
+        run: ./gradlew testDebugUnitTest

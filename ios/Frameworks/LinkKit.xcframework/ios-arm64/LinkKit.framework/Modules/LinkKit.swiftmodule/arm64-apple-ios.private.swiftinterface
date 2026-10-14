@@ -222,6 +222,9 @@ public protocol SubmissionData {
 @objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class EmbeddedSearchUIView : UIKit.UIView {
   @_Concurrency.MainActor @preconcurrency final public let expectedWidth: CoreFoundation.CGFloat
   @_Concurrency.MainActor @preconcurrency final public let expectedHeight: CoreFoundation.CGFloat
+  @_Concurrency.MainActor @preconcurrency @objc override final public var intrinsicContentSize: CoreFoundation.CGSize {
+    @objc get
+  }
   @objc deinit
 }
 @_Concurrency.MainActor @preconcurrency public struct EmbeddedSearchView : SwiftUICore.View {

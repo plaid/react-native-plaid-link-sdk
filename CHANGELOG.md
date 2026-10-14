@@ -1,5 +1,29 @@
 # RELEASES
 
+## LinkKit V13.4.0 — 2026-10-14
+
+### Changes
+
+- Updates the bundled iOS SDK to LinkKit 7.2.2, which fixes Link opening at
+  the size the window had when the session was created. Unfolding an iPhone
+  Duo or resizing an iPad multitasking window before opening Link no longer
+  leaves it in a column at the old width.
+- Picks up LinkKit 7.2.1, which fixes a crash affecting Layer customers on
+  iOS.
+- Updates Android integration to `com.plaid.link:sdk-core:6.3.0`, which adds
+  automatic session handoff for Embedded Link and fixes password-manager
+  autofill on the Link credentials screen when the password manager requires
+  unlock or confirmation before filling.
+- No changes to the JavaScript API.
+
+### Android
+
+Android SDK [6.3.0](https://github.com/plaid/plaid-link-android/releases/tag/v6.3.0)
+
+### iOS
+
+iOS SDK [7.2.2](https://github.com/plaid/plaid-link-ios/releases/tag/7.2.2)
+
 ## LinkKit V13.3.0 — 2026-09-23
 
 ### Changes

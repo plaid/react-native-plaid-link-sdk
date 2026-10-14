@@ -36,5 +36,5 @@ Pod::Spec.new do |s|
   end
 
   s.dependency 'React-Core'
-  s.dependency 'Plaid', '~> 6.5.0'
+  s.dependency 'Plaid', '~> 6.5.4'
 end

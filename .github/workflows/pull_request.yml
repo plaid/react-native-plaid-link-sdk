@@ -38,3 +38,18 @@ jobs:
 
       - name: Unit & Integration tests
         run: npm test
+
+  validate-linkkit-xcframework:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Validate LinkKit XCFramework slices and signatures
+        run: npm run check:linkkit

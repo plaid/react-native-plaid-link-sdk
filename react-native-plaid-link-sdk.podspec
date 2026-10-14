@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "14.0"
 
   s.source       = { :git => "https://github.com/plaid/react-native-plaid-link-sdk.git", :tag => "v#{s.version}" }
-  s.source_files  = "ios/**/*.{h,m,mm,swift}"
+  s.source_files  = "ios/*.{h,m,mm,swift}"
   # we need this since Swift generates import for `react_native_plaid_link_sdk/react_native_plaid_link_sdk.h` and we have to fake it
   s.header_dir = "react_native_plaid_link_sdk"
   # we don't want this to be seen by Swift
@@ -36,5 +36,9 @@ Pod::Spec.new do |s|
   end
 
   s.dependency 'React-Core'
-  s.dependency 'Plaid', '~> 6.5.4'
+
+  # LinkKit is bundled in the npm package. CocoaPods distribution of the
+  # Plaid pod ended at 6.5.1, so newer LinkKit releases are vendored here.
+  s.vendored_frameworks = 'ios/Frameworks/LinkKit.xcframework'
+  s.preserve_paths = 'ios/Frameworks/LinkKit.xcframework'
 end

@@ -10,6 +10,12 @@ This SDK works with any supported version of React Native.
 
 - Upgrade the Android SDK to version 5.5.6.
 - Upgrade the iOS SDK to LinkKit 6.5.4.
+- **iOS: LinkKit is now bundled in the npm package as `LinkKit.xcframework`**
+  instead of being pulled from the `Plaid` CocoaPod. CocoaPods distribution of
+  LinkKit ended at 6.5.1 and CocoaPods trunk becomes read-only on
+  2026-12-02, so this is the only way for 12.x to ship newer LinkKit fixes. If
+  your Podfile declares `pod 'Plaid'` directly, remove it and run
+  `pod install`; otherwise no integration changes are required.
 
 ### Android
 

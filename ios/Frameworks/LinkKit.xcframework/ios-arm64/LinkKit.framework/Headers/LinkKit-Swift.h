@@ -308,6 +308,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 /// UIKit-based View for Plaid Embedded Search.
 SWIFT_CLASS("_TtC7LinkKit20EmbeddedSearchUIView")
 @interface EmbeddedSearchUIView : UIView
+@property (nonatomic, readonly) CGSize intrinsicContentSize;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder SWIFT_UNAVAILABLE;
 - (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
 @end

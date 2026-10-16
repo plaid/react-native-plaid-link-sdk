@@ -30,7 +30,8 @@ native module.
 
 ### Android
 
-- Android Studio 4.0 or newer
+- Android 7.1 (API level 25) or newer
+- `compileSdkVersion` 36
 - Kotlin 1.9.25 or newer for Kotlin integrations
 - A package name registered in the Plaid Dashboard for Android OAuth flows
 

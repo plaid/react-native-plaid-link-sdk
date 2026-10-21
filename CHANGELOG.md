@@ -1,5 +1,28 @@
 # RELEASES
 
+## LinkKit V13.4.1 — 2026-10-21
+
+### Changes
+
+- Updates the bundled iOS SDK to LinkKit 7.2.3, which fixes a crash
+  (`EXC_BAD_ACCESS`) that could occur shortly after the app returned to the
+  foreground while Link was open, such as after OAuth, and fixes the Layer
+  background gradient covering only part of the screen when Link's view
+  changes size after it loads, such as on iPhone Duo or after rotation.
+- Updates Android integration to `com.plaid.link:sdk-core:6.3.1`, which fixes
+  a race condition that showed a blank white screen after returning from a
+  financial institution's OAuth login.
+- Picks up security updates on iOS.
+- No changes to the JavaScript API.
+
+### Android
+
+Android SDK [6.3.1](https://github.com/plaid/plaid-link-android/releases/tag/v6.3.1)
+
+### iOS
+
+iOS SDK [7.2.3](https://github.com/plaid/plaid-link-ios/releases/tag/7.2.3)
+
 ## LinkKit V13.4.0 — 2026-10-14
 
 ### Changes

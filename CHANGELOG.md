@@ -1,5 +1,29 @@
 # RELEASES
 
+## LinkKit V12.8.7 — 2026-10-21
+
+#### Requirements
+
+This SDK works with any supported version of React Native.
+
+### Changes
+
+- Upgrade the bundled iOS SDK to LinkKit 6.5.5.
+- Android SDK stays at version 5.5.6.
+
+### Android
+
+Android SDK [5.5.6](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.6) (unchanged)
+
+### iOS
+
+iOS SDK [6.5.5](https://github.com/plaid/plaid-link-ios/releases/tag/6.5.5)
+
+### Changes
+
+- Fix the Layer background gradient covering only part of the screen when Link's view changes size after it loads, such as on iPhone Duo or after rotation.
+- Security improvements.
+
 ## LinkKit V12.8.6 — 2026-10-14
 
 #### Requirements

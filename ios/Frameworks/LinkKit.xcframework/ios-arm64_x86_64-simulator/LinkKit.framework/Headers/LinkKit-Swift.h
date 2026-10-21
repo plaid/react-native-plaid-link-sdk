@@ -349,6 +349,7 @@ SWIFT_CLASS("_TtC7LinkKit18PLKPlaidFinanceKit")
 
 
 
+
 #endif
 #if __has_attribute(external_source_symbol)
 # pragma clang attribute pop
@@ -704,6 +705,7 @@ SWIFT_CLASS("_TtC7LinkKit18PLKPlaidFinanceKit")
 + (void)syncWithToken:(NSString * _Nonnull)token requestAuthorizationIfNeeded:(BOOL)requestAuthorizationIfNeeded syncBehavior:(PLKSyncBehavior)syncBehavior onSuccess:(void (^ _Nonnull)(void))onSuccess onError:(void (^ _Nonnull)(NSError * _Nonnull))onError SWIFT_AVAILABILITY(ios,introduced=17.4);
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
+
 
 
 

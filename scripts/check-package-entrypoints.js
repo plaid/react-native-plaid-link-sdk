@@ -84,4 +84,35 @@ for (const entrypoint of [main, types]) {
   }
 }
 
-console.log(`Package entrypoints are valid: ${main}, ${types}`);
+// 12.8.6 shipped 503 files because local Gradle output under android/build
+// and compiled tooling under dist/ matched the old "files" globs. Keep those
+// out of every future tarball.
+const forbiddenPathPrefixes = [
+  'android/build/',
+  'ios/build/',
+  'dist/scripts/',
+  'dist/coverage/',
+  'dist/build/',
+  'dist/__tests__/',
+];
+const forbiddenPathSegments = ['node_modules/', 'Pods/'];
+
+const forbiddenPackedFiles = packedFiles
+  .map(file => file.path)
+  .filter(
+    filePath =>
+      forbiddenPathPrefixes.some(prefix => filePath.startsWith(prefix)) ||
+      forbiddenPathSegments.some(segment => filePath.includes(segment)),
+  );
+
+if (forbiddenPackedFiles.length > 0) {
+  fail(
+    `packed package includes build output or tooling that must not ship:\n  ${forbiddenPackedFiles
+      .sort()
+      .join('\n  ')}`,
+  );
+}
+
+console.log(
+  `Package entrypoints are valid: ${main}, ${types} (${packedFiles.length} files packed)`,
+);

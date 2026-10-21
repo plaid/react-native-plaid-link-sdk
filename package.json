@@ -7,10 +7,22 @@
   "react-native": "src/index.ts",
   "files": [
     "dist/**/*",
-    "android/**/*",
-    "ios/**/*",
+    "src/**/*",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/gradle/",
+    "android/gradlew",
+    "android/gradlew.bat",
+    "android/src/",
+    "ios/*.h",
+    "ios/*.m",
+    "ios/*.mm",
+    "ios/*.swift",
+    "ios/Frameworks/",
     "react-native-plaid-link-sdk.podspec",
-    "src/**/*"
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "tsc",

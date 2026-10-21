@@ -12,8 +12,10 @@
     "target": "es6",
     "module": "es6",
     "declaration": true,
+    "rootDir": ".",
     "outDir": "./dist"
   },
+  "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "dist",

@@ -1,5 +1,17 @@
 # RELEASES
 
+## Unreleased
+
+### Changes
+
+- Keep build output and tooling out of the npm tarball. `package.json`
+  `files` now lists the Android and iOS sources explicitly instead of
+  `android/**/*` and `ios/**/*`, so local `android/build` output can no longer
+  ship, and `tsconfig.json` compiles only `src/` so `dist/` no longer contains
+  copies of `scripts/`. `npm run check:package` fails if any of those paths
+  are packed, and `npm run publish:dry-run` uses the `old-version` dist-tag
+  that 12.x releases publish under.
+
 ## LinkKit V12.8.7 — 2026-10-21
 
 #### Requirements

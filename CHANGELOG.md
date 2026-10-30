@@ -1,9 +1,15 @@
 # RELEASES
 
-## Unreleased
+## LinkKit V12.8.8 — 2026-10-30
+
+#### Requirements
+
+This SDK works with any supported version of React Native.
 
 ### Changes
 
+- Upgrade the bundled iOS SDK to LinkKit 6.5.7.
+- Android SDK stays at version 5.5.6.
 - Keep build output and tooling out of the npm tarball. `package.json`
   `files` now lists the Android and iOS sources explicitly instead of
   `android/**/*` and `ios/**/*`, so local `android/build` output can no longer
@@ -11,6 +17,19 @@
   copies of `scripts/`. `npm run check:package` fails if any of those paths
   are packed, and `npm run publish:dry-run` uses the `old-version` dist-tag
   that 12.x releases publish under.
+
+### Android
+
+Android SDK [5.5.6](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.6) (unchanged)
+
+### iOS
+
+iOS SDK [6.5.7](https://github.com/plaid/plaid-link-ios/releases/tag/6.5.7)
+
+### Changes
+
+- Reduce error reporting noise during FinanceKit syncs (6.5.7).
+- Fix a memory leak (6.5.6).
 
 ## LinkKit V12.8.7 — 2026-10-21
 

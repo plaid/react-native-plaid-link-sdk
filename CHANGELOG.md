@@ -28,7 +28,7 @@ iOS SDK [6.5.7](https://github.com/plaid/plaid-link-ios/releases/tag/6.5.7)
 
 ### Changes
 
-- Reduce error reporting noise during FinanceKit syncs (6.5.7).
+- Logging updates (6.5.7).
 - Fix a memory leak (6.5.6).
 
 ## LinkKit V12.8.7 — 2026-10-21

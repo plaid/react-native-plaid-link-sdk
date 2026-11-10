@@ -343,6 +343,19 @@ SWIFT_CLASS("_TtC7LinkKit18PLKPlaidFinanceKit")
 /// \param onError Closure executed when the sync fails, providing an NSError.
 ///
 + (void)syncWithToken:(NSString * _Nonnull)token requestAuthorizationIfNeeded:(BOOL)requestAuthorizationIfNeeded syncBehavior:(PLKSyncBehavior)syncBehavior onSuccess:(void (^ _Nonnull)(void))onSuccess onError:(void (^ _Nonnull)(NSError * _Nonnull))onError SWIFT_AVAILABILITY(ios,introduced=17.4);
+/// Reports whether a FinanceKit sync can run on this phone, without prompting the user.
+/// Use it to decide whether to show an Apple Card option at all (PLKFinanceKitStatusUnavailable),
+/// whether to pass requestAuthorizationIfNeeded:YES to <code>sync</code> (PLKFinanceKitStatusNotDetermined), or
+/// to send the user to Settings instead of syncing (PLKFinanceKitStatusDenied).
+/// warning:
+/// Needs the same FinanceKit entitlement as <code>sync</code>; without it FinanceKit terminates the
+/// process. With the entitlement it is safe to call on any device running iOS 17.4 or later,
+/// including an iPad running your app in compatibility mode.
+/// note:
+/// Available on iOS 17.4 and later.
+/// \param completion Called with the current status, not necessarily on the main queue.
+///
++ (void)statusWithCompletion:(void (^ _Nonnull)(PLKFinanceKitStatus))completion SWIFT_AVAILABILITY(ios,introduced=17.4);
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -703,6 +716,19 @@ SWIFT_CLASS("_TtC7LinkKit18PLKPlaidFinanceKit")
 /// \param onError Closure executed when the sync fails, providing an NSError.
 ///
 + (void)syncWithToken:(NSString * _Nonnull)token requestAuthorizationIfNeeded:(BOOL)requestAuthorizationIfNeeded syncBehavior:(PLKSyncBehavior)syncBehavior onSuccess:(void (^ _Nonnull)(void))onSuccess onError:(void (^ _Nonnull)(NSError * _Nonnull))onError SWIFT_AVAILABILITY(ios,introduced=17.4);
+/// Reports whether a FinanceKit sync can run on this phone, without prompting the user.
+/// Use it to decide whether to show an Apple Card option at all (PLKFinanceKitStatusUnavailable),
+/// whether to pass requestAuthorizationIfNeeded:YES to <code>sync</code> (PLKFinanceKitStatusNotDetermined), or
+/// to send the user to Settings instead of syncing (PLKFinanceKitStatusDenied).
+/// warning:
+/// Needs the same FinanceKit entitlement as <code>sync</code>; without it FinanceKit terminates the
+/// process. With the entitlement it is safe to call on any device running iOS 17.4 or later,
+/// including an iPad running your app in compatibility mode.
+/// note:
+/// Available on iOS 17.4 and later.
+/// \param completion Called with the current status, not necessarily on the main queue.
+///
++ (void)statusWithCompletion:(void (^ _Nonnull)(PLKFinanceKitStatus))completion SWIFT_AVAILABILITY(ios,introduced=17.4);
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 

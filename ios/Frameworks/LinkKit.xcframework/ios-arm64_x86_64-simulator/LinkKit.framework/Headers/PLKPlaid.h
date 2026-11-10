@@ -368,6 +368,10 @@ static NSString *const kPLKExitErrorRawJSONKey = @"PLKExitErrorRawJSONKey";
 static NSString *const kPLKExitErrorUnknownTypeKey = @"kPLKExitErrorUnknownTypeKey";
 static NSString *const kPLKExitErrorCodeKey = @"kPLKExitErrorCodeKey";
 
+/// userInfo keys on the NSError for PLKPlaidFinanceKitErrorSyncFailed: the API error type and code the server ended the sync with.
+static NSString *const kPLKFinanceKitErrorTypeKey = @"PLKFinanceKitErrorTypeKey";
+static NSString *const kPLKFinanceKitErrorCodeKey = @"PLKFinanceKitErrorCodeKey";
+
 static NSString *const kPLKExitErrorInvalidRequestDomain = @"PLKExitErrorInvalidRequestDomain";
 static NSString *const kPLKExitErrorInvalidInputDomain = @"PLKExitErrorInvalidInputDomain";
 static NSString *const kPLKExitErrorInstitutionErrorDomain = @"PLKExitErrorInstitutionErrorDomain";
@@ -639,6 +643,51 @@ typedef void(^PLKDismissalHandler)(UIViewController *);
 - (void) submit:(PLKSubmissionData *)data;
 
 @end
+
+/// The `code` of the NSError a FinanceKit sync fails with, in the kPLKDefaultErrorDomain domain. The values
+/// are stable; new cases are only added at the end.
+typedef NS_ENUM(NSInteger, PLKPlaidFinanceKitError) {
+    PLKPlaidFinanceKitErrorInvalidToken = 0,
+    PLKPlaidFinanceKitErrorPermissionError = 1,
+    PLKPlaidFinanceKitErrorLinkApiError = 2,
+    PLKPlaidFinanceKitErrorPermissionAccessError = 3,
+    PLKPlaidFinanceKitErrorUnknown = 4,
+    /// The sync ended because Apple returned no accounts shared with this app.
+    PLKPlaidFinanceKitErrorNoAccounts = 5,
+    /// The server ended the sync with another API error, given under kPLKFinanceKitErrorTypeKey and
+    /// kPLKFinanceKitErrorCodeKey in the error's userInfo.
+    PLKPlaidFinanceKitErrorSyncFailed = 6,
+    /// FinanceKit access has not been requested yet and the sync was told not to request it.
+    PLKPlaidFinanceKitErrorPermissionNotRequested = 7,
+    /// This device, region or OS version cannot provide FinanceKit data. The sync did not start.
+    PLKPlaidFinanceKitErrorDataUnavailable = 8,
+    /// The server closed the sync channel before the sync completed. Start a new sync to retry.
+    PLKPlaidFinanceKitErrorChannelClosed = 9,
+    /// iOS was about to suspend the app, or an hour passed, before the sync finished. Start a new sync
+    /// while the app is active to retry.
+    PLKPlaidFinanceKitErrorSyncTimedOut = 10
+};
+
+/// What `+[PLKPlaidFinanceKit statusWithCompletion:]` reports: whether a FinanceKit sync can run on this
+/// phone, and what the user has decided about sharing Wallet data with your app. Reading it never prompts,
+/// but it needs the same FinanceKit entitlement as a sync; without it FinanceKit terminates the process.
+typedef NS_ENUM(NSInteger, PLKFinanceKitStatus) {
+    /// FinanceKit cannot provide financial data on this device, region or OS version. A sync would fail with
+    /// PLKPlaidFinanceKitErrorDataUnavailable, so do not offer Apple Card here.
+    PLKFinanceKitStatusUnavailable,
+    /// The user has never been asked. A sync with requestAuthorizationIfNeeded:YES shows Apple's prompt;
+    /// with NO it fails with PLKPlaidFinanceKitErrorPermissionNotRequested.
+    PLKFinanceKitStatusNotDetermined,
+    /// The user declined Apple's prompt, or turned sharing off later. iOS will not prompt again; only the user
+    /// can change it, under Settings > Apps > (your app) > Wallet. A sync fails with
+    /// PLKPlaidFinanceKitErrorPermissionAccessError.
+    PLKFinanceKitStatusDenied,
+    /// Your app may read the user's Wallet data. An Apple Card in the Wallet, or any account shared with your
+    /// app, is not guaranteed, so a sync can still end with PLKPlaidFinanceKitErrorNoAccounts.
+    PLKFinanceKitStatusAuthorized,
+    /// FinanceKit did not report a status. Treat it like NotDetermined and let the sync decide.
+    PLKFinanceKitStatusUnknown
+};
 
 typedef NS_ENUM(NSInteger, PLKSyncBehavior) {
     PLKSyncBehaviorLive,

@@ -1,5 +1,48 @@
 # RELEASES
 
+## LinkKit V12.8.9 — 2026-11-10
+
+#### Requirements
+
+This SDK works with any supported version of React Native.
+
+### Changes
+
+- Upgrade the bundled iOS SDK to LinkKit 6.5.8.
+- Android SDK stays at version 5.5.6.
+- `FinanceKitErrorType` gains `NoAccounts`, `SyncFailed`,
+  `PermissionNotRequested`, `DataUnavailable`, `ChannelClosed` and
+  `SyncTimedOut`, the errors LinkKit 6.5.8 adds to `syncFinanceKit`. A
+  `SyncFailed` error also carries the server's `errorType` and `errorCode`.
+  Code that switches exhaustively over `FinanceKitError` needs the new cases.
+
+### Android
+
+Android SDK [5.5.6](https://github.com/plaid/plaid-link-android/releases/tag/v5.5.6) (unchanged)
+
+### iOS
+
+iOS SDK [6.5.8](https://github.com/plaid/plaid-link-ios/releases/tag/6.5.8)
+
+### Changes
+
+- `syncFinanceKit` fails with `NoAccounts` when Apple shared no accounts with
+  your app; it used to complete successfully.
+- `syncFinanceKit` completes with `ChannelClosed` or `SyncTimedOut` when the
+  server closes the sync, or it times out, before it finishes; the callback
+  used to never fire.
+- `PermissionNotRequested` replaces `PermissionAccessError` when
+  `requestAuthorizationIfNeeded` is `false` and the user was never asked.
+- `DataUnavailable` is reported on a device, region or OS version that cannot
+  provide Wallet data, including an iPad running an iPhone app.
+- A FinanceKit authorization failure is reported as `PermissionError` instead
+  of `Unknown`.
+- Any other failure the server reports is delivered as `SyncFailed`.
+- A sync holds an iOS background task once the permission prompt is answered,
+  so it keeps running for about 30 seconds after the user leaves the app.
+- Link asks once more when the user leaves Apple's permission sheet without
+  choosing.
+
 ## LinkKit V12.8.8 — 2026-10-30
 
 #### Requirements

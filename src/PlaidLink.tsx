@@ -159,10 +159,7 @@ export const syncFinanceKit = (
           completion()
         },
         (error: FinanceKitError) => {
-          completion({
-            type: error.type,
-            message: error.message,
-          })
+          completion(error)
         }
       )
     }

@@ -575,6 +575,23 @@ public struct PlaidFinanceKit {
   public static func sync(token: Swift.String, requestAuthorizationIfNeeded: Swift.Bool, syncBehavior: LinkKit.PlaidFinanceKit.SyncBehavior = .live, completion: @escaping (Swift.Result<Swift.Void, LinkKit.FinanceKitError>) -> Swift.Void)
   @available(iOS 17.4, *)
   public static func sync(token: Swift.String, requestAuthorizationIfNeeded: Swift.Bool, syncBehavior: LinkKit.PlaidFinanceKit.SyncBehavior = .live) async throws
+  @available(iOS 17.4, *)
+  public enum Status {
+    case unavailable
+    case notDetermined
+    case denied
+    case authorized
+    case unknown
+    public static func == (a: LinkKit.PlaidFinanceKit.Status, b: LinkKit.PlaidFinanceKit.Status) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  @available(iOS 17.4, *)
+  public static func status(completion: @escaping (LinkKit.PlaidFinanceKit.Status) -> Swift.Void)
+  @available(iOS 17.4, *)
+  public static func status() async -> LinkKit.PlaidFinanceKit.Status
 }
 public enum VerificationStatus : Swift.CustomStringConvertible, Swift.Codable {
   case pendingAutomaticVerification
@@ -615,6 +632,8 @@ public enum AssetReportErrorCode : Swift.Error, Swift.CustomStringConvertible {
 @_inheritsConvenienceInitializers @objc public class PLKPlaidFinanceKit : ObjectiveC.NSObject {
   @available(iOS 17.4, *)
   @objc public static func sync(token: Swift.String, requestAuthorizationIfNeeded: Swift.Bool, syncBehavior: LinkKit.PLKSyncBehavior, onSuccess: @escaping () -> Swift.Void, onError: @escaping (Foundation.NSError) -> Swift.Void)
+  @available(iOS 17.4, *)
+  @objc public static func status(completion: @escaping (LinkKit.PLKFinanceKitStatus) -> Swift.Void)
   @objc override dynamic public init()
   @objc deinit
 }
@@ -648,6 +667,12 @@ public enum FinanceKitError : Foundation.LocalizedError {
   case permissionError(message: Swift.String)
   case linkApiError(message: Swift.String)
   case permissionAccessError(message: Swift.String)
+  case permissionNotRequested(message: Swift.String)
+  case dataUnavailable(message: Swift.String)
+  case noAccounts(message: Swift.String)
+  case syncFailed(errorType: Swift.String, errorCode: Swift.String, message: Swift.String)
+  case channelClosed(message: Swift.String)
+  case syncTimedOut(message: Swift.String)
   case unknown(error: any Swift.Error)
   public var errorDescription: Swift.String? {
     get
@@ -722,3 +747,7 @@ extension LinkKit.Product : Swift.Hashable {}
 extension LinkKit.PlaidFinanceKit.SyncBehavior : Swift.Equatable {}
 @available(iOS 17.4, *)
 extension LinkKit.PlaidFinanceKit.SyncBehavior : Swift.Hashable {}
+@available(iOS 17.4, *)
+extension LinkKit.PlaidFinanceKit.Status : Swift.Equatable {}
+@available(iOS 17.4, *)
+extension LinkKit.PlaidFinanceKit.Status : Swift.Hashable {}

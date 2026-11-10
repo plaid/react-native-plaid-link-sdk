@@ -591,7 +591,19 @@ export enum FinanceKitErrorType {
     PermissionError = 1,
     LinkApiError = 2,
     PermissionAccessError = 3,
-    Unknown = 4
+    Unknown = 4,
+    /** The sync ended because Apple returned no accounts shared with this app. */
+    NoAccounts = 5,
+    /** The server ended the sync with another API error, given in `errorType` and `errorCode`. */
+    SyncFailed = 6,
+    /** FinanceKit access has not been requested yet and the sync was told not to request it. */
+    PermissionNotRequested = 7,
+    /** This device, region or OS version cannot provide FinanceKit data. The sync did not start. */
+    DataUnavailable = 8,
+    /** The server closed the sync before it completed. Start a new sync to retry. */
+    ChannelClosed = 9,
+    /** iOS was about to suspend the app, or an hour passed, before the sync finished. */
+    SyncTimedOut = 10
 }
 
 interface InvalidTokenError {
@@ -619,12 +631,52 @@ interface UnknownError {
     message: string;
 }
 
+interface NoAccountsError {
+    type: FinanceKitErrorType.NoAccounts;
+    message: string;
+}
+
+interface SyncFailedError {
+    type: FinanceKitErrorType.SyncFailed;
+    message: string;
+    /** The API error type the server ended the sync with, for example `ITEM_ERROR`. */
+    errorType: string;
+    /** The API error code the server ended the sync with. */
+    errorCode: string;
+}
+
+interface PermissionNotRequestedError {
+    type: FinanceKitErrorType.PermissionNotRequested;
+    message: string;
+}
+
+interface DataUnavailableError {
+    type: FinanceKitErrorType.DataUnavailable;
+    message: string;
+}
+
+interface ChannelClosedError {
+    type: FinanceKitErrorType.ChannelClosed;
+    message: string;
+}
+
+interface SyncTimedOutError {
+    type: FinanceKitErrorType.SyncTimedOut;
+    message: string;
+}
+
 export type FinanceKitError =
   | InvalidTokenError
   | PermissionError
   | LinkApiError
   | PermissionAccessError
-  | UnknownError;
+  | UnknownError
+  | NoAccountsError
+  | SyncFailedError
+  | PermissionNotRequestedError
+  | DataUnavailableError
+  | ChannelClosedError
+  | SyncTimedOutError;
 
 export interface SubmissionData {
     phoneNumber?: string;

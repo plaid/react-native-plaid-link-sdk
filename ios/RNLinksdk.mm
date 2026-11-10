@@ -239,11 +239,21 @@ RCT_EXPORT_METHOD(syncFinanceKit:(NSString *)token
         }
         onError:^(NSError *error) {
             
-            NSDictionary *financeKitError = @{
+            NSMutableDictionary *financeKitError = [@{
                 @"type": [NSNumber numberWithInteger: error.code],
                 @"message": error.localizedDescription
-            };
-            
+            } mutableCopy];
+
+            // PLKPlaidFinanceKitErrorSyncFailed carries the API error the server ended the sync with.
+            id errorType = error.userInfo[kPLKFinanceKitErrorTypeKey];
+            id errorCode = error.userInfo[kPLKFinanceKitErrorCodeKey];
+            if ([errorType isKindOfClass:[NSString class]]) {
+                financeKitError[@"errorType"] = errorType;
+            }
+            if ([errorCode isKindOfClass:[NSString class]]) {
+                financeKitError[@"errorCode"] = errorCode;
+            }
+
             onError(@[financeKitError]);
         }
     ];

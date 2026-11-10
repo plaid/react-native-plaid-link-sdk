@@ -77,6 +77,7 @@ try {
     `import React from "react";
 import {
   EmbeddedLinkView,
+  FinanceKitErrorType,
   LinkIOSPresentationStyle,
   LinkLogLevel,
   create,
@@ -116,7 +117,11 @@ export function exerciseSupportedApi(token: string): Promise<void> {
   submit({ phoneNumber: "+14155550017", dateOfBirth: "1990-01-01" });
 
   syncFinanceKit(token, true, false, (error?: FinanceKitError) => {
-    void error;
+    if (error?.type === FinanceKitErrorType.SyncFailed) {
+      void error.errorCode;
+    } else if (error?.type === FinanceKitErrorType.NoAccounts) {
+      void error.message;
+    }
   });
 
   dismissLink();

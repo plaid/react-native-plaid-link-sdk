@@ -549,6 +549,8 @@ struct LayerSubmissionData: SubmissionData {
 
 @available(iOS 17.4, *)
 extension LinkKit.FinanceKitError {
+    /// `errorType` values mirror LinkKit's Objective-C `PLKPlaidFinanceKitError` codes and
+    /// the JavaScript `FinanceKitErrorType` enum, so the three stay comparable.
     fileprivate var asFinanceKitErrorDictionary: [String: Any] {
         let errorType: Int
         let errorCode: String
@@ -575,6 +577,30 @@ extension LinkKit.FinanceKitError {
             errorType = 4
             errorCode = "UNKNOWN"
             errorMessage = error.localizedDescription
+        case .noAccounts:
+            errorType = 5
+            errorCode = "NO_ACCOUNTS"
+            errorMessage = self.localizedDescription
+        case .syncFailed:
+            errorType = 6
+            errorCode = "SYNC_FAILED"
+            errorMessage = self.localizedDescription
+        case .permissionNotRequested:
+            errorType = 7
+            errorCode = "PERMISSION_NOT_REQUESTED"
+            errorMessage = self.localizedDescription
+        case .dataUnavailable:
+            errorType = 8
+            errorCode = "DATA_UNAVAILABLE"
+            errorMessage = self.localizedDescription
+        case .channelClosed:
+            errorType = 9
+            errorCode = "CHANNEL_CLOSED"
+            errorMessage = self.localizedDescription
+        case .syncTimedOut:
+            errorType = 10
+            errorCode = "SYNC_TIMED_OUT"
+            errorMessage = self.localizedDescription
         @unknown default:
             errorType = 4
             errorCode = "UNKNOWN"

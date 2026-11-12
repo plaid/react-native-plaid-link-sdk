@@ -1,5 +1,46 @@
 # RELEASES
 
+## LinkKit V13.5.0 — 2026-11-12
+
+### Changes
+
+- Updates the bundled iOS SDK to LinkKit 7.4.0, picking up 7.3.0, 7.3.1 and
+  7.4.0:
+  - FinanceKit syncs now report outcomes that previously completed silently
+    or never called back. `syncFinanceKit` rejects with the new error codes
+    `NO_ACCOUNTS` (Apple shared no accounts with your app), `SYNC_FAILED`
+    (any other error the server reports at the end of a sync),
+    `PERMISSION_NOT_REQUESTED` (`requestAuthorizationIfNeeded: false` on a
+    device where the user was never asked; previously `PERMISSION_ACCESS_ERROR`),
+    `DATA_UNAVAILABLE` (this device, region or OS version cannot provide Wallet
+    data; previously a permission error or a crash), `CHANNEL_CLOSED` (the
+    server closed the sync before it completed) and `SYNC_TIMED_OUT` (iOS was
+    about to suspend the app, or an hour passed, before the sync finished).
+    `FinanceKitErrorType` gains the matching values 5 through 10, numbered the
+    same as LinkKit's Objective-C `PLKPlaidFinanceKitError`.
+  - A FinanceKit sync holds an iOS background task once any permission prompt
+    is answered, so a sync the user started on screen keeps running for the
+    roughly 30 seconds iOS grants after they leave your app.
+  - When the user leaves Apple's FinanceKit permission sheet without choosing,
+    Link asks once more instead of treating it as a denial.
+  - Adds `LinkEventViewName.INSTITUTION_LOGIN_INSTRUCTIONS`, sent when Link
+    shows an institution's login instructions.
+  - LinkKit debug symbols are published as `LinkKit.dSYMs.zip` on each
+    [plaid-link-ios release](https://github.com/plaid/plaid-link-ios/releases),
+    so crashes inside LinkKit can be symbolicated.
+- Android integration is unchanged at `com.plaid.link:sdk-core:6.3.1`.
+- JavaScript API changes are additive only: the new `FinanceKitErrorType`
+  values and `LinkEventViewName.INSTITUTION_LOGIN_INSTRUCTIONS`. Existing
+  values are unchanged.
+
+### Android
+
+Android SDK [6.3.1](https://github.com/plaid/plaid-link-android/releases/tag/v6.3.1)
+
+### iOS
+
+iOS SDK [7.4.0](https://github.com/plaid/plaid-link-ios/releases/tag/7.4.0)
+
 ## LinkKit V13.4.1 — 2026-10-21
 
 ### Changes

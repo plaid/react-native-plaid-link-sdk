@@ -267,6 +267,11 @@ try {
 }
 ```
 
+A failed sync rejects with an error whose `code` names the cause, such as
+`PERMISSION_NOT_REQUESTED`, `NO_ACCOUNTS`, `DATA_UNAVAILABLE`, `CHANNEL_CLOSED`
+or `SYNC_TIMED_OUT`. `FinanceKitErrorType` lists every cause with the same
+numbering as LinkKit's Objective-C `PLKPlaidFinanceKitError`.
+
 ## Troubleshooting
 
 ### Expo Go cannot load the native module

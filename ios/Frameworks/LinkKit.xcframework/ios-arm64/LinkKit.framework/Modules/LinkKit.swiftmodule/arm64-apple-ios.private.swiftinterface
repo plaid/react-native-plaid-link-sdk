@@ -322,6 +322,12 @@ public enum FinanceKitError : Foundation.LocalizedError {
   case permissionError(message: Swift.String)
   case linkApiError(message: Swift.String)
   case permissionAccessError(message: Swift.String)
+  case permissionNotRequested(message: Swift.String)
+  case dataUnavailable(message: Swift.String)
+  case noAccounts(message: Swift.String)
+  case syncFailed(errorType: Swift.String, errorCode: Swift.String, message: Swift.String)
+  case channelClosed(message: Swift.String)
+  case syncTimedOut(message: Swift.String)
   case unknown(error: any Swift.Error)
   public var errorDescription: Swift.String? {
     get
@@ -487,6 +493,7 @@ public enum ViewName : Swift.CustomStringConvertible, Swift.Codable, Swift.Equat
   case instantMicrodepositVerification
   case sameDayMicrodepositVerification
   case transferStatusCheck
+  case institutionLoginInstructions
   case unknown(Swift.String)
   public static var allCases: [LinkKit.ViewName] {
     get
@@ -683,6 +690,23 @@ public struct PlaidFinanceKit {
   public static func sync(token: Swift.String, requestAuthorizationIfNeeded: Swift.Bool, syncBehavior: LinkKit.PlaidFinanceKit.SyncBehavior = .live, completion: @escaping (Swift.Result<Swift.Void, LinkKit.FinanceKitError>) -> Swift.Void)
   @available(iOS 17.4, *)
   public static func sync(token: Swift.String, requestAuthorizationIfNeeded: Swift.Bool, syncBehavior: LinkKit.PlaidFinanceKit.SyncBehavior = .live) async throws
+  @available(iOS 17.4, *)
+  public enum Status {
+    case unavailable
+    case notDetermined
+    case denied
+    case authorized
+    case unknown
+    public static func == (a: LinkKit.PlaidFinanceKit.Status, b: LinkKit.PlaidFinanceKit.Status) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  @available(iOS 17.4, *)
+  public static func status(completion: @escaping (LinkKit.PlaidFinanceKit.Status) -> Swift.Void)
+  @available(iOS 17.4, *)
+  public static func status() async -> LinkKit.PlaidFinanceKit.Status
 }
 @available(*, deprecated, message: "Present Link with PlaidLinkSheet(session:) or session.sheet() instead")
 @_Concurrency.MainActor @preconcurrency public struct PlaidLinkUIViewControllerRepresentable : SwiftUICore.View {
@@ -760,5 +784,9 @@ extension LinkKit.Environment : Swift.Hashable {}
 extension LinkKit.PlaidFinanceKit.SyncBehavior : Swift.Equatable {}
 @available(iOS 17.4, *)
 extension LinkKit.PlaidFinanceKit.SyncBehavior : Swift.Hashable {}
+@available(iOS 17.4, *)
+extension LinkKit.PlaidFinanceKit.Status : Swift.Equatable {}
+@available(iOS 17.4, *)
+extension LinkKit.PlaidFinanceKit.Status : Swift.Hashable {}
 @available(*, deprecated, message: "Present Link with PlaidLinkSheet(session:) or session.sheet() instead")
 extension LinkKit.PlaidLinkUIViewControllerRepresentable : Swift.Sendable {}

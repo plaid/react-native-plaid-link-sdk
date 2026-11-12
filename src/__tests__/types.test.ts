@@ -545,6 +545,12 @@ describe("Type Definitions", () => {
         expect(FinanceKitErrorType.LinkApiError).toBe(2);
         expect(FinanceKitErrorType.PermissionAccessError).toBe(3);
         expect(FinanceKitErrorType.Unknown).toBe(4);
+        expect(FinanceKitErrorType.NoAccounts).toBe(5);
+        expect(FinanceKitErrorType.SyncFailed).toBe(6);
+        expect(FinanceKitErrorType.PermissionNotRequested).toBe(7);
+        expect(FinanceKitErrorType.DataUnavailable).toBe(8);
+        expect(FinanceKitErrorType.ChannelClosed).toBe(9);
+        expect(FinanceKitErrorType.SyncTimedOut).toBe(10);
       });
     });
 
@@ -597,6 +603,23 @@ describe("Type Definitions", () => {
 
         expect(error.type).toBe(FinanceKitErrorType.Unknown);
         expect(error.message).toBe("An unknown error occurred");
+      });
+
+      it.each([
+        [FinanceKitErrorType.NoAccounts, "No accounts shared with this app"],
+        [FinanceKitErrorType.SyncFailed, "The server ended the sync"],
+        [
+          FinanceKitErrorType.PermissionNotRequested,
+          "FinanceKit access has not been requested yet",
+        ],
+        [FinanceKitErrorType.DataUnavailable, "FinanceKit data unavailable"],
+        [FinanceKitErrorType.ChannelClosed, "The sync channel was closed"],
+        [FinanceKitErrorType.SyncTimedOut, "The sync timed out"],
+      ])("accepts LinkKit 7.4.0 error type %i", (type, message) => {
+        const error: FinanceKitError = { type, message } as FinanceKitError;
+
+        expect(error.type).toBe(type);
+        expect(error.message).toBe(message);
       });
     });
   });

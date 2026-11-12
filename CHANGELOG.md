@@ -1,5 +1,31 @@
 # RELEASES
 
+## LinkKit V13.6.0 — 2026-11-12
+
+### Changes
+
+- Updates Android integration to `com.plaid.link:sdk-core:6.4.0`:
+  - Android now reports the `LinkEventName` values
+    `SELECT_DENYLISTED_INSTITUTION`, `SELECT_FALLBACK_ROUTING_INSTITUTION`
+    and `SELECT_REMEMBER_ME_DUPLICATE_INSTITUTION`, and the
+    `LinkEventViewName` value `INSTITUTION_LOGIN_INSTRUCTIONS`, by name. These
+    values already exist in the JavaScript enums; older Android SDKs delivered
+    them as `UNKNOWN` with the raw name.
+  - The Android SDK no longer depends on AppCompat, so Compose-only apps no
+    longer need `androidx.appcompat` to use Link.
+  - Removes the unused `READ_BASIC_PHONE_STATE` permission from the Android
+    SDK manifest.
+- iOS integration is unchanged at LinkKit 7.4.0.
+- No changes to the JavaScript API.
+
+### Android
+
+Android SDK [6.4.0](https://github.com/plaid/plaid-link-android/releases/tag/v6.4.0)
+
+### iOS
+
+iOS SDK [7.4.0](https://github.com/plaid/plaid-link-ios/releases/tag/7.4.0)
+
 ## LinkKit V13.5.0 — 2026-11-12
 
 ### Changes

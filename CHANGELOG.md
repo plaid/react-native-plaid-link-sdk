@@ -1,5 +1,63 @@
 # RELEASES
 
+## LinkKit V13.5.0 — 2026-11-12
+
+### Changes
+
+- Updates the bundled iOS SDK to LinkKit 7.4.0, picking up 7.3.0, 7.3.1 and
+  7.4.0:
+  - FinanceKit syncs now report outcomes that previously completed silently
+    or never called back. `syncFinanceKit` rejects with the new error codes
+    `NO_ACCOUNTS` (Apple shared no accounts with your app), `SYNC_FAILED`
+    (any other error the server reports at the end of a sync),
+    `PERMISSION_NOT_REQUESTED` (`requestAuthorizationIfNeeded: false` on a
+    device where the user was never asked; previously `PERMISSION_ACCESS_ERROR`),
+    `DATA_UNAVAILABLE` (this device, region or OS version cannot provide Wallet
+    data; previously a permission error or a crash), `CHANNEL_CLOSED` (the
+    server closed the sync before it completed) and `SYNC_TIMED_OUT` (iOS was
+    about to suspend the app, or an hour passed, before the sync finished).
+    `FinanceKitErrorType` gains the matching values 5 through 10, numbered the
+    same as LinkKit's Objective-C `PLKPlaidFinanceKitError`.
+  - A FinanceKit sync holds an iOS background task once any permission prompt
+    is answered, so a sync the user started on screen keeps running for the
+    roughly 30 seconds iOS grants after they leave your app.
+  - When the user leaves Apple's FinanceKit permission sheet without choosing,
+    Link asks once more instead of treating it as a denial.
+  - Adds `LinkEventViewName.INSTITUTION_LOGIN_INSTRUCTIONS`, sent when Link
+    shows an institution's login instructions.
+  - LinkKit debug symbols are published as `LinkKit.dSYMs.zip` on each
+    [plaid-link-ios release](https://github.com/plaid/plaid-link-ios/releases),
+    so crashes inside LinkKit can be symbolicated.
+- Updates Android integration to `com.plaid.link:sdk-core:6.4.0`:
+  - Android now reports the `LinkEventName` values
+    `SELECT_DENYLISTED_INSTITUTION`, `SELECT_FALLBACK_ROUTING_INSTITUTION`
+    and `SELECT_REMEMBER_ME_DUPLICATE_INSTITUTION`, and the
+    `LinkEventViewName` value `INSTITUTION_LOGIN_INSTRUCTIONS`, by name.
+    Older Android SDKs delivered them as `UNKNOWN` with the raw name.
+  - The Android SDK no longer depends on AppCompat, so Compose-only apps no
+    longer need `androidx.appcompat` to use Link.
+  - Removes the unused `READ_BASIC_PHONE_STATE` permission from the Android
+    SDK manifest.
+- Adds `getFinanceKitStatus()`, which resolves a `FinanceKitStatus`
+  (`AUTHORIZED`, `NOT_DETERMINED`, `DENIED`, `UNAVAILABLE` or `UNKNOWN`)
+  describing whether the app can read the user's Apple Wallet data through
+  FinanceKit, without starting a sync or prompting the user. It wraps LinkKit
+  7.4.0's `PlaidFinanceKit.status()`, requires iOS 17.4 or later and the same
+  FinanceKit entitlement as `syncFinanceKit`, rejects with
+  `UNSUPPORTED_IOS_VERSION` on earlier iOS, and throws on Android.
+- JavaScript API changes are additive only: `getFinanceKitStatus`,
+  `FinanceKitStatus`, the new `FinanceKitErrorType` values and
+  `LinkEventViewName.INSTITUTION_LOGIN_INSTRUCTIONS`. Existing values are
+  unchanged.
+
+### Android
+
+Android SDK [6.4.0](https://github.com/plaid/plaid-link-android/releases/tag/v6.4.0)
+
+### iOS
+
+iOS SDK [7.4.0](https://github.com/plaid/plaid-link-ios/releases/tag/7.4.0)
+
 ## LinkKit V13.4.1 — 2026-10-21
 
 ### Changes

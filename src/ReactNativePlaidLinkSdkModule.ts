@@ -2,6 +2,7 @@ import { NativeModule, requireNativeModule } from "expo";
 
 import {
   ReactNativePlaidLinkSdkModuleEvents,
+  FinanceKitStatus,
   FinanceKitSyncBehavior,
 } from "./ReactNativePlaidLinkSdk.types";
 
@@ -24,6 +25,7 @@ declare class ReactNativePlaidLinkSdkModule extends NativeModule<ReactNativePlai
     requestAuthorizationIfNeeded: boolean,
     syncBehavior: FinanceKitSyncBehavior,
   ): Promise<void>;
+  getFinanceKitStatus(): Promise<FinanceKitStatus>;
 }
 
 // This call loads the native module object from the JSI.

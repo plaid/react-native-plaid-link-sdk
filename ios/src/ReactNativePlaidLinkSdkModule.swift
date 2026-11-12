@@ -368,6 +368,20 @@ public class ReactNativePlaidLinkSdkModule: Module {
                 }
             }
         }
+
+        AsyncFunction(ModuleFunctionName.getFinanceKitStatus.rawValue) { (promise: Promise) in
+            if #available(iOS 17.4, *) {
+                PlaidFinanceKit.status { status in
+                    DispatchQueue.main.async {
+                        promise.resolve(status.asString)
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    promise.reject("UNSUPPORTED_IOS_VERSION", "FinanceKit requires iOS 17.4 or later")
+                }
+            }
+        }
     }
 
     // MARK: Enums
@@ -390,6 +404,7 @@ public class ReactNativePlaidLinkSdkModule: Module {
         case submitLayerData
         case startHeadlessSession
         case syncFinanceKit
+        case getFinanceKitStatus
     }
 
     // MARK: Private
@@ -401,6 +416,21 @@ public class ReactNativePlaidLinkSdkModule: Module {
 }
 
 // MARK: Internal Extensions
+
+@available(iOS 17.4, *)
+extension PlaidFinanceKit.Status {
+    /// Values match the `FinanceKitStatus` enum in `ReactNativePlaidLinkSdk.types.ts`.
+    var asString: String {
+        switch self {
+        case .unavailable: return "unavailable"
+        case .notDetermined: return "notDetermined"
+        case .denied: return "denied"
+        case .authorized: return "authorized"
+        case .unknown: return "unknown"
+        @unknown default: return "unknown"
+        }
+    }
+}
 
 extension Institution {
     var asDictionary: [String: Any] {
@@ -549,6 +579,8 @@ struct LayerSubmissionData: SubmissionData {
 
 @available(iOS 17.4, *)
 extension LinkKit.FinanceKitError {
+    /// `errorType` values mirror LinkKit's Objective-C `PLKPlaidFinanceKitError` codes and
+    /// the JavaScript `FinanceKitErrorType` enum, so the three stay comparable.
     fileprivate var asFinanceKitErrorDictionary: [String: Any] {
         let errorType: Int
         let errorCode: String
@@ -575,6 +607,30 @@ extension LinkKit.FinanceKitError {
             errorType = 4
             errorCode = "UNKNOWN"
             errorMessage = error.localizedDescription
+        case .noAccounts:
+            errorType = 5
+            errorCode = "NO_ACCOUNTS"
+            errorMessage = self.localizedDescription
+        case .syncFailed:
+            errorType = 6
+            errorCode = "SYNC_FAILED"
+            errorMessage = self.localizedDescription
+        case .permissionNotRequested:
+            errorType = 7
+            errorCode = "PERMISSION_NOT_REQUESTED"
+            errorMessage = self.localizedDescription
+        case .dataUnavailable:
+            errorType = 8
+            errorCode = "DATA_UNAVAILABLE"
+            errorMessage = self.localizedDescription
+        case .channelClosed:
+            errorType = 9
+            errorCode = "CHANNEL_CLOSED"
+            errorMessage = self.localizedDescription
+        case .syncTimedOut:
+            errorType = 10
+            errorCode = "SYNC_TIMED_OUT"
+            errorMessage = self.localizedDescription
         @unknown default:
             errorType = 4
             errorCode = "UNKNOWN"

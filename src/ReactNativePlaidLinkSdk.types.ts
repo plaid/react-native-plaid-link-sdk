@@ -728,6 +728,7 @@ export enum LinkEventViewName {
   IDENTITY_MATCH_BLOCK = "IDENTITY_MATCH_BLOCK",
   INSTANT_MICRODEPOSIT_AUTHORIZED = "INSTANT_MICRODEPOSIT_AUTHORIZED",
   INSTANT_MICRODEPOSIT_VERIFICATION = "INSTANT_MICRODEPOSIT_VERIFICATION",
+  INSTITUTION_LOGIN_INSTRUCTIONS = "INSTITUTION_LOGIN_INSTRUCTIONS",
   KYC_CHECK = "KYC_CHECK",
   LOADING = "LOADING",
   MATCHED_CONSENT = "MATCHED_CONSENT",
@@ -868,12 +869,54 @@ export enum FinanceKitSyncBehavior {
   SIMULATED = 1,
 }
 
+/**
+ * Whether this app can read the user's Apple Wallet data through FinanceKit.
+ * Values match the cases of LinkKit's `PlaidFinanceKit.Status`.
+ */
+export enum FinanceKitStatus {
+  /** This device, region or OS version cannot provide FinanceKit data. */
+  UNAVAILABLE = "unavailable",
+  /** The user has not been asked for FinanceKit access yet. */
+  NOT_DETERMINED = "notDetermined",
+  /** The user declined FinanceKit access. */
+  DENIED = "denied",
+  /** The user granted FinanceKit access. */
+  AUTHORIZED = "authorized",
+  /** FinanceKit reported a status this SDK version does not recognize. */
+  UNKNOWN = "unknown",
+}
+
+/**
+ * Why a FinanceKit sync failed. Values match LinkKit's Objective-C
+ * `PLKPlaidFinanceKitError` codes; new values are only added at the end.
+ */
 export enum FinanceKitErrorType {
   InvalidToken = 0,
   PermissionError = 1,
   LinkApiError = 2,
   PermissionAccessError = 3,
   Unknown = 4,
+  /** The sync ended because Apple returned no accounts shared with this app. */
+  NoAccounts = 5,
+  /** The server ended the sync with an API error other than the ones above. */
+  SyncFailed = 6,
+  /**
+   * FinanceKit access has not been requested yet and the sync was told not to
+   * request it (`requestAuthorizationIfNeeded: false`).
+   */
+  PermissionNotRequested = 7,
+  /**
+   * This device, region or OS version cannot provide FinanceKit data. The sync
+   * did not start.
+   */
+  DataUnavailable = 8,
+  /** The server closed the sync channel before the sync completed. Start a new sync to retry. */
+  ChannelClosed = 9,
+  /**
+   * iOS was about to suspend the app, or an hour passed, before the sync
+   * finished. Start a new sync while the app is active to retry.
+   */
+  SyncTimedOut = 10,
 }
 
 interface InvalidTokenError {
@@ -901,9 +944,45 @@ interface UnknownError {
   message: string;
 }
 
+interface NoAccountsError {
+  type: FinanceKitErrorType.NoAccounts;
+  message: string;
+}
+
+interface SyncFailedError {
+  type: FinanceKitErrorType.SyncFailed;
+  message: string;
+}
+
+interface PermissionNotRequestedError {
+  type: FinanceKitErrorType.PermissionNotRequested;
+  message: string;
+}
+
+interface DataUnavailableError {
+  type: FinanceKitErrorType.DataUnavailable;
+  message: string;
+}
+
+interface ChannelClosedError {
+  type: FinanceKitErrorType.ChannelClosed;
+  message: string;
+}
+
+interface SyncTimedOutError {
+  type: FinanceKitErrorType.SyncTimedOut;
+  message: string;
+}
+
 export type FinanceKitError =
   | InvalidTokenError
   | PermissionError
   | LinkApiError
   | PermissionAccessError
-  | UnknownError;
+  | UnknownError
+  | NoAccountsError
+  | SyncFailedError
+  | PermissionNotRequestedError
+  | DataUnavailableError
+  | ChannelClosedError
+  | SyncTimedOutError;

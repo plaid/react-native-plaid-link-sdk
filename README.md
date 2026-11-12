@@ -272,6 +272,42 @@ A failed sync rejects with an error whose `code` names the cause, such as
 or `SYNC_TIMED_OUT`. `FinanceKitErrorType` lists every cause with the same
 numbering as LinkKit's Objective-C `PLKPlaidFinanceKitError`.
 
+### Checking FinanceKit access
+
+`getFinanceKitStatus` reports whether your app can read the user's Apple Wallet
+data without starting a sync or prompting the user. Use it to decide whether to
+show a FinanceKit option, or to explain why a sync was skipped.
+
+```ts
+import {
+  FinanceKitStatus,
+  getFinanceKitStatus,
+} from "react-native-plaid-link-sdk";
+
+const status = await getFinanceKitStatus();
+
+switch (status) {
+  case FinanceKitStatus.AUTHORIZED:
+    // Safe to sync without a permission prompt.
+    break;
+  case FinanceKitStatus.NOT_DETERMINED:
+    // The user has not been asked yet; a sync with
+    // requestAuthorizationIfNeeded: true will prompt them.
+    break;
+  case FinanceKitStatus.DENIED:
+    // The user declined; send them to Settings to change it.
+    break;
+  case FinanceKitStatus.UNAVAILABLE:
+  case FinanceKitStatus.UNKNOWN:
+    // This device, region or OS cannot provide FinanceKit data.
+    break;
+}
+```
+
+`getFinanceKitStatus` requires iOS 17.4 or later and the same FinanceKit
+entitlement as `syncFinanceKit`. It rejects with `UNSUPPORTED_IOS_VERSION` on
+earlier iOS versions and throws on Android.
+
 ## Troubleshooting
 
 ### Expo Go cannot load the native module

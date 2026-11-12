@@ -14,6 +14,7 @@ import {
   LinkErrorType,
   LinkEventName,
   LinkIOSPresentationStyle,
+  FinanceKitStatus,
   FinanceKitSyncBehavior,
   FinanceKitErrorType,
   FinanceKitError,
@@ -535,6 +536,20 @@ describe("Type Definitions", () => {
       it("has correct values", () => {
         expect(FinanceKitSyncBehavior.LIVE).toBe(0);
         expect(FinanceKitSyncBehavior.SIMULATED).toBe(1);
+      });
+    });
+
+    describe("FinanceKitStatus", () => {
+      it("matches the LinkKit PlaidFinanceKit.Status case names", () => {
+        expect(FinanceKitStatus.UNAVAILABLE).toBe("unavailable");
+        expect(FinanceKitStatus.NOT_DETERMINED).toBe("notDetermined");
+        expect(FinanceKitStatus.DENIED).toBe("denied");
+        expect(FinanceKitStatus.AUTHORIZED).toBe("authorized");
+        expect(FinanceKitStatus.UNKNOWN).toBe("unknown");
+      });
+
+      it("has exactly five values", () => {
+        expect(Object.values(FinanceKitStatus)).toHaveLength(5);
       });
     });
 

@@ -34,6 +34,8 @@ const mockNativeModule = {
     ) => Promise.resolve(),
   ),
 
+  getFinanceKitStatus: jest.fn(() => Promise.resolve("notDetermined")),
+
   addListener: jest
     .fn()
     .mockImplementation((eventName: string, callback: Function) => {

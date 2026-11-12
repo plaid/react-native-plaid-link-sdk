@@ -870,6 +870,23 @@ export enum FinanceKitSyncBehavior {
 }
 
 /**
+ * Whether this app can read the user's Apple Wallet data through FinanceKit.
+ * Values match the cases of LinkKit's `PlaidFinanceKit.Status`.
+ */
+export enum FinanceKitStatus {
+  /** This device, region or OS version cannot provide FinanceKit data. */
+  UNAVAILABLE = "unavailable",
+  /** The user has not been asked for FinanceKit access yet. */
+  NOT_DETERMINED = "notDetermined",
+  /** The user declined FinanceKit access. */
+  DENIED = "denied",
+  /** The user granted FinanceKit access. */
+  AUTHORIZED = "authorized",
+  /** FinanceKit reported a status this SDK version does not recognize. */
+  UNKNOWN = "unknown",
+}
+
+/**
  * Why a FinanceKit sync failed. Values match LinkKit's Objective-C
  * `PLKPlaidFinanceKitError` codes; new values are only added at the end.
  */

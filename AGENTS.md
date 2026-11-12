@@ -56,7 +56,8 @@ to the create call**, and **every create function is `async`**.
 ## Complete v13 export surface
 
 Functions — `createPlaidLinkSession`, `createPlaidIdentityVerificationSession`,
-`createPlaidLayerSession`, `createPlaidHeadlessSession`, `syncFinanceKit`.
+`createPlaidLayerSession`, `createPlaidHeadlessSession`, `syncFinanceKit`,
+`getFinanceKitStatus`.
 
 Constant — `sdkVersion`.
 
@@ -64,8 +65,8 @@ Component — `PlaidEmbeddedSearchView` (with `PlaidEmbeddedSearchViewProps`).
 
 Types and enums — `LinkSuccess`, `LinkExit`, `LinkEvent`, `LinkEventName`,
 `LinkError`, `LinkTokenConfiguration`, `PlaidLinkSession`, `PlaidLayerSession`,
-`PlaidHeadlessSession`, `SubmissionData`, `FinanceKitSyncBehavior`, and the
-other types in `ReactNativePlaidLinkSdk.types`.
+`PlaidHeadlessSession`, `SubmissionData`, `FinanceKitSyncBehavior`,
+`FinanceKitStatus`, and the other types in `ReactNativePlaidLinkSdk.types`.
 
 Default export — deprecated native module instance. Do not use it; use the named
 exports, including `sdkVersion`. It will be removed in the next major version.
@@ -192,6 +193,23 @@ try {
   });
 } catch (error) {
   console.log("FinanceKit error", error);
+}
+```
+
+`getFinanceKitStatus()` resolves a `FinanceKitStatus` (`AUTHORIZED`,
+`NOT_DETERMINED`, `DENIED`, `UNAVAILABLE` or `UNKNOWN`) without starting a sync
+or prompting the user. iOS 17.4+ only; rejects with `UNSUPPORTED_IOS_VERSION`
+on earlier iOS and throws on Android.
+
+```ts
+import {
+  FinanceKitStatus,
+  getFinanceKitStatus,
+} from "react-native-plaid-link-sdk";
+
+const status = await getFinanceKitStatus();
+if (status === FinanceKitStatus.AUTHORIZED) {
+  // Sync will not prompt the user.
 }
 ```
 

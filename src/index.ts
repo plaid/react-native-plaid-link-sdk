@@ -12,6 +12,7 @@ import {
   PlaidLayerSession,
   PlaidHeadlessSession,
   SubmissionData,
+  FinanceKitStatus,
   FinanceKitSyncBehavior,
 } from "./ReactNativePlaidLinkSdk.types";
 import NativePlaidModule from "./ReactNativePlaidLinkSdkModule";
@@ -353,6 +354,21 @@ export async function syncFinanceKit(config: {
     config.requestAuthorizationIfNeeded ?? true,
     config.syncBehavior ?? FinanceKitSyncBehavior.LIVE,
   );
+}
+
+/**
+ * Reports whether this app can read the user's Apple Wallet data through
+ * FinanceKit, without starting a sync or prompting the user.
+ *
+ * iOS 17.4+ only. Rejects with `UNSUPPORTED_IOS_VERSION` on earlier iOS and
+ * throws on Android.
+ */
+export async function getFinanceKitStatus(): Promise<FinanceKitStatus> {
+  if (Platform.OS === "android") {
+    throw new Error("FinanceKit is only available on iOS");
+  }
+
+  return NativePlaidModule.getFinanceKitStatus();
 }
 
 export {

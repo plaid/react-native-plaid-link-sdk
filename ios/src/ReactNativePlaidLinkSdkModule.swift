@@ -368,6 +368,20 @@ public class ReactNativePlaidLinkSdkModule: Module {
                 }
             }
         }
+
+        AsyncFunction(ModuleFunctionName.getFinanceKitStatus.rawValue) { (promise: Promise) in
+            if #available(iOS 17.4, *) {
+                PlaidFinanceKit.status { status in
+                    DispatchQueue.main.async {
+                        promise.resolve(status.asString)
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    promise.reject("UNSUPPORTED_IOS_VERSION", "FinanceKit requires iOS 17.4 or later")
+                }
+            }
+        }
     }
 
     // MARK: Enums
@@ -390,6 +404,7 @@ public class ReactNativePlaidLinkSdkModule: Module {
         case submitLayerData
         case startHeadlessSession
         case syncFinanceKit
+        case getFinanceKitStatus
     }
 
     // MARK: Private
@@ -401,6 +416,21 @@ public class ReactNativePlaidLinkSdkModule: Module {
 }
 
 // MARK: Internal Extensions
+
+@available(iOS 17.4, *)
+extension PlaidFinanceKit.Status {
+    /// Values match the `FinanceKitStatus` enum in `ReactNativePlaidLinkSdk.types.ts`.
+    var asString: String {
+        switch self {
+        case .unavailable: return "unavailable"
+        case .notDetermined: return "notDetermined"
+        case .denied: return "denied"
+        case .authorized: return "authorized"
+        case .unknown: return "unknown"
+        @unknown default: return "unknown"
+        }
+    }
+}
 
 extension Institution {
     var asDictionary: [String: Any] {

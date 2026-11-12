@@ -1,5 +1,18 @@
 # RELEASES
 
+## Unreleased
+
+### Changes
+
+- Adds `getFinanceKitStatus()`, which resolves a `FinanceKitStatus`
+  (`AUTHORIZED`, `NOT_DETERMINED`, `DENIED`, `UNAVAILABLE` or `UNKNOWN`)
+  describing whether the app can read the user's Apple Wallet data through
+  FinanceKit, without starting a sync or prompting the user. It wraps LinkKit
+  7.4.0's `PlaidFinanceKit.status()`, requires iOS 17.4 or later and the same
+  FinanceKit entitlement as `syncFinanceKit`, rejects with
+  `UNSUPPORTED_IOS_VERSION` on earlier iOS, and throws on Android.
+- No native SDK changes.
+
 ## LinkKit V13.5.0 — 2026-11-12
 
 ### Changes

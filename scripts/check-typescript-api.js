@@ -70,11 +70,13 @@ try {
   fs.writeFileSync(
     path.join(consumerRoot, "supported.ts"),
     `import {
+  FinanceKitStatus,
   FinanceKitSyncBehavior,
   PlaidEmbeddedSearchView,
   createPlaidHeadlessSession,
   createPlaidLayerSession,
   createPlaidLinkSession,
+  getFinanceKitStatus,
   sdkVersion,
   syncFinanceKit,
 } from "react-native-plaid-link-sdk";
@@ -110,7 +112,10 @@ async function exerciseSupportedApi(token: string) {
     syncBehavior: FinanceKitSyncBehavior.LIVE,
   });
 
-  return { PlaidEmbeddedSearchView, sdkVersion };
+  const status: FinanceKitStatus = await getFinanceKitStatus();
+  const authorized = status === FinanceKitStatus.AUTHORIZED;
+
+  return { PlaidEmbeddedSearchView, authorized, sdkVersion };
 }
 
 void exerciseSupportedApi;

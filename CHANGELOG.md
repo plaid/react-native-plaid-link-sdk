@@ -41,14 +41,23 @@
   - LinkKit debug symbols are published as `LinkKit.dSYMs.zip` on each
     [plaid-link-ios release](https://github.com/plaid/plaid-link-ios/releases),
     so crashes inside LinkKit can be symbolicated.
-- Android integration is unchanged at `com.plaid.link:sdk-core:6.3.1`.
+- Updates Android integration to `com.plaid.link:sdk-core:6.4.0`:
+  - Android now reports the `LinkEventName` values
+    `SELECT_DENYLISTED_INSTITUTION`, `SELECT_FALLBACK_ROUTING_INSTITUTION`
+    and `SELECT_REMEMBER_ME_DUPLICATE_INSTITUTION`, and the
+    `LinkEventViewName` value `INSTITUTION_LOGIN_INSTRUCTIONS`, by name.
+    Older Android SDKs delivered them as `UNKNOWN` with the raw name.
+  - The Android SDK no longer depends on AppCompat, so Compose-only apps no
+    longer need `androidx.appcompat` to use Link.
+  - Removes the unused `READ_BASIC_PHONE_STATE` permission from the Android
+    SDK manifest.
 - JavaScript API changes are additive only: the new `FinanceKitErrorType`
   values and `LinkEventViewName.INSTITUTION_LOGIN_INSTRUCTIONS`. Existing
   values are unchanged.
 
 ### Android
 
-Android SDK [6.3.1](https://github.com/plaid/plaid-link-android/releases/tag/v6.3.1)
+Android SDK [6.4.0](https://github.com/plaid/plaid-link-android/releases/tag/v6.4.0)
 
 ### iOS
 

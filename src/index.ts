@@ -198,7 +198,12 @@ export async function createPlaidLinkSession(
     },
   );
 
-  await NativePlaidModule.createPlaidLinkSession(config.token);
+  try {
+    await NativePlaidModule.createPlaidLinkSession(config.token);
+  } catch (error) {
+    cleanupListeners();
+    throw error;
+  }
 
   config.onLoad?.();
 
@@ -288,7 +293,12 @@ export async function createPlaidLayerSession(
     },
   );
 
-  await NativePlaidModule.createPlaidLayerSession(config.token);
+  try {
+    await NativePlaidModule.createPlaidLayerSession(config.token);
+  } catch (error) {
+    cleanupListeners();
+    throw error;
+  }
 
   return {
     open: () => NativePlaidModule.openLayerSession(),
@@ -329,7 +339,12 @@ export async function createPlaidHeadlessSession(
     },
   );
 
-  await NativePlaidModule.createPlaidHeadlessSession(config.token);
+  try {
+    await NativePlaidModule.createPlaidHeadlessSession(config.token);
+  } catch (error) {
+    cleanupListeners();
+    throw error;
+  }
 
   if (config.onLoad) {
     config.onLoad();

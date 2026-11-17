@@ -191,4 +191,34 @@ describe("createPlaidLayerSession", () => {
     );
     expect(console.error).not.toHaveBeenCalled();
   });
+
+  it("removes its listeners when native creation fails", async () => {
+    (
+      NativePlaidModule.createPlaidLayerSession as jest.Mock
+    ).mockRejectedValueOnce(new Error("Layer session creation failed"));
+
+    const config = {
+      token: "invalid-token",
+      onSuccess: jest.fn(),
+      onExit: jest.fn(),
+      onEvent: jest.fn(),
+    };
+
+    await expect(createPlaidLayerSession(config)).rejects.toThrow(
+      "Layer session creation failed",
+    );
+
+    expect(
+      (NativePlaidModule as any).__getListenerCount("PlaidLink.onSuccess"),
+    ).toBe(0);
+    expect(
+      (NativePlaidModule as any).__getListenerCount("PlaidLink.onExit"),
+    ).toBe(0);
+    expect(
+      (NativePlaidModule as any).__getListenerCount("PlaidLink.onEvent"),
+    ).toBe(0);
+
+    (NativePlaidModule as any).__triggerEvent("PlaidLink.onExit", {});
+    expect(config.onExit).not.toHaveBeenCalled();
+  });
 });
